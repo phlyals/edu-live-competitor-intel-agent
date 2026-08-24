@@ -1,0 +1,272 @@
+{
+  "snapshot": {
+    "id": "before-mvp-lite-20260821-221945",
+    "created_at": "2026-08-21T22:19:45+08:00",
+    "timezone": "Asia/Shanghai",
+    "purpose": "MVP-Lite实施前只读状态基线",
+    "read_only_collection": true,
+    "contains_credentials": false
+  },
+  "artifacts": {
+    "project_directory": "/Volumes/ExternalStorage/agent架构师/教育直播竞品情报Agent/",
+    "course_file_count": 4,
+    "files": {
+      "01-岗位卡.md": {
+        "exists": true,
+        "sha256": "7134749c85d871852695eb264cf7323ad3aa24922ae594214a78a49b6da9e9c4"
+      },
+      "02-工作流卡片.md": {
+        "exists": true,
+        "sha256": "58d723d1bbddfd82832cc6f3ca52871926db03ffd78ed7adc430c7bf424b9fe7"
+      },
+      "03-流程图.md": {
+        "exists": true,
+        "sha256": "6a2b1895a0082120419f0bbc89d7b6c550cf9640de85973b57dbb116cecb2b62"
+      },
+      "04-Profile.md": {
+        "exists": true,
+        "sha256": "c1888844aefff45b3997753f3c697c6d9a8dfa855ea3f86f964bbbde2f4cbd87"
+      }
+    },
+    "soul": {
+      "path": "/Users/mac/.hermes/profiles/edu_live_competitor_intel/SOUL.md",
+      "exists": true,
+      "sha256": "c1888844aefff45b3997753f3c697c6d9a8dfa855ea3f86f964bbbde2f4cbd87",
+      "equals_profile_markdown": true,
+      "effective": true
+    }
+  },
+  "hermes": {
+    "agent_name": "直播竞品情报主管",
+    "profile_id": "edu_live_competitor_intel",
+    "profile_root": "/Users/mac/.hermes/profiles/edu_live_competitor_intel/",
+    "gateway_state": "running",
+    "feishu_gateway_state": "connected",
+    "active_agents_at_snapshot": 0,
+    "bot_name": "直播竞品情报主管",
+    "private_chat": {
+      "status": "VERIFIED_COMPONENT",
+      "historical_real_receive_and_reply": true,
+      "last_inbound_evidence_at": "2026-08-18T20:55:32+08:00",
+      "last_outbound_evidence_at": "2026-08-18T21:13:15+08:00"
+    },
+    "real_business_e2e": false
+  },
+  "feishu": {
+    "base": {
+      "name": "直播竞品情报主管｜业务工作台",
+      "identity_used_for_read": "bot",
+      "read_verified": true,
+      "table_count": 11,
+      "record_counts": {
+        "00_系统保留": 0,
+        "01_商品": 0,
+        "02_同行账号": 0,
+        "03_商品同行关系": 0,
+        "04_账号监控": 0,
+        "05_直播场次": 0,
+        "06_转录证据": 0,
+        "07_场次分析": 0,
+        "08_打法版本": 0,
+        "09_策略候选审批": 0,
+        "10_Runtime状态": 0
+      },
+      "real_business_write_occurred": false,
+      "write_status": "DISABLED"
+    }
+  },
+  "runtime": {
+    "code_path": "/Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/",
+    "database_path": "/Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/runtime.db",
+    "schema_version": 2,
+    "core_python_file_count": 17,
+    "worker": {
+      "process_present": true,
+      "mode": "heartbeat_only",
+      "business_actions_enabled": false,
+      "service_heartbeat_rows": 1
+    },
+    "record_counts": {
+      "tasks": 0,
+      "products": 0,
+      "competitors": 0,
+      "product_competitors": 0,
+      "monitor_targets": 0,
+      "live_sessions": 0,
+      "media_assets": 0,
+      "transcripts": 0,
+      "analyses": 0,
+      "strategy_candidates": 0,
+      "approvals": 0,
+      "checkpoints": 0,
+      "runtime_events": 0,
+      "outbox": 0,
+      "service_heartbeats": 1
+    },
+    "safety_gates": {
+      "real_product_scan": false,
+      "feishu_business_write": false,
+      "live_monitor": false,
+      "recording": false,
+      "formal_knowledge_write": false
+    },
+    "business_task_running": false,
+    "complete_scan_count": 0,
+    "validated_read_only_scan_evidence_files": 4
+  },
+  "browser": {
+    "tabbit_controllable": true,
+    "computer_use_permissions": {
+      "accessibility": true,
+      "screen_recording": true
+    },
+    "login_state": {
+      "status": "VERIFIED_COMPONENT",
+      "verified_during_snapshot": true,
+      "evidence": "已存在的商品决策页显示巨量百应业务界面且无登录提示"
+    },
+    "existing_product_tab_present": true,
+    "browser_scanner_exists": false,
+    "automatic_full_scan_available": false,
+    "scan_started_during_snapshot": false
+  },
+  "tools": {
+    "cua_tabbit": {
+      "version": "0.20.0",
+      "status": "VERIFIED_COMPONENT",
+      "business_validation": "仅页面读取，未形成自动商品扫描"
+    },
+    "ffmpeg": {
+      "version": "8.1.2",
+      "status": "VERIFIED_COMPONENT",
+      "business_validation": "未处理真实直播录像"
+    },
+    "faster_whisper": {
+      "version": "1.2.1",
+      "status": "CODE_EXISTS_UNVERIFIED",
+      "business_validation": "仅合成音频；中文质量测试未通过"
+    },
+    "douyin_live_recorder": {
+      "revision": "add187f8d8c7f",
+      "status": "VERIFIED_COMPONENT",
+      "business_validation": "接口及只读状态探测已验证；无本Profile真实完整录制"
+    },
+    "obsidian": {
+      "open_vault": "/Users/mac/Desktop/项目/01_Obsidian知识库/obsidian-main-20260622",
+      "status": "VERIFIED_COMPONENT",
+      "business_validation": "未归档本项目真实内容"
+    },
+    "streamlink": {
+      "version": "8.5.0",
+      "status": "CODE_EXISTS_UNVERIFIED"
+    },
+    "yt_dlp": {
+      "version": "2026.7.4",
+      "status": "CODE_EXISTS_UNVERIFIED"
+    },
+    "lark_cli": {
+      "version": "1.0.58",
+      "status": "VERIFIED_COMPONENT",
+      "business_validation": "Base只读成功，业务写入未发生"
+    }
+  },
+  "capabilities": {
+    "feishu_receive_product_link": {
+      "status": "VERIFIED_COMPONENT",
+      "evidence": "真实私聊收到过商品链接并回复",
+      "blocker": "未接入任务Runtime"
+    },
+    "deterministic_product_link_parse": {
+      "status": "DESIGNED_ONLY",
+      "evidence": "仅有方案设计",
+      "blocker": "无解析实现"
+    },
+    "automatic_task_creation": {
+      "status": "CODE_EXISTS_UNVERIFIED",
+      "evidence": "tasks Schema存在，记录数为0",
+      "blocker": "无消息到任务入口"
+    },
+    "browser_open_product": {
+      "status": "VERIFIED_COMPONENT",
+      "evidence": "本轮已有商品决策页和登录业务UI",
+      "blocker": "不能由任务自动驱动"
+    },
+    "complete_competitor_scan": {
+      "status": "VERIFIED_COMPONENT",
+      "evidence": "一次只读样本读取32条内容",
+      "blocker": "无可重复扫描器，验证器硬编码3页"
+    },
+    "stable_competitor_uid": {
+      "status": "VERIFIED_COMPONENT",
+      "evidence": "历史验证15个Buyin creator uid",
+      "blocker": "无生产采集编排"
+    },
+    "save_local_scan_result": {
+      "status": "VERIFIED_COMPONENT",
+      "evidence": "存在4份validated JSON",
+      "blocker": "未写入Runtime正式业务对象"
+    },
+    "write_feishu_base": {
+      "status": "DISABLED",
+      "evidence": "Base可读且业务记录均为0",
+      "blocker": "feishu_business_write=false"
+    },
+    "feishu_return_result": {
+      "status": "VERIFIED_COMPONENT",
+      "evidence": "Bot私聊回复已验证",
+      "blocker": "尚无业务结果可返回"
+    },
+    "live_monitor": {
+      "status": "DISABLED",
+      "evidence": "一次性探测器存在",
+      "blocker": "live_monitor=false且无持续worker"
+    },
+    "automatic_recording": {
+      "status": "DISABLED",
+      "evidence": "recorder代码和依赖存在",
+      "blocker": "recording=false且无真实事件验证"
+    },
+    "transcription": {
+      "status": "CODE_EXISTS_UNVERIFIED",
+      "evidence": "合成音频产生过时间戳JSON",
+      "blocker": "中文质量测试未通过且无真实直播音频"
+    },
+    "n_vs_n_minus_1": {
+      "status": "DESIGNED_ONLY",
+      "evidence": "仅工作流/Profile规则",
+      "blocker": "无实现和真实两场数据"
+    },
+    "strategy_analysis": {
+      "status": "DESIGNED_ONLY",
+      "evidence": "仅工作流/Profile规则",
+      "blocker": "无真实场次与执行器"
+    },
+    "formal_knowledge_update": {
+      "status": "DISABLED",
+      "evidence": "knowledge_writer代码存在",
+      "blocker": "formal_knowledge_write=false且正式SSOT未接入"
+    }
+  },
+  "baseline_metrics": {
+    "course_artifact_files": 4,
+    "runtime_core_code_files": 17,
+    "sqlite_business_tasks": 0,
+    "sqlite_complete_scans": 0,
+    "feishu_product_records": 0,
+    "feishu_competitor_records": 0,
+    "feishu_relation_records": 0,
+    "feishu_runtime_records": 0,
+    "real_e2e_success_tasks": 0,
+    "latest_real_business_delivery_at": null,
+    "closest_chain": "飞书收到真实链接→Agent识别→Tabbit只读采集/UID验证；未创建任务、未正式扫描、未写Base"
+  },
+  "blockers": [
+    "缺少飞书消息到唯一业务任务的执行入口",
+    "缺少确定性商品链接解析实现",
+    "缺少可重复、可恢复的browser_scanner.py",
+    "缺少本地业务事务到outbox再到Base的闭环",
+    "Base业务写入安全门关闭",
+    "当前worker仅服务心跳，不能执行或恢复业务任务",
+    "真实直播转录、监控、录制和后续分析均未形成业务闭环"
+  ]
+}

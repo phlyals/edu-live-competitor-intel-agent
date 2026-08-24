@@ -1,0 +1,42 @@
+# macOS metadata
+.DS_Store
+**/.DS_Store
+
+# Authentication and authorization artifacts
+*auth*.png
+*qr*.png
+feishu-*.png
+lark-*.png
+hermes-feishu-bot-qr.png
+
+# Runtime output and local state
+logs/
+*.log
+*.pid
+*.sock
+*.db
+*.db-*
+*.sqlite
+*.sqlite3
+*.sqlite-*
+__pycache__/
+*.py[cod]
+
+# Credentials and machine-local configuration
+.env
+.env.*
+auth.json
+credentials.json
+secrets.json
+*.pem
+*.key
+
+# Media and generated processing results stay outside source control
+*.mp4
+*.ts
+*.flv
+*.mkv
+*.wav
+*.mp3
+*.m4a
+analysis/drafts/
