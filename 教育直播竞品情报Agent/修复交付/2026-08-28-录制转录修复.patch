@@ -1,0 +1,415 @@
+diff --git a/runtime/bin/recorder.py b/runtime/bin/recorder.py
+index 8073ae1..f5b738b 100755
+--- a/runtime/bin/recorder.py
++++ b/runtime/bin/recorder.py
+@@ -120,7 +120,7 @@ def main() -> int:
+         v3_config = json.loads(V3_CONFIG.read_text(encoding="utf-8"))
+     except (OSError, json.JSONDecodeError) as exc:
+         return emit({"status": "ERROR", "reason": f"V3 config unavailable: {exc.__class__.__name__}"})
+-    requested_duration = float(args.duration if args.duration is not None else v3_config.get("recording_duration_seconds", 0))
++    requested_duration = float(args.duration if args.duration is not None else (v3_config.get("recording_duration_seconds") or 0))
+     requested_quality = str(args.quality or v3_config.get("recording_quality") or "LD").upper()
+     segment_seconds = float(v3_config.get("recording_segment_seconds") or 0)
+     safety = config.get("safety") or {}
+@@ -133,7 +133,7 @@ def main() -> int:
+             })
+         command = [
+             str(SHARED_PYTHON), str(SHARED_RECORDER), "--url", args.url,
+-            "--duration", str(args.duration), "--check-only",
++            "--check-only",
+         ]
+         return_code, payload = run_shared(command)
+         mapped = "LIVE" if payload.get("status") == "live" else "OFFLINE_CONFIRMED" if payload.get("status") == "not_live" else "UNKNOWN"
+@@ -145,6 +145,7 @@ def main() -> int:
+             "title": payload.get("title"),
+             "room_id": payload.get("room_id"),
+             "return_code": return_code,
++            "reason": payload.get("message") if mapped == "UNKNOWN" else None,
+             "authorization_mode": "persistent_gate" if safety.get("live_monitor", False) else "one_off_read_only_probe",
+             "recording_started": False,
+         })
+@@ -171,14 +172,17 @@ def main() -> int:
+     completed_dir = completed_root / account_id / session_id
+     if completed_dir.exists():
+         return emit({"status": "ERROR", "reason": "Completed session output already exists; refusing to overwrite", "recording_started": False})
+-    if partial_dir.exists() and not args.resume:
+-        return emit({"status": "ERROR", "reason": "Session output already exists; use --resume for the same business session", "recording_started": False})
++    if partial_dir.is_symlink():
++        return emit({"status": "ERROR", "reason": "Session output directory must not be a symlink", "recording_started": False})
+     partial_dir.mkdir(parents=True, exist_ok=True, mode=0o700)
+-    existing_parts = sorted(partial_dir.glob("*.ts.partial"))
++    existing_parts = sorted(p for p in partial_dir.iterdir() if p.is_file() and (p.name.endswith('.ts.partial') or p.suffix=='.ts') and p.stat().st_size>0)
+     if existing_parts and not args.resume:
+         return emit({"status": "ERROR", "reason": "Session output already exists; use --resume to continue the same session", "recording_started": False})
+     part_index = len(existing_parts)
+     filename = "整场直播.ts.partial" if part_index == 0 else f"整场直播.part{part_index:02d}.ts.partial"
++    while (partial_dir / filename).exists() and (partial_dir / filename).stat().st_size>0:
++        part_index += 1
++        filename = f"整场直播.part{part_index:02d}.ts.partial"
+ 
+     command = [
+         str(SHARED_PYTHON), str(SHARED_RECORDER), "--url", args.url,
+@@ -194,7 +198,7 @@ def main() -> int:
+             "reason": payload.get("message") or "Shared recorder failed",
+             "partial_dir": str(partial_dir),
+             "return_code": return_code,
+-            "recording_started": True,
++            "recording_started": (partial_dir / filename).is_file() and (partial_dir / filename).stat().st_size>0,
+         })
+     # Keep the whole-session file in partial storage until Runtime V3 confirms
+     # the five-minute down window.  Continuation files exist only after a
+diff --git a/runtime/v3/v3_worker.py b/runtime/v3/v3_worker.py
+index efacbbc..99c55f8 100644
+--- a/runtime/v3/v3_worker.py
++++ b/runtime/v3/v3_worker.py
+@@ -133,7 +133,7 @@ def create_session_if_live(conn, target: dict, result: dict) -> dict | None:
+     if existing and existing["status"] not in {"ENDED", "FINALIZED", "DUPLICATE_SUPERSEDED"}:
+         return {**dict(existing), "_created": False}
+     session_id = "session_" + hashlib.sha256(f"{target['monitor_target_id']}:{platform_session_id}:{now}".encode("utf-8")).hexdigest()[:32]
+-    conn.execute("INSERT INTO live_sessions(session_id,monitor_target_id,platform_session_id,status,started_at,source_url,metadata_json) VALUES(?,?,?,'RECORDING',?,?,?)", (session_id, target["monitor_target_id"], platform_session_id, now, target["live_url"], json.dumps(result, ensure_ascii=False, sort_keys=True)))
++    conn.execute("INSERT INTO live_sessions(session_id,monitor_target_id,platform_session_id,status,started_at,source_url,metadata_json) VALUES(?,?,?,'WAITING_STREAM',?,?,?)", (session_id, target["monitor_target_id"], platform_session_id, now, target["live_url"], json.dumps(result, ensure_ascii=False, sort_keys=True)))
+     return {**dict(conn.execute("SELECT * FROM live_sessions WHERE session_id=?", (session_id,)).fetchone()), "_created": True}
+ 
+ 
+@@ -175,8 +175,8 @@ def update_session_liveness(conn, target: dict, state: str, now: str) -> None:
+         if state == "LIVE":
+             metadata.pop("down_since", None)
+             metadata["last_seen_live_at"] = now
+-            next_status = "WAITING_CAPACITY" if row["status"] == "WAITING_CAPACITY" else "RECORDING"
+-            conn.execute("UPDATE live_sessions SET metadata_json=?,status=? WHERE session_id=?", (json.dumps(metadata, ensure_ascii=False, sort_keys=True), next_status, row["session_id"]))
++            # LIVE proves the broadcast, not that our recorder is writing bytes.
++            conn.execute("UPDATE live_sessions SET metadata_json=? WHERE session_id=?", (json.dumps(metadata, ensure_ascii=False, sort_keys=True), row["session_id"]))
+             continue
+         if state == "UNKNOWN":
+             metadata["last_unknown_at"] = now
+@@ -192,7 +192,7 @@ def update_session_liveness(conn, target: dict, state: str, now: str) -> None:
+         except ValueError:
+             elapsed = 0
+         if elapsed >= 300:
+-            conn.execute("UPDATE live_sessions SET status='ENDED',ended_at=?,metadata_json=? WHERE session_id=?", (now, json.dumps(metadata, ensure_ascii=False, sort_keys=True), row["session_id"]))
++            conn.execute("UPDATE live_sessions SET status='ENDED',ended_at=?,metadata_json=? WHERE session_id=?", (down_since, json.dumps(metadata, ensure_ascii=False, sort_keys=True), row["session_id"]))
+ 
+ 
+ def pid_alive(pid: int | None) -> bool:
+@@ -272,12 +272,50 @@ def upsert_recording_lease(conn, session_id: str, *, now: str | None = None, lea
+     conn.execute("INSERT INTO recording_leases(lease_id,session_id,node_id,fencing_token,acquired_at,lease_until,status) VALUES(?,?,?,?,?,?,?) ON CONFLICT(lease_id) DO UPDATE SET node_id=excluded.node_id,fencing_token=excluded.fencing_token,acquired_at=excluded.acquired_at,lease_until=excluded.lease_until,status='ACTIVE'", (lease_id, session_id, os.environ.get("V3_NODE_ID") or socket.gethostname(), acquired_ms, now, lease_until, "ACTIVE"))
+ 
+ 
++def recording_bytes(directory: Path) -> int:
++    return sum(p.stat().st_size for p in directory.iterdir() if p.is_file() and (p.name.endswith('.ts.partial') or p.suffix=='.ts')) if directory.is_dir() else 0
++
++
++def recording_failure(conn, session: dict, job: dict, reason: str, now: str) -> None:
++    row=conn.execute('SELECT metadata_json FROM live_sessions WHERE session_id=?',(session['session_id'],)).fetchone()
++    meta=json.loads(row['metadata_json'] or '{}');health=meta.setdefault('recording_health',{})
++    failures=int(health.get('consecutive_failures',min(int(job.get('restart_count') or 0),3)))+1
++    delay=600 if failures>3 else 30
++    retry=(datetime.fromisoformat(now.replace('Z','+00:00'))+timedelta(seconds=delay)).isoformat(timespec='milliseconds').replace('+00:00','Z')
++    health.update(consecutive_failures=failures,next_retry_at=retry,last_failure=reason,last_failure_at=now)
++    meta['recording_gap_seen']=True
++    conn.execute("UPDATE live_sessions SET status='WAITING_STREAM',metadata_json=? WHERE session_id=?",(json.dumps(meta,ensure_ascii=False),session['session_id']))
++    conn.execute("UPDATE recording_jobs SET status='WAITING_STREAM',pid=NULL,last_error=?,updated_at=? WHERE session_id=?",(f'{reason}; retry at {retry}',now,session['session_id']))
++    conn.execute("UPDATE recording_leases SET status='RELEASED',lease_until=? WHERE session_id=?",(now,session['session_id']))
++    record_event(conn,'RECORDING_BACKOFF' if delay==600 else 'RECORDING_RETRY_SCHEDULED',object_type='session',object_id=session['session_id'],payload={'reason':reason,'consecutive_failures':failures,'retry_at':retry,'wait_seconds':delay},severity='WARNING')
++
++
++def recording_progress(conn, session: dict, job: dict, now: str) -> str:
++    meta=json.loads(session['metadata_json'] or '{}');health=meta.setdefault('recording_health',{})
++    size=recording_bytes(Path(job['partial_dir']))
++    if health.get('pid')!=job['pid']:
++        health.update(pid=job['pid'],bytes=size,checked_at=now,last_growth_at=None,growth_observations=0)
++    elif size>int(health.get('bytes') or 0):
++        health.update(last_growth_at=now,growth_observations=int(health.get('growth_observations') or 0)+1,consecutive_failures=0,next_retry_at=None)
++        meta.setdefault('first_media_growth_at',now)
++    reference=health.get('last_growth_at') or health.get('checked_at') or now
++    age=(datetime.fromisoformat(now.replace('Z','+00:00'))-datetime.fromisoformat(reference.replace('Z','+00:00'))).total_seconds()
++    state='RUNNING' if size>0 and health.get('growth_observations',0)>0 and age<120 else 'STALLED' if age>=120 else 'STARTING'
++    health['bytes']=size
++    # checked_at is the initial sample time, so a motionless file cannot reset the stall timer.
++    health['last_observed_at']=now
++    conn.execute('UPDATE live_sessions SET metadata_json=?,status=? WHERE session_id=?',(json.dumps(meta,ensure_ascii=False),'RECORDING' if state=='RUNNING' else 'WAITING_STREAM',session['session_id']))
++    conn.execute('UPDATE recording_jobs SET status=?,updated_at=? WHERE session_id=?',(state if state!='STALLED' else 'WAITING_STREAM',now,session['session_id']))
++    return state
++
++
+ def ensure_recording_job(session: dict, target: dict) -> dict:
+     account_key, recording_key, partial_dir, completed_dir = recording_keys(session, target)
+     now = utc_now()
+     with connect() as conn:
+         job = conn.execute("SELECT * FROM recording_jobs WHERE session_id=?", (session["session_id"],)).fetchone()
+-        if job and job["status"] == "RUNNING" and pid_alive(job["pid"]):
++        job=dict(job) if job else None
++        if job and pid_alive(job["pid"]):
+             if recorder_uses_fixed_segments(recording_key):
+                 stop_recorder_group(job["pid"])
+                 conn.execute("UPDATE recording_jobs SET status='STARTING',pid=NULL,updated_at=?,last_error='migrating from fixed segments to full-session file' WHERE session_id=?", (utc_now(), session["session_id"]))
+@@ -289,19 +327,29 @@ def ensure_recording_job(session: dict, target: dict) -> dict:
+                 return {"started": False, "pid": job["pid"], "recording_key": recording_key}
+         discovered = discover_recorder_pid(recording_key)
+         if discovered:
+-            conn.execute("INSERT INTO recording_jobs(job_id,session_id,status,pid,account_key,recording_key,partial_dir,completed_dir,started_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?) ON CONFLICT(session_id) DO UPDATE SET status='RUNNING',pid=excluded.pid,account_key=excluded.account_key,recording_key=excluded.recording_key,partial_dir=excluded.partial_dir,completed_dir=excluded.completed_dir,updated_at=excluded.updated_at,last_error=NULL", ("recjob_" + hashlib.sha256(session["session_id"].encode()).hexdigest()[:24], session["session_id"], "RUNNING", discovered, account_key, recording_key, str(partial_dir), str(completed_dir), session["started_at"] or now, now))
+-            conn.execute("UPDATE live_sessions SET status='RECORDING' WHERE session_id=? AND status='WAITING_CAPACITY'", (session["session_id"],))
++            conn.execute("INSERT INTO recording_jobs(job_id,session_id,status,pid,account_key,recording_key,partial_dir,completed_dir,started_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?) ON CONFLICT(session_id) DO UPDATE SET status='STARTING',pid=excluded.pid,account_key=excluded.account_key,recording_key=excluded.recording_key,partial_dir=excluded.partial_dir,completed_dir=excluded.completed_dir,updated_at=excluded.updated_at,last_error=NULL", ("recjob_" + hashlib.sha256(session["session_id"].encode()).hexdigest()[:24], session["session_id"], "STARTING", discovered, account_key, recording_key, str(partial_dir), str(completed_dir), session["started_at"] or now, now))
+             upsert_recording_lease(conn, session["session_id"], now=now)
+             conn.commit()
+             return {"started": False, "pid": discovered, "recording_key": recording_key, "discovered": True}
++        if job and job.get('pid'):
++            recording_failure(conn,session,job,'recorder exited while broadcast is live',now)
++        row=conn.execute('SELECT metadata_json FROM live_sessions WHERE session_id=?',(session['session_id'],)).fetchone()
++        meta=json.loads(row['metadata_json'] or '{}');health=meta.setdefault('recording_health',{})
++        if health.get('next_retry_at') and health['next_retry_at']>now:
++            conn.commit()
++            return {'started':False,'recording_key':recording_key,'reason':'recording backoff','next_retry_at':health['next_retry_at']}
++        if health.get('next_retry_at') and int(health.get('consecutive_failures') or 0)>3:
++            health['consecutive_failures']=0
++        health['next_retry_at']=None
+         capacity = int((load_config().get("atomic_activation") or {}).get("max_concurrent_recordings", 65))
+-        running_count = conn.execute("SELECT count(*) FROM recording_jobs WHERE status='RUNNING' AND session_id<>?", (session["session_id"],)).fetchone()[0]
++        running_count = conn.execute("SELECT count(*) FROM recording_jobs WHERE status IN ('RUNNING','STARTING') AND session_id<>?", (session["session_id"],)).fetchone()[0]
+         if running_count >= capacity:
+             conn.execute("INSERT INTO recording_jobs(job_id,session_id,status,pid,account_key,recording_key,partial_dir,completed_dir,started_at,updated_at,restart_count,last_error) VALUES(?,?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT(session_id) DO UPDATE SET status='WAITING_CAPACITY',pid=NULL,account_key=excluded.account_key,recording_key=excluded.recording_key,partial_dir=excluded.partial_dir,completed_dir=excluded.completed_dir,updated_at=excluded.updated_at,last_error=excluded.last_error", ("recjob_" + hashlib.sha256(session["session_id"].encode()).hexdigest()[:24], session["session_id"], "WAITING_CAPACITY", None, account_key, recording_key, str(partial_dir), str(completed_dir), session["started_at"] or now, now, 0, f"recording capacity {capacity} reached ({running_count} running sessions)"))
+             conn.execute("UPDATE live_sessions SET status='WAITING_CAPACITY',completeness='UNKNOWN' WHERE session_id=? AND status IN ('RECORDING','DETECTED','WAITING_STREAM','WAITING_CAPACITY')", (session["session_id"],))
+             conn.commit()
+             return {"started": False, "pid": None, "recording_key": recording_key, "reason": "recording capacity reached", "capacity": capacity, "running_count": running_count}
+         conn.execute("INSERT INTO recording_jobs(job_id,session_id,status,pid,account_key,recording_key,partial_dir,completed_dir,started_at,updated_at,restart_count,last_error) VALUES(?,?,?,?,?,?,?,?,?,?,?,NULL) ON CONFLICT(session_id) DO UPDATE SET status='STARTING',pid=NULL,account_key=excluded.account_key,recording_key=excluded.recording_key,partial_dir=excluded.partial_dir,completed_dir=excluded.completed_dir,updated_at=excluded.updated_at,restart_count=recording_jobs.restart_count+1,last_error=NULL", ("recjob_" + hashlib.sha256(session["session_id"].encode()).hexdigest()[:24], session["session_id"], "STARTING", None, account_key, recording_key, str(partial_dir), str(completed_dir), session["started_at"] or now, now, 0))
++        conn.execute("UPDATE live_sessions SET status='WAITING_STREAM',metadata_json=? WHERE session_id=?",(json.dumps(meta,ensure_ascii=False),session['session_id']))
+         conn.commit()
+     log_dir = Path("/Volumes/ExternalStorage/同行直播录制/exports/runtime-v3-recordings") / recording_key
+     log_dir.mkdir(parents=True, exist_ok=True)
+@@ -317,12 +365,14 @@ def ensure_recording_job(session: dict, target: dict) -> dict:
+     handle.close()
+     with connect() as conn:
+         if process.poll() is not None:
+-            conn.execute("UPDATE recording_jobs SET status='WAITING_STREAM',pid=NULL,updated_at=?,last_error=? WHERE session_id=?", (utc_now(), "recorder exited before establishing stream", session["session_id"]))
+-            conn.execute("UPDATE live_sessions SET status='WAITING_STREAM' WHERE session_id=? AND status='RECORDING'", (session["session_id"],))
++            recording_failure(conn,session,job or {},'recorder exited before establishing stream',utc_now())
+             conn.commit()
+             return {"started": False, "pid": None, "recording_key": recording_key, "reason": "recorder exited before stream"}
+-        conn.execute("UPDATE recording_jobs SET status='RUNNING',pid=?,updated_at=? WHERE session_id=?", (process.pid, utc_now(), session["session_id"]))
+-        conn.execute("UPDATE live_sessions SET status='RECORDING' WHERE session_id=? AND status='WAITING_CAPACITY'", (session["session_id"],))
++        conn.execute("UPDATE recording_jobs SET status='STARTING',pid=?,updated_at=? WHERE session_id=?", (process.pid, utc_now(), session["session_id"]))
++        row=conn.execute('SELECT metadata_json FROM live_sessions WHERE session_id=?',(session['session_id'],)).fetchone()
++        meta=json.loads(row['metadata_json'] or '{}');health=meta.setdefault('recording_health',{})
++        health.update(pid=process.pid,bytes=recording_bytes(partial_dir),checked_at=utc_now(),last_growth_at=None,growth_observations=0)
++        conn.execute('UPDATE live_sessions SET metadata_json=? WHERE session_id=?',(json.dumps(meta,ensure_ascii=False),session['session_id']))
+         upsert_recording_lease(conn, session["session_id"])
+         conn.commit()
+     return {"started": True, "pid": process.pid, "recording_key": recording_key}
+@@ -331,6 +381,8 @@ def ensure_recording_job(session: dict, target: dict) -> dict:
+ def finalize_media_for_session(conn, session: dict, job: dict) -> None:
+     partial_dir = Path(job["partial_dir"])
+     completed_dir = Path(job["completed_dir"])
++    if session['status']!='ENDED' or pid_alive(job.get('pid')):
++        return
+     # V3 Final keeps one user-visible full-session file.  Continuation parts
+     # are merged here only when a recorder restart was required.
+     if not partial_dir.exists() and not completed_dir.exists():
+@@ -351,12 +403,12 @@ def finalize_media_for_session(conn, session: dict, job: dict) -> None:
+                 concat_list = media_root / ".concat-list.txt"
+                 concat_list.write_text("".join("file '" + path.as_posix().replace("'", "'\\''") + "'\n" for path in parts), encoding="utf-8")
+                 ffmpeg = shutil.which("ffmpeg") or "/opt/homebrew/bin/ffmpeg"
+-                proc = subprocess.run([ffmpeg, "-hide_banner", "-loglevel", "error", "-y", "-f", "concat", "-safe", "0", "-i", str(concat_list), "-c", "copy", str(final_path)], capture_output=True, text=True, timeout=3600, check=False)
+-                if proc.returncode != 0 or not final_path.exists() or final_path.stat().st_size == 0:
+-                    with final_path.open("wb") as merged:
+-                        for part in parts:
+-                            with part.open("rb") as source:
+-                                shutil.copyfileobj(source, merged, length=1024 * 1024)
++                merging=media_root/'整场直播.merge.tmp'
++                proc = subprocess.run([ffmpeg, "-hide_banner", "-loglevel", "error", "-y", "-f", "concat", "-safe", "0", "-i", str(concat_list), "-c", "copy", '-f','mpegts',str(merging)], capture_output=True, text=True, timeout=3600, check=False)
++                if proc.returncode != 0 or not merging.exists() or merging.stat().st_size == 0:
++                    conn.execute("UPDATE recording_jobs SET last_error='media concat failed; source parts retained' WHERE session_id=?",(session['session_id'],))
++                    return
++                merging.replace(final_path)
+                 for part in parts:
+                     if part != final_path and part.exists():
+                         part.unlink()
+@@ -376,13 +428,21 @@ def finalize_media_for_session(conn, session: dict, job: dict) -> None:
+     if session["status"] != "ENDED" or not final_files:
+         return
+     path = final_files[0]
++    probe=subprocess.run(['/opt/homebrew/bin/ffprobe','-v','error','-show_entries','format=duration','-of','json',str(path)],capture_output=True,text=True,timeout=60,check=False)
++    try:duration=float(json.loads(probe.stdout)['format']['duration'])
++    except (ValueError,KeyError,TypeError):return
++    if probe.returncode!=0 or duration<=0:return
++    expected=(datetime.fromisoformat(session['ended_at'].replace('Z','+00:00'))-datetime.fromisoformat(session['started_at'].replace('Z','+00:00'))).total_seconds()
++    metadata=json.loads(session['metadata_json'] or '{}')
++    complete=not metadata.get('recording_gap_seen') and int(job.get('restart_count') or 0)==0 and abs(duration-expected)<=max(60,expected*0.02)
++    metadata['media_coverage']={'duration_seconds':duration,'observed_session_seconds':expected,'continuous_capture':complete,'checked_at':utc_now()}
+     checksum = file_digest(path)
+     captured_from = session["started_at"] or utc_now()
+     captured_to = session["ended_at"] or utc_now()
+     segment_id = "segment_" + hashlib.sha256(f"{session['session_id']}:final".encode("utf-8")).hexdigest()[:24]
+     conn.execute("INSERT INTO recording_segments(segment_id,session_id,path,checksum,captured_from,captured_to,status,bytes) VALUES(?,?,?,?,?,?,?,?) ON CONFLICT(session_id,path) DO UPDATE SET checksum=excluded.checksum,status='COMPLETE',bytes=excluded.bytes,captured_to=excluded.captured_to", (segment_id, session["session_id"], str(path), checksum, captured_from, captured_to, "COMPLETE", path.stat().st_size))
+     manifest_path = media_root / "media-manifest.json"
+-    manifest = {"session_id": session["session_id"], "final_path": str(path), "sha256": checksum, "bytes": path.stat().st_size, "captured_from": captured_from, "captured_to": captured_to, "created_at": utc_now()}
++    manifest = {"session_id": session["session_id"], "final_path": str(path), "sha256": checksum, "bytes": path.stat().st_size, "captured_from": captured_from, "captured_to": captured_to, "created_at": utc_now(), 'coverage':metadata['media_coverage'],'completeness':'COMPLETE' if complete else 'PARTIAL'}
+     manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+     manifest_hash = hashlib.sha256(manifest_path.read_bytes()).hexdigest()
+     conn.execute("INSERT INTO media_manifests(manifest_id,session_id,status,manifest_path,manifest_hash,segment_count,total_bytes,complete_from,complete_to,verified_at,metadata_json) VALUES(?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT(session_id) DO UPDATE SET status='VERIFIED',manifest_path=excluded.manifest_path,manifest_hash=excluded.manifest_hash,segment_count=excluded.segment_count,total_bytes=excluded.total_bytes,complete_from=excluded.complete_from,complete_to=excluded.complete_to,verified_at=excluded.verified_at,metadata_json=excluded.metadata_json", ("manifest:" + session["session_id"], session["session_id"], "VERIFIED", str(manifest_path), manifest_hash, 1, path.stat().st_size, captured_from, captured_to, utc_now(), json.dumps({"final_file": str(path)}, ensure_ascii=False)))
+@@ -394,7 +454,7 @@ def finalize_media_for_session(conn, session: dict, job: dict) -> None:
+     except ValueError:
+         video_due = utc_now()
+     conn.execute("INSERT INTO retention_jobs(retention_job_id,object_type,object_id,policy_name,status,not_before,created_at,updated_at,payload_json) VALUES(?,?,?,?,?,?,?,?,?) ON CONFLICT(object_type,object_id,policy_name) DO UPDATE SET not_before=excluded.not_before,payload_json=excluded.payload_json", ("retention:video:" + session["session_id"], "VIDEO", session["session_id"], "VIDEO_72H", "PENDING", video_due, utc_now(), utc_now(), json.dumps({"session_id": session["session_id"], "path": str(path), "manifest_path": str(manifest_path)}, ensure_ascii=False)))
+-    conn.execute("UPDATE live_sessions SET status='MEDIA_COMPLETE',completeness='COMPLETE' WHERE session_id=?", (session["session_id"],))
++    conn.execute("UPDATE live_sessions SET status='MEDIA_COMPLETE',completeness=?,metadata_json=? WHERE session_id=?", ('COMPLETE' if complete else 'PARTIAL',json.dumps(metadata,ensure_ascii=False),session["session_id"]))
+ 
+ 
+ def reconcile_recording_jobs() -> dict:
+@@ -408,6 +468,10 @@ def reconcile_recording_jobs() -> dict:
+             target = conn.execute("SELECT * FROM monitor_targets WHERE monitor_target_id=?", (session["monitor_target_id"],)).fetchone() if session else None
+             if not session or not target:
+                 continue
++            if alive and session['status']=='ENDED':
++                stop_recorder_group(job['pid'])
++                alive=pid_alive(job['pid'])
++                if alive:continue
+             if alive:
+                 # Migrate any pre-V3 fixed-segment child in place.  This is a
+                 # one-time compatibility action: the old process group is
+@@ -420,12 +484,17 @@ def reconcile_recording_jobs() -> dict:
+                     ensure_recording_job(dict(session), dict(target))
+                     restarted += 1
+                 else:
+-                    conn.execute("UPDATE recording_jobs SET status='RUNNING',updated_at=? WHERE session_id=?", (utc_now(), session["session_id"]))
+-                    upsert_recording_lease(conn, session["session_id"])
+-                    running += 1
++                    state=recording_progress(conn,dict(session),job,utc_now())
++                    if state=='STALLED':
++                        stop_recorder_group(job['pid'])
++                        recording_failure(conn,dict(session),job,'media stopped growing for 120 seconds',utc_now())
++                    else:
++                        upsert_recording_lease(conn, session["session_id"])
++                        running += int(state=='RUNNING')
+             elif session["status"] in {"ENDED", "MEDIA_COMPLETE", "DUPLICATE_SUPERSEDED"}:
+                 finalize_media_for_session(conn, dict(session), job)
+-                conn.execute("UPDATE recording_jobs SET status='COMPLETE',pid=NULL,updated_at=? WHERE session_id=?", (utc_now(), session["session_id"]))
++                final_state=conn.execute('SELECT status FROM live_sessions WHERE session_id=?',(session['session_id'],)).fetchone()[0]
++                conn.execute("UPDATE recording_jobs SET status=?,pid=NULL,updated_at=? WHERE session_id=?", ('COMPLETE' if final_state in {'MEDIA_COMPLETE','DUPLICATE_SUPERSEDED'} else 'WAITING_STREAM',utc_now(), session["session_id"]))
+                 conn.execute("UPDATE recording_leases SET status='RELEASED',lease_until=? WHERE session_id=? AND status='ACTIVE'", (utc_now(), session["session_id"]))
+                 finalized += 1
+             elif target["live_status"] == "LIVE":
+diff --git a/runtime/v3/v3_pipeline_worker.py b/runtime/v3/v3_pipeline_worker.py
+index 7b84413..824e3d7 100644
+--- a/runtime/v3/v3_pipeline_worker.py
++++ b/runtime/v3/v3_pipeline_worker.py
+@@ -16,6 +16,7 @@ import signal
+ import shutil
+ import subprocess
+ import time
++from datetime import datetime, timedelta, timezone
+ from pathlib import Path
+ 
+ from v3_runtime import connect, init_db, upsert_heartbeat, utc_now
+@@ -60,6 +61,15 @@ def register_segments() -> int:
+     return changed
+ 
+ 
++def media_duration(path: Path) -> float | None:
++    if not path.is_file():return None
++    proc=subprocess.run(['/opt/homebrew/bin/ffprobe','-v','error','-show_entries','format=duration','-of','json',str(path)],capture_output=True,text=True,timeout=60,check=False)
++    try:
++        value=float(json.loads(proc.stdout)['format']['duration'])
++        return value if proc.returncode==0 and value>0 else None
++    except (ValueError,KeyError,TypeError):return None
++
++
+ def extract_audio(media: Path, audio: Path, *, max_seconds: int = 0, bitrate_kbps: int = 48) -> bool:
+     """Extract speech audio; max_seconds=0 means the complete final session.
+ 
+@@ -68,11 +78,15 @@ def extract_audio(media: Path, audio: Path, *, max_seconds: int = 0, bitrate_kbp
+     faster-whisper decodes the compressed speech track directly through
+     FFmpeg.
+     """
+-    if audio.is_file() and audio.stat().st_size > 0:
+-        return True
+     if not FFMPEG.is_file() or not media.is_file():
+         return False
++    duration=media_duration(media)
++    if duration is None:return False
++    expected=min(duration,max_seconds) if max_seconds>0 else duration
++    existing=media_duration(audio)
++    if existing is not None and abs(existing-expected)<=2:return True
+     audio.parent.mkdir(parents=True, exist_ok=True)
++    temporary=audio.with_name(audio.stem+'.extracting'+audio.suffix)
+     command = [str(FFMPEG), "-hide_banner", "-loglevel", "error", "-y", "-i", str(media)]
+     if max_seconds > 0:
+         command.extend(["-t", str(max_seconds)])
+@@ -83,27 +97,38 @@ def extract_audio(media: Path, audio: Path, *, max_seconds: int = 0, bitrate_kbp
+         command.extend(["-c:a", "aac", "-b:a", f"{max(32, int(bitrate_kbps))}k"])
+     else:
+         command.extend(["-c:a", "pcm_s16le"])
+-    command.append(str(audio))
++    command.append(str(temporary))
+     proc = subprocess.run(command, capture_output=True, text=True, timeout=1800, check=False)
+-    return proc.returncode == 0 and audio.is_file() and audio.stat().st_size > 0
++    actual=media_duration(temporary) if proc.returncode==0 else None
++    if actual is None or abs(actual-expected)>2:return False
++    temporary.replace(audio)
++    return True
+ 
+ 
+ def transcribe_pending() -> int:
+     created = 0
+     with connect() as conn:
+-        sessions = conn.execute("SELECT DISTINCT s.session_id,s.status,r.path,r.segment_id,r.checksum FROM live_sessions s JOIN recording_segments r ON r.session_id=s.session_id WHERE r.status='COMPLETE' AND NOT EXISTS (SELECT 1 FROM transcripts t WHERE t.session_id=s.session_id AND t.status='COMPLETE')").fetchall()
++        sessions = [dict(r) for r in conn.execute("SELECT DISTINCT s.session_id,s.status,s.ended_at,s.completeness,r.path,r.segment_id,r.checksum FROM live_sessions s JOIN recording_segments r ON r.session_id=s.session_id WHERE r.status='COMPLETE' AND s.status='MEDIA_COMPLETE' ORDER BY s.ended_at DESC,r.path")]
+     for session in sessions:
+         media = Path(session["path"])
+         full_session = media.name == "整场直播.ts"
++        if full_session and session['completeness']!='COMPLETE':continue
++        media_hash=str(session['checksum'] or digest(media))
++        source_digest=hashlib.sha256(('FULL_SESSION:'+media_hash).encode()).hexdigest() if full_session else media_hash
++        with connect() as conn:
++            previous=conn.execute("SELECT * FROM transcripts WHERE session_id=? AND source_digest=? AND status='COMPLETE'",(session['session_id'],source_digest)).fetchone()
++        if previous:
++            metadata=json.loads(previous['metadata_json'] or '{}')
++            if (not full_session or metadata.get('coverage_scope')=='FULL_SESSION') and previous['output_path'] and Path(previous['output_path']).is_file():continue
+         config = json.loads((ROOT / "v3" / "v3_config.json").read_text(encoding="utf-8")) if (ROOT / "v3" / "v3_config.json").is_file() else {}
+         audio_format = str(config.get("asr_audio_format") or "opus").lower().lstrip(".")
+         audio_ext = "." + audio_format
+-        preferred_audio = media.with_suffix(audio_ext) if full_session else media.with_suffix(".sample300s" + audio_ext)
++        preferred_audio = media.with_name(media.stem+'.'+media_hash[:12]+audio_ext) if full_session else media.with_suffix(".sample300s" + audio_ext)
+         legacy_audio = media.with_suffix(".wav") if full_session else media.with_suffix(".sample300s.wav")
+-        audio = preferred_audio if preferred_audio.is_file() or not legacy_audio.is_file() else legacy_audio
++        audio = preferred_audio if full_session or preferred_audio.is_file() or not legacy_audio.is_file() else legacy_audio
+         if not extract_audio(media, audio, max_seconds=0 if full_session else 300, bitrate_kbps=int(config.get("asr_audio_bitrate_kbps") or 48)):
+             with connect() as conn:
+-                conn.execute("INSERT OR IGNORE INTO transcripts(transcript_id,session_id,source_digest,engine,model,status,source_path,created_at,metadata_json) VALUES(?,?,?,?,?,?,?,?,?)", ("transcript_" + hashlib.sha256(str(media).encode()).hexdigest()[:24], session["session_id"], str(session["checksum"] or hashlib.sha256(str(media).encode()).hexdigest()), "faster-whisper", "tiny", "WAITING_TOOL", str(media), utc_now(), json.dumps({"reason": "audio extraction failed", "segment_id": session["segment_id"]}, ensure_ascii=False)))
++                conn.execute("INSERT OR IGNORE INTO transcripts(transcript_id,session_id,source_digest,engine,model,status,source_path,created_at,metadata_json) VALUES(?,?,?,?,?,?,?,?,?)", ("transcript_" + hashlib.sha256(f"{session['session_id']}:{source_digest}".encode()).hexdigest()[:24], session["session_id"], source_digest, "faster-whisper", str(config.get('asr_model') or 'faster-whisper-small'), "WAITING_TOOL", str(media), utc_now(), json.dumps({"reason": "audio extraction/duration validation failed", "segment_id": session["segment_id"]}, ensure_ascii=False)))
+                 conn.commit()
+             continue
+         out = audio.with_suffix(".transcript.json")
+@@ -111,7 +136,7 @@ def transcribe_pending() -> int:
+         if out.is_file():
+             try:
+                 existing = json.loads(out.read_text(encoding="utf-8"))
+-                if existing.get("status") == "READY":
++                if existing.get("status") == "READY" and (not full_session or existing.get('source_media_sha256')==media_hash):
+                     result = existing
+             except (OSError, json.JSONDecodeError):
+                 result = None
+@@ -132,12 +157,20 @@ def transcribe_pending() -> int:
+             except json.JSONDecodeError:
+                 result = {"status": "PAUSED", "reason": (proc.stderr or proc.stdout)[-1000:]}
+         status = "COMPLETE" if result.get("status") == "READY" and out.is_file() else "PAUSED"
++        if status=='COMPLETE':
++            result=json.loads(out.read_text())
++            duration=media_duration(audio)
++            if duration is None or result.get('duration') is None or abs(float(result['duration'])-duration)>2:
++                status='PAUSED';result['reason']='ASR input duration does not cover the complete audio'
++            elif full_session:
++                result.update(coverage_scope='FULL_SESSION',source_media_sha256=media_hash,source_audio_sha256=digest(audio),covered_audio_seconds=duration,recording_completeness=session['completeness'])
++                temporary=out.with_suffix('.verified.tmp')
++                temporary.write_text(json.dumps(result,ensure_ascii=False,indent=2));temporary.replace(out)
+         with connect() as conn:
+-            transcript_id = "transcript_" + hashlib.sha256(f"{session['session_id']}:{session['checksum'] or media}".encode()).hexdigest()[:24]
++            transcript_id = "transcript_" + hashlib.sha256(f"{session['session_id']}:{source_digest}".encode()).hexdigest()[:24]
+             config = json.loads((ROOT / "v3" / "v3_config.json").read_text(encoding="utf-8")) if (ROOT / "v3" / "v3_config.json").is_file() else {}
+             model_name = str(config.get("asr_model") or "faster-whisper-small")
+-            metadata = {**result, "source_segment_id": session["segment_id"], "sample_only": not full_session, "sample_seconds": None if full_session else 300, "model_name": model_name, "audio_format": audio.suffix.lower().lstrip("."), "audio_bitrate_kbps": int(config.get("asr_audio_bitrate_kbps") or 48)}
+-            source_digest = str(session["checksum"] or hashlib.sha256(str(media).encode()).hexdigest())
++            metadata = {**result, "coverage_scope": 'FULL_SESSION' if full_session else 'SAMPLE', "source_segment_id": session["segment_id"], "sample_only": not full_session, "sample_seconds": None if full_session else 300, "model_name": model_name, "audio_format": audio.suffix.lower().lstrip("."), "audio_bitrate_kbps": int(config.get("asr_audio_bitrate_kbps") or 48)}
+             conn.execute("INSERT INTO transcripts(transcript_id,session_id,source_digest,engine,model,status,language,source_path,output_path,low_confidence_count,created_at,metadata_json) VALUES(?,?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT(session_id,source_digest) DO UPDATE SET status=excluded.status,language=excluded.language,output_path=excluded.output_path,low_confidence_count=excluded.low_confidence_count,metadata_json=excluded.metadata_json", (transcript_id, session["session_id"], source_digest, "faster-whisper", model_name, status, result.get("language"), str(audio), str(out) if out.is_file() else None, int(result.get("low_confidence_count") or 0), utc_now(), json.dumps(metadata, ensure_ascii=False)))
+             if status == "COMPLETE" and full_session:
+                 try:
+
