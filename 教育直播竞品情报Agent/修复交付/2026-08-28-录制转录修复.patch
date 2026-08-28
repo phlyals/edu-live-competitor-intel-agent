@@ -59,7 +59,7 @@ index 8073ae1..f5b738b 100755
      # Keep the whole-session file in partial storage until Runtime V3 confirms
      # the five-minute down window.  Continuation files exist only after a
 diff --git a/runtime/v3/v3_worker.py b/runtime/v3/v3_worker.py
-index efacbbc..99c55f8 100644
+index efacbbc..16956cf 100644
 --- a/runtime/v3/v3_worker.py
 +++ b/runtime/v3/v3_worker.py
 @@ -133,7 +133,7 @@ def create_session_if_live(conn, target: dict, result: dict) -> dict | None:
@@ -195,16 +195,19 @@ index efacbbc..99c55f8 100644
          upsert_recording_lease(conn, session["session_id"])
          conn.commit()
      return {"started": True, "pid": process.pid, "recording_key": recording_key}
-@@ -331,6 +381,8 @@ def ensure_recording_job(session: dict, target: dict) -> dict:
+@@ -331,6 +381,11 @@ def ensure_recording_job(session: dict, target: dict) -> dict:
  def finalize_media_for_session(conn, session: dict, job: dict) -> None:
      partial_dir = Path(job["partial_dir"])
      completed_dir = Path(job["completed_dir"])
++    if session['status']=='MEDIA_COMPLETE' and not json.loads(session['metadata_json'] or '{}').get('media_coverage'):
++        # Revalidate legacy "complete" labels without altering their media.
++        session={**session,'status':'ENDED'}
 +    if session['status']!='ENDED' or pid_alive(job.get('pid')):
 +        return
      # V3 Final keeps one user-visible full-session file.  Continuation parts
      # are merged here only when a recorder restart was required.
      if not partial_dir.exists() and not completed_dir.exists():
-@@ -351,12 +403,12 @@ def finalize_media_for_session(conn, session: dict, job: dict) -> None:
+@@ -351,12 +406,12 @@ def finalize_media_for_session(conn, session: dict, job: dict) -> None:
                  concat_list = media_root / ".concat-list.txt"
                  concat_list.write_text("".join("file '" + path.as_posix().replace("'", "'\\''") + "'\n" for path in parts), encoding="utf-8")
                  ffmpeg = shutil.which("ffmpeg") or "/opt/homebrew/bin/ffmpeg"
@@ -223,7 +226,7 @@ index efacbbc..99c55f8 100644
                  for part in parts:
                      if part != final_path and part.exists():
                          part.unlink()
-@@ -376,13 +428,21 @@ def finalize_media_for_session(conn, session: dict, job: dict) -> None:
+@@ -376,13 +431,21 @@ def finalize_media_for_session(conn, session: dict, job: dict) -> None:
      if session["status"] != "ENDED" or not final_files:
          return
      path = final_files[0]
@@ -246,7 +249,7 @@ index efacbbc..99c55f8 100644
      manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
      manifest_hash = hashlib.sha256(manifest_path.read_bytes()).hexdigest()
      conn.execute("INSERT INTO media_manifests(manifest_id,session_id,status,manifest_path,manifest_hash,segment_count,total_bytes,complete_from,complete_to,verified_at,metadata_json) VALUES(?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT(session_id) DO UPDATE SET status='VERIFIED',manifest_path=excluded.manifest_path,manifest_hash=excluded.manifest_hash,segment_count=excluded.segment_count,total_bytes=excluded.total_bytes,complete_from=excluded.complete_from,complete_to=excluded.complete_to,verified_at=excluded.verified_at,metadata_json=excluded.metadata_json", ("manifest:" + session["session_id"], session["session_id"], "VERIFIED", str(manifest_path), manifest_hash, 1, path.stat().st_size, captured_from, captured_to, utc_now(), json.dumps({"final_file": str(path)}, ensure_ascii=False)))
-@@ -394,7 +454,7 @@ def finalize_media_for_session(conn, session: dict, job: dict) -> None:
+@@ -394,7 +457,7 @@ def finalize_media_for_session(conn, session: dict, job: dict) -> None:
      except ValueError:
          video_due = utc_now()
      conn.execute("INSERT INTO retention_jobs(retention_job_id,object_type,object_id,policy_name,status,not_before,created_at,updated_at,payload_json) VALUES(?,?,?,?,?,?,?,?,?) ON CONFLICT(object_type,object_id,policy_name) DO UPDATE SET not_before=excluded.not_before,payload_json=excluded.payload_json", ("retention:video:" + session["session_id"], "VIDEO", session["session_id"], "VIDEO_72H", "PENDING", video_due, utc_now(), utc_now(), json.dumps({"session_id": session["session_id"], "path": str(path), "manifest_path": str(manifest_path)}, ensure_ascii=False)))
@@ -255,7 +258,7 @@ index efacbbc..99c55f8 100644
  
  
  def reconcile_recording_jobs() -> dict:
-@@ -408,6 +468,10 @@ def reconcile_recording_jobs() -> dict:
+@@ -408,6 +471,10 @@ def reconcile_recording_jobs() -> dict:
              target = conn.execute("SELECT * FROM monitor_targets WHERE monitor_target_id=?", (session["monitor_target_id"],)).fetchone() if session else None
              if not session or not target:
                  continue
@@ -266,7 +269,7 @@ index efacbbc..99c55f8 100644
              if alive:
                  # Migrate any pre-V3 fixed-segment child in place.  This is a
                  # one-time compatibility action: the old process group is
-@@ -420,12 +484,17 @@ def reconcile_recording_jobs() -> dict:
+@@ -420,12 +487,17 @@ def reconcile_recording_jobs() -> dict:
                      ensure_recording_job(dict(session), dict(target))
                      restarted += 1
                  else:
@@ -289,7 +292,7 @@ index efacbbc..99c55f8 100644
                  finalized += 1
              elif target["live_status"] == "LIVE":
 diff --git a/runtime/v3/v3_pipeline_worker.py b/runtime/v3/v3_pipeline_worker.py
-index 7b84413..824e3d7 100644
+index 7b84413..c15009a 100644
 --- a/runtime/v3/v3_pipeline_worker.py
 +++ b/runtime/v3/v3_pipeline_worker.py
 @@ -16,6 +16,7 @@ import signal
@@ -334,7 +337,7 @@ index 7b84413..824e3d7 100644
      command = [str(FFMPEG), "-hide_banner", "-loglevel", "error", "-y", "-i", str(media)]
      if max_seconds > 0:
          command.extend(["-t", str(max_seconds)])
-@@ -83,27 +97,38 @@ def extract_audio(media: Path, audio: Path, *, max_seconds: int = 0, bitrate_kbp
+@@ -83,27 +97,39 @@ def extract_audio(media: Path, audio: Path, *, max_seconds: int = 0, bitrate_kbp
          command.extend(["-c:a", "aac", "-b:a", f"{max(32, int(bitrate_kbps))}k"])
      else:
          command.extend(["-c:a", "pcm_s16le"])
@@ -352,11 +355,12 @@ index 7b84413..824e3d7 100644
      created = 0
      with connect() as conn:
 -        sessions = conn.execute("SELECT DISTINCT s.session_id,s.status,r.path,r.segment_id,r.checksum FROM live_sessions s JOIN recording_segments r ON r.session_id=s.session_id WHERE r.status='COMPLETE' AND NOT EXISTS (SELECT 1 FROM transcripts t WHERE t.session_id=s.session_id AND t.status='COMPLETE')").fetchall()
-+        sessions = [dict(r) for r in conn.execute("SELECT DISTINCT s.session_id,s.status,s.ended_at,s.completeness,r.path,r.segment_id,r.checksum FROM live_sessions s JOIN recording_segments r ON r.session_id=s.session_id WHERE r.status='COMPLETE' AND s.status='MEDIA_COMPLETE' ORDER BY s.ended_at DESC,r.path")]
++        sessions = [dict(r) for r in conn.execute("SELECT DISTINCT s.session_id,s.status,s.ended_at,s.completeness,s.metadata_json AS session_metadata,r.path,r.segment_id,r.checksum FROM live_sessions s JOIN recording_segments r ON r.session_id=s.session_id WHERE r.status='COMPLETE' AND s.status='MEDIA_COMPLETE' ORDER BY s.ended_at DESC,r.path")]
      for session in sessions:
          media = Path(session["path"])
          full_session = media.name == "整场直播.ts"
-+        if full_session and session['completeness']!='COMPLETE':continue
++        coverage=json.loads(session['session_metadata'] or '{}').get('media_coverage') or {}
++        if full_session and (session['completeness']!='COMPLETE' or coverage.get('continuous_capture') is not True):continue
 +        media_hash=str(session['checksum'] or digest(media))
 +        source_digest=hashlib.sha256(('FULL_SESSION:'+media_hash).encode()).hexdigest() if full_session else media_hash
 +        with connect() as conn:
@@ -379,7 +383,7 @@ index 7b84413..824e3d7 100644
                  conn.commit()
              continue
          out = audio.with_suffix(".transcript.json")
-@@ -111,7 +136,7 @@ def transcribe_pending() -> int:
+@@ -111,7 +137,7 @@ def transcribe_pending() -> int:
          if out.is_file():
              try:
                  existing = json.loads(out.read_text(encoding="utf-8"))
@@ -388,7 +392,7 @@ index 7b84413..824e3d7 100644
                      result = existing
              except (OSError, json.JSONDecodeError):
                  result = None
-@@ -132,12 +157,20 @@ def transcribe_pending() -> int:
+@@ -132,12 +158,20 @@ def transcribe_pending() -> int:
              except json.JSONDecodeError:
                  result = {"status": "PAUSED", "reason": (proc.stderr or proc.stdout)[-1000:]}
          status = "COMPLETE" if result.get("status") == "READY" and out.is_file() else "PAUSED"
@@ -412,4 +416,3 @@ index 7b84413..824e3d7 100644
              conn.execute("INSERT INTO transcripts(transcript_id,session_id,source_digest,engine,model,status,language,source_path,output_path,low_confidence_count,created_at,metadata_json) VALUES(?,?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT(session_id,source_digest) DO UPDATE SET status=excluded.status,language=excluded.language,output_path=excluded.output_path,low_confidence_count=excluded.low_confidence_count,metadata_json=excluded.metadata_json", (transcript_id, session["session_id"], source_digest, "faster-whisper", model_name, status, result.get("language"), str(audio), str(out) if out.is_file() else None, int(result.get("low_confidence_count") or 0), utc_now(), json.dumps(metadata, ensure_ascii=False)))
              if status == "COMPLETE" and full_session:
                  try:
-

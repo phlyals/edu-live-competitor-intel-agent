@@ -113,6 +113,7 @@ class FullTranscriptTests(RecordingCase):
         self.completed.mkdir();media=self.completed/'整场直播.ts';media.write_bytes(b'unit media')
         with self.connect() as c:
             c.execute("UPDATE live_sessions SET status='MEDIA_COMPLETE',completeness='COMPLETE',ended_at='2026-08-28T00:10:00Z'")
+            c.execute('UPDATE live_sessions SET metadata_json=?',(json.dumps({'media_coverage':{'continuous_capture':True}}),))
             c.execute("INSERT INTO recording_segments(segment_id,session_id,path,checksum,captured_from,status,bytes) VALUES('seg','s',?,'testhash','2026-08-28T00:00:00Z','COMPLETE',10)",(str(media),))
             c.execute("INSERT INTO transcripts(transcript_id,session_id,source_digest,engine,model,status,created_at,metadata_json) VALUES('sample','s','testhash','faster-whisper','small','COMPLETE','2026-08-28T00:00:00Z',?)",(json.dumps({'sample_only':True,'sample_seconds':300}),))
         return media
@@ -138,6 +139,10 @@ class FullTranscriptTests(RecordingCase):
     def test_partial_capture_not_mislabeled_full_session(self):
         self.prepare()
         with self.connect() as c:c.execute("UPDATE live_sessions SET completeness='PARTIAL'")
+        created,extraction=self.run_asr(600);self.assertEqual(created,0);extraction.assert_not_called()
+    def test_legacy_complete_label_without_coverage_is_not_accepted(self):
+        self.prepare()
+        with self.connect() as c:c.execute("UPDATE live_sessions SET metadata_json='{}'")
         created,extraction=self.run_asr(600);self.assertEqual(created,0);extraction.assert_not_called()
 
 
