@@ -1,5 +1,6 @@
 import contextlib
 import io
+import hashlib
 import json
 import sys
 import unittest
@@ -57,6 +58,43 @@ class RecorderTests(RecordingCase):
 
 
 class RecordingStateTests(RecordingCase):
+    def test_segment_registration_survives_directory_move(self):
+        p=self.partial/'整场直播.ts';p.write_bytes(b'unit media')
+        self.assertEqual(pipeline.register_segments(),1)
+        with self.connect() as c:original=c.execute('SELECT segment_id FROM recording_segments').fetchone()[0]
+        self.partial.rename(self.completed)
+        self.assertEqual(pipeline.register_segments(),1)
+        with self.connect() as c:
+            rows=c.execute('SELECT segment_id,path FROM recording_segments').fetchall()
+            self.assertEqual(len(rows),1);self.assertEqual(rows[0]['segment_id'],original)
+            self.assertEqual(rows[0]['path'],str(self.completed/'整场直播.ts'))
+    def test_finalizer_reuses_registered_segment_after_move(self):
+        p=self.partial/'整场直播.ts';p.write_bytes(b'unit media')
+        pipeline.register_segments()
+        with self.connect() as c:
+            original=c.execute('SELECT segment_id FROM recording_segments').fetchone()[0]
+            c.execute("UPDATE live_sessions SET status='ENDED',ended_at='2026-08-28T00:10:00Z'")
+            c.execute('UPDATE recording_jobs SET pid=NULL')
+            s,j=self.rows(c)
+            fake=type('Process',(),{'returncode':0,'stdout':json.dumps({'format':{'duration':'600'}})})()
+            with patch.object(worker.subprocess,'run',return_value=fake):worker.finalize_media_for_session(c,s,j)
+            row=c.execute('SELECT segment_id,path FROM recording_segments').fetchone()
+            self.assertEqual(row['segment_id'],original);self.assertEqual(row['path'],str(self.completed/'整场直播.ts'))
+            self.assertEqual(self.rows(c)[0]['status'],'MEDIA_COMPLETE')
+    def test_existing_canonical_segment_id_is_preserved(self):
+        p=self.partial/'整场直播.ts';p.write_bytes(b'unit media')
+        with self.connect() as c:c.execute("INSERT INTO recording_segments(segment_id,session_id,path,checksum,captured_from,status,bytes) VALUES('legacy-final','s',?,?,'2026-08-28T00:00:00Z','PARTIAL',10)",(str(p),hashlib.sha256(p.read_bytes()).hexdigest()))
+        pipeline.register_segments()
+        with self.connect() as c:self.assertEqual(c.execute('SELECT segment_id FROM recording_segments').fetchone()[0],'legacy-final')
+    def test_conflicting_live_paths_are_not_overwritten(self):
+        old=self.partial/'整场直播.ts';old.write_bytes(b'old media')
+        pipeline.register_segments()
+        self.completed.mkdir();new=self.completed/'整场直播.ts';new.write_bytes(b'different media')
+        self.assertEqual(pipeline.register_segments(),0)
+        with self.connect() as c:
+            self.assertEqual(c.execute('SELECT path FROM recording_segments').fetchone()[0],str(old))
+            self.assertIn('relocation conflict',self.rows(c)[1]['last_error'])
+        self.assertEqual(old.read_bytes(),b'old media');self.assertEqual(new.read_bytes(),b'different media')
     def test_process_without_media_is_not_running(self):
         with self.connect() as c:
             s,j=self.rows(c);self.assertEqual(worker.recording_progress(c,s,j,'2026-08-28T00:00:00Z'),'STARTING')

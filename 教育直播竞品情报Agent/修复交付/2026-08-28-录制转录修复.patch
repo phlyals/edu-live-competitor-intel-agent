@@ -59,7 +59,7 @@ index 8073ae1..f5b738b 100755
      # Keep the whole-session file in partial storage until Runtime V3 confirms
      # the five-minute down window.  Continuation files exist only after a
 diff --git a/runtime/v3/v3_worker.py b/runtime/v3/v3_worker.py
-index efacbbc..16956cf 100644
+index efacbbc..c04d644 100644
 --- a/runtime/v3/v3_worker.py
 +++ b/runtime/v3/v3_worker.py
 @@ -133,7 +133,7 @@ def create_session_if_live(conn, target: dict, result: dict) -> dict | None:
@@ -226,7 +226,21 @@ index efacbbc..16956cf 100644
                  for part in parts:
                      if part != final_path and part.exists():
                          part.unlink()
-@@ -376,13 +431,21 @@ def finalize_media_for_session(conn, session: dict, job: dict) -> None:
+@@ -369,20 +424,34 @@ def finalize_media_for_session(conn, session: dict, job: dict) -> None:
+     for path in sorted(media_root.glob("整场直播.ts")) if media_root.exists() else []:
+         segment_id = "segment_" + hashlib.sha256(f"{session['session_id']}:{path.name}".encode("utf-8")).hexdigest()[:24]
+         checksum = file_digest(path)
++        canonical=conn.execute('SELECT segment_id FROM recording_segments WHERE session_id=? AND path=?',(session['session_id'],str(path))).fetchone()
++        if canonical:segment_id=canonical['segment_id']
++        prior=conn.execute('SELECT session_id,path,checksum FROM recording_segments WHERE segment_id=?',(segment_id,)).fetchone()
++        if prior and (prior['session_id']!=session['session_id'] or (prior['path']!=str(path) and Path(prior['path']).is_file() and prior['checksum']!=checksum)):
++            conn.execute("UPDATE recording_jobs SET last_error='media relocation conflict; original files retained' WHERE session_id=?",(session['session_id'],))
++            return
+         captured_from = session["started_at"] or utc_now()
+         captured_to = session["ended_at"] if session["status"] == "ENDED" else None
+-        conn.execute("INSERT INTO recording_segments(segment_id,session_id,path,checksum,captured_from,captured_to,status,bytes) VALUES(?,?,?,?,?,?,?,?) ON CONFLICT(session_id,path) DO UPDATE SET checksum=excluded.checksum,status=excluded.status,bytes=excluded.bytes,captured_to=excluded.captured_to", (segment_id, session["session_id"], str(path), checksum, captured_from, captured_to, "COMPLETE" if session["status"] == "ENDED" else "PARTIAL", path.stat().st_size))
++        conn.execute("INSERT INTO recording_segments(segment_id,session_id,path,checksum,captured_from,captured_to,status,bytes) VALUES(?,?,?,?,?,?,?,?) ON CONFLICT(segment_id) DO UPDATE SET path=excluded.path,checksum=excluded.checksum,status=excluded.status,bytes=excluded.bytes,captured_to=excluded.captured_to", (segment_id, session["session_id"], str(path), checksum, captured_from, captured_to, "COMPLETE" if session["status"] == "ENDED" else "PARTIAL", path.stat().st_size))
+     final_files = sorted(media_root.glob("整场直播.ts")) if media_root.exists() else []
      if session["status"] != "ENDED" or not final_files:
          return
      path = final_files[0]
@@ -241,7 +255,8 @@ index efacbbc..16956cf 100644
      checksum = file_digest(path)
      captured_from = session["started_at"] or utc_now()
      captured_to = session["ended_at"] or utc_now()
-     segment_id = "segment_" + hashlib.sha256(f"{session['session_id']}:final".encode("utf-8")).hexdigest()[:24]
+-    segment_id = "segment_" + hashlib.sha256(f"{session['session_id']}:final".encode("utf-8")).hexdigest()[:24]
++    segment_id = conn.execute('SELECT segment_id FROM recording_segments WHERE session_id=? AND path=?',(session['session_id'],str(path))).fetchone()['segment_id']
      conn.execute("INSERT INTO recording_segments(segment_id,session_id,path,checksum,captured_from,captured_to,status,bytes) VALUES(?,?,?,?,?,?,?,?) ON CONFLICT(session_id,path) DO UPDATE SET checksum=excluded.checksum,status='COMPLETE',bytes=excluded.bytes,captured_to=excluded.captured_to", (segment_id, session["session_id"], str(path), checksum, captured_from, captured_to, "COMPLETE", path.stat().st_size))
      manifest_path = media_root / "media-manifest.json"
 -    manifest = {"session_id": session["session_id"], "final_path": str(path), "sha256": checksum, "bytes": path.stat().st_size, "captured_from": captured_from, "captured_to": captured_to, "created_at": utc_now()}
@@ -249,7 +264,7 @@ index efacbbc..16956cf 100644
      manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
      manifest_hash = hashlib.sha256(manifest_path.read_bytes()).hexdigest()
      conn.execute("INSERT INTO media_manifests(manifest_id,session_id,status,manifest_path,manifest_hash,segment_count,total_bytes,complete_from,complete_to,verified_at,metadata_json) VALUES(?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT(session_id) DO UPDATE SET status='VERIFIED',manifest_path=excluded.manifest_path,manifest_hash=excluded.manifest_hash,segment_count=excluded.segment_count,total_bytes=excluded.total_bytes,complete_from=excluded.complete_from,complete_to=excluded.complete_to,verified_at=excluded.verified_at,metadata_json=excluded.metadata_json", ("manifest:" + session["session_id"], session["session_id"], "VERIFIED", str(manifest_path), manifest_hash, 1, path.stat().st_size, captured_from, captured_to, utc_now(), json.dumps({"final_file": str(path)}, ensure_ascii=False)))
-@@ -394,7 +457,7 @@ def finalize_media_for_session(conn, session: dict, job: dict) -> None:
+@@ -394,7 +463,7 @@ def finalize_media_for_session(conn, session: dict, job: dict) -> None:
      except ValueError:
          video_due = utc_now()
      conn.execute("INSERT INTO retention_jobs(retention_job_id,object_type,object_id,policy_name,status,not_before,created_at,updated_at,payload_json) VALUES(?,?,?,?,?,?,?,?,?) ON CONFLICT(object_type,object_id,policy_name) DO UPDATE SET not_before=excluded.not_before,payload_json=excluded.payload_json", ("retention:video:" + session["session_id"], "VIDEO", session["session_id"], "VIDEO_72H", "PENDING", video_due, utc_now(), utc_now(), json.dumps({"session_id": session["session_id"], "path": str(path), "manifest_path": str(manifest_path)}, ensure_ascii=False)))
@@ -258,7 +273,7 @@ index efacbbc..16956cf 100644
  
  
  def reconcile_recording_jobs() -> dict:
-@@ -408,6 +471,10 @@ def reconcile_recording_jobs() -> dict:
+@@ -408,6 +477,10 @@ def reconcile_recording_jobs() -> dict:
              target = conn.execute("SELECT * FROM monitor_targets WHERE monitor_target_id=?", (session["monitor_target_id"],)).fetchone() if session else None
              if not session or not target:
                  continue
@@ -269,7 +284,7 @@ index efacbbc..16956cf 100644
              if alive:
                  # Migrate any pre-V3 fixed-segment child in place.  This is a
                  # one-time compatibility action: the old process group is
-@@ -420,12 +487,17 @@ def reconcile_recording_jobs() -> dict:
+@@ -420,12 +493,17 @@ def reconcile_recording_jobs() -> dict:
                      ensure_recording_job(dict(session), dict(target))
                      restarted += 1
                  else:
@@ -292,7 +307,7 @@ index efacbbc..16956cf 100644
                  finalized += 1
              elif target["live_status"] == "LIVE":
 diff --git a/runtime/v3/v3_pipeline_worker.py b/runtime/v3/v3_pipeline_worker.py
-index 7b84413..c15009a 100644
+index 7b84413..6924bb6 100644
 --- a/runtime/v3/v3_pipeline_worker.py
 +++ b/runtime/v3/v3_pipeline_worker.py
 @@ -16,6 +16,7 @@ import signal
@@ -303,7 +318,27 @@ index 7b84413..c15009a 100644
  from pathlib import Path
  
  from v3_runtime import connect, init_db, upsert_heartbeat, utc_now
-@@ -60,6 +61,15 @@ def register_segments() -> int:
+@@ -51,15 +52,31 @@ def register_segments() -> int:
+             media_complete = completed_root.exists() or job["session_status"] in {"MEDIA_COMPLETE", "ENDED", "DUPLICATE_SUPERSEDED"}
+             for path in sorted(root.glob("*.ts")) if root.exists() else []:
+                 seg_id = "segment_" + hashlib.sha256(f"{job['session_id']}:{path.name}".encode()).hexdigest()[:24]
+-                size = path.stat().st_size
+-                prior = conn.execute("SELECT checksum,bytes FROM recording_segments WHERE session_id=? AND path=?", (job["session_id"], str(path))).fetchone()
+-                checksum = str(prior["checksum"]) if prior and prior["checksum"] and int(prior["bytes"] or 0) == size else digest(path)
+-                conn.execute("INSERT INTO recording_segments(segment_id,session_id,path,checksum,captured_from,captured_to,status,bytes) VALUES(?,?,?,?,?,?,?,?) ON CONFLICT(session_id,path) DO UPDATE SET checksum=excluded.checksum,bytes=excluded.bytes,status=excluded.status,captured_to=excluded.captured_to", (seg_id, job["session_id"], str(path), checksum, job["started_at"] or utc_now(), job["ended_at"], "COMPLETE" if media_complete else "PARTIAL", size))
++                try:size = path.stat().st_size
++                except FileNotFoundError:continue  # finalizer moved this directory
++                prior = conn.execute("SELECT segment_id,checksum,bytes FROM recording_segments WHERE session_id=? AND path=?", (job["session_id"], str(path))).fetchone()
++                try:checksum = str(prior["checksum"]) if prior and prior["checksum"] and int(prior["bytes"] or 0) == size else digest(path)
++                except FileNotFoundError:continue
++                if prior:seg_id=prior['segment_id']
++                old=conn.execute('SELECT session_id,path,checksum FROM recording_segments WHERE segment_id=?',(seg_id,)).fetchone()
++                if old and (old['session_id']!=job['session_id'] or (old['path']!=str(path) and Path(old['path']).is_file() and old['checksum']!=checksum)):
++                    conn.execute("UPDATE recording_jobs SET last_error='media relocation conflict; original files retained' WHERE session_id=?",(job['session_id'],))
++                    continue
++                conn.execute("INSERT INTO recording_segments(segment_id,session_id,path,checksum,captured_from,captured_to,status,bytes) VALUES(?,?,?,?,?,?,?,?) ON CONFLICT(segment_id) DO UPDATE SET path=excluded.path,checksum=excluded.checksum,bytes=excluded.bytes,status=excluded.status,captured_to=excluded.captured_to", (seg_id, job["session_id"], str(path), checksum, job["started_at"] or utc_now(), job["ended_at"], "COMPLETE" if media_complete else "PARTIAL", size))
+                 changed += 1
+         conn.commit()
      return changed
  
  
@@ -319,7 +354,7 @@ index 7b84413..c15009a 100644
  def extract_audio(media: Path, audio: Path, *, max_seconds: int = 0, bitrate_kbps: int = 48) -> bool:
      """Extract speech audio; max_seconds=0 means the complete final session.
  
-@@ -68,11 +78,15 @@ def extract_audio(media: Path, audio: Path, *, max_seconds: int = 0, bitrate_kbp
+@@ -68,11 +85,15 @@ def extract_audio(media: Path, audio: Path, *, max_seconds: int = 0, bitrate_kbp
      faster-whisper decodes the compressed speech track directly through
      FFmpeg.
      """
@@ -337,7 +372,7 @@ index 7b84413..c15009a 100644
      command = [str(FFMPEG), "-hide_banner", "-loglevel", "error", "-y", "-i", str(media)]
      if max_seconds > 0:
          command.extend(["-t", str(max_seconds)])
-@@ -83,27 +97,39 @@ def extract_audio(media: Path, audio: Path, *, max_seconds: int = 0, bitrate_kbp
+@@ -83,27 +104,39 @@ def extract_audio(media: Path, audio: Path, *, max_seconds: int = 0, bitrate_kbp
          command.extend(["-c:a", "aac", "-b:a", f"{max(32, int(bitrate_kbps))}k"])
      else:
          command.extend(["-c:a", "pcm_s16le"])
@@ -383,7 +418,7 @@ index 7b84413..c15009a 100644
                  conn.commit()
              continue
          out = audio.with_suffix(".transcript.json")
-@@ -111,7 +137,7 @@ def transcribe_pending() -> int:
+@@ -111,7 +144,7 @@ def transcribe_pending() -> int:
          if out.is_file():
              try:
                  existing = json.loads(out.read_text(encoding="utf-8"))
@@ -392,7 +427,7 @@ index 7b84413..c15009a 100644
                      result = existing
              except (OSError, json.JSONDecodeError):
                  result = None
-@@ -132,12 +158,20 @@ def transcribe_pending() -> int:
+@@ -132,12 +165,20 @@ def transcribe_pending() -> int:
              except json.JSONDecodeError:
                  result = {"status": "PAUSED", "reason": (proc.stderr or proc.stdout)[-1000:]}
          status = "COMPLETE" if result.get("status") == "READY" and out.is_file() else "PAUSED"
