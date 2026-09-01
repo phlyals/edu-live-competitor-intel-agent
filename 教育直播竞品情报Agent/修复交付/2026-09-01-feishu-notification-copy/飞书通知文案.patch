@@ -1,0 +1,577 @@
+--- /Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-09-01-feishu-notification-copy/修改前/v3_runtime.py	2026-08-31 11:31:36
++++ v3_runtime.py	2026-09-01 18:14:42
+@@ -268,7 +268,9 @@
+         conn.execute("INSERT INTO tasks(task_id,task_type,dedupe_key,status,business_state,runtime_state,delivery_state,product_id,input_json,current_step,started_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)", (task_id, "feishu_command", dedupe_key, "RECEIVED", "RECEIVED", "IDLE", "NOT_STARTED", None, json_text({"message_id": message_id, "chat_id": chat_id, "sender_id": sender_id, "content": content, "parsed": parsed}), "INGRESS", now, now))
+         record_event(conn, "TASK_RECEIVED", task_id=task_id, object_type="task", object_id=task_id, payload={"message_id": message_id})
+         checkpoint(conn, task_id, "TASK_RECEIVED", "CURRENT", {"message_id": message_id})
+-        ack_text = f"已接收扫描任务，任务ID：{task_id}。Runtime V3 正在处理，结果会回写到业务工作台。"
++        from v3_notification_copy import ingress_ack_text
++
++        ack_text = ingress_ack_text()
+         ack_uuid = str(uuid.uuid5(uuid.NAMESPACE_URL, f"runtime-v3-ack:{message_id}"))
+         ack_id = enqueue_outbox_conn(conn, object_type="ingress_ack", object_id=task_id, destination="feishu_chat", payload={"task_id": task_id, "chat_id": chat_id, "source_message_id": message_id, "text": ack_text, "idempotency_key": ack_uuid, "profile_id": PROFILE_ID})
+         ack_until = (datetime.now(timezone.utc) + timedelta(seconds=30)).isoformat(timespec="milliseconds").replace("+00:00", "Z")
+--- /Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-09-01-feishu-notification-copy/修改前/v3_task_control.py	2026-08-28 21:50:48
++++ v3_task_control.py	2026-09-01 18:25:10
+@@ -6,9 +6,16 @@
+ import os
+ import uuid
+ from datetime import datetime, timedelta, timezone
+-from zoneinfo import ZoneInfo
+ 
+-CONTROL = re.compile(r"^(继续(?:处理|任务)?|恢复(?:处理|任务)?|查询进度|查看进度|任务状态|进度|状态|怎么样了|处理得怎么样了)(?:\s+(task_[A-Za-z0-9_-]+))?[。！!？?\s]*$")
++from v3_notification_copy import (
++    ambiguous_tasks_text,
++    blocked_resume_text,
++    product_key,
++    resume_text,
++    task_summary as plain_task_summary,
++)
++
++CONTROL = re.compile(r"^(继续(?:处理|任务)?|恢复(?:处理|任务)?|查询进度|查看进度|任务状态|进度|状态|怎么样了|处理得怎么样了)(?:\s+(task_[A-Za-z0-9_-]+|\d{10,22}))?[。！!？?\s]*$")
+ ACTIVE = {"RUNNING", "RECEIVED", "RETRY_WAIT", "DELIVERY_PENDING"}
+ RESUMABLE = {"FAILED_FINAL", "WAITING_HUMAN", "WAITING_TOOL", "WAITING_IDENTITY", "PARTIAL_SUCCESS"}
+ 
+@@ -29,15 +36,8 @@
+     return sorted(rows.values(),key=lambda r:(r.get('started_at') or '',r['task_id']))
+ 
+ 
+-def task_summary(task: dict) -> str:
+-    text=f"商品：{_product_key(task)}\n任务 {task['task_id']}\n状态：{task['status']}\n当前步骤：{task.get('current_step') or '待处理'}"
+-    if task.get('updated_at'):
+-        stamp=datetime.fromisoformat(task['updated_at'].replace('Z','+00:00')).astimezone(ZoneInfo('Asia/Shanghai'))
+-        text+='\n更新时间：'+stamp.strftime('%Y-%m-%d %H:%M:%S')+'（北京时间）'
+-    if task['status']=='COMPLETE':return text+'\n已完成交付，不重复扫描。'
+-    if task.get('error_message'):text+='\n原因：'+str(task['error_message'])
+-    if task.get('next_attempt_at'):text+='\n已安排自动重试，无需重发商品。'
+-    return text
++def task_summary(task: dict, *, include_task_id: bool = False) -> str:
++    return plain_task_summary(task, include_task_id=include_task_id)
+ 
+ 
+ def parse_control(content: str) -> dict | None:
+@@ -48,12 +48,7 @@
+ 
+ 
+ def _product_key(task: dict) -> str:
+-    data = json.loads(task.get("input_json") or "{}")
+-    explicit=(data.get('product_resolution') or {}).get('resolved_input') or task.get('product_id')
+-    if explicit:return str(explicit).removeprefix('douyin:')
+-    raw=str(data.get('content') or '')
+-    number=re.search(r'(?<!\d)\d{10,22}(?!\d)',raw)
+-    return number.group(0) if number else raw or task['task_id']
++    return product_key(task)
+ 
+ 
+ def current_tasks(rows: list[dict]) -> list[dict]:
+@@ -71,7 +66,11 @@
+ 
+ def select_task(rows: list[dict], requested: str | None, action: str) -> tuple[dict | None, str]:
+     if requested:
+-        return next((r for r in rows if r["task_id"] == requested), None), "explicit"
++        if requested.startswith("task_"):
++            return next((r for r in rows if r["task_id"] == requested), None), "explicit"
++        product_rows = [r for r in current_tasks(rows) if _product_key(r) == requested]
++        pending = [r for r in product_rows if r["status"] not in {"COMPLETE", "SUPERSEDED"}]
++        return (pending[0] if pending else (product_rows[-1] if product_rows else None)), "explicit_product"
+     relevant=current_tasks(rows)
+     pending = [r for r in relevant if r["status"] not in {"COMPLETE","SUPERSEDED"}]
+     if action == "status" and not pending:
+@@ -104,22 +103,23 @@
+         task, reason = select_task(rows, control.get("requested_task_id"), control["action"])
+         task_id = task["task_id"] if task else None
+         if not task:
+-            text = "有多个不同商品任务待处理，请指定任务ID（继续 task_…）：\n" + "\n\n".join(task_summary(r) for r in current_tasks(rows) if r["status"] not in {'COMPLETE','SUPERSEDED'}) if reason == "ambiguous" else "当前会话没有可操作的任务；不会创建新的扫描任务。"
++            pending = [r for r in current_tasks(rows) if r["status"] not in {'COMPLETE','SUPERSEDED'}]
++            text = ambiguous_tasks_text(pending) if reason == "ambiguous" else "ℹ️ 当前没有可继续处理的商品任务。\n请直接发送新的抖音商品分享链接。"
+         elif control["action"] == "resume" and task["status"] in RESUMABLE:
+             if task.get("error_type") in {"IDENTITY_CONFIGURATION_ERROR", "IDENTITY_CONFLICT", "UNAUTHORIZED"}:
+-                text = f"任务 {task_id} 存在身份/配置冲突，不能仅凭继续指令放行：{task.get('error_type')}。"
++                text = blocked_resume_text(task)
+             else:
+                 attempts = int(task.get("attempts") or 0)
+                 # Preserve fencing epochs/history; grant a fresh bounded retry budget.
+                 conn.execute("UPDATE tasks SET status='RETRY_WAIT',runtime_state='IDLE',next_attempt_at=?,max_attempts=?,lease_owner=NULL,lease_until=NULL,error_type=NULL,error_message=NULL,updated_at=? WHERE task_id=? AND status=?", (v3.utc_now(), max(int(task.get("max_attempts") or 0), attempts+v3.TASK_MAX_ATTEMPTS), v3.utc_now(), task_id, task["status"]))
+                 conn.execute("UPDATE task_leases SET status='RELEASED',released_at=? WHERE task_id=? AND status='ACTIVE'", (v3.utc_now(), task_id))
+                 v3.record_event(conn, "USER_TASK_RESUMED", task_id=task_id, payload={"message_id": message_id, "previous_status": task["status"], "previous_attempts": attempts})
+-                text = f"已将原任务 {task_id} 恢复到队列；不会重复建单。已完整提交的结果仅补交付，未完成的扫描会重新核验。"
++                text = resume_text(task)
+         else:
+             state = task["status"]
+             text = task_summary(task)
+             if state in ACTIVE:
+-                text += "\n任务已在执行或排队，本次不会重复启动。"
++                text += "\n当前任务已经在运行，本次不会重复启动。"
+         conn.execute("UPDATE inbox_messages SET task_id=? WHERE inbox_id=?", (task_id, inbox_id))
+         ack_uuid = str(uuid.uuid5(uuid.NAMESPACE_URL, "runtime-v3-control:"+message_id))
+         ack_id = v3.enqueue_outbox_conn(conn, object_type="ingress_ack", object_id=inbox_id, destination="feishu_chat", payload={"task_id":task_id,"chat_id":chat_id,"source_message_id":message_id,"text":text,"idempotency_key":ack_uuid,"profile_id":v3.PROFILE_ID})
+--- /Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-09-01-feishu-notification-copy/修改前/v3_worker.py	2026-08-30 21:53:21
++++ v3_worker.py	2026-09-01 18:18:51
+@@ -1047,6 +1047,35 @@
+         record_event(conn,'LOCAL_SCAN_COMMITTED',task_id=task_id,object_type='product',object_id=imported['product_id'],payload={'result_path':str(result_path),'outbox_id':outbox_id,'scan_id':imported['scan_id']})
+         conn.commit()
+     return {'task_id':task_id,'status':'DELIVERY_PENDING','product_id':imported['product_id'],'outbox_id':outbox_id}
++
++
++def notify_task_status(task_id: str, input_data: dict) -> dict:
++    """Send concise user copy while retaining technical errors in PostgreSQL."""
++    with connect() as conn:
++        task = dict(conn.execute('SELECT * FROM tasks WHERE task_id=?', (task_id,)).fetchone())
++    if task['status'] not in {'WAITING_HUMAN', 'WAITING_TOOL', 'WAITING_IDENTITY', 'FAILED_FINAL', 'PARTIAL_SUCCESS'}:
++        return task
++    source_message = input_data.get('notification_message_id') or input_data.get('message_id') or ''
++    if not input_data.get('chat_id') or not source_message.startswith('om_'):
++        return task
++    from v3_task_control import task_summary
++
++    error_type = str(task.get('error_type') or '')
++    dedupe = hashlib.sha256(
++        f"{task_id}:{task['status']}:{error_type}:{task.get('attempts') or 0}".encode()
++    ).hexdigest()[:32]
++    enqueue_outbox(
++        object_type='task_notification', object_id=task_id, destination='feishu_chat',
++        payload={
++            'task_id': task_id,
++            'chat_id': input_data['chat_id'],
++            'source_message_id': source_message,
++            'text': task_summary(task),
++            'idempotency_key': dedupe,
++            'profile_id': PROFILE_ID,
++        },
++    )
++    return task
+ 
+ 
+ def process_task_once() -> dict | None:
+@@ -1064,6 +1093,7 @@
+             scan=conn.execute('SELECT result_digest FROM scan_runs WHERE scan_id=? AND product_id=?',(committed['scan_id'],committed['product_id'])).fetchone()
+         if not scan or not result_path.is_file() or hashlib.sha256(result_path.read_bytes()).hexdigest()!=scan['result_digest']:
+             release_task(task_id,status='WAITING_HUMAN',runtime_state='WAITING_HUMAN',error_type='COMMITTED_EVIDENCE_MISSING',error_message='已提交扫描的真本缺失或校验不一致',resume_from='LOCAL_COMMIT')
++            notify_task_status(task_id, input_data)
+             return {'task_id':task_id,'status':'WAITING_HUMAN'}
+         return queue_scan_delivery(task_id,committed,result_path,input_data)
+     message_id = str(input_data.get("message_id") or "")
+@@ -1096,21 +1126,18 @@
+         human_required = error_type in {"BUYIN_LOGIN_REQUIRED", "TABBIT_TAB_AMBIGUOUS", "TABBIT_WINDOW_AMBIGUOUS", "TABBIT_ACQUISITION_BLOCKED", "STORAGE_UNAVAILABLE", "STORAGE_LOW_SPACE", "QR_IDENTITY_UNRESOLVED"}
+         next_status = "WAITING_HUMAN" if human_required else ("RETRY_WAIT" if payload.get("status") in {"FAILED", "INCOMPLETE", "DELIVERY_FAILED"} else "FAILED_FINAL")
+         release_task(task_id, status=next_status, runtime_state="WAITING_HUMAN" if human_required else "WAITING_TOOL", error_type=error_type, error_message=str(payload.get("error_message") or "扫描未完成"), resume_from="SCANNING")
+-        with connect() as conn:
+-            actual=dict(conn.execute('SELECT * FROM tasks WHERE task_id=?',(task_id,)).fetchone())
+-        source_message=input_data.get('notification_message_id') or message_id
+-        if actual['status'] in {'WAITING_HUMAN','FAILED_FINAL'} and input_data.get("chat_id") and source_message.startswith('om_'):
+-            from v3_task_control import task_summary
+-            enqueue_outbox(object_type="task_notification", object_id=task_id, destination="feishu_chat", payload={"task_id": task_id, "chat_id": input_data["chat_id"], "source_message_id": source_message, "text": task_summary(actual)+"\n原任务及已有证据保留，无需重发商品。", "idempotency_key": hashlib.sha256(f"{task_id}:{error_type}:{actual['attempts']}".encode()).hexdigest()[:32], "profile_id": PROFILE_ID})
++        actual = notify_task_status(task_id, input_data)
+         return {"task_id": task_id, "status": actual['status'], "error_type": error_type}
+     result_path = Path(str(payload.get("output_dir") or "")) / "result.json"
+     if not result_path.is_file():
+         release_task(task_id, status="FAILED_FINAL", runtime_state="FAILED", error_type="RESULT_MISSING", error_message="扫描完成但result.json不存在", resume_from="LOCAL_COMMIT")
++        notify_task_status(task_id, input_data)
+         return {"task_id": task_id, "status": "FAILED_FINAL", "error_type": "RESULT_MISSING"}
+     try:
+         imported = import_result(result_path, task_id=task_id)
+     except ValueError as exc:
+         release_task(task_id,status="WAITING_IDENTITY",runtime_state="WAITING_TOOL",error_type="IDENTITY_OR_EVIDENCE_NOT_VERIFIED",error_message=str(exc),resume_from="IDENTITY_CLOSURE")
++        notify_task_status(task_id, input_data)
+         return {"task_id":task_id,"status":"WAITING_IDENTITY","error_type":str(exc)}
+     return queue_scan_delivery(task_id,imported,result_path,input_data)
+ 
+@@ -1202,7 +1229,8 @@
+             source=json.loads(task_row['input_json'])
+             notification_message=source.get('notification_message_id') or source.get('message_id') or ''
+             if source.get('chat_id') and notification_message.startswith('om_'):
+-                enqueue_outbox(object_type='task_notification',object_id=body['task_id'],destination='feishu_chat',payload={'task_id':body['task_id'],'chat_id':source['chat_id'],'source_message_id':notification_message,'text':f"任务 {body['task_id']} 已完成商品扫描、同行身份建档和飞书交付。扫描版本：{body.get('scan_id')}。监控中的开播状态以实时探针为准。",'idempotency_key':hashlib.sha256(f"{body['task_id']}:complete".encode()).hexdigest()[:32],'profile_id':PROFILE_ID})
++                from v3_notification_copy import completion_text
++                enqueue_outbox(object_type='task_notification',object_id=body['task_id'],destination='feishu_chat',payload={'task_id':body['task_id'],'chat_id':source['chat_id'],'source_message_id':notification_message,'text':completion_text(body.get('product_id')),'idempotency_key':hashlib.sha256(f"{body['task_id']}:complete".encode()).hexdigest()[:32],'profile_id':PROFILE_ID})
+         return {"outbox_id": item["outbox_id"], "status": "SENT"}
+     from v3_runtime import retry_outbox
+     retry_outbox(item["outbox_id"], error_type=str(payload.get("error_type") or "DELIVERY_FAILED"), error_message=str(payload.get("error_message") or "飞书交付未完成"), retry_after_seconds=min(3600, 30 * (int(item.get("attempts") or 0) + 1)))
+--- /Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-09-01-feishu-notification-copy/修改前/test_v3_workflow.py	2026-08-30 12:48:25
++++ test_v3_workflow.py	2026-09-01 18:25:37
+@@ -9,6 +9,7 @@
+ import v3_runtime as v3
+ import v3_retention_worker as retention_worker
+ from v3_task_control import parse_control, ingest_control, select_task
++from v3_notification_copy import completion_text, ingress_ack_text, plain_reason, task_summary
+ from v3_scan_import import import_scan, scan_identity, validate_scan
+ 
+ USER='ou_e2bb6eeeda749177d2b1191664831934'
+@@ -62,6 +63,7 @@
+ class ControlTests(RuntimeCase):
+     def test_plain_continue_is_control(self):
+         self.assertEqual(parse_control('继续处理。')['action'],'resume')
++        self.assertEqual(parse_control('继续 3839136509492068370')['requested_task_id'],'3839136509492068370')
+         self.assertEqual(parse_control('查询进度')['action'],'status')
+         self.assertIsNone(parse_control('这个人继续直播时说了什么'))
+     def test_resume_same_task_preserves_attempt_fencing(self):
+@@ -86,7 +88,8 @@
+         task=self.task()
+         with self.connect() as c:c.execute("UPDATE tasks SET status='FAILED_FINAL' WHERE task_id=?",(task,))
+         result=self.control('任务状态')
+-        self.assertIn('FAILED_FINAL',result['ack_text'])
++        self.assertIn('本次未完成',result['ack_text'])
++        self.assertNotIn('FAILED_FINAL',result['ack_text'])
+         with self.connect() as c:self.assertEqual(c.execute('SELECT status FROM tasks').fetchone()[0],'FAILED_FINAL')
+     def test_cross_chat_cannot_control(self):
+         task=self.task()
+@@ -94,10 +97,13 @@
+         self.assertIsNone(result['task_id'])
+     def test_distinct_products_require_target(self):
+         self.task('om_a','111111111111')
+-        self.task('om_b','222222222222')
++        second=self.task('om_b','222222222222')
+         result=self.control('继续')
+         self.assertIsNone(result['task_id'])
+         self.assertIn('多个不同商品',result['ack_text'])
++        self.assertNotIn('task_',result['ack_text'])
++        selected=self.control('继续 222222222222',message='om_choose')
++        self.assertEqual(selected['task_id'],second)
+     def test_repeated_product_share_chooses_original(self):
+         first=self.task('om_a')
+         self.task('om_b')
+@@ -108,7 +114,8 @@
+         with self.connect() as c:c.execute("UPDATE tasks SET status='COMPLETE',last_success_at=? WHERE task_id=?",(v3.utc_now(),first))
+         result=self.control('继续')
+         self.assertEqual(result['task_id'],first)
+-        self.assertIn('已完成交付',result['ack_text'])
++        self.assertIn('处理完成',result['ack_text'])
++        self.assertIn('后续发现开播会自动录制',result['ack_text'])
+     def test_identity_conflict_not_overridden(self):
+         task=self.task()
+         with self.connect() as c:c.execute("UPDATE tasks SET status='FAILED_FINAL',error_type='IDENTITY_CONFLICT' WHERE task_id=?",(task,))
+@@ -121,7 +128,7 @@
+     def test_no_task_is_explicit(self):
+         result=self.control('继续')
+         self.assertIsNone(result['task_id'])
+-        self.assertIn('没有可操作',result['ack_text'])
++        self.assertIn('没有可继续处理',result['ack_text'])
+     def test_concurrent_duplicate_control_has_one_event(self):
+         self.task()
+         with ThreadPoolExecutor(max_workers=6) as pool:
+@@ -130,6 +137,67 @@
+         with self.connect() as c:self.assertEqual(c.execute("SELECT count(*) FROM domain_events WHERE event_type='TASK_CONTROL_RECEIVED'").fetchone()[0],1)
+ 
+ 
++class NotificationCopyTests(unittest.TestCase):
++    def task(self, **overrides):
++        row = {
++            'task_id': 'task_internal_only',
++            'status': 'WAITING_HUMAN',
++            'product_id': None,
++            'input_json': json.dumps({
++                'content': 'https://alliance.jinritemai.com/?promotion_id=3839136509492068370',
++                'product_resolution': {'resolved_input': '3839136509492068370'},
++            }),
++            'current_step': 'PRODUCT_RESOLVED',
++            'updated_at': '2026-09-01T09:57:20.850Z',
++            'error_type': 'TABBIT_ACQUISITION_BLOCKED',
++            'error_message': "expect(locator).toBeVisible() failed; navigating to /passport/aff/web/logout/",
++        }
++        row.update(overrides)
++        return row
++
++    def test_ingress_ack_is_short_and_has_no_internal_identifier(self):
++        text = ingress_ack_text()
++        self.assertIn('已收到商品链接', text)
++        self.assertIn('查找相关同行直播间', text)
++        self.assertNotIn('task_', text)
++        self.assertNotIn('Runtime V3', text)
++
++    def test_login_failure_hides_raw_browser_error(self):
++        text = task_summary(self.task())
++        self.assertIn('需要你操作', text)
++        self.assertIn('登录状态已失效', text)
++        self.assertIn('回复“继续处理”', text)
++        for technical in ('TABBIT', 'locator', 'passport', '/logout', 'task_internal_only'):
++            self.assertNotIn(technical, text)
++
++    def test_plain_reason_covers_user_action_failures(self):
++        cases = {
++            'STORAGE_UNAVAILABLE': '录制硬盘当前未连接',
++            'STORAGE_LOW_SPACE': '录制硬盘剩余空间不足',
++            'PRODUCT_LINK_RESOLUTION_FAILED': '没有识别出有效的商品链接',
++            'QR_IDENTITY_UNRESOLVED': '对应关系暂时无法确认',
++            'RESULT_MISSING': '扫描结果保存不完整',
++            'IDENTITY_CONFLICT': '账号配置存在冲突',
++        }
++        for error_type, expected in cases.items():
++            with self.subTest(error_type=error_type):
++                self.assertIn(expected, plain_reason(error_type, 'raw developer traceback'))
++
++    def test_retry_and_complete_copy_do_not_expose_status_codes(self):
++        retry = task_summary(self.task(
++            status='RETRY_WAIT', error_type='SCAN_PAGE_NOT_READY',
++            error_message='SCAN_RENDER_TIMEOUT: rows', current_step='SCANNING',
++        ))
++        self.assertIn('系统会自动继续处理', retry)
++        self.assertNotIn('RETRY_WAIT', retry)
++        self.assertNotIn('SCAN_', retry)
++        complete = completion_text('douyin:3839136509492068370')
++        self.assertIn('同行直播间查找完成', complete)
++        self.assertIn('后续发现开播会自动录制', complete)
++        self.assertNotIn('task_', complete)
++        self.assertNotIn('scan_', complete)
++
++
+ class ImportTests(RuntimeCase):
+     def result(self,product='3838016038189006849',uid='v2_creator',stable='uid:123456789012345',name='同名账号'):
+         task=self.task('om_'+product,product)
+--- /Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-09-01-feishu-notification-copy/修改前/test_v3_minimal_repair.py	2026-08-28 22:06:14
++++ test_v3_minimal_repair.py	2026-09-01 18:17:05
+@@ -80,6 +80,27 @@
+             self.assertIsNotNone(c.execute('SELECT next_attempt_at FROM tasks').fetchone()[0])
+             self.assertEqual(c.execute('SELECT count(*) FROM scan_runs').fetchone()[0],0)
+ 
++    def test_login_failure_notification_is_plain_language(self):
++        self.task('om_login', '3839136509492068370')
++        payload = {
++            'status': 'INCOMPLETE',
++            'error_type': 'TABBIT_ACQUISITION_BLOCKED',
++            'error_message': 'expect(locator).toBeVisible() failed; /passport/aff/web/logout/',
++        }
++        fake = type('Process', (), {'stdout': json.dumps(payload), 'stderr': '', 'returncode': 2})()
++        with patch.object(worker, 'connect', side_effect=self.connect), \
++                patch.object(worker, 'resolve_product_input', return_value=('3839136509492068370', {})), \
++                patch.object(worker.subprocess, 'run', return_value=fake), \
++                patch.object(worker.Path, 'mkdir'), \
++                patch.object(worker, 'enqueue_outbox') as enqueue:
++            result = worker.process_task_once()
++        self.assertEqual(result['status'], 'WAITING_HUMAN')
++        text = enqueue.call_args.kwargs['payload']['text']
++        self.assertIn('登录状态已失效', text)
++        self.assertIn('回复“继续处理”', text)
++        for technical in ('TABBIT', 'locator', 'passport', '/logout', 'task_'):
++            self.assertNotIn(technical, text)
++
+     def test_retry_exhaustion_reports_actual_status(self):
+         self.setup_product()
+         with self.connect() as c:c.execute('UPDATE tasks SET attempts=4,max_attempts=5')
+@@ -91,7 +112,7 @@
+     def test_status_uses_beijing_time_and_no_stale_failure_for_complete(self):
+         row=self.setup_product();row.update(status='COMPLETE',updated_at='2026-08-28T06:03:00Z',error_message='old failure')
+         text=task_summary(row)
+-        self.assertIn('14:03:00',text)
++        self.assertIn('14:03',text)
+         self.assertNotIn('old failure',text)
+ 
+ 
+--- /Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-09-01-feishu-notification-copy/修改前/test_v3_feishu_ingress.py	2026-08-27 11:54:49
++++ test_v3_feishu_ingress.py	2026-09-01 18:17:18
+@@ -126,6 +126,10 @@
+                 ack = dict(conn.execute("SELECT * FROM outbox").fetchone())
+                 self.assertEqual(ack["object_type"], "ingress_ack")
+                 self.assertEqual(ack["status"], "IN_FLIGHT")
++                text = json.loads(ack["payload_json"])["text"]
++                self.assertIn("已收到商品链接", text)
++                self.assertNotIn("task_", text)
++                self.assertNotIn("Runtime V3", text)
+ 
+     def test_ack_retry_then_completion_is_idempotent(self):
+         with tempfile.TemporaryDirectory(prefix="edu-ack-regression-") as folder:
+--- /dev/null	2026-09-01 18:28:20
++++ v3_notification_copy.py	2026-09-01 18:25:20
+@@ -0,0 +1,204 @@
++#!/usr/bin/env python3
++"""Plain-language Feishu copy for Runtime V3 task notifications."""
++from __future__ import annotations
++
++import json
++import re
++from datetime import datetime
++from zoneinfo import ZoneInfo
++
++
++STATUS_HEADINGS = {
++    "RECEIVED": "📥 已收到",
++    "RUNNING": "⏳ 正在处理",
++    "RETRY_WAIT": "⏳ 正在处理",
++    "DELIVERY_PENDING": "⏳ 正在保存结果",
++    "WAITING_HUMAN": "⚠️ 需要你操作",
++    "WAITING_TOOL": "⚠️ 暂时无法继续",
++    "WAITING_IDENTITY": "⚠️ 需要重新确认直播间",
++    "PARTIAL_SUCCESS": "⚠️ 已完成部分处理",
++    "FAILED_FINAL": "❌ 本次未完成",
++    "COMPLETE": "✅ 处理完成",
++    "SUPERSEDED": "ℹ️ 已由新任务替代",
++}
++
++STEP_COPY = {
++    "INGRESS": "正在识别商品链接",
++    "PRODUCT_RESOLVED": "已识别商品，正在查找同行直播间",
++    "SCANNING": "正在查找同行直播间",
++    "IDENTITY_CLOSURE": "正在确认同行账号与直播间",
++    "LOCAL_COMMIT": "正在保存扫描结果",
++    "OUTBOX": "正在写入业务工作台",
++    "DELIVERY": "正在写入业务工作台",
++}
++
++
++def product_key(task: dict) -> str:
++    try:
++        data = json.loads(task.get("input_json") or "{}")
++    except (TypeError, json.JSONDecodeError):
++        data = {}
++    explicit = (data.get("product_resolution") or {}).get("resolved_input") or task.get("product_id")
++    if explicit:
++        return str(explicit).removeprefix("douyin:")
++    raw = str(data.get("content") or "")
++    number = re.search(r"(?<!\d)\d{10,22}(?!\d)", raw)
++    return number.group(0) if number else "待识别"
++
++
++def ingress_ack_text() -> str:
++    return "\n".join((
++        "📥 已收到商品链接",
++        "正在识别商品并查找相关同行直播间。",
++        "有结果后我会继续通知你。",
++    ))
++
++
++def _login_expired(error_type: str, error_message: str) -> bool:
++    if error_type == "BUYIN_LOGIN_REQUIRED":
++        return True
++    text = error_message.lower()
++    return error_type == "TABBIT_ACQUISITION_BLOCKED" and any(
++        marker in text for marker in ("passport", "/logout", "login", "登录")
++    )
++
++
++def plain_reason(error_type: str | None, error_message: str | None) -> str:
++    kind = str(error_type or "")
++    detail = str(error_message or "")
++    if _login_expired(kind, detail):
++        return "精选联盟登录状态已失效，暂时无法查找同行直播间。"
++    if kind in {"TABBIT_TAB_AMBIGUOUS", "TABBIT_WINDOW_AMBIGUOUS"}:
++        return "系统无法确定应使用哪个精选联盟页面。"
++    if kind == "TABBIT_ACQUISITION_BLOCKED":
++        return "精选联盟页面暂时无法正常读取。"
++    if kind == "STORAGE_UNAVAILABLE":
++        return "录制硬盘当前未连接。"
++    if kind == "STORAGE_LOW_SPACE":
++        return "录制硬盘剩余空间不足。"
++    if kind == "QR_IDENTITY_UNRESOLVED":
++        return "同行账号与直播间的对应关系暂时无法确认。"
++    if kind in {"PRODUCT_LINK_RESOLUTION_FAILED", "INVALID_COMMAND"}:
++        return "没有识别出有效的商品链接或商品编号。"
++    if kind in {"SCAN_DATA_CHANGED", "SCAN_PAGE_NOT_READY", "SCAN_TEMPORARY_HTTP_ERROR"}:
++        return "精选联盟页面数据暂时不稳定，本次没有完整读取。"
++    if kind in {"COMMITTED_EVIDENCE_MISSING", "RESULT_MISSING", "INVALID_SCANNER_OUTPUT"}:
++        return "本次扫描结果保存不完整。"
++    if kind == "IDENTITY_OR_EVIDENCE_NOT_VERIFIED":
++        return "同行账号与直播间的对应关系尚未确认完整。"
++    if kind in {"IDENTITY_CONFIGURATION_ERROR", "IDENTITY_CONFLICT", "UNAUTHORIZED"}:
++        return "账号配置存在冲突，当前无法继续处理。"
++    if kind in {"FEISHU_ACK_FAILED", "DELIVERY_FAILED"}:
++        return "结果暂时没有成功写入飞书。"
++    return "本次处理暂时没有完成。"
++
++
++def _action_text(task: dict) -> str | None:
++    status = str(task.get("status") or "")
++    error_type = str(task.get("error_type") or "")
++    error_message = str(task.get("error_message") or "")
++    if _login_expired(error_type, error_message):
++        return "请重新登录巨量百应或精选联盟，然后回复“继续处理”。不用重新发送商品链接。"
++    if error_type in {"TABBIT_TAB_AMBIGUOUS", "TABBIT_WINDOW_AMBIGUOUS"}:
++        return "请只保留一个已登录的精选联盟页面，然后回复“继续处理”。"
++    if error_type == "STORAGE_UNAVAILABLE":
++        return "请连接录制硬盘，然后回复“继续处理”。"
++    if error_type == "STORAGE_LOW_SPACE":
++        return "请清理录制硬盘空间，然后回复“继续处理”。"
++    if error_type in {"PRODUCT_LINK_RESOLUTION_FAILED", "INVALID_COMMAND"}:
++        return "请重新发送有效的抖音商品分享链接。"
++    if error_type in {"IDENTITY_CONFIGURATION_ERROR", "IDENTITY_CONFLICT", "UNAUTHORIZED"}:
++        return "这个问题不能通过重复操作解决，请联系维护人员检查账号配置。"
++    if status == "RETRY_WAIT":
++        return "系统会自动继续处理，你不用重新发送商品链接。"
++    if status in {"WAITING_HUMAN", "WAITING_TOOL", "WAITING_IDENTITY", "FAILED_FINAL", "PARTIAL_SUCCESS"}:
++        return "已有进度会保留。准备好后回复“继续处理”，不用重新发送商品链接。"
++    return None
++
++
++def _progress_text(task: dict) -> str:
++    status = str(task.get("status") or "")
++    if status == "COMPLETE":
++        return "同行账号和直播间已整理完成"
++    step = str(task.get("current_step") or "")
++    progress = STEP_COPY.get(step, "等待处理")
++    if status in {"WAITING_HUMAN", "FAILED_FINAL"} and step == "PRODUCT_RESOLVED":
++        return "已识别商品，尚未完成同行直播间查找"
++    return progress
++
++
++def _beijing_timestamp(value: str | None) -> str | None:
++    if not value:
++        return None
++    try:
++        stamp = datetime.fromisoformat(value.replace("Z", "+00:00")).astimezone(ZoneInfo("Asia/Shanghai"))
++    except ValueError:
++        return None
++    return stamp.strftime("%Y-%m-%d %H:%M") + "（北京时间）"
++
++
++def task_summary(task: dict, *, include_task_id: bool = False) -> str:
++    status = str(task.get("status") or "")
++    lines = [
++        STATUS_HEADINGS.get(status, "ℹ️ 任务状态更新"),
++        f"商品：{product_key(task)}",
++        f"当前进度：{_progress_text(task)}",
++    ]
++    if include_task_id:
++        lines.append(f"任务编号：{task.get('task_id') or '未知'}")
++    if status == "COMPLETE":
++        lines.extend((
++            "同行信息已写入业务工作台。",
++            "后续发现开播会自动录制。",
++        ))
++    elif status in {"WAITING_HUMAN", "WAITING_TOOL", "WAITING_IDENTITY", "RETRY_WAIT", "FAILED_FINAL", "PARTIAL_SUCCESS"}:
++        if task.get("error_type") or status != "RETRY_WAIT":
++            lines.append(f"原因：{plain_reason(task.get('error_type'), task.get('error_message'))}")
++        action = _action_text(task)
++        if action:
++            lines.append(action)
++    elif status in {"RECEIVED", "RUNNING", "DELIVERY_PENDING"}:
++        lines.append("任务正在后台处理，有结果后我会继续通知你。")
++    timestamp = _beijing_timestamp(task.get("updated_at"))
++    if timestamp:
++        lines.append(f"更新时间：{timestamp}")
++    return "\n".join(lines)
++
++
++def resume_text(task: dict) -> str:
++    return "\n".join((
++        "✅ 已继续处理",
++        f"商品：{product_key(task)}",
++        "系统会从上次中断处继续，不会重复创建任务。",
++        "有结果后我会继续通知你。",
++    ))
++
++
++def blocked_resume_text(task: dict) -> str:
++    return "\n".join((
++        "⚠️ 暂时无法继续",
++        f"商品：{product_key(task)}",
++        f"原因：{plain_reason(task.get('error_type'), task.get('error_message'))}",
++        "这个问题不能通过重复操作解决，请联系维护人员检查账号配置。",
++    ))
++
++
++def ambiguous_tasks_text(tasks: list[dict]) -> str:
++    lines = [
++        "⚠️ 有多个不同商品任务等待处理",
++        "请按对应商品编号回复，例如“继续 3839136509492068370”：",
++    ]
++    for task in tasks:
++        product = product_key(task)
++        lines.append(f"商品 {product}：回复“继续 {product}”")
++    return "\n".join(lines)
++
++
++def completion_text(product_id: str | None) -> str:
++    product = str(product_id or "待识别").removeprefix("douyin:")
++    return "\n".join((
++        "✅ 同行直播间查找完成",
++        f"商品：{product}",
++        "同行账号和直播间已整理并写入业务工作台。",
++        "后续发现开播会自动录制。",
++    ))

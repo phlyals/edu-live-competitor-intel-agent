@@ -1,0 +1,287 @@
+--- /Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-09-01-feishu-control-routing-fix/修改前/v3_task_control.py	2026-09-01 18:25:10
++++ v3_task_control.py	2026-09-01 19:53:50
+@@ -16,6 +16,10 @@
+ )
+ 
+ CONTROL = re.compile(r"^(继续(?:处理|任务)?|恢复(?:处理|任务)?|查询进度|查看进度|任务状态|进度|状态|怎么样了|处理得怎么样了)(?:\s+(task_[A-Za-z0-9_-]+|\d{10,22}))?[。！!？?\s]*$")
++ORDINAL_CONTROL = re.compile(r"^(?:继续|恢复)(?:处理|任务)?\s*(?:第)?([一二三四五12345])(?:个|项|条|任务)?[。！!？?\s]*$")
++LOGIN_READY_CONTROL = re.compile(r"^(?:巨量百应|百应|精选联盟).{0,10}(?:已登录|登录好了|已经登录|登录完成).{0,10}[。！!？?\s]*$")
++CONFIRM_CONTROL = re.compile(r"^(?:确认|确定|好的?，?确认|就按这个)[。！!？?\s]*$")
++ORDINAL_INDEX = {"一": 0, "1": 0, "二": 1, "2": 1, "三": 2, "3": 2, "四": 3, "4": 3, "五": 4, "5": 4}
+ ACTIVE = {"RUNNING", "RECEIVED", "RETRY_WAIT", "DELIVERY_PENDING"}
+ RESUMABLE = {"FAILED_FINAL", "WAITING_HUMAN", "WAITING_TOOL", "WAITING_IDENTITY", "PARTIAL_SUCCESS"}
+ 
+@@ -41,7 +45,15 @@
+ 
+ 
+ def parse_control(content: str) -> dict | None:
+-    match = CONTROL.fullmatch(content.strip())
++    normalized = content.strip()
++    ordinal = ORDINAL_CONTROL.fullmatch(normalized)
++    if ordinal:
++        return {"action": "resume", "requested_task_id": None, "selection_index": ORDINAL_INDEX[ordinal[1]]}
++    if LOGIN_READY_CONTROL.fullmatch(normalized):
++        return {"action": "resume", "requested_task_id": None, "selection_index": 0}
++    if CONFIRM_CONTROL.fullmatch(normalized):
++        return {"action": "status", "requested_task_id": None, "confirmation_only": True}
++    match = CONTROL.fullmatch(normalized)
+     if not match:
+         return None
+     return {"action": "resume" if match[1].startswith(("继续", "恢复")) else "status", "requested_task_id": match[2]}
+@@ -64,7 +76,20 @@
+     return relevant
+ 
+ 
+-def select_task(rows: list[dict], requested: str | None, action: str) -> tuple[dict | None, str]:
++def pending_task_choices(rows: list[dict]) -> list[dict]:
++    groups: dict[str, list[dict]] = {}
++    for row in current_tasks(rows):
++        if row["status"] not in {"COMPLETE", "SUPERSEDED"}:
++            groups.setdefault(_product_key(row), []).append(row)
++    ranked = []
++    for group in groups.values():
++        original = min(group, key=lambda r: (r.get("started_at") or "", r["task_id"]))
++        activity = max(str(r.get("updated_at") or r.get("started_at") or "") for r in group)
++        ranked.append((activity, original))
++    return [row for _, row in sorted(ranked, key=lambda item: item[0], reverse=True)]
++
++
++def select_task(rows: list[dict], requested: str | None, action: str, selection_index: int | None = None) -> tuple[dict | None, str]:
+     if requested:
+         if requested.startswith("task_"):
+             return next((r for r in rows if r["task_id"] == requested), None), "explicit"
+@@ -72,16 +97,14 @@
+         pending = [r for r in product_rows if r["status"] not in {"COMPLETE", "SUPERSEDED"}]
+         return (pending[0] if pending else (product_rows[-1] if product_rows else None)), "explicit_product"
+     relevant=current_tasks(rows)
+-    pending = [r for r in relevant if r["status"] not in {"COMPLETE","SUPERSEDED"}]
++    pending = pending_task_choices(rows)
++    if selection_index is not None:
++        return (pending[selection_index], "ordinal") if selection_index < len(pending) else (None, "selection_out_of_range")
+     if action == "status" and not pending:
+         return (relevant[-1] if relevant else None), "latest_complete"
+-    groups: dict[str, list[dict]] = {}
+-    for row in pending:
+-        groups.setdefault(_product_key(row), []).append(row)
+-    if len(groups) > 1:
++    if len(pending) > 1:
+         return None, "ambiguous"
+-    # Multiple shares of the same product resume the oldest original task.
+-    return (next(iter(groups.values()))[0] if groups else (relevant[-1] if relevant else None)), "original"
++    return (pending[0] if pending else (relevant[-1] if relevant else None)), "original"
+ 
+ 
+ def ingest_control(*, message_id: str, chat_id: str, sender_id: str, content: str, control: dict) -> dict:
+@@ -100,11 +123,11 @@
+             conn.commit()
+             return {"status": "DUPLICATE", "created": False, "task_id": prior["task_id"]}
+         rows = authorized_tasks(conn,chat_id,sender_id)
+-        task, reason = select_task(rows, control.get("requested_task_id"), control["action"])
++        task, reason = select_task(rows, control.get("requested_task_id"), control["action"], control.get("selection_index"))
+         task_id = task["task_id"] if task else None
+         if not task:
+-            pending = [r for r in current_tasks(rows) if r["status"] not in {'COMPLETE','SUPERSEDED'}]
+-            text = ambiguous_tasks_text(pending) if reason == "ambiguous" else "ℹ️ 当前没有可继续处理的商品任务。\n请直接发送新的抖音商品分享链接。"
++            pending = pending_task_choices(rows)
++            text = ambiguous_tasks_text(pending) if pending and reason in {"ambiguous", "selection_out_of_range"} else "ℹ️ 当前没有可继续处理的商品任务。\n请直接发送新的抖音商品分享链接。"
+         elif control["action"] == "resume" and task["status"] in RESUMABLE:
+             if task.get("error_type") in {"IDENTITY_CONFIGURATION_ERROR", "IDENTITY_CONFLICT", "UNAUTHORIZED"}:
+                 text = blocked_resume_text(task)
+--- /Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-09-01-feishu-control-routing-fix/修改前/v3_notification_copy.py	2026-09-01 18:25:20
++++ v3_notification_copy.py	2026-09-01 19:54:09
+@@ -186,11 +186,13 @@
+ def ambiguous_tasks_text(tasks: list[dict]) -> str:
+     lines = [
+         "⚠️ 有多个不同商品任务等待处理",
+-        "请按对应商品编号回复，例如“继续 3839136509492068370”：",
++        "最近发送的商品排在最前面。请回复“继续第一个”“继续第二个”等：",
+     ]
+-    for task in tasks:
++    ordinals = ("第一个", "第二个", "第三个", "第四个", "第五个")
++    for index, task in enumerate(tasks):
+         product = product_key(task)
+-        lines.append(f"商品 {product}：回复“继续 {product}”")
++        label = ordinals[index] if index < len(ordinals) else f"第{index + 1}个"
++        lines.append(f"{index + 1}. 商品 {product}（回复“继续{label}”）")
+     return "\n".join(lines)
+ 
+ 
+--- /Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-09-01-feishu-control-routing-fix/修改前/test_v3_workflow.py	2026-09-01 18:25:37
++++ test_v3_workflow.py	2026-09-01 19:54:41
+@@ -64,6 +64,10 @@
+     def test_plain_continue_is_control(self):
+         self.assertEqual(parse_control('继续处理。')['action'],'resume')
+         self.assertEqual(parse_control('继续 3839136509492068370')['requested_task_id'],'3839136509492068370')
++        self.assertEqual(parse_control('继续第一个')['selection_index'],0)
++        self.assertEqual(parse_control('继续第二项')['selection_index'],1)
++        self.assertEqual(parse_control('巨量百应已登录，你看一下。')['selection_index'],0)
++        self.assertEqual(parse_control('确认')['action'],'status')
+         self.assertEqual(parse_control('查询进度')['action'],'status')
+         self.assertIsNone(parse_control('这个人继续直播时说了什么'))
+     def test_resume_same_task_preserves_attempt_fencing(self):
+@@ -96,13 +100,17 @@
+         result=self.control('继续 '+task,chat='oc_other')
+         self.assertIsNone(result['task_id'])
+     def test_distinct_products_require_target(self):
+-        self.task('om_a','111111111111')
++        first=self.task('om_a','111111111111')
+         second=self.task('om_b','222222222222')
++        with self.connect() as c:
++            c.execute("UPDATE tasks SET updated_at='2026-01-01T00:00:00Z' WHERE task_id=?",(first,))
++            c.execute("UPDATE tasks SET updated_at='2026-01-02T00:00:00Z' WHERE task_id=?",(second,))
+         result=self.control('继续')
+         self.assertIsNone(result['task_id'])
+         self.assertIn('多个不同商品',result['ack_text'])
+         self.assertNotIn('task_',result['ack_text'])
+-        selected=self.control('继续 222222222222',message='om_choose')
++        self.assertLess(result['ack_text'].index('222222222222'),result['ack_text'].index('111111111111'))
++        selected=self.control('继续第一个',message='om_choose')
+         self.assertEqual(selected['task_id'],second)
+     def test_repeated_product_share_chooses_original(self):
+         first=self.task('om_a')
+--- /Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-09-01-feishu-control-routing-fix/修改前/test_v3_feishu_ingress.py	2026-09-01 18:17:18
++++ test_v3_feishu_ingress.py	2026-09-01 19:54:54
+@@ -33,6 +33,11 @@
+     def test_plain_chat_does_not_enter_v3(self):
+         self.assertEqual(ingress.classify("今天怎么样？")["status"], "NOT_BUSINESS")
+ 
++    def test_natural_followups_stay_in_deterministic_task_control(self):
++        for text in ("继续第一个", "继续第二项", "巨量百应已登录，你看一下。", "确认"):
++            with self.subTest(text=text):
++                self.assertEqual(ingress.classify(text)["status"], "CONTROL")
++
+     def test_unrelated_url_does_not_enter_v3(self):
+         self.assertEqual(ingress.classify("https://example.com/item")["status"], "NOT_BUSINESS")
+ 
+--- /Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-09-01-feishu-control-routing-fix/修改前/test_v3_minimal_repair.py	2026-09-01 18:17:05
++++ test_v3_minimal_repair.py	2026-09-01 20:12:26
+@@ -1,5 +1,6 @@
+ """Regression coverage for the observed refresh/retry/scheduled-control failure."""
+ import json
++import inspect
+ import sys
+ import unittest
+ from pathlib import Path
+@@ -11,7 +12,7 @@
+ from v3_task_control import authorized_tasks, product_scope, task_summary
+ 
+ sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'bin'))
+-from tabbit_scanner import scan_error_type
++from tabbit_scanner import PROGRAM, scan, scan_error_type
+ 
+ 
+ class ScheduledControlTests(RuntimeCase):
+@@ -122,13 +123,22 @@
+             self.assertEqual(scan_error_type(RuntimeError(message)),'SCAN_DATA_CHANGED')
+     def test_delayed_render_and_http(self):
+         self.assertEqual(scan_error_type(RuntimeError('SCAN_RENDER_TIMEOUT: rows')),'SCAN_PAGE_NOT_READY')
++        self.assertEqual(scan_error_type(RuntimeError('Evaluation exceeded controller timeout of 120000 ms')),'SCAN_PAGE_NOT_READY')
+         self.assertEqual(scan_error_type(RuntimeError('SCAN_REFRESH_HTTP: 503')),'SCAN_TEMPORARY_HTTP_ERROR')
+         self.assertEqual(scan_error_type(RuntimeError('SCAN_REFRESH_HTTP: 403')),'TABBIT_ACQUISITION_BLOCKED')
+     def test_unknown_and_identity_not_blindly_retried(self):
+         self.assertEqual(scan_error_type(RuntimeError('unknown code defect')),'TABBIT_ACQUISITION_BLOCKED')
+         self.assertEqual(scan_error_type(RuntimeError('QR_IDENTITY_UNRESOLVED')),'QR_IDENTITY_UNRESOLVED')
+ 
++    def test_slow_pages_are_split_below_controller_timeout(self):
++        wrapper = inspect.getsource(scan)
++        javascript = PROGRAM.read_text(encoding='utf-8')
++        self.assertIn("'rowBatchSize':4", wrapper)
++        self.assertIn("'timeoutMs':120000", wrapper)
++        self.assertIn('const batchEnd=', javascript)
++        self.assertIn('s.rowOffset=batchEnd', javascript)
+ 
++
+ class DeliveryRetryTests(unittest.TestCase):
+     def process(self,payload,code):
+         return type('Process',(),{'stdout':json.dumps(payload),'stderr':'','returncode':code})()
+--- /Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-09-01-feishu-control-routing-fix/修改前/tabbit_scanner.py	2026-08-28 21:47:16
++++ ../bin/tabbit_scanner.py	2026-09-01 20:10:35
+@@ -26,7 +26,10 @@
+     message=str(exc)
+     if any(marker in message for marker in ('result count changed', 'pagination repeated a page', 'end-page count mismatch')):
+         return 'SCAN_DATA_CHANGED'
+-    if any(marker in message for marker in ('SCAN_REFRESH_TIMEOUT', 'SCAN_RENDER_TIMEOUT')):
++    if any(marker in message for marker in (
++        'SCAN_REFRESH_TIMEOUT', 'SCAN_RENDER_TIMEOUT',
++        'Evaluation exceeded controller timeout', 'controller timeout',
++    )):
+         return 'SCAN_PAGE_NOT_READY'
+     if 'SCAN_REFRESH_HTTP:' in message and re.search(r'\b(?:429|5\d\d)\b',message):
+         return 'SCAN_TEMPORARY_HTTP_ERROR'
+@@ -138,7 +141,7 @@
+     if shutil.disk_usage(STORAGE).free < 50*1024**3:raise RuntimeError('STORAGE_LOW_SPACE: less than 50GiB free')
+     output.mkdir(parents=True,exist_ok=True)
+     run_id='scan_'+uuid.uuid4().hex
+-    input_data={'taskId':task_id,'scanId':run_id,'productId':product_id,'productUrl':f'https://buyin.jinritemai.com/dashboard/merch-picking-library/merch-promoting?id={product_id}','outputDir':str(output)}
++    input_data={'taskId':task_id,'scanId':run_id,'productId':product_id,'productUrl':f'https://buyin.jinritemai.com/dashboard/merch-picking-library/merch-promoting?id={product_id}','outputDir':str(output),'rowBatchSize':4}
+     protocol=TabbitProtocol(output)
+     def code(action: str, **extra) -> str:
+         data={**input_data,'action':action,**extra}
+@@ -146,7 +149,7 @@
+     try:
+         protocol.execute({'op':'bootstrap','taskName':'同行扫描-'+task_id[-12:],'requestId':'prepare','code':code('prepare'),'timeoutMs':60000})
+         for n in range(100):
+-            result=protocol.execute({'op':'run','requestId':f'page-{n+1:03d}','code':code('scan_page'),'timeoutMs':120000})
++            result=protocol.execute({'op':'run','requestId':f'page-batch-{n+1:03d}','code':code('scan_page'),'timeoutMs':120000})
+             if result.get('done'):break
+         else:raise RuntimeError('page limit exceeded')
+         acquired=json.loads((output/'acquisition.json').read_text())
+--- /Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-09-01-feishu-control-routing-fix/修改前/tabbit_scan.js	2026-08-28 21:47:16
++++ ../bin/tabbit_scan.js	2026-09-01 20:10:55
+@@ -69,7 +69,7 @@
+     await expect(activeNumber()).toHaveAttribute('title','1');
+   }
+   const filterEvidence={...await selectedFilter().evaluate(e=>({label:e.textContent,selectedClass:e.className,siblings:[...e.parentElement.children].map(x=>({label:x.textContent,class:x.className}))})),refresh:refreshEvidence};
+-  globalThis.scanState={productId:input.productId,name,sourceUrl:page.url(),startedAt:new Date().toISOString(),total,page:1,observations:[],identities:{},pageEvidence:[],opened:0,closed:0,maxOpen:1,filterEvidence,done:false};
++  globalThis.scanState={productId:input.productId,name,sourceUrl:page.url(),startedAt:new Date().toISOString(),total,page:1,rowOffset:0,currentPageFingerprint:null,observations:[],identities:{},pageEvidence:[],opened:0,closed:0,maxOpen:1,filterEvidence,done:false};
+   await fs.mkdir(input.outputDir+'/identities',{recursive:true});
+   return {status:'PREPARED',productId:input.productId,name,total,filterVerified:true,filterEvidence};
+ }
+@@ -92,8 +92,16 @@
+   }));
+   assert(raw.length>0 && raw.every(r=>r.account_name&&r.live_title&&r.live_date),'invalid live row structure');
+   const fingerprint=hash(raw);
+-  assert(!s.pageEvidence.some(p=>p.fingerprint===fingerprint),'pagination repeated a page');
+-  for(let i=0;i<raw.length;i++) {
++  const offset=Number.isInteger(s.rowOffset)?s.rowOffset:0;
++  if(offset===0) {
++    assert(!s.pageEvidence.some(p=>p.fingerprint===fingerprint),'pagination repeated a page');
++    s.currentPageFingerprint=fingerprint;
++  } else {
++    assert.equal(s.currentPageFingerprint,fingerprint,'result count changed during page batch');
++  }
++  const batchSize=Math.max(1,Math.min(Number(input.rowBatchSize)||4,raw.length));
++  const batchEnd=Math.min(raw.length,offset+batchSize);
++  for(let i=offset;i<batchEnd;i++) {
+     const row=raw[i], base=page, before=pages().slice();
+     let detail;
+     try {
+@@ -132,10 +140,17 @@
+     }
+     s.observations.push({...row,source_page:s.page,source_batch:s.page,source_position:i+1,collected_at:new Date().toISOString()});
+   }
++  s.rowOffset=batchEnd;
++  if(batchEnd<raw.length) {
++    await fs.writeFile(input.outputDir+'/acquisition.json',JSON.stringify(s,null,2));
++    return {status:'PAGE_BATCH_COMPLETE',page:s.page,pageDone:false,nextOffset:s.rowOffset,rowCount:raw.length,done:false,observations:s.observations.length,total:s.total,identities:Object.keys(s.identities).length,opened:s.opened,closed:s.closed,pages:pages().length};
++  }
+   assert.equal(await verifySurface(),s.total,'result count changed during identity lookup');
+   const next=content().locator('.auxo-pagination-next');
+   const end=(await next.getAttribute('aria-disabled'))==='true';
+   s.pageEvidence.push({page:s.page,count:raw.length,total:s.total,fingerprint,filterVerified:true,nextDisabled:end});
++  s.rowOffset=0;
++  s.currentPageFingerprint=null;
+   if(end){assert.equal(s.observations.length,s.total,'end-page count mismatch');s.done=true;}
+   else {
+     const previous=await rowsLocator().allTextContents();
+--- /Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-09-01-feishu-control-routing-fix/修改前/config.yaml	2026-08-23 19:04:51
++++ /Users/mac/.hermes/profiles/edu_live_competitor_intel/config.yaml	2026-09-01 20:03:37
+@@ -450,6 +450,8 @@
+   - /Volumes/ExternalStorage/同行直播录制
+   trust_recent_files: false
+   trust_recent_files_seconds: 600
++feishu:
++  gateway_restart_notification: false
+ streaming:
+   enabled: false
+   transport: auto
