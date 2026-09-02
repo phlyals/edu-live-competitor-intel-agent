@@ -1,0 +1,7 @@
+{
+  "status": "CLEANED",
+  "analysis_id": "analysis_c0d5fe33a0180f99e66fbca2",
+  "backup_path": "/Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/backups/source-binding-metadata-cleanup-20260831-0014/pre-cleanup.json",
+  "backup_sha256": "faa435b17ad03a0d7005c61f1239383405a295dcf61da62773d2ff12f42cdbca",
+  "event_id": "evt_source_binding_metadata_cleanup"
+}

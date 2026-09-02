@@ -1,0 +1,29 @@
+{
+  "verification_mode": "HISTORICAL_LOCAL_REPLAY",
+  "source_file": "/Volumes/ExternalStorage/同行直播录制/continuous-monitor-recordings/抖音直播/陈兴笃学/陈兴笃学_2026-08-25_07-58-17.mp4",
+  "source_duration_seconds": 3787.299122,
+  "recorded_file": "/Volumes/ExternalStorage/同行直播录制/exports/recording-repair-verification-20260829/full-replay/整场直播.ts",
+  "recorded_duration_seconds": 3787.299667,
+  "difference_seconds": 0.0005450000003293098,
+  "relative_error": 1.4390202167118656e-07,
+  "source_sha256": "b6143bd6828af8ee801573f96db29b2e0faff0f8e99d2bdefe19ca5ec1e5bea9",
+  "source_matches_historical_sha256": true,
+  "recorded_sha256": "dbad3ab3bd9950d7f9d61260bfaf97fb33a9bdf371635ba2ac3caa6d4725e5f4",
+  "acceptance_script_unchanged": true,
+  "acceptance_result": {
+    "file_exists": true,
+    "file_path": "/Volumes/ExternalStorage/同行直播录制/exports/recording-repair-verification-20260829/full-replay/整场直播.ts",
+    "duration_seconds": 3787.299667,
+    "file_size_mb": 716.15,
+    "expected_duration_seconds": 3787.299122,
+    "is_complete": true,
+    "session_id": "replay_20260829_chen_63min",
+    "script": "check_recording",
+    "checked_at": "2026-08-28T16:27:25.872661+00:00",
+    "status": "PASS",
+    "message": "录制时长误差在 5% 以内"
+  },
+  "fixture_database": "disposable Unix-socket-only PostgreSQL; replay timeline used, no production database writes",
+  "real_live_final_acceptance": false,
+  "checked_at": "2026-08-28T16:27:34.482944+00:00"
+}

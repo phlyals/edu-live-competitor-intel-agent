@@ -1,0 +1,21 @@
+{
+  "checked_at": "2026-08-30T04:51:06.593554+00:00",
+  "status": "PASS",
+  "suites": [
+    {
+      "python": "/Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/.venv/bin/python",
+      "command": "-B -m unittest discover -s runtime/v3 -p test_v3*.py",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "..........................................................................................................\n----------------------------------------------------------------------\nRan 106 tests in 5.093s\n\nOK\n"
+    },
+    {
+      "python": "/Users/mac/.local/share/edu-live-runtime-v3-venv/bin/python",
+      "command": "-B -m unittest discover -s runtime/v3 -p test_v3*.py",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "..........................................................................................................\n----------------------------------------------------------------------\nRan 106 tests in 4.793s\n\nOK\n"
+    }
+  ],
+  "expected_test_count_each": 106
+}

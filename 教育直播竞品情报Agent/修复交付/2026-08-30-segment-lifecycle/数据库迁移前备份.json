@@ -1,0 +1,10 @@
+{
+  "created_at": "2026-08-30T13:25:53.441237+00:00",
+  "path": "/Volumes/ExternalStorage/AgentInfrastructure/backups/edu-segment-lifecycle-20260830/pre-segment-lifecycle.dump",
+  "bytes": 932360,
+  "sha256": "61b4f606e7ce0e341c5e24962af5209df15fa6f0ebbe2dcbd566d8c944d3df43",
+  "pg_dump_returncode": 0,
+  "pg_restore_list_returncode": 0,
+  "toc_entries": 215,
+  "mode": "0o600"
+}

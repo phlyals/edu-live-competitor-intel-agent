@@ -1,0 +1,13 @@
+{
+  "review_id": "review_62fe3cd307db300b3310b7ba",
+  "object_type": "ASR_VALIDATION",
+  "object_id": "asr-validation:chinese-livestream",
+  "review_type": "HUMAN_GOLD_AND_TIMESTAMP",
+  "status": "PENDING",
+  "requested_at": "2026-08-26T07:17:57.359Z",
+  "requested_by": "runtime-v3",
+  "decided_at": null,
+  "decided_by": null,
+  "decision_notes": null,
+  "metadata_json": "{\"package_path\": \"/Volumes/ExternalStorage/同行直播录制/analysis/drafts/runtime-v3/asr-validation/human-review-package.json\", \"evidence_path\": \"/Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/test_artifacts/chinese_asr_validation.json\", \"metrics\": {\"cer\": 0.16101694915254236, \"gold_characters\": 1770, \"predicted_characters\": 1818, \"term_recall\": 0.6666666666666666, \"term_hits\": [\"直播\", \"选科\", \"文科\", \"理科\", \"家长\", \"组合\", \"排名\", \"物化生\"], \"term_total\": 12, \"gold_span_seconds\": 300, \"predicted_span_seconds\": 300.04, \"span_error_seconds\": 0.040000000000020464, \"timestamp_metric\": \"span_error_only; exact per-segment timestamp alignment still requires human review\"}}"
+}

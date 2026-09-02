@@ -1,0 +1,22 @@
+{
+  "status": "APPLIED",
+  "plan_sha256": "784f93e56db082956ba60e89d1310f8a1aeb56eb2113e8e06f7a4b6e5f5d3ba7",
+  "backup_path": "/Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-31-lineage-recompute-production/生产克隆迁移备份/pre-lineage-recompute-20260831-013620-966700.json",
+  "backup_sha256": "120d640a9d34ff39c04def1fb9f7f4d0dd40f37b2db44bbe2e7867673b97d2ea",
+  "postconditions": {
+    "healthy": true,
+    "schema": {
+      "missing_lineage_columns": [],
+      "recompute_requests_exists": true
+    },
+    "indexes": [
+      "idx_lineage_upstream_version",
+      "idx_recompute_requests_candidate",
+      "idx_recompute_requests_due"
+    ],
+    "marker": "1",
+    "edge_errors": [],
+    "request_errors": [],
+    "legacy_request_errors": []
+  }
+}

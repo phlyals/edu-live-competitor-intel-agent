@@ -1,0 +1,33 @@
+{
+  "status": "PASS",
+  "chunk_index": 0,
+  "row_count": 80,
+  "model_input_contains_timestamp_prefix": false,
+  "finish_reason": "stop",
+  "attempt": 1,
+  "usage": {
+    "prompt_tokens": 2633,
+    "completion_tokens": 1158,
+    "total_tokens": 3791,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "prompt_cache_hit_tokens": 0,
+    "prompt_cache_miss_tokens": 2633
+  },
+  "field_item_counts": {
+    "instructor": 0,
+    "course_content": 2,
+    "interaction_patterns": 2,
+    "product_handoff": 0,
+    "hook": 2,
+    "pain_points": 2,
+    "claims": 2,
+    "cta": 2,
+    "risks": 2,
+    "evidence_refs": 2
+  },
+  "reference_count": 31,
+  "all_references_in_chunk": true,
+  "model_output_contains_free_timestamp_fields": false
+}

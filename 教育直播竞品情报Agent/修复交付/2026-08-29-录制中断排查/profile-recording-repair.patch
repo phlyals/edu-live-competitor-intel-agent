@@ -1,0 +1,408 @@
+--- a/runtime/bin/recorder.py
++++ b/runtime/bin/recorder.py
+@@ -101,6 +101,8 @@
+     mode.add_argument("--self-test", action="store_true")
+     mode.add_argument("--check-only", action="store_true")
+     parser.add_argument("--url")
++    parser.add_argument("--replay-file", help="Local replay verification; does not access the production DB")
++    parser.add_argument("--replay-output-dir", help="Required isolated output directory for --replay-file")
+     parser.add_argument("--duration", type=float, default=None, help="0 means record until the stream ends")
+     parser.add_argument("--account-id")
+     parser.add_argument("--session-id")
+@@ -112,6 +114,20 @@
+ 
+     if args.self_test:
+         return self_test()
++    if args.replay_file:
++        if args.url or args.check_only or not args.approved or not args.replay_output_dir:
++            return emit({"status": "ERROR", "reason": "Replay requires --approved and --replay-output-dir, without --url/--check-only"})
++        source = Path(args.replay_file).expanduser().resolve()
++        if not source.is_file():
++            return emit({"status": "ERROR", "reason": "Replay source must be an existing local file"})
++        output = Path(args.replay_output_dir).expanduser().resolve()
++        command = [str(SHARED_PYTHON), str(SHARED_RECORDER), "--input-file", str(source),
++                   "--duration", "0", "--output-dir", str(output), "--filename", "整场直播.ts",
++                   "--segment-seconds", "0"]
++        code, payload = run_shared(command)
++        return emit({**payload, "status": "RECORDED" if code == 0 and payload.get("status") == "recorded" else "ERROR",
++                     "return_code": code, "source_file": str(source), "verification_mode": "LOCAL_REPLAY",
++                     "network_request_performed": False})
+     if not args.url:
+         return emit({"status": "ERROR", "reason": "--url is required"})
+ 
+@@ -180,7 +196,7 @@
+         return emit({"status": "ERROR", "reason": "Session output already exists; use --resume to continue the same session", "recording_started": False})
+     part_index = len(existing_parts)
+     filename = "整场直播.ts.partial" if part_index == 0 else f"整场直播.part{part_index:02d}.ts.partial"
+-    while (partial_dir / filename).exists() and (partial_dir / filename).stat().st_size>0:
++    while (partial_dir / filename).exists():
+         part_index += 1
+         filename = f"整场直播.part{part_index:02d}.ts.partial"
+ 
+@@ -198,6 +214,9 @@
+             "reason": payload.get("message") or "Shared recorder failed",
+             "partial_dir": str(partial_dir),
+             "return_code": return_code,
++            "ffmpeg_return_code": payload.get("ffmpeg_return_code"),
++            "ffmpeg_tail": payload.get("ffmpeg_tail") or payload.get("ffmpeg_error_tail"),
++            "recording_state_path": payload.get("recording_state_path"),
+             "recording_started": (partial_dir / filename).is_file() and (partial_dir / filename).stat().st_size>0,
+         })
+     # Keep the whole-session file in partial storage until Runtime V3 confirms
+@@ -220,6 +239,10 @@
+         "segment_seconds": segment_seconds,
+         "recorded_duration_seconds": payload.get("recorded_duration_seconds"),
+         "part_index": part_index,
++        "return_code": return_code,
++        "ffmpeg_return_code": payload.get("ffmpeg_return_code"),
++        "ffmpeg_tail": payload.get("ffmpeg_tail"),
++        "recording_state_path": payload.get("recording_state_path"),
+     })
+ 
+ 
+--- a/runtime/v3/v3_worker.py
++++ b/runtime/v3/v3_worker.py
+@@ -54,6 +54,11 @@
+ V3_CONFIG = Path(__file__).resolve().parent / "v3_config.json"
+ SERVICE = "runtime-v3"
+ STOP_EVENT = threading.Event()
++RECORDER_PROCESSES: dict[int, subprocess.Popen] = {}
++RECORDING_LOG_ROOT = Path("/Volumes/ExternalStorage/同行直播录制/exports/runtime-v3-recordings")
++OFFLINE_WINDOW_SECONDS = 300
++OFFLINE_MIN_OBSERVATIONS = 3
++OFFLINE_MAX_OBSERVATION_GAP = 150
+ 
+ 
+ def emit(payload: dict, code: int = 0) -> int:
+@@ -172,17 +177,35 @@
+             metadata = json.loads(row["metadata_json"] or "{}")
+         except json.JSONDecodeError:
+             metadata = {}
+-        if state == "LIVE":
+-            metadata.pop("down_since", None)
+-            metadata["last_seen_live_at"] = now
++        if state != "OFFLINE_CONFIRMED":
++            # Unknown observations break continuity; they do not count as
++            # evidence of being offline for the entire elapsed wall time.
++            for key in ("down_since", "offline_observations", "last_offline_at"):
++                metadata.pop(key, None)
++            metadata["last_seen_live_at" if state == "LIVE" else "last_unknown_at"] = now
+             # LIVE proves the broadcast, not that our recorder is writing bytes.
+             conn.execute("UPDATE live_sessions SET metadata_json=? WHERE session_id=?", (json.dumps(metadata, ensure_ascii=False, sort_keys=True), row["session_id"]))
+             continue
+-        if state == "UNKNOWN":
+-            metadata["last_unknown_at"] = now
++        job = conn.execute("SELECT * FROM recording_jobs WHERE session_id=?", (row["session_id"],)).fetchone()
++        health = metadata.get("recording_health") or {}
++        if job and health.get("bytes") is not None and recording_bytes(Path(job["partial_dir"])) > int(health["bytes"]):
++            for key in ("down_since", "offline_observations", "last_offline_at"):
++                metadata.pop(key, None)
++            metadata["offline_rejected_media_growth_at"] = now
++            record_event(conn, "OFFLINE_REJECTED_MEDIA_GROWTH", object_type="session", object_id=row["session_id"],
++                         payload={"observed_at": now}, severity="WARNING")
+             conn.execute("UPDATE live_sessions SET metadata_json=? WHERE session_id=?", (json.dumps(metadata, ensure_ascii=False, sort_keys=True), row["session_id"]))
+             continue
+         down_since = metadata.get("down_since")
++        last_offline = metadata.get("last_offline_at")
++        try:
++            gap = (datetime.fromisoformat(now.replace("Z", "+00:00")) - datetime.fromisoformat(str(last_offline).replace("Z", "+00:00"))).total_seconds()
++        except (ValueError, TypeError):
++            gap = OFFLINE_MAX_OBSERVATION_GAP + 1
++        if gap < 0 or gap > OFFLINE_MAX_OBSERVATION_GAP:
++            down_since = None
++        metadata["last_offline_at"] = now
++        metadata["offline_observations"] = int(metadata.get("offline_observations") or 0) + 1 if down_since else 1
+         if not down_since:
+             metadata["down_since"] = now
+             conn.execute("UPDATE live_sessions SET metadata_json=? WHERE session_id=?", (json.dumps(metadata, ensure_ascii=False, sort_keys=True), row["session_id"]))
+@@ -191,15 +214,34 @@
+             elapsed = (datetime.fromisoformat(now.replace("Z", "+00:00")) - datetime.fromisoformat(str(down_since).replace("Z", "+00:00"))).total_seconds()
+         except ValueError:
+             elapsed = 0
+-        if elapsed >= 300:
++        if elapsed >= OFFLINE_WINDOW_SECONDS and metadata["offline_observations"] >= OFFLINE_MIN_OBSERVATIONS:
+             conn.execute("UPDATE live_sessions SET status='ENDED',ended_at=?,metadata_json=? WHERE session_id=?", (down_since, json.dumps(metadata, ensure_ascii=False, sort_keys=True), row["session_id"]))
++            record_event(conn, "SESSION_OFFLINE_CONFIRMED", object_type="session", object_id=row["session_id"],
++                         payload={"down_since": down_since, "confirmed_at": now, "observations": metadata["offline_observations"]})
++        else:
++            conn.execute("UPDATE live_sessions SET metadata_json=? WHERE session_id=?", (json.dumps(metadata, ensure_ascii=False, sort_keys=True), row["session_id"]))
+ 
+ 
+ def pid_alive(pid: int | None) -> bool:
+     if not pid:
+         return False
+     try:
++        pid = int(pid)
++    except (TypeError, ValueError):
++        return False
++    owned = RECORDER_PROCESSES.get(pid)
++    if owned is not None:
++        if owned.poll() is None:
++            return True
++        RECORDER_PROCESSES.pop(pid, None)
++        return False
++    try:
+         os.kill(int(pid), 0)
++        state = subprocess.run(["/bin/ps", "-o", "stat=", "-p", str(int(pid))], capture_output=True,
++                               text=True, timeout=5, check=False)
++        return state.returncode == 0 and bool(state.stdout.strip()) and not state.stdout.strip().startswith("Z")
++    except subprocess.TimeoutExpired:
++        # kill(pid, 0) succeeded; a slow ps is not evidence that it is dead.
+         return True
+     except (OSError, ValueError):
+         return False
+@@ -313,6 +355,9 @@
+     account_key, recording_key, partial_dir, completed_dir = recording_keys(session, target)
+     now = utc_now()
+     with connect() as conn:
++        current = conn.execute("SELECT status FROM live_sessions WHERE session_id=?", (session["session_id"],)).fetchone()
++        if not current or current["status"] not in {"RECORDING", "DETECTED", "WAITING_STREAM", "WAITING_CAPACITY"} or target.get("status", "ACTIVE") != "ACTIVE":
++            return {"started": False, "reason": "session or target is no longer active"}
+         job = conn.execute("SELECT * FROM recording_jobs WHERE session_id=?", (session["session_id"],)).fetchone()
+         job=dict(job) if job else None
+         if job and pid_alive(job["pid"]):
+@@ -332,7 +377,7 @@
+             conn.commit()
+             return {"started": False, "pid": discovered, "recording_key": recording_key, "discovered": True}
+         if job and job.get('pid'):
+-            recording_failure(conn,session,job,'recorder exited while broadcast is live',now)
++            recording_failure(conn,session,job,'recorder exited before session end was confirmed',now)
+         row=conn.execute('SELECT metadata_json FROM live_sessions WHERE session_id=?',(session['session_id'],)).fetchone()
+         meta=json.loads(row['metadata_json'] or '{}');health=meta.setdefault('recording_health',{})
+         if health.get('next_retry_at') and health['next_retry_at']>now:
+@@ -351,7 +396,7 @@
+         conn.execute("INSERT INTO recording_jobs(job_id,session_id,status,pid,account_key,recording_key,partial_dir,completed_dir,started_at,updated_at,restart_count,last_error) VALUES(?,?,?,?,?,?,?,?,?,?,?,NULL) ON CONFLICT(session_id) DO UPDATE SET status='STARTING',pid=NULL,account_key=excluded.account_key,recording_key=excluded.recording_key,partial_dir=excluded.partial_dir,completed_dir=excluded.completed_dir,updated_at=excluded.updated_at,restart_count=recording_jobs.restart_count+1,last_error=NULL", ("recjob_" + hashlib.sha256(session["session_id"].encode()).hexdigest()[:24], session["session_id"], "STARTING", None, account_key, recording_key, str(partial_dir), str(completed_dir), session["started_at"] or now, now, 0))
+         conn.execute("UPDATE live_sessions SET status='WAITING_STREAM',metadata_json=? WHERE session_id=?",(json.dumps(meta,ensure_ascii=False),session['session_id']))
+         conn.commit()
+-    log_dir = Path("/Volumes/ExternalStorage/同行直播录制/exports/runtime-v3-recordings") / recording_key
++    log_dir = RECORDING_LOG_ROOT / recording_key
+     log_dir.mkdir(parents=True, exist_ok=True)
+     handle = (log_dir / "recorder.log").open("ab")
+     v3_config = json.loads(V3_CONFIG.read_text(encoding="utf-8"))
+@@ -362,13 +407,18 @@
+     if any(partial_dir.glob("*.ts.partial")) or any(partial_dir.glob("*.ts")):
+         argv.append("--resume")
+     process = subprocess.Popen(argv, stdout=handle, stderr=subprocess.STDOUT, start_new_session=True)
++    RECORDER_PROCESSES[process.pid] = process
+     handle.close()
+     with connect() as conn:
+         if process.poll() is not None:
++            RECORDER_PROCESSES.pop(process.pid, None)
+             recording_failure(conn,session,job or {},'recorder exited before establishing stream',utc_now())
+             conn.commit()
+             return {"started": False, "pid": None, "recording_key": recording_key, "reason": "recorder exited before stream"}
+         conn.execute("UPDATE recording_jobs SET status='STARTING',pid=?,updated_at=? WHERE session_id=?", (process.pid, utc_now(), session["session_id"]))
++        record_event(conn, "RECORDING_PROCESS_STARTED", object_type="session", object_id=session["session_id"],
++                     payload={"pid": process.pid, "recording_key": recording_key, "resume": "--resume" in argv,
++                              "log_path": str(log_dir / "recorder.log")})
+         row=conn.execute('SELECT metadata_json FROM live_sessions WHERE session_id=?',(session['session_id'],)).fetchone()
+         meta=json.loads(row['metadata_json'] or '{}');health=meta.setdefault('recording_health',{})
+         health.update(pid=process.pid,bytes=recording_bytes(partial_dir),checked_at=utc_now(),last_growth_at=None,growth_observations=0)
+@@ -478,6 +528,8 @@
+             if not session or not target:
+                 continue
+             if alive and session['status']=='ENDED':
++                record_event(conn, "RECORDING_STOP_REQUESTED", object_type="session", object_id=session["session_id"],
++                             payload={"pid": job["pid"], "reason": "confirmed offline window", "ended_at": session["ended_at"]})
+                 stop_recorder_group(job['pid'])
+                 alive=pid_alive(job['pid'])
+                 if alive:continue
+@@ -506,7 +558,11 @@
+                 conn.execute("UPDATE recording_jobs SET status=?,pid=NULL,updated_at=? WHERE session_id=?", ('COMPLETE' if final_state in {'MEDIA_COMPLETE','DUPLICATE_SUPERSEDED'} else 'WAITING_STREAM',utc_now(), session["session_id"]))
+                 conn.execute("UPDATE recording_leases SET status='RELEASED',lease_until=? WHERE session_id=? AND status='ACTIVE'", (utc_now(), session["session_id"]))
+                 finalized += 1
+-            elif target["live_status"] == "LIVE":
++            elif target["status"] == "ACTIVE" and target["live_status"] in {"LIVE", "UNKNOWN"}:
++                # An already-authorised session must recover even if the room
++                # probes temporarily fail. UNKNOWN neither creates a new
++                # session nor proves the existing broadcast ended. The same
++                # bounded retry/backoff and fresh URL resolution still apply.
+                 conn.commit()
+                 ensure_recording_job(dict(session), dict(target))
+                 restarted += 1
+--- a/runtime/v3/test_v3_recording_transcription.py
++++ b/runtime/v3/test_v3_recording_transcription.py
+@@ -1,11 +1,18 @@
+ import contextlib
+ import io
+ import hashlib
++import importlib.util
++from http.server import BaseHTTPRequestHandler, HTTPServer
+ import json
++import shutil
++import subprocess
+ import sys
++import tempfile
++import threading
++from types import SimpleNamespace
+ import unittest
+ from pathlib import Path
+-from unittest.mock import patch
++from unittest.mock import AsyncMock, Mock, patch
+ 
+ import v3_runtime as v3
+ import v3_worker as worker
+@@ -13,6 +20,9 @@
+ from test_v3_workflow import RuntimeCase
+ sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'bin'))
+ import recorder
++spec = importlib.util.spec_from_file_location('shared_recorder_test', recorder.SHARED_RECORDER)
++shared_recorder = importlib.util.module_from_spec(spec)
++spec.loader.exec_module(shared_recorder)
+ 
+ 
+ class RecordingCase(RuntimeCase):
+@@ -27,7 +37,9 @@
+             c.execute("INSERT INTO recording_jobs(job_id,session_id,status,pid,account_key,recording_key,partial_dir,completed_dir,started_at,updated_at) VALUES('j','s','STARTING',123456,'acct','sess',?,?,'2026-08-28T00:00:00Z','2026-08-28T00:00:00Z')",(str(self.partial),str(self.completed)))
+         self.worker_patch=patch.object(worker,'connect',side_effect=self.connect);self.worker_patch.start()
+         self.pipeline_patch=patch.object(pipeline,'connect',side_effect=self.connect);self.pipeline_patch.start()
++        self.log_patch=patch.object(worker,'RECORDING_LOG_ROOT',self.root/'logs');self.log_patch.start()
+     def tearDown(self):
++        self.log_patch.stop();worker.RECORDER_PROCESSES.clear()
+         self.pipeline_patch.stop();self.worker_patch.stop();super().tearDown()
+     def rows(self,c):
+         return dict(c.execute("SELECT * FROM live_sessions WHERE session_id='s'").fetchone()),dict(c.execute("SELECT * FROM recording_jobs WHERE session_id='s'").fetchone())
+@@ -55,6 +67,91 @@
+         folder=self.partial/'acct'/'sess';folder.mkdir(parents=True);p=folder/'整场直播.ts.partial';p.write_bytes(b'preserve')
+         result,run=self.call_recorder(['--url','https://live.douyin.com/123','--account-id','acct','--session-id','sess','--approved'],lambda cmd:(0,{}))
+         self.assertEqual(result['status'],'ERROR');run.assert_not_called();self.assertEqual(p.read_bytes(),b'preserve')
++    def test_zero_byte_failed_output_gets_a_new_filename(self):
++        folder=self.partial/'acct'/'sess';folder.mkdir(parents=True)
++        original=folder/'整场直播.ts.partial';original.touch()
++        def shared(cmd):
++            self.assertNotEqual(cmd[cmd.index('--filename')+1],original.name)
++            (folder/cmd[cmd.index('--filename')+1]).write_bytes(b'recovered')
++            return 0,{'status':'recorded'}
++        result,_=self.call_recorder(['--url','https://live.douyin.com/123','--account-id','acct','--session-id','sess','--approved'],shared)
++        self.assertEqual(result['status'],'RECORDED');self.assertEqual(original.stat().st_size,0)
++
++
++class SharedRecorderTests(unittest.TestCase):
++    def test_actual_ffmpeg_reconnects_after_http_503(self):
++        ffmpeg=shutil.which('ffmpeg')
++        if not ffmpeg:self.skipTest('ffmpeg unavailable')
++        with tempfile.TemporaryDirectory() as d:
++            source=Path(d)/'source.ts';output=Path(d)/'capture.ts'
++            subprocess.run([ffmpeg,'-v','error','-f','lavfi','-i','sine=frequency=440:sample_rate=48000','-t','3','-c:a','aac','-f','mpegts',str(source)],check=True,capture_output=True,timeout=20)
++            data=source.read_bytes();requests=[]
++            class Handler(BaseHTTPRequestHandler):
++                def do_GET(self):
++                    requests.append(self.path)
++                    if len(requests)==1:
++                        self.send_response(503);self.send_header('Content-Length','0');self.end_headers();return
++                    self.send_response(200);self.send_header('Content-Length',str(len(data)));self.end_headers();self.wfile.write(data)
++                def log_message(self,*_args):pass
++            server=HTTPServer(('127.0.0.1',0),Handler)
++            thread=threading.Thread(target=server.serve_forever,daemon=True);thread.start()
++            try:
++                code,_=shared_recorder.record_stream(f'http://127.0.0.1:{server.server_port}/live',output,2,ffmpeg)
++            finally:
++                server.shutdown();server.server_close();thread.join(timeout=5)
++            self.assertEqual(code,0);self.assertGreaterEqual(len(requests),2)
++            self.assertGreater(output.stat().st_size,0)
++            state=json.loads(shared_recorder.recording_state_path(output).read_text())
++            self.assertTrue(any('503' in line for line in state['ffmpeg_tail']))
++    def test_actual_ffmpeg_failure_records_exit_code(self):
++        ffmpeg=shutil.which('ffmpeg')
++        if not ffmpeg:self.skipTest('ffmpeg unavailable')
++        with tempfile.TemporaryDirectory() as d:
++            source=Path(d)/'broken.mp4';source.write_bytes(b'broken input')
++            output=Path(d)/'capture.ts'
++            code,_=shared_recorder.record_stream(str(source),output,0,ffmpeg)
++            state=json.loads(shared_recorder.recording_state_path(output).read_text())
++            self.assertNotEqual(code,0);self.assertEqual(state['return_code'],code)
++            self.assertEqual(state['exit_kind'],'ERROR');self.assertTrue(state['ffmpeg_tail'])
++    def test_http_eof_and_network_retry_are_bounded(self):
++        with tempfile.TemporaryDirectory() as d:
++            process=SimpleNamespace(pid=123,stderr=io.StringIO(''),poll=lambda:0,wait=lambda:0)
++            with patch.object(shared_recorder.subprocess,'Popen',return_value=process) as run:
++                shared_recorder.record_stream('https://example.invalid/live',Path(d)/'capture.ts',0,'ffmpeg')
++            command=run.call_args.args[0]
++            self.assertIn('-reconnect_at_eof',command);self.assertIn('-reconnect_on_network_error',command)
++            self.assertIn('-reconnect_delay_total_max',command);self.assertIn('-n',command)
++            self.assertNotIn('-t',command)
++    def test_local_replay_does_not_use_http_options_or_duration_limit(self):
++        with tempfile.TemporaryDirectory() as d:
++            process=SimpleNamespace(pid=123,stderr=io.StringIO(''),poll=lambda:0,wait=lambda:0)
++            with patch.object(shared_recorder.subprocess,'Popen',return_value=process) as run:
++                shared_recorder.record_stream('/tmp/replay.mp4',Path(d)/'capture.ts',0,'ffmpeg')
++            command=run.call_args.args[0]
++            self.assertNotIn('-reconnect',command);self.assertNotIn('-t',command)
++    def test_error_tail_is_bounded_redacted_and_persisted_even_on_success(self):
++        with tempfile.TemporaryDirectory() as d:
++            output=Path(d)/'capture.ts'
++            warnings=''.join(f'WARNING {n} https://secret.invalid/token\n' for n in range(200))
++            process=SimpleNamespace(pid=123,stderr=io.StringIO(warnings),poll=lambda:0,wait=lambda:0)
++            with patch.object(shared_recorder.subprocess,'Popen',return_value=process):
++                code,tail=shared_recorder.record_stream('/tmp/replay.mp4',output,0,'ffmpeg')
++            state=json.loads(shared_recorder.recording_state_path(output).read_text())
++            self.assertEqual(code,0);self.assertEqual(len(state['ffmpeg_tail']),50)
++            self.assertNotIn('secret.invalid',tail);self.assertEqual(state['exit_kind'],'NORMAL')
++            self.assertTrue(state['started_at'])
++            self.assertTrue(state['ended_at'])
++    def test_live_without_stream_url_is_unknown_not_offline(self):
++        with patch.object(shared_recorder,'resolve_stream',AsyncMock(return_value={'is_live':True,'stream_url':None})),patch.object(sys,'argv',['record','--url','https://live.douyin.com/123','--check-only']),contextlib.redirect_stdout(io.StringIO()) as output:
++            code=shared_recorder.main()
++        self.assertEqual(code,5);self.assertEqual(json.loads(output.getvalue())['status'],'error')
++    def test_existing_replay_output_is_not_overwritten(self):
++        with tempfile.TemporaryDirectory() as d:
++            source=Path(d)/'source.mp4';source.write_bytes(b'source')
++            dest=Path(d)/'output.ts';dest.write_bytes(b'preserve')
++            with patch.object(sys,'argv',['record','--input-file',str(source),'--output-dir',d,'--filename',dest.name]),contextlib.redirect_stdout(io.StringIO()) as output:
++                code=shared_recorder.main()
++            self.assertEqual(code,5);self.assertEqual(dest.read_bytes(),b'preserve')
+ 
+ 
+ class RecordingStateTests(RecordingCase):
+@@ -127,9 +224,49 @@
+             self.assertEqual(self.rows(c)[0]['status'],'WAITING_STREAM')
+     def test_offline_grace_excluded_from_recorded_duration(self):
+         with self.connect() as c:
+-            worker.update_session_liveness(c,{'monitor_target_id':'m'},'OFFLINE_CONFIRMED','2026-08-28T00:10:00Z')
+-            worker.update_session_liveness(c,{'monitor_target_id':'m'},'OFFLINE_CONFIRMED','2026-08-28T00:15:01Z')
++            for minute in range(10,16):
++                worker.update_session_liveness(c,{'monitor_target_id':'m'},'OFFLINE_CONFIRMED',f'2026-08-28T00:{minute}:00Z')
+             s,_=self.rows(c);self.assertEqual(s['status'],'ENDED');self.assertEqual(s['ended_at'],'2026-08-28T00:10:00Z')
++    def test_unknown_breaks_offline_confirmation_window(self):
++        with self.connect() as c:
++            for minute,state in [(0,'OFFLINE_CONFIRMED'),(1,'UNKNOWN'),(6,'OFFLINE_CONFIRMED')]:
++                worker.update_session_liveness(c,{'monitor_target_id':'m'},state,f'2026-08-28T00:0{minute}:00Z')
++            s,_=self.rows(c);self.assertIsNone(s['ended_at'])
++            self.assertEqual(json.loads(s['metadata_json'])['down_since'],'2026-08-28T00:06:00Z')
++    def test_sparse_offline_samples_do_not_prove_continuity(self):
++        with self.connect() as c:
++            worker.update_session_liveness(c,{'monitor_target_id':'m'},'OFFLINE_CONFIRMED','2026-08-28T00:00:00Z')
++            worker.update_session_liveness(c,{'monitor_target_id':'m'},'OFFLINE_CONFIRMED','2026-08-28T00:06:00Z')
++            self.assertIsNone(self.rows(c)[0]['ended_at'])
++    def test_media_growth_vetoes_offline_confirmation(self):
++        with self.connect() as c:
++            c.execute('UPDATE live_sessions SET metadata_json=?',(json.dumps({'recording_health':{'bytes':0}}),))
++            (self.partial/'capture.ts.partial').write_bytes(b'still receiving')
++            worker.update_session_liveness(c,{'monitor_target_id':'m'},'OFFLINE_CONFIRMED','2026-08-28T00:06:00Z')
++            s,_=self.rows(c);meta=json.loads(s['metadata_json'])
++            self.assertNotIn('down_since',meta);self.assertIn('offline_rejected_media_growth_at',meta)
++    def test_dead_recorder_restarts_for_existing_unknown_session(self):
++        with self.connect() as c:c.execute("UPDATE monitor_targets SET live_status='UNKNOWN'")
++        with patch.object(worker,'pid_alive',return_value=False),patch.object(worker,'ensure_recording_job',return_value={'started':True}) as restart:
++            result=worker.reconcile_recording_jobs()
++        self.assertEqual(result['restarted'],1);restart.assert_called_once()
++        self.assertEqual(restart.call_args.args[0]['session_id'],'s')
++    def test_dead_recorder_does_not_restart_after_confirmed_offline(self):
++        with self.connect() as c:c.execute("UPDATE monitor_targets SET live_status='OFFLINE_CONFIRMED'")
++        with patch.object(worker,'pid_alive',return_value=False),patch.object(worker,'ensure_recording_job') as restart:
++            worker.reconcile_recording_jobs()
++        restart.assert_not_called()
++    def test_stale_session_cannot_restart_after_end(self):
++        with self.connect() as c:
++            s,_=self.rows(c);c.execute("UPDATE live_sessions SET status='ENDED'")
++        with patch.object(worker,'recording_keys',return_value=('acct','sess',self.partial,self.completed)),patch.object(worker.subprocess,'Popen') as spawn:
++            result=worker.ensure_recording_job(s,{'competitor_id':'c'})
++        spawn.assert_not_called();self.assertFalse(result['started'])
++    def test_owned_exited_process_is_reaped_not_treated_as_running(self):
++        process=Mock();process.poll.return_value=0;worker.RECORDER_PROCESSES[987654]=process
++        with patch.object(worker.os,'kill') as kill:
++            self.assertFalse(worker.pid_alive(987654));kill.assert_not_called()
++        self.assertNotIn(987654,worker.RECORDER_PROCESSES)
+     def test_finalizer_never_promotes_live_media(self):
+         p=self.partial/'整场直播.ts.partial';p.write_bytes(b'unit fixture')
+         with self.connect() as c:

@@ -1,0 +1,53 @@
+{
+  "ok": true,
+  "ordering_strategy": "SIDECAR_STARTED_AT",
+  "ordered_names": [
+    "整场直播.ts.partial",
+    "整场直播.refresh0001.ts.partial"
+  ],
+  "source_durations": [
+    1.021333,
+    1.021333
+  ],
+  "merged_probe": {
+    "ok": true,
+    "return_code": 0,
+    "duration_seconds": 2.005333,
+    "stream_types": [
+      "audio",
+      "video"
+    ],
+    "codecs": [
+      {
+        "codec_type": "audio",
+        "codec_name": "aac"
+      },
+      {
+        "codec_type": "video",
+        "codec_name": "mpeg2video"
+      }
+    ],
+    "streams": [
+      {
+        "index": 0,
+        "codec_type": "video",
+        "codec_name": "mpeg2video",
+        "channels": null,
+        "width": 320,
+        "height": 240
+      },
+      {
+        "index": 1,
+        "codec_type": "audio",
+        "codec_name": "aac",
+        "channels": 1,
+        "width": null,
+        "height": null
+      }
+    ],
+    "stderr_tail": ""
+  },
+  "sources_still_exist": true,
+  "merged_bytes": 44744,
+  "ffmpeg_stderr": ""
+}

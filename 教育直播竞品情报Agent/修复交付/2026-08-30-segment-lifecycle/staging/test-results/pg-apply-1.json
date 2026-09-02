@@ -1,0 +1,17 @@
+{
+  "mode": "APPLY",
+  "database": "segment_lifecycle_test",
+  "transaction_read_only": false,
+  "plan_sha256": "8c24c3b7d1f4fd3c6ad4fa3211b4fc35435499254ae82b971c76afe754a8d2f8",
+  "full_media_hash": true,
+  "segment_counts": {
+    "CANONICAL_ACTIVE": 1,
+    "LOST_REVIEW": 0,
+    "SOURCE_RETAINED": 0,
+    "SOURCE_SUPERSEDED": 1,
+    "UNCLASSIFIED": 0
+  },
+  "transcripts_to_cancel": 1,
+  "issues": [],
+  "backup_path": "/tmp/segment-lifecycle-pg-6539/backups/segment-lifecycle-before-2026-08-30T134518.944Z.json"
+}

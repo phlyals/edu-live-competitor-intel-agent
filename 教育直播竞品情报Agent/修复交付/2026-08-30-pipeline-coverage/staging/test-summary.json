@@ -1,0 +1,41 @@
+{
+  "candidate_only": true,
+  "production_modified": false,
+  "database_modified": false,
+  "services_reloaded": false,
+  "hard_minimum_coverage_rate": 0.9,
+  "target_coverage_rate": 0.95,
+  "profile_environment": {
+    "tests_run": 50,
+    "failures": 0,
+    "errors": 0,
+    "log": "runtime/v3/profile-tests-final.log"
+  },
+  "service_environment": {
+    "tests_run": 50,
+    "failures": 0,
+    "errors": 0,
+    "log": "runtime/v3/service-tests-final.log"
+  },
+  "required_scenarios": {
+    "complete_timeline": "PASS",
+    "one_percent_coverage": "PASS",
+    "internal_gap": "PASS",
+    "invalid_timestamps": "PASS",
+    "existing_artifact_revalidation": "PASS",
+    "heartbeat_quality_blocked": "PASS",
+    "heartbeat_unrecoverable": "PASS",
+    "heartbeat_eligible_pending": "PASS",
+    "cancelled_superseded_excluded_from_stale": "PASS",
+    "target_0_95_reporting": "PASS",
+    "current_canonical_digest_scoping": "PASS",
+    "historical_quality_rows_excluded": "PASS",
+    "quality_blocked_idempotent_skip": "PASS"
+  },
+  "sha256": {
+    "v3_pipeline_worker.py": "6ea4316a18ad08dfa0712bbbb7636b71c33cecd707c2a745e1505fc6609be1e4",
+    "v3_config.json": "d9e0325230f8009745e2e46837957b694beb81898d86b72b50a35a54d308a691",
+    "test_v3_pipeline_coverage.py": "97a971cb167ee67cef67a5bdddf4d410de7346a8e37ec84ea3cbbac08ec718fa",
+    "candidate.patch": "94b7a05784d381befb6cc6b9a40a0f1a9d888a72ab69a744fb52270284143dba"
+  }
+}

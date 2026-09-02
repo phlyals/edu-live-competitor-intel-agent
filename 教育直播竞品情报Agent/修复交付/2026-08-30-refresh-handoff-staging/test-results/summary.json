@@ -1,0 +1,25 @@
+{
+  "baseline_ordering_test": {
+    "expected": "FAIL",
+    "exit_code": 1,
+    "result": "EXPECTED_FAIL"
+  },
+  "candidate_isolated_tests": {
+    "tests": 2,
+    "exit_code": 0,
+    "result": "PASS"
+  },
+  "profile_python_existing_shared_tests": {
+    "tests": 10,
+    "exit_code": 0,
+    "result": "PASS"
+  },
+  "service_python_existing_shared_tests": {
+    "tests": 10,
+    "exit_code": 0,
+    "result": "PASS"
+  },
+  "real_900_second_wait_used": false,
+  "production_files_changed": false,
+  "deployable_now": false
+}

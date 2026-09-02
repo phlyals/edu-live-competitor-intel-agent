@@ -1,0 +1,20 @@
+{
+  "status": "ALREADY_APPLIED",
+  "health": {
+    "healthy": true,
+    "schema": {
+      "missing_tables": [],
+      "missing_columns": {}
+    },
+    "indexes": [
+      "idx_comparison_evidence_analysis",
+      "idx_comparisons_competitor_newer",
+      "idx_knowledge_publish_receipts_candidate",
+      "idx_strategy_evidence_candidate",
+      "idx_strategy_versions_active",
+      "idx_version_observations_competitor"
+    ],
+    "marker": "1",
+    "errors": []
+  }
+}

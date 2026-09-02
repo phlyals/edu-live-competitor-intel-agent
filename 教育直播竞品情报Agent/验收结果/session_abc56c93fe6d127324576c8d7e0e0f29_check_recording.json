@@ -1,0 +1,14 @@
+{
+  "file_exists": false,
+  "file_path": "",
+  "duration_seconds": null,
+  "file_size_mb": null,
+  "expected_duration_seconds": null,
+  "is_complete": false,
+  "session_id": "session_abc56c93fe6d127324576c8d7e0e0f29",
+  "script": "check_recording",
+  "checked_at": "2026-08-29T04:46:51.146967+00:00",
+  "status": "FAIL",
+  "error_code": "RECORDING_NOT_UNIQUE",
+  "message": "未找到唯一整场录像；不会拼接或累计分段时长"
+}

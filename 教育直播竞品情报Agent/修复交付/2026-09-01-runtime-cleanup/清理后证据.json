@@ -1,0 +1,141 @@
+{
+  "checked_at": "2026-08-31T15:20:53.004Z",
+  "database_transaction_read_only": "on",
+  "heartbeats": [
+    {
+      "service_name": "evidence-v3",
+      "pid": 93471,
+      "status": "READY",
+      "last_heartbeat_at": "2026-08-31T15:20:39.202Z",
+      "last_success_at": "2026-08-31T15:20:39.202Z"
+    },
+    {
+      "service_name": "retention-v3",
+      "pid": 61718,
+      "status": "READY",
+      "last_heartbeat_at": "2026-08-31T15:20:38.355Z",
+      "last_success_at": "2026-08-31T15:20:38.355Z"
+    }
+  ],
+  "schema_markers": [
+    {
+      "key": "business_chain_revision",
+      "value": "1"
+    },
+    {
+      "key": "evidence_outbox_versioning_revision",
+      "value": "1"
+    },
+    {
+      "key": "lineage_recompute_revision",
+      "value": "1"
+    },
+    {
+      "key": "long_job_claim_retry_revision",
+      "value": "1"
+    }
+  ],
+  "outbox_counts": [
+    {
+      "status": "DEAD_LETTER",
+      "count": 1
+    },
+    {
+      "status": "SENT",
+      "count": 474
+    }
+  ],
+  "recompute_counts": [],
+  "recording_job_counts": [
+    {
+      "status": "COMPLETE",
+      "count": 155
+    },
+    {
+      "status": "RUNNING",
+      "count": 2
+    },
+    {
+      "status": "WAITING_STREAM",
+      "count": 10
+    }
+  ],
+  "retention": {
+    "v3_config": {
+      "delete_enabled": false,
+      "video_hours": 72,
+      "audio_hours": 168,
+      "scan_interval_seconds": 3600,
+      "hold_if_transcript_incomplete": true,
+      "hold_if_review_pending": true
+    },
+    "legacy_automatic_delete": false,
+    "job_counts": [
+      {
+        "object_type": "AUDIO",
+        "status": "DELETED",
+        "count": 1
+      },
+      {
+        "object_type": "AUDIO",
+        "status": "PENDING",
+        "count": 7
+      },
+      {
+        "object_type": "VIDEO",
+        "status": "DELETED",
+        "count": 1
+      },
+      {
+        "object_type": "VIDEO",
+        "status": "PENDING",
+        "count": 153
+      }
+    ],
+    "due_counts": [
+      {
+        "object_type": "VIDEO",
+        "count": 20
+      }
+    ]
+  },
+  "disk": {
+    "total_gib": 698.44,
+    "used_gib": 280.56,
+    "free_gib": 417.88,
+    "partial_files": 304,
+    "partial_gib": 48.525,
+    "partial_groups": {
+      "session=MEDIA_COMPLETE|job=COMPLETE|completeness=PARTIAL|manifest=VERIFIED|retention=PENDING": {
+        "files": 255,
+        "gib": 39.977
+      },
+      "session=MEDIA_COMPLETE|job=COMPLETE|completeness=COMPLETE|manifest=VERIFIED|retention=PENDING": {
+        "files": 49,
+        "gib": 8.548
+      }
+    },
+    "unreferenced_partial_files": []
+  },
+  "production_files": {
+    "v3_evidence_worker.py": {
+      "sha256": "f9b0e51e3082fbaaa0b74dc3afd95396011711639c584b24b7cea1db9fcf6c71",
+      "bytes": 16973
+    },
+    "v3_projection_reconciler.py": {
+      "sha256": "b3dc825f32af1d1df6aa2656434dd0a0c7f75f02dc0153dc6c379918f5a318e2",
+      "bytes": 12407
+    }
+  },
+  "cleanup": {
+    "removed_dead_function": "release_held_projections",
+    "removed_stale_oneshot_heartbeat_behavior": "projection-reconciler-v3",
+    "deleted_stale_heartbeat_rows": 1,
+    "evidence_service_reloaded": true,
+    "tests_each_environment": {
+      "ran": 239,
+      "skipped": 17,
+      "status": "OK"
+    }
+  }
+}

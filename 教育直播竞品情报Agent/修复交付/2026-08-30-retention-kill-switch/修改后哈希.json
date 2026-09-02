@@ -1,0 +1,9 @@
+{
+  "checked_at": "2026-08-30T04:50:53.741422+00:00",
+  "files": {
+    "/Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/v3_retention_worker.py": "a78bc16522b1b4b858153d8c5a00abfbf5761ec58594d97ec8d3d2326e42951e",
+    "/Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/v3_config.json": "751a0837ad6644a08db9e953c6e28af088cd4b6f91f2553df58a36485606a7c5",
+    "/Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/config.json": "773ac88162c38c884f7ef8af76985028d90ba4c9d2da071423a9e1c014b12ee8",
+    "/Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/test_v3_workflow.py": "6c1b048ce88da628d3ce5dbeb084de205f6d979255abeadc727e9a1261bfbeb1"
+  }
+}

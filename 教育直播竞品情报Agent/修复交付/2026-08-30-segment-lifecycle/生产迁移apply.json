@@ -1,0 +1,17 @@
+{
+  "mode": "APPLY",
+  "database": "edu_live_competitor_intel_v3",
+  "transaction_read_only": false,
+  "plan_sha256": "4aa0260a611b04773322f5dc91c7c0a89d6f251f6b30e4b5a2e404227231bc98",
+  "full_media_hash": false,
+  "segment_counts": {
+    "CANONICAL_ACTIVE": 99,
+    "LOST_REVIEW": 0,
+    "SOURCE_RETAINED": 2,
+    "SOURCE_SUPERSEDED": 274,
+    "UNCLASSIFIED": 0
+  },
+  "transcripts_to_cancel": 245,
+  "issues": [],
+  "backup_path": "/Volumes/ExternalStorage/AgentInfrastructure/backups/edu-segment-lifecycle-20260830/segment-lifecycle-before-2026-08-30T135239.614Z.json"
+}

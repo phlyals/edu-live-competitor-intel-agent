@@ -1,0 +1,136 @@
+[
+  {
+    "python": "/Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/.venv/bin/python",
+    "returncode": 0,
+    "test_count": 149,
+    "results": [
+      {
+        "test": "test_v3_analysis_worker.py",
+        "returncode": 0,
+        "count": 17,
+        "tail": "test_reference_manifest_detects_text_digest_tampering (__main__.ValidationAndMergeTests.test_reference_manifest_detects_text_digest_tampering) ... ok\n\n----------------------------------------------------------------------\nRan 17 tests in 0.017s\n\nOK"
+      },
+      {
+        "test": "test_v3_feishu_ingress.py",
+        "returncode": 0,
+        "count": 21,
+        "tail": "test_waiting_is_not_recording_failure (__main__.ProjectionTests.test_waiting_is_not_recording_failure) ... ok\n\n----------------------------------------------------------------------\nRan 21 tests in 0.580s\n\nOK"
+      },
+      {
+        "test": "test_v3_ffmpeg_tail_classifier.py",
+        "returncode": 0,
+        "count": 8,
+        "tail": "test_sidecar_persists_safe_codes_and_no_url (__main__.PersistenceTests.test_sidecar_persists_safe_codes_and_no_url) ... ok\n\n----------------------------------------------------------------------\nRan 8 tests in 0.023s\n\nOK"
+      },
+      {
+        "test": "test_v3_finalizer_evidence.py",
+        "returncode": 0,
+        "count": 7,
+        "tail": "test_success_publishes_final_but_retains_sources_and_sidecars (__main__.FinalizerEvidenceTests.test_success_publishes_final_but_retains_sources_and_sidecars) ... ok\n\n----------------------------------------------------------------------\nRan 7 tests in 1.236s\n\nOK"
+      },
+      {
+        "test": "test_v3_minimal_repair.py",
+        "returncode": 0,
+        "count": 15,
+        "tail": "test_temporary_error_retries_but_keeps_evidence_guard (__main__.ScheduledControlTests.test_temporary_error_retries_but_keeps_evidence_guard) ... ok\n\n----------------------------------------------------------------------\nRan 15 tests in 0.607s\n\nOK"
+      },
+      {
+        "test": "test_v3_pipeline_coverage.py",
+        "returncode": 0,
+        "count": 10,
+        "tail": "test_qualified_full_session_is_complete (__main__.PipelineCoverageIntegrationTests.test_qualified_full_session_is_complete) ... ok\n\n----------------------------------------------------------------------\nRan 10 tests in 0.526s\n\nOK"
+      },
+      {
+        "test": "test_v3_recording_transcription.py",
+        "returncode": 0,
+        "count": 40,
+        "tail": "test_stream_fingerprint_never_persists_query_values (__main__.SharedRecorderTests.test_stream_fingerprint_never_persists_query_values) ... ok\n\n----------------------------------------------------------------------\nRan 40 tests in 2.666s\n\nOK"
+      },
+      {
+        "test": "test_v3_segment_lifecycle.py",
+        "returncode": 0,
+        "count": 4,
+        "tail": "test_pipeline_only_attempts_canonical_active (__main__.CandidateCodeTests.test_pipeline_only_attempts_canonical_active) ... ok\n\n----------------------------------------------------------------------\nRan 4 tests in 0.082s\n\nOK"
+      },
+      {
+        "test": "test_v3_segment_lifecycle_migration.py",
+        "returncode": 0,
+        "count": 3,
+        "tail": "test_only_superseded_missing_waiting_transcript_is_cancelled (__main__.SQLitePlanningTests.test_only_superseded_missing_waiting_transcript_is_cancelled) ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 0.014s\n\nOK"
+      },
+      {
+        "test": "test_v3_workflow.py",
+        "returncode": 0,
+        "count": 24,
+        "tail": "test_disabled_returns_before_database_or_filesystem_work (__main__.RetentionKillSwitchTests.test_disabled_returns_before_database_or_filesystem_work) ... ok\n\n----------------------------------------------------------------------\nRan 24 tests in 1.683s\n\nOK"
+      }
+    ]
+  },
+  {
+    "python": "/Users/mac/.local/share/edu-live-runtime-v3-venv/bin/python",
+    "returncode": 0,
+    "test_count": 149,
+    "results": [
+      {
+        "test": "test_v3_analysis_worker.py",
+        "returncode": 0,
+        "count": 17,
+        "tail": "test_reference_manifest_detects_text_digest_tampering (__main__.ValidationAndMergeTests.test_reference_manifest_detects_text_digest_tampering) ... ok\n\n----------------------------------------------------------------------\nRan 17 tests in 0.018s\n\nOK"
+      },
+      {
+        "test": "test_v3_feishu_ingress.py",
+        "returncode": 0,
+        "count": 21,
+        "tail": "test_waiting_is_not_recording_failure (__main__.ProjectionTests.test_waiting_is_not_recording_failure) ... ok\n\n----------------------------------------------------------------------\nRan 21 tests in 0.646s\n\nOK"
+      },
+      {
+        "test": "test_v3_ffmpeg_tail_classifier.py",
+        "returncode": 0,
+        "count": 8,
+        "tail": "test_sidecar_persists_safe_codes_and_no_url (__main__.PersistenceTests.test_sidecar_persists_safe_codes_and_no_url) ... ok\n\n----------------------------------------------------------------------\nRan 8 tests in 0.038s\n\nOK"
+      },
+      {
+        "test": "test_v3_finalizer_evidence.py",
+        "returncode": 0,
+        "count": 7,
+        "tail": "test_success_publishes_final_but_retains_sources_and_sidecars (__main__.FinalizerEvidenceTests.test_success_publishes_final_but_retains_sources_and_sidecars) ... ok\n\n----------------------------------------------------------------------\nRan 7 tests in 1.826s\n\nOK"
+      },
+      {
+        "test": "test_v3_minimal_repair.py",
+        "returncode": 0,
+        "count": 15,
+        "tail": "test_temporary_error_retries_but_keeps_evidence_guard (__main__.ScheduledControlTests.test_temporary_error_retries_but_keeps_evidence_guard) ... ok\n\n----------------------------------------------------------------------\nRan 15 tests in 0.930s\n\nOK"
+      },
+      {
+        "test": "test_v3_pipeline_coverage.py",
+        "returncode": 0,
+        "count": 10,
+        "tail": "test_qualified_full_session_is_complete (__main__.PipelineCoverageIntegrationTests.test_qualified_full_session_is_complete) ... ok\n\n----------------------------------------------------------------------\nRan 10 tests in 0.807s\n\nOK"
+      },
+      {
+        "test": "test_v3_recording_transcription.py",
+        "returncode": 0,
+        "count": 40,
+        "tail": "test_stream_fingerprint_never_persists_query_values (__main__.SharedRecorderTests.test_stream_fingerprint_never_persists_query_values) ... ok\n\n----------------------------------------------------------------------\nRan 40 tests in 3.731s\n\nOK"
+      },
+      {
+        "test": "test_v3_segment_lifecycle.py",
+        "returncode": 0,
+        "count": 4,
+        "tail": "test_pipeline_only_attempts_canonical_active (__main__.CandidateCodeTests.test_pipeline_only_attempts_canonical_active) ... ok\n\n----------------------------------------------------------------------\nRan 4 tests in 0.189s\n\nOK"
+      },
+      {
+        "test": "test_v3_segment_lifecycle_migration.py",
+        "returncode": 0,
+        "count": 3,
+        "tail": "test_only_superseded_missing_waiting_transcript_is_cancelled (__main__.SQLitePlanningTests.test_only_superseded_missing_waiting_transcript_is_cancelled) ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 0.022s\n\nOK"
+      },
+      {
+        "test": "test_v3_workflow.py",
+        "returncode": 0,
+        "count": 24,
+        "tail": "test_disabled_returns_before_database_or_filesystem_work (__main__.RetentionKillSwitchTests.test_disabled_returns_before_database_or_filesystem_work) ... ok\n\n----------------------------------------------------------------------\nRan 24 tests in 2.278s\n\nOK"
+      }
+    ]
+  }
+]

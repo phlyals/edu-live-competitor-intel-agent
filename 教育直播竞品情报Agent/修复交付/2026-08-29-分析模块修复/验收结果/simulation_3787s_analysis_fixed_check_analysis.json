@@ -1,0 +1,645 @@
+{
+  "modules_present": [
+    "开场",
+    "干货",
+    "需求",
+    "信任",
+    "商品承接",
+    "成交",
+    "答疑"
+  ],
+  "expected_modules": [
+    "开场",
+    "干货",
+    "需求",
+    "信任",
+    "商品承接",
+    "成交",
+    "答疑"
+  ],
+  "missing_modules": [],
+  "modules_with_timestamps": [
+    {
+      "module": "开场",
+      "has_timestamps": true
+    },
+    {
+      "module": "干货",
+      "has_timestamps": true
+    },
+    {
+      "module": "需求",
+      "has_timestamps": true
+    },
+    {
+      "module": "信任",
+      "has_timestamps": true
+    },
+    {
+      "module": "商品承接",
+      "has_timestamps": true
+    },
+    {
+      "module": "成交",
+      "has_timestamps": true
+    },
+    {
+      "module": "答疑",
+      "has_timestamps": true
+    }
+  ],
+  "timestamps_in_coverage": [
+    {
+      "module": "开场",
+      "in_coverage": true,
+      "references": [
+        {
+          "start_time": 77.01,
+          "end_time": 78.01,
+          "in_coverage": true
+        },
+        {
+          "start_time": 275.78,
+          "end_time": 279.78,
+          "in_coverage": true
+        },
+        {
+          "start_time": 440.78,
+          "end_time": 444.02,
+          "in_coverage": true
+        },
+        {
+          "start_time": 610.67,
+          "end_time": 614.67,
+          "in_coverage": true
+        },
+        {
+          "start_time": 869.54,
+          "end_time": 872.54,
+          "in_coverage": true
+        },
+        {
+          "start_time": 1091.04,
+          "end_time": 1095.04,
+          "in_coverage": true
+        },
+        {
+          "start_time": 1314.19,
+          "end_time": 1316.96,
+          "in_coverage": true
+        },
+        {
+          "start_time": 1491.24,
+          "end_time": 1496.36,
+          "in_coverage": true
+        },
+        {
+          "start_time": 1918.42,
+          "end_time": 1928.14,
+          "in_coverage": true
+        },
+        {
+          "start_time": 2168.92,
+          "end_time": 2174.04,
+          "in_coverage": true
+        },
+        {
+          "start_time": 2234.88,
+          "end_time": 2238.88,
+          "in_coverage": true
+        },
+        {
+          "start_time": 2350.77,
+          "end_time": 2358.89,
+          "in_coverage": true
+        },
+        {
+          "start_time": 2824.0,
+          "end_time": 2831.94,
+          "in_coverage": true
+        },
+        {
+          "start_time": 2843.73,
+          "end_time": 2846.21,
+          "in_coverage": true
+        },
+        {
+          "start_time": 3147.64,
+          "end_time": 3149.64,
+          "in_coverage": true
+        },
+        {
+          "start_time": 3299.22,
+          "end_time": 3303.84,
+          "in_coverage": true
+        }
+      ]
+    },
+    {
+      "module": "干货",
+      "in_coverage": true,
+      "references": [
+        {
+          "start_time": 0.0,
+          "end_time": 30.43,
+          "in_coverage": true
+        },
+        {
+          "start_time": 149.11,
+          "end_time": 153.19,
+          "in_coverage": true
+        },
+        {
+          "start_time": 440.78,
+          "end_time": 444.02,
+          "in_coverage": true
+        },
+        {
+          "start_time": 577.54,
+          "end_time": 582.92,
+          "in_coverage": true
+        },
+        {
+          "start_time": 889.08,
+          "end_time": 891.08,
+          "in_coverage": true
+        },
+        {
+          "start_time": 1130.78,
+          "end_time": 1133.78,
+          "in_coverage": true
+        },
+        {
+          "start_time": 1304.64,
+          "end_time": 1306.72,
+          "in_coverage": true
+        },
+        {
+          "start_time": 1596.9,
+          "end_time": 1601.9,
+          "in_coverage": true
+        },
+        {
+          "start_time": 1772.71,
+          "end_time": 1804.04,
+          "in_coverage": true
+        },
+        {
+          "start_time": 1834.69,
+          "end_time": 1839.49,
+          "in_coverage": true
+        },
+        {
+          "start_time": 2332.36,
+          "end_time": 2337.85,
+          "in_coverage": true
+        },
+        {
+          "start_time": 2661.5,
+          "end_time": 2664.98,
+          "in_coverage": true
+        },
+        {
+          "start_time": 2681.18,
+          "end_time": 2688.18,
+          "in_coverage": true
+        },
+        {
+          "start_time": 2786.25,
+          "end_time": 2790.09,
+          "in_coverage": true
+        },
+        {
+          "start_time": 3451.2,
+          "end_time": 3458.96,
+          "in_coverage": true
+        }
+      ]
+    },
+    {
+      "module": "需求",
+      "in_coverage": true,
+      "references": [
+        {
+          "start_time": 39.43,
+          "end_time": 42.79,
+          "in_coverage": true
+        },
+        {
+          "start_time": 63.11,
+          "end_time": 64.11,
+          "in_coverage": true
+        },
+        {
+          "start_time": 503.38,
+          "end_time": 507.7,
+          "in_coverage": true
+        },
+        {
+          "start_time": 577.54,
+          "end_time": 582.92,
+          "in_coverage": true
+        },
+        {
+          "start_time": 959.28,
+          "end_time": 963.28,
+          "in_coverage": true
+        },
+        {
+          "start_time": 992.89,
+          "end_time": 995.09,
+          "in_coverage": true
+        },
+        {
+          "start_time": 1406.49,
+          "end_time": 1410.49,
+          "in_coverage": true
+        },
+        {
+          "start_time": 1432.32,
+          "end_time": 1436.53,
+          "in_coverage": true
+        },
+        {
+          "start_time": 1817.44,
+          "end_time": 1818.44,
+          "in_coverage": true
+        },
+        {
+          "start_time": 2115.76,
+          "end_time": 2123.76,
+          "in_coverage": true
+        },
+        {
+          "start_time": 2378.75,
+          "end_time": 2385.83,
+          "in_coverage": true
+        },
+        {
+          "start_time": 2420.61,
+          "end_time": 2428.61,
+          "in_coverage": true
+        },
+        {
+          "start_time": 2713.35,
+          "end_time": 2718.35,
+          "in_coverage": true
+        },
+        {
+          "start_time": 2811.34,
+          "end_time": 2814.78,
+          "in_coverage": true
+        },
+        {
+          "start_time": 3325.62,
+          "end_time": 3328.43,
+          "in_coverage": true
+        },
+        {
+          "start_time": 3352.6,
+          "end_time": 3356.92,
+          "in_coverage": true
+        }
+      ]
+    },
+    {
+      "module": "信任",
+      "in_coverage": true,
+      "references": [
+        {
+          "start_time": 30.43,
+          "end_time": 39.23,
+          "in_coverage": true
+        },
+        {
+          "start_time": 342.88,
+          "end_time": 351.88,
+          "in_coverage": true
+        },
+        {
+          "start_time": 465.58,
+          "end_time": 468.92,
+          "in_coverage": true
+        },
+        {
+          "start_time": 598.73,
+          "end_time": 603.33,
+          "in_coverage": true
+        },
+        {
+          "start_time": 1091.04,
+          "end_time": 1095.04,
+          "in_coverage": true
+        },
+        {
+          "start_time": 1255.68,
+          "end_time": 1258.28,
+          "in_coverage": true
+        },
+        {
+          "start_time": 1373.92,
+          "end_time": 1377.96,
+          "in_coverage": true
+        },
+        {
+          "start_time": 1491.24,
+          "end_time": 1496.36,
+          "in_coverage": true
+        },
+        {
+          "start_time": 1772.71,
+          "end_time": 1804.04,
+          "in_coverage": true
+        },
+        {
+          "start_time": 1954.03,
+          "end_time": 1984.03,
+          "in_coverage": true
+        },
+        {
+          "start_time": 2216.33,
+          "end_time": 2218.13,
+          "in_coverage": true
+        },
+        {
+          "start_time": 2391.43,
+          "end_time": 2395.01,
+          "in_coverage": true
+        },
+        {
+          "start_time": 2706.18,
+          "end_time": 2713.35,
+          "in_coverage": true
+        },
+        {
+          "start_time": 2939.19,
+          "end_time": 2944.35,
+          "in_coverage": true
+        },
+        {
+          "start_time": 3228.52,
+          "end_time": 3231.08,
+          "in_coverage": true
+        },
+        {
+          "start_time": 3451.2,
+          "end_time": 3458.96,
+          "in_coverage": true
+        },
+        {
+          "start_time": 3597.04,
+          "end_time": 3601.26,
+          "in_coverage": true
+        },
+        {
+          "start_time": 3649.11,
+          "end_time": 3650.13,
+          "in_coverage": true
+        }
+      ]
+    },
+    {
+      "module": "商品承接",
+      "in_coverage": true,
+      "references": [
+        {
+          "start_time": 2446.58,
+          "end_time": 2475.82,
+          "in_coverage": true
+        },
+        {
+          "start_time": 2595.51,
+          "end_time": 2599.87,
+          "in_coverage": true
+        },
+        {
+          "start_time": 2885.95,
+          "end_time": 2888.77,
+          "in_coverage": true
+        },
+        {
+          "start_time": 3002.28,
+          "end_time": 3010.75,
+          "in_coverage": true
+        },
+        {
+          "start_time": 3204.2,
+          "end_time": 3211.6,
+          "in_coverage": true
+        },
+        {
+          "start_time": 3413.69,
+          "end_time": 3417.69,
+          "in_coverage": true
+        },
+        {
+          "start_time": 3557.93,
+          "end_time": 3561.25,
+          "in_coverage": true
+        },
+        {
+          "start_time": 3641.93,
+          "end_time": 3644.49,
+          "in_coverage": true
+        }
+      ]
+    },
+    {
+      "module": "成交",
+      "in_coverage": true,
+      "references": [
+        {
+          "start_time": 98.81,
+          "end_time": 100.81,
+          "in_coverage": true
+        },
+        {
+          "start_time": 283.78,
+          "end_time": 288.79,
+          "in_coverage": true
+        },
+        {
+          "start_time": 665.29,
+          "end_time": 666.57,
+          "in_coverage": true
+        },
+        {
+          "start_time": 837.58,
+          "end_time": 842.22,
+          "in_coverage": true
+        },
+        {
+          "start_time": 1284.3,
+          "end_time": 1288.12,
+          "in_coverage": true
+        },
+        {
+          "start_time": 1306.72,
+          "end_time": 1310.75,
+          "in_coverage": true
+        },
+        {
+          "start_time": 1520.68,
+          "end_time": 1523.68,
+          "in_coverage": true
+        },
+        {
+          "start_time": 1942.51,
+          "end_time": 1949.67,
+          "in_coverage": true
+        },
+        {
+          "start_time": 2097.52,
+          "end_time": 2100.8,
+          "in_coverage": true
+        },
+        {
+          "start_time": 2249.8,
+          "end_time": 2256.92,
+          "in_coverage": true
+        },
+        {
+          "start_time": 2489.4,
+          "end_time": 2494.5,
+          "in_coverage": true
+        },
+        {
+          "start_time": 2727.35,
+          "end_time": 2757.59,
+          "in_coverage": true
+        },
+        {
+          "start_time": 3046.47,
+          "end_time": 3051.46,
+          "in_coverage": true
+        },
+        {
+          "start_time": 3154.64,
+          "end_time": 3160.64,
+          "in_coverage": true
+        },
+        {
+          "start_time": 3515.77,
+          "end_time": 3516.85,
+          "in_coverage": true
+        },
+        {
+          "start_time": 3571.55,
+          "end_time": 3577.36,
+          "in_coverage": true
+        },
+        {
+          "start_time": 3667.51,
+          "end_time": 3670.07,
+          "in_coverage": true
+        }
+      ]
+    },
+    {
+      "module": "答疑",
+      "in_coverage": true,
+      "references": [
+        {
+          "start_time": 0.0,
+          "end_time": 30.43,
+          "in_coverage": true
+        },
+        {
+          "start_time": 143.47,
+          "end_time": 149.11,
+          "in_coverage": true
+        },
+        {
+          "start_time": 450.34,
+          "end_time": 453.14,
+          "in_coverage": true
+        },
+        {
+          "start_time": 635.67,
+          "end_time": 641.67,
+          "in_coverage": true
+        },
+        {
+          "start_time": 863.82,
+          "end_time": 865.98,
+          "in_coverage": true
+        },
+        {
+          "start_time": 977.89,
+          "end_time": 981.89,
+          "in_coverage": true
+        },
+        {
+          "start_time": 1306.72,
+          "end_time": 1310.75,
+          "in_coverage": true
+        },
+        {
+          "start_time": 1546.68,
+          "end_time": 1554.47,
+          "in_coverage": true
+        },
+        {
+          "start_time": 1911.02,
+          "end_time": 1918.42,
+          "in_coverage": true
+        },
+        {
+          "start_time": 2110.96,
+          "end_time": 2115.76,
+          "in_coverage": true
+        },
+        {
+          "start_time": 2249.8,
+          "end_time": 2256.92,
+          "in_coverage": true
+        },
+        {
+          "start_time": 2489.4,
+          "end_time": 2494.5,
+          "in_coverage": true
+        },
+        {
+          "start_time": 2727.35,
+          "end_time": 2757.59,
+          "in_coverage": true
+        },
+        {
+          "start_time": 2876.61,
+          "end_time": 2877.63,
+          "in_coverage": true
+        },
+        {
+          "start_time": 3154.64,
+          "end_time": 3160.64,
+          "in_coverage": true
+        },
+        {
+          "start_time": 3188.8,
+          "end_time": 3190.92,
+          "in_coverage": true
+        },
+        {
+          "start_time": 3571.55,
+          "end_time": 3577.36,
+          "in_coverage": true
+        },
+        {
+          "start_time": 3667.51,
+          "end_time": 3670.07,
+          "in_coverage": true
+        }
+      ]
+    }
+  ],
+  "is_complete": true,
+  "session_id": "simulation_3787s_analysis_fixed",
+  "script": "check_analysis",
+  "checked_at": "2026-08-29T14:53:52.851161+00:00",
+  "report_id": "report_fixed",
+  "status": "PASS",
+  "coverage_status": "PASS",
+  "message": "七模块及时间戳引用完整",
+  "transcript_id": "transcript_fixed",
+  "coverage_message": "覆盖率已计算；空白/静音也计入未覆盖时段，非识别准确率"
+}

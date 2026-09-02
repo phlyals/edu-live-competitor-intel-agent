@@ -1,0 +1,3964 @@
+{
+  "created_at": "2026-08-31T15:42:19.598746+00:00",
+  "database_transaction_read_only": "on",
+  "active_recording_jobs_elsewhere": 1,
+  "root": "/Volumes/ExternalStorage/同行直播录制/media/completed",
+  "file_count": 304,
+  "total_bytes": 52103684692,
+  "total_gib": 48.525,
+  "unsafe_count": 0,
+  "files": [
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_00a2da5e9c4d90e8/sess_aefc4eb0d1601aa66e11bd30/整场直播.refresh0001.ts.partial",
+      "bytes": 89735784,
+      "mtime": "2026-08-31T09:09:43.757548+00:00",
+      "db": {
+        "object_id": "session_5c61edf1a2f301732d67fbc686baeb5a",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_00a2da5e9c4d90e8/sess_aefc4eb0d1601aa66e11bd30/整场直播.refresh0002.ts.partial",
+      "bytes": 89578052,
+      "mtime": "2026-08-31T09:24:43.807844+00:00",
+      "db": {
+        "object_id": "session_5c61edf1a2f301732d67fbc686baeb5a",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_00a2da5e9c4d90e8/sess_aefc4eb0d1601aa66e11bd30/整场直播.refresh0003.ts.partial",
+      "bytes": 90787268,
+      "mtime": "2026-08-31T09:39:43.703202+00:00",
+      "db": {
+        "object_id": "session_5c61edf1a2f301732d67fbc686baeb5a",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_00a2da5e9c4d90e8/sess_aefc4eb0d1601aa66e11bd30/整场直播.refresh0004.ts.partial",
+      "bytes": 133688680,
+      "mtime": "2026-08-31T09:54:43.734589+00:00",
+      "db": {
+        "object_id": "session_5c61edf1a2f301732d67fbc686baeb5a",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_00a2da5e9c4d90e8/sess_aefc4eb0d1601aa66e11bd30/整场直播.refresh0005.ts.partial",
+      "bytes": 87114688,
+      "mtime": "2026-08-31T10:02:56.653994+00:00",
+      "db": {
+        "object_id": "session_5c61edf1a2f301732d67fbc686baeb5a",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_00a2da5e9c4d90e8/sess_aefc4eb0d1601aa66e11bd30/整场直播.ts.partial",
+      "bytes": 130378000,
+      "mtime": "2026-08-31T08:54:45.725364+00:00",
+      "db": {
+        "object_id": "session_5c61edf1a2f301732d67fbc686baeb5a",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_00a2da5e9c4d90e8/sess_b0240f33a9216ad10f648356/整场直播.refresh0001.ts.partial",
+      "bytes": 134626800,
+      "mtime": "2026-08-31T13:38:20.287509+00:00",
+      "db": {
+        "object_id": "session_d4128430ccf58fe1c62677121adc368f",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "COMPLETE",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_00a2da5e9c4d90e8/sess_b0240f33a9216ad10f648356/整场直播.refresh0002.ts.partial",
+      "bytes": 134395560,
+      "mtime": "2026-08-31T13:53:18.198436+00:00",
+      "db": {
+        "object_id": "session_d4128430ccf58fe1c62677121adc368f",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "COMPLETE",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_00a2da5e9c4d90e8/sess_b0240f33a9216ad10f648356/整场直播.refresh0003.ts.partial",
+      "bytes": 134294604,
+      "mtime": "2026-08-31T14:08:16.144007+00:00",
+      "db": {
+        "object_id": "session_d4128430ccf58fe1c62677121adc368f",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "COMPLETE",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_00a2da5e9c4d90e8/sess_b0240f33a9216ad10f648356/整场直播.refresh0004.ts.partial",
+      "bytes": 135675652,
+      "mtime": "2026-08-31T14:23:14.127159+00:00",
+      "db": {
+        "object_id": "session_d4128430ccf58fe1c62677121adc368f",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "COMPLETE",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_00a2da5e9c4d90e8/sess_b0240f33a9216ad10f648356/整场直播.refresh0005.ts.partial",
+      "bytes": 205978064,
+      "mtime": "2026-08-31T14:36:22.257942+00:00",
+      "db": {
+        "object_id": "session_d4128430ccf58fe1c62677121adc368f",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "COMPLETE",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_00a2da5e9c4d90e8/sess_b0240f33a9216ad10f648356/整场直播.ts.partial",
+      "bytes": 180974252,
+      "mtime": "2026-08-31T13:23:22.287405+00:00",
+      "db": {
+        "object_id": "session_d4128430ccf58fe1c62677121adc368f",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "COMPLETE",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_08513b0271791c3c/sess_6097a2e5cd5a7f46efd0801e/整场直播.refresh0001.ts.partial",
+      "bytes": 135099244,
+      "mtime": "2026-08-30T13:19:02.335713+00:00",
+      "db": {
+        "object_id": "session_a11008384fa574090555c6e1389a4686",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_08513b0271791c3c/sess_6097a2e5cd5a7f46efd0801e/整场直播.refresh0002.ts.partial",
+      "bytes": 135066720,
+      "mtime": "2026-08-30T13:34:02.351950+00:00",
+      "db": {
+        "object_id": "session_a11008384fa574090555c6e1389a4686",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_08513b0271791c3c/sess_6097a2e5cd5a7f46efd0801e/整场直播.refresh0003.ts.partial",
+      "bytes": 135203772,
+      "mtime": "2026-08-30T13:49:12.392265+00:00",
+      "db": {
+        "object_id": "session_a11008384fa574090555c6e1389a4686",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_08513b0271791c3c/sess_6097a2e5cd5a7f46efd0801e/整场直播.refresh0004.ts.partial",
+      "bytes": 76536492,
+      "mtime": "2026-08-30T14:00:21.979419+00:00",
+      "db": {
+        "object_id": "session_a11008384fa574090555c6e1389a4686",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_08513b0271791c3c/sess_6097a2e5cd5a7f46efd0801e/整场直播.ts.partial",
+      "bytes": 134907296,
+      "mtime": "2026-08-30T13:04:04.332889+00:00",
+      "db": {
+        "object_id": "session_a11008384fa574090555c6e1389a4686",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_085261530d5b7db7/sess_ff720851fb6d26bf1c875322/整场直播.ts.partial",
+      "bytes": 126980840,
+      "mtime": "2026-08-30T14:00:36.033254+00:00",
+      "db": {
+        "object_id": "session_ac696981e0ee2a67689fd11f621f6847",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_0d701166362f3482/sess_8355943de183458d04c5d0b1/整场直播.refresh0001.ts.partial",
+      "bytes": 249613052,
+      "mtime": "2026-08-31T11:50:17.161641+00:00",
+      "db": {
+        "object_id": "session_2ff6986d77fc67223fbea50d3417440e",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_0d701166362f3482/sess_8355943de183458d04c5d0b1/整场直播.refresh0002.ts.partial",
+      "bytes": 249331804,
+      "mtime": "2026-08-31T12:05:17.153087+00:00",
+      "db": {
+        "object_id": "session_2ff6986d77fc67223fbea50d3417440e",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_0d701166362f3482/sess_8355943de183458d04c5d0b1/整场直播.refresh0003.ts.partial",
+      "bytes": 248826648,
+      "mtime": "2026-08-31T12:20:17.218628+00:00",
+      "db": {
+        "object_id": "session_2ff6986d77fc67223fbea50d3417440e",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_0d701166362f3482/sess_8355943de183458d04c5d0b1/整场直播.refresh0004.ts.partial",
+      "bytes": 249115792,
+      "mtime": "2026-08-31T12:35:17.210901+00:00",
+      "db": {
+        "object_id": "session_2ff6986d77fc67223fbea50d3417440e",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_0d701166362f3482/sess_8355943de183458d04c5d0b1/整场直播.refresh0005.ts.partial",
+      "bytes": 248809164,
+      "mtime": "2026-08-31T12:50:17.188377+00:00",
+      "db": {
+        "object_id": "session_2ff6986d77fc67223fbea50d3417440e",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_0d701166362f3482/sess_8355943de183458d04c5d0b1/整场直播.refresh0006.ts.partial",
+      "bytes": 22604556,
+      "mtime": "2026-08-31T12:52:47.184913+00:00",
+      "db": {
+        "object_id": "session_2ff6986d77fc67223fbea50d3417440e",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_0d701166362f3482/sess_8355943de183458d04c5d0b1/整场直播.ts.partial",
+      "bytes": 249773604,
+      "mtime": "2026-08-31T11:35:13.114759+00:00",
+      "db": {
+        "object_id": "session_2ff6986d77fc67223fbea50d3417440e",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_0d701166362f3482/sess_d8a4d4628b76596244287bd3/整场直播.refresh0001.ts.partial",
+      "bytes": 248224672,
+      "mtime": "2026-08-30T11:51:52.432570+00:00",
+      "db": {
+        "object_id": "session_3ea4d56fbdf35de2bba7681a0b8e348e",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_0d701166362f3482/sess_d8a4d4628b76596244287bd3/整场直播.refresh0002.ts.partial",
+      "bytes": 248988892,
+      "mtime": "2026-08-30T12:06:50.287601+00:00",
+      "db": {
+        "object_id": "session_3ea4d56fbdf35de2bba7681a0b8e348e",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_0d701166362f3482/sess_d8a4d4628b76596244287bd3/整场直播.refresh0003.ts.partial",
+      "bytes": 247436764,
+      "mtime": "2026-08-30T12:21:48.235069+00:00",
+      "db": {
+        "object_id": "session_3ea4d56fbdf35de2bba7681a0b8e348e",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_0d701166362f3482/sess_d8a4d4628b76596244287bd3/整场直播.refresh0004.ts.partial",
+      "bytes": 248928920,
+      "mtime": "2026-08-30T12:36:46.257369+00:00",
+      "db": {
+        "object_id": "session_3ea4d56fbdf35de2bba7681a0b8e348e",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_0d701166362f3482/sess_d8a4d4628b76596244287bd3/整场直播.refresh0005.ts.partial",
+      "bytes": 247681164,
+      "mtime": "2026-08-30T12:51:44.397716+00:00",
+      "db": {
+        "object_id": "session_3ea4d56fbdf35de2bba7681a0b8e348e",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_0d701166362f3482/sess_d8a4d4628b76596244287bd3/整场直播.refresh0006.ts.partial",
+      "bytes": 160956416,
+      "mtime": "2026-08-30T13:01:33.888256+00:00",
+      "db": {
+        "object_id": "session_3ea4d56fbdf35de2bba7681a0b8e348e",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_0d701166362f3482/sess_d8a4d4628b76596244287bd3/整场直播.ts.partial",
+      "bytes": 248306828,
+      "mtime": "2026-08-30T11:36:54.445194+00:00",
+      "db": {
+        "object_id": "session_3ea4d56fbdf35de2bba7681a0b8e348e",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_1ae8502cb7f2968a/sess_ab54db18d98bef94dde7e6b5/整场直播.ts.partial",
+      "bytes": 23273836,
+      "mtime": "2026-08-31T01:00:03.105034+00:00",
+      "db": {
+        "object_id": "session_d0577d19af63d155129ab3b89e348aec",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "COMPLETE",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_6a668c48730ed52bca520bdd/整场直播.refresh0001.ts.partial",
+      "bytes": 131741376,
+      "mtime": "2026-08-30T15:14:08.647810+00:00",
+      "db": {
+        "object_id": "session_5458206e276cbb3e734a50067bf2097d",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_6a668c48730ed52bca520bdd/整场直播.refresh0002.ts.partial",
+      "bytes": 132029956,
+      "mtime": "2026-08-30T15:29:08.585839+00:00",
+      "db": {
+        "object_id": "session_5458206e276cbb3e734a50067bf2097d",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_6a668c48730ed52bca520bdd/整场直播.refresh0003.ts.partial",
+      "bytes": 131273444,
+      "mtime": "2026-08-30T15:44:06.558521+00:00",
+      "db": {
+        "object_id": "session_5458206e276cbb3e734a50067bf2097d",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_6a668c48730ed52bca520bdd/整场直播.refresh0004.ts.partial",
+      "bytes": 65344100,
+      "mtime": "2026-08-30T15:54:11.079646+00:00",
+      "db": {
+        "object_id": "session_5458206e276cbb3e734a50067bf2097d",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_6a668c48730ed52bca520bdd/整场直播.ts.partial",
+      "bytes": 131101988,
+      "mtime": "2026-08-30T14:59:10.697061+00:00",
+      "db": {
+        "object_id": "session_5458206e276cbb3e734a50067bf2097d",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_787b761be007c0830576007c/整场直播.refresh0001.ts.partial",
+      "bytes": 131759236,
+      "mtime": "2026-08-31T09:34:15.928886+00:00",
+      "db": {
+        "object_id": "session_99c19047bd38f164e27ecc433f5e49e8",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_787b761be007c0830576007c/整场直播.refresh0002.ts.partial",
+      "bytes": 132129784,
+      "mtime": "2026-08-31T09:49:13.953457+00:00",
+      "db": {
+        "object_id": "session_99c19047bd38f164e27ecc433f5e49e8",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_787b761be007c0830576007c/整场直播.refresh0003.ts.partial",
+      "bytes": 131720508,
+      "mtime": "2026-08-31T10:04:11.906224+00:00",
+      "db": {
+        "object_id": "session_99c19047bd38f164e27ecc433f5e49e8",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_787b761be007c0830576007c/整场直播.refresh0004.ts.partial",
+      "bytes": 121372672,
+      "mtime": "2026-08-31T10:18:04.042952+00:00",
+      "db": {
+        "object_id": "session_99c19047bd38f164e27ecc433f5e49e8",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_787b761be007c0830576007c/整场直播.ts.partial",
+      "bytes": 131091836,
+      "mtime": "2026-08-31T09:19:17.895090+00:00",
+      "db": {
+        "object_id": "session_99c19047bd38f164e27ecc433f5e49e8",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_aef0d0b59dc1208689efce85/整场直播.refresh0001.ts.partial",
+      "bytes": 131496224,
+      "mtime": "2026-08-31T07:09:37.162714+00:00",
+      "db": {
+        "object_id": "session_1ed6573ad2188b89e797e4b6ef3cabd4",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_aef0d0b59dc1208689efce85/整场直播.refresh0002.ts.partial",
+      "bytes": 132296540,
+      "mtime": "2026-08-31T07:24:35.057814+00:00",
+      "db": {
+        "object_id": "session_1ed6573ad2188b89e797e4b6ef3cabd4",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_aef0d0b59dc1208689efce85/整场直播.refresh0003.ts.partial",
+      "bytes": 131706032,
+      "mtime": "2026-08-31T07:39:33.213574+00:00",
+      "db": {
+        "object_id": "session_1ed6573ad2188b89e797e4b6ef3cabd4",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_aef0d0b59dc1208689efce85/整场直播.refresh0004.ts.partial",
+      "bytes": 131192792,
+      "mtime": "2026-08-31T07:54:31.215960+00:00",
+      "db": {
+        "object_id": "session_1ed6573ad2188b89e797e4b6ef3cabd4",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_aef0d0b59dc1208689efce85/整场直播.refresh0005.ts.partial",
+      "bytes": 8650752,
+      "mtime": "2026-08-31T07:55:31.178633+00:00",
+      "db": {
+        "object_id": "session_1ed6573ad2188b89e797e4b6ef3cabd4",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_aef0d0b59dc1208689efce85/整场直播.ts.partial",
+      "bytes": 130955724,
+      "mtime": "2026-08-31T06:54:39.192259+00:00",
+      "db": {
+        "object_id": "session_1ed6573ad2188b89e797e4b6ef3cabd4",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_b02574aa870775054f6777a4/整场直播.refresh0001.ts.partial",
+      "bytes": 205471404,
+      "mtime": "2026-08-30T13:36:32.259134+00:00",
+      "db": {
+        "object_id": "session_301089a174e24811a1a3e0376ac4e40d",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_b02574aa870775054f6777a4/整场直播.refresh0002.ts.partial",
+      "bytes": 205413500,
+      "mtime": "2026-08-30T13:52:02.357392+00:00",
+      "db": {
+        "object_id": "session_301089a174e24811a1a3e0376ac4e40d",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_b02574aa870775054f6777a4/整场直播.refresh0003.ts.partial",
+      "bytes": 205455988,
+      "mtime": "2026-08-30T14:07:02.331700+00:00",
+      "db": {
+        "object_id": "session_301089a174e24811a1a3e0376ac4e40d",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_b02574aa870775054f6777a4/整场直播.refresh0004.ts.partial",
+      "bytes": 176289668,
+      "mtime": "2026-08-30T14:23:06.406957+00:00",
+      "db": {
+        "object_id": "session_301089a174e24811a1a3e0376ac4e40d",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_b02574aa870775054f6777a4/整场直播.ts.partial",
+      "bytes": 205222868,
+      "mtime": "2026-08-30T13:21:34.440320+00:00",
+      "db": {
+        "object_id": "session_301089a174e24811a1a3e0376ac4e40d",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_d6cb670e198780987e1b64ce/整场直播.refresh0001.ts.partial",
+      "bytes": 201053780,
+      "mtime": "2026-08-31T12:14:55.544759+00:00",
+      "db": {
+        "object_id": "session_28fd9c3aa7f75ee2fa821fb406212153",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_d6cb670e198780987e1b64ce/整场直播.refresh0002.ts.partial",
+      "bytes": 201045508,
+      "mtime": "2026-08-31T12:29:59.707069+00:00",
+      "db": {
+        "object_id": "session_28fd9c3aa7f75ee2fa821fb406212153",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_d6cb670e198780987e1b64ce/整场直播.refresh0003.ts.partial",
+      "bytes": 200999448,
+      "mtime": "2026-08-31T12:45:15.492888+00:00",
+      "db": {
+        "object_id": "session_28fd9c3aa7f75ee2fa821fb406212153",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_d6cb670e198780987e1b64ce/整场直播.refresh0004.ts.partial",
+      "bytes": 126683612,
+      "mtime": "2026-08-31T12:57:03.287070+00:00",
+      "db": {
+        "object_id": "session_28fd9c3aa7f75ee2fa821fb406212153",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_d6cb670e198780987e1b64ce/整场直播.ts.partial",
+      "bytes": 201057164,
+      "mtime": "2026-08-31T11:59:57.782018+00:00",
+      "db": {
+        "object_id": "session_28fd9c3aa7f75ee2fa821fb406212153",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_3209ade1e6024113/sess_139fc71edee4426d14ad3307/整场直播.refresh0001.ts.partial",
+      "bytes": 246560496,
+      "mtime": "2026-08-31T05:04:26.239460+00:00",
+      "db": {
+        "object_id": "session_ab7c56b588cd2fbd2bdfa3a5d8480726",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_3209ade1e6024113/sess_139fc71edee4426d14ad3307/整场直播.refresh0002.ts.partial",
+      "bytes": 246326060,
+      "mtime": "2026-08-31T05:19:26.629015+00:00",
+      "db": {
+        "object_id": "session_ab7c56b588cd2fbd2bdfa3a5d8480726",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_3209ade1e6024113/sess_139fc71edee4426d14ad3307/整场直播.refresh0003.ts.partial",
+      "bytes": 247125248,
+      "mtime": "2026-08-31T05:34:26.986431+00:00",
+      "db": {
+        "object_id": "session_ab7c56b588cd2fbd2bdfa3a5d8480726",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_3209ade1e6024113/sess_139fc71edee4426d14ad3307/整场直播.refresh0004.ts.partial",
+      "bytes": 142868480,
+      "mtime": "2026-08-31T05:43:05.687661+00:00",
+      "db": {
+        "object_id": "session_ab7c56b588cd2fbd2bdfa3a5d8480726",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_3209ade1e6024113/sess_139fc71edee4426d14ad3307/整场直播.ts.partial",
+      "bytes": 246968644,
+      "mtime": "2026-08-31T04:49:25.376346+00:00",
+      "db": {
+        "object_id": "session_ab7c56b588cd2fbd2bdfa3a5d8480726",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_3209ade1e6024113/sess_866923f0e08c195f90161f8a/整场直播.refresh0001.ts.partial",
+      "bytes": 252756036,
+      "mtime": "2026-08-30T14:16:00.704601+00:00",
+      "db": {
+        "object_id": "session_ff57b5a50cbe69850e8ade07ebf3671d",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_3209ade1e6024113/sess_866923f0e08c195f90161f8a/整场直播.refresh0002.ts.partial",
+      "bytes": 252882560,
+      "mtime": "2026-08-30T14:30:58.924362+00:00",
+      "db": {
+        "object_id": "session_ff57b5a50cbe69850e8ade07ebf3671d",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_3209ade1e6024113/sess_866923f0e08c195f90161f8a/整场直播.refresh0003.ts.partial",
+      "bytes": 252962460,
+      "mtime": "2026-08-30T14:45:56.774920+00:00",
+      "db": {
+        "object_id": "session_ff57b5a50cbe69850e8ade07ebf3671d",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_3209ade1e6024113/sess_866923f0e08c195f90161f8a/整场直播.refresh0004.ts.partial",
+      "bytes": 40883044,
+      "mtime": "2026-08-30T14:48:39.195073+00:00",
+      "db": {
+        "object_id": "session_ff57b5a50cbe69850e8ade07ebf3671d",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_3209ade1e6024113/sess_866923f0e08c195f90161f8a/整场直播.ts.partial",
+      "bytes": 252989720,
+      "mtime": "2026-08-30T14:00:36.766596+00:00",
+      "db": {
+        "object_id": "session_ff57b5a50cbe69850e8ade07ebf3671d",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_3e8022c5df7ea4c8/sess_b457c76b94e5737d01c48b15/整场直播.refresh0001.ts.partial",
+      "bytes": 146918804,
+      "mtime": "2026-08-30T16:50:45.647591+00:00",
+      "db": {
+        "object_id": "session_585f96d367ba7a062a99dd7788a271fd",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_3e8022c5df7ea4c8/sess_b457c76b94e5737d01c48b15/整场直播.refresh0002.ts.partial",
+      "bytes": 147095900,
+      "mtime": "2026-08-30T17:05:47.923002+00:00",
+      "db": {
+        "object_id": "session_585f96d367ba7a062a99dd7788a271fd",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_3e8022c5df7ea4c8/sess_b457c76b94e5737d01c48b15/整场直播.refresh0003.ts.partial",
+      "bytes": 99839468,
+      "mtime": "2026-08-30T17:19:19.317075+00:00",
+      "db": {
+        "object_id": "session_585f96d367ba7a062a99dd7788a271fd",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_3e8022c5df7ea4c8/sess_b457c76b94e5737d01c48b15/整场直播.ts.partial",
+      "bytes": 146518928,
+      "mtime": "2026-08-30T16:35:45.409178+00:00",
+      "db": {
+        "object_id": "session_585f96d367ba7a062a99dd7788a271fd",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_3fda32b6a5c38fa3/sess_2798f8580636fa3c4e9a3c76/整场直播.refresh0001.ts.partial",
+      "bytes": 135303224,
+      "mtime": "2026-08-31T01:16:16.034542+00:00",
+      "db": {
+        "object_id": "session_b80831bc566df754ccda6fa03a903dbb",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_3fda32b6a5c38fa3/sess_2798f8580636fa3c4e9a3c76/整场直播.refresh0002.ts.partial",
+      "bytes": 135514348,
+      "mtime": "2026-08-31T01:31:13.988451+00:00",
+      "db": {
+        "object_id": "session_b80831bc566df754ccda6fa03a903dbb",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_3fda32b6a5c38fa3/sess_2798f8580636fa3c4e9a3c76/整场直播.refresh0003.ts.partial",
+      "bytes": 135628276,
+      "mtime": "2026-08-31T01:46:14.141663+00:00",
+      "db": {
+        "object_id": "session_b80831bc566df754ccda6fa03a903dbb",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_3fda32b6a5c38fa3/sess_2798f8580636fa3c4e9a3c76/整场直播.refresh0004.ts.partial",
+      "bytes": 136732588,
+      "mtime": "2026-08-31T02:01:14.205363+00:00",
+      "db": {
+        "object_id": "session_b80831bc566df754ccda6fa03a903dbb",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_3fda32b6a5c38fa3/sess_2798f8580636fa3c4e9a3c76/整场直播.refresh0005.ts.partial",
+      "bytes": 11524400,
+      "mtime": "2026-08-31T02:02:56.215314+00:00",
+      "db": {
+        "object_id": "session_b80831bc566df754ccda6fa03a903dbb",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_3fda32b6a5c38fa3/sess_2798f8580636fa3c4e9a3c76/整场直播.ts.partial",
+      "bytes": 135418844,
+      "mtime": "2026-08-31T01:01:15.902774+00:00",
+      "db": {
+        "object_id": "session_b80831bc566df754ccda6fa03a903dbb",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_4096b05b78a4d383/sess_e4f1530f57ed4c74b7c90877/整场直播.refresh0001.ts.partial",
+      "bytes": 68464148,
+      "mtime": "2026-08-30T23:36:29.210282+00:00",
+      "db": {
+        "object_id": "session_d700e8d82ab1d8d9a530620c7d077ccf",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_4096b05b78a4d383/sess_e4f1530f57ed4c74b7c90877/整场直播.refresh0002.ts.partial",
+      "bytes": 681124,
+      "mtime": "2026-08-30T23:37:38.136274+00:00",
+      "db": {
+        "object_id": "session_d700e8d82ab1d8d9a530620c7d077ccf",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_4096b05b78a4d383/sess_e4f1530f57ed4c74b7c90877/整场直播.ts.partial",
+      "bytes": 68340256,
+      "mtime": "2026-08-30T23:21:29.136908+00:00",
+      "db": {
+        "object_id": "session_d700e8d82ab1d8d9a530620c7d077ccf",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_53fe49068cf4e0ba/sess_29438f3a0208999ca824a510/整场直播.refresh0001.ts.partial",
+      "bytes": 167388808,
+      "mtime": "2026-08-31T02:40:20.229860+00:00",
+      "db": {
+        "object_id": "session_05f56e48c2ea2c261f225c749b2d0035",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_53fe49068cf4e0ba/sess_29438f3a0208999ca824a510/整场直播.refresh0002.ts.partial",
+      "bytes": 168977972,
+      "mtime": "2026-08-31T02:55:18.256271+00:00",
+      "db": {
+        "object_id": "session_05f56e48c2ea2c261f225c749b2d0035",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_53fe49068cf4e0ba/sess_29438f3a0208999ca824a510/整场直播.refresh0003.ts.partial",
+      "bytes": 292201444,
+      "mtime": "2026-08-31T03:10:16.266696+00:00",
+      "db": {
+        "object_id": "session_05f56e48c2ea2c261f225c749b2d0035",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_53fe49068cf4e0ba/sess_29438f3a0208999ca824a510/整场直播.refresh0004.ts.partial",
+      "bytes": 73924608,
+      "mtime": "2026-08-31T03:13:22.589939+00:00",
+      "db": {
+        "object_id": "session_05f56e48c2ea2c261f225c749b2d0035",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_53fe49068cf4e0ba/sess_29438f3a0208999ca824a510/整场直播.ts.partial",
+      "bytes": 167029352,
+      "mtime": "2026-08-31T02:25:22.218868+00:00",
+      "db": {
+        "object_id": "session_05f56e48c2ea2c261f225c749b2d0035",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_53fe49068cf4e0ba/sess_4e36b3ac725850a6f41ee589/整场直播.refresh0001.ts.partial",
+      "bytes": 257900092,
+      "mtime": "2026-08-31T04:18:14.270321+00:00",
+      "db": {
+        "object_id": "session_62cfc3dd39a6821723953e3895b9056c",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_53fe49068cf4e0ba/sess_4e36b3ac725850a6f41ee589/整场直播.refresh0002.ts.partial",
+      "bytes": 257756836,
+      "mtime": "2026-08-31T04:33:14.284115+00:00",
+      "db": {
+        "object_id": "session_62cfc3dd39a6821723953e3895b9056c",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_53fe49068cf4e0ba/sess_4e36b3ac725850a6f41ee589/整场直播.refresh0003.ts.partial",
+      "bytes": 258306924,
+      "mtime": "2026-08-31T04:48:14.372151+00:00",
+      "db": {
+        "object_id": "session_62cfc3dd39a6821723953e3895b9056c",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_53fe49068cf4e0ba/sess_4e36b3ac725850a6f41ee589/整场直播.refresh0004.ts.partial",
+      "bytes": 91885000,
+      "mtime": "2026-08-31T04:55:20.259337+00:00",
+      "db": {
+        "object_id": "session_62cfc3dd39a6821723953e3895b9056c",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_53fe49068cf4e0ba/sess_4e36b3ac725850a6f41ee589/整场直播.ts.partial",
+      "bytes": 257992776,
+      "mtime": "2026-08-31T04:03:16.215641+00:00",
+      "db": {
+        "object_id": "session_62cfc3dd39a6821723953e3895b9056c",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_650c33d1973a5825/sess_1bae967233649f4cc0376aba/整场直播.refresh0001.ts.partial",
+      "bytes": 129920596,
+      "mtime": "2026-08-31T06:48:59.496396+00:00",
+      "db": {
+        "object_id": "session_c57a7fd09e3ec686c0f6d2eebda988b2",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_650c33d1973a5825/sess_1bae967233649f4cc0376aba/整场直播.refresh0002.ts.partial",
+      "bytes": 132012096,
+      "mtime": "2026-08-31T07:03:59.457214+00:00",
+      "db": {
+        "object_id": "session_c57a7fd09e3ec686c0f6d2eebda988b2",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_650c33d1973a5825/sess_1bae967233649f4cc0376aba/整场直播.refresh0003.ts.partial",
+      "bytes": 130596832,
+      "mtime": "2026-08-31T07:18:59.376545+00:00",
+      "db": {
+        "object_id": "session_c57a7fd09e3ec686c0f6d2eebda988b2",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_650c33d1973a5825/sess_1bae967233649f4cc0376aba/整场直播.refresh0004.ts.partial",
+      "bytes": 143688212,
+      "mtime": "2026-08-31T07:33:57.513875+00:00",
+      "db": {
+        "object_id": "session_c57a7fd09e3ec686c0f6d2eebda988b2",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_650c33d1973a5825/sess_1bae967233649f4cc0376aba/整场直播.refresh0005.ts.partial",
+      "bytes": 147659524,
+      "mtime": "2026-08-31T07:48:57.542833+00:00",
+      "db": {
+        "object_id": "session_c57a7fd09e3ec686c0f6d2eebda988b2",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_650c33d1973a5825/sess_1bae967233649f4cc0376aba/整场直播.refresh0006.ts.partial",
+      "bytes": 38535168,
+      "mtime": "2026-08-31T07:53:13.511988+00:00",
+      "db": {
+        "object_id": "session_c57a7fd09e3ec686c0f6d2eebda988b2",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_650c33d1973a5825/sess_1bae967233649f4cc0376aba/整场直播.ts.partial",
+      "bytes": 201107172,
+      "mtime": "2026-08-31T06:33:59.648373+00:00",
+      "db": {
+        "object_id": "session_c57a7fd09e3ec686c0f6d2eebda988b2",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_650c33d1973a5825/sess_683585a0e62ee5917589b7f4/整场直播.refresh0001.ts.partial",
+      "bytes": 129632580,
+      "mtime": "2026-08-30T23:55:26.460438+00:00",
+      "db": {
+        "object_id": "session_64bcafeff27cdbc642db33c5a6b0cf1d",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_650c33d1973a5825/sess_683585a0e62ee5917589b7f4/整场直播.refresh0002.ts.partial",
+      "bytes": 132956420,
+      "mtime": "2026-08-31T00:10:24.443656+00:00",
+      "db": {
+        "object_id": "session_64bcafeff27cdbc642db33c5a6b0cf1d",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_650c33d1973a5825/sess_683585a0e62ee5917589b7f4/整场直播.refresh0003.ts.partial",
+      "bytes": 133161716,
+      "mtime": "2026-08-31T00:25:22.348108+00:00",
+      "db": {
+        "object_id": "session_64bcafeff27cdbc642db33c5a6b0cf1d",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_650c33d1973a5825/sess_683585a0e62ee5917589b7f4/整场直播.refresh0004.ts.partial",
+      "bytes": 131017388,
+      "mtime": "2026-08-31T00:40:20.506880+00:00",
+      "db": {
+        "object_id": "session_64bcafeff27cdbc642db33c5a6b0cf1d",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_650c33d1973a5825/sess_683585a0e62ee5917589b7f4/整场直播.refresh0005.ts.partial",
+      "bytes": 148771544,
+      "mtime": "2026-08-31T00:55:18.494013+00:00",
+      "db": {
+        "object_id": "session_64bcafeff27cdbc642db33c5a6b0cf1d",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_650c33d1973a5825/sess_683585a0e62ee5917589b7f4/整场直播.refresh0006.ts.partial",
+      "bytes": 128062216,
+      "mtime": "2026-08-31T01:09:12.424429+00:00",
+      "db": {
+        "object_id": "session_64bcafeff27cdbc642db33c5a6b0cf1d",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_650c33d1973a5825/sess_683585a0e62ee5917589b7f4/整场直播.ts.partial",
+      "bytes": 204183792,
+      "mtime": "2026-08-30T23:40:28.458802+00:00",
+      "db": {
+        "object_id": "session_64bcafeff27cdbc642db33c5a6b0cf1d",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_650c33d1973a5825/sess_d5094d60696b13f7ebbb4157/整场直播.refresh0001.ts.partial",
+      "bytes": 131754724,
+      "mtime": "2026-08-31T02:39:12.999732+00:00",
+      "db": {
+        "object_id": "session_15f7b0f71878fd566407b2a242797771",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "COMPLETE",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_650c33d1973a5825/sess_d5094d60696b13f7ebbb4157/整场直播.refresh0002.ts.partial",
+      "bytes": 130939368,
+      "mtime": "2026-08-31T02:54:12.993043+00:00",
+      "db": {
+        "object_id": "session_15f7b0f71878fd566407b2a242797771",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "COMPLETE",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_650c33d1973a5825/sess_d5094d60696b13f7ebbb4157/整场直播.refresh0003.ts.partial",
+      "bytes": 132264956,
+      "mtime": "2026-08-31T03:09:12.951870+00:00",
+      "db": {
+        "object_id": "session_15f7b0f71878fd566407b2a242797771",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "COMPLETE",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_650c33d1973a5825/sess_d5094d60696b13f7ebbb4157/整场直播.refresh0004.ts.partial",
+      "bytes": 135103380,
+      "mtime": "2026-08-31T03:24:17.006670+00:00",
+      "db": {
+        "object_id": "session_15f7b0f71878fd566407b2a242797771",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "COMPLETE",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_650c33d1973a5825/sess_d5094d60696b13f7ebbb4157/整场直播.refresh0005.ts.partial",
+      "bytes": 154658764,
+      "mtime": "2026-08-31T03:39:17.017771+00:00",
+      "db": {
+        "object_id": "session_15f7b0f71878fd566407b2a242797771",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "COMPLETE",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_650c33d1973a5825/sess_d5094d60696b13f7ebbb4157/整场直播.refresh0006.ts.partial",
+      "bytes": 25331684,
+      "mtime": "2026-08-31T03:43:04.107451+00:00",
+      "db": {
+        "object_id": "session_15f7b0f71878fd566407b2a242797771",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "COMPLETE",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_650c33d1973a5825/sess_d5094d60696b13f7ebbb4157/整场直播.ts.partial",
+      "bytes": 202416592,
+      "mtime": "2026-08-31T02:24:13.126605+00:00",
+      "db": {
+        "object_id": "session_15f7b0f71878fd566407b2a242797771",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "COMPLETE",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_6e6a8a489e97fdc4/sess_3d3fd5e76decd3d8cc1bb48c/整场直播.refresh0001.ts.partial",
+      "bytes": 141032712,
+      "mtime": "2026-08-31T01:38:05.037278+00:00",
+      "db": {
+        "object_id": "session_662b9750311de685bccb71734626081a",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_6e6a8a489e97fdc4/sess_3d3fd5e76decd3d8cc1bb48c/整场直播.refresh0002.ts.partial",
+      "bytes": 143154668,
+      "mtime": "2026-08-31T01:53:03.143775+00:00",
+      "db": {
+        "object_id": "session_662b9750311de685bccb71734626081a",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_6e6a8a489e97fdc4/sess_3d3fd5e76decd3d8cc1bb48c/整场直播.refresh0003.ts.partial",
+      "bytes": 157119120,
+      "mtime": "2026-08-31T02:08:01.246511+00:00",
+      "db": {
+        "object_id": "session_662b9750311de685bccb71734626081a",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_6e6a8a489e97fdc4/sess_3d3fd5e76decd3d8cc1bb48c/整场直播.refresh0004.ts.partial",
+      "bytes": 167244800,
+      "mtime": "2026-08-31T02:23:01.242999+00:00",
+      "db": {
+        "object_id": "session_662b9750311de685bccb71734626081a",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_6e6a8a489e97fdc4/sess_3d3fd5e76decd3d8cc1bb48c/整场直播.refresh0005.ts.partial",
+      "bytes": 15423144,
+      "mtime": "2026-08-31T02:24:48.676461+00:00",
+      "db": {
+        "object_id": "session_662b9750311de685bccb71734626081a",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_6e6a8a489e97fdc4/sess_3d3fd5e76decd3d8cc1bb48c/整场直播.ts.partial",
+      "bytes": 142397968,
+      "mtime": "2026-08-31T01:23:06.993973+00:00",
+      "db": {
+        "object_id": "session_662b9750311de685bccb71734626081a",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_6e6a8a489e97fdc4/sess_5276210f8da4aea5f14e3ef6/整场直播.refresh0001.ts.partial",
+      "bytes": 122719256,
+      "mtime": "2026-08-30T23:10:17.697932+00:00",
+      "db": {
+        "object_id": "session_616f3936a0a9a2c626582568ae5410fc",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_6e6a8a489e97fdc4/sess_5276210f8da4aea5f14e3ef6/整场直播.refresh0002.ts.partial",
+      "bytes": 122985276,
+      "mtime": "2026-08-30T23:25:17.744516+00:00",
+      "db": {
+        "object_id": "session_616f3936a0a9a2c626582568ae5410fc",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_6e6a8a489e97fdc4/sess_5276210f8da4aea5f14e3ef6/整场直播.refresh0003.ts.partial",
+      "bytes": 150214068,
+      "mtime": "2026-08-30T23:40:17.771144+00:00",
+      "db": {
+        "object_id": "session_616f3936a0a9a2c626582568ae5410fc",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_6e6a8a489e97fdc4/sess_5276210f8da4aea5f14e3ef6/整场直播.refresh0004.ts.partial",
+      "bytes": 112088420,
+      "mtime": "2026-08-30T23:52:57.402075+00:00",
+      "db": {
+        "object_id": "session_616f3936a0a9a2c626582568ae5410fc",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_6e6a8a489e97fdc4/sess_5276210f8da4aea5f14e3ef6/整场直播.ts.partial",
+      "bytes": 121796552,
+      "mtime": "2026-08-30T22:55:17.757050+00:00",
+      "db": {
+        "object_id": "session_616f3936a0a9a2c626582568ae5410fc",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_6e6a8a489e97fdc4/sess_a6ce150e909a9409be7cf464/整场直播.refresh0001.ts.partial",
+      "bytes": 145609384,
+      "mtime": "2026-08-31T03:47:55.224946+00:00",
+      "db": {
+        "object_id": "session_be82650f4a1c3645cdc394e257a2b651",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "COMPLETE",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_6e6a8a489e97fdc4/sess_a6ce150e909a9409be7cf464/整场直播.refresh0002.ts.partial",
+      "bytes": 147450656,
+      "mtime": "2026-08-31T04:02:55.258797+00:00",
+      "db": {
+        "object_id": "session_be82650f4a1c3645cdc394e257a2b651",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "COMPLETE",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_6e6a8a489e97fdc4/sess_a6ce150e909a9409be7cf464/整场直播.refresh0003.ts.partial",
+      "bytes": 154198164,
+      "mtime": "2026-08-31T04:17:53.205311+00:00",
+      "db": {
+        "object_id": "session_be82650f4a1c3645cdc394e257a2b651",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "COMPLETE",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_6e6a8a489e97fdc4/sess_a6ce150e909a9409be7cf464/整场直播.refresh0004.ts.partial",
+      "bytes": 160689992,
+      "mtime": "2026-08-31T04:32:10.832817+00:00",
+      "db": {
+        "object_id": "session_be82650f4a1c3645cdc394e257a2b651",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "COMPLETE",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_6e6a8a489e97fdc4/sess_a6ce150e909a9409be7cf464/整场直播.ts.partial",
+      "bytes": 146276220,
+      "mtime": "2026-08-31T03:32:55.124483+00:00",
+      "db": {
+        "object_id": "session_be82650f4a1c3645cdc394e257a2b651",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "COMPLETE",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_77ae4f4bebcaca48/sess_fe61e88d569883055f4c9586/整场直播.refresh0001.ts.partial",
+      "bytes": 246490184,
+      "mtime": "2026-08-31T03:49:42.571536+00:00",
+      "db": {
+        "object_id": "session_467e48f1f055dc30902ca65bf655d3d3",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_77ae4f4bebcaca48/sess_fe61e88d569883055f4c9586/整场直播.refresh0002.ts.partial",
+      "bytes": 246790796,
+      "mtime": "2026-08-31T04:04:42.606270+00:00",
+      "db": {
+        "object_id": "session_467e48f1f055dc30902ca65bf655d3d3",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_77ae4f4bebcaca48/sess_fe61e88d569883055f4c9586/整场直播.refresh0003.ts.partial",
+      "bytes": 248743740,
+      "mtime": "2026-08-31T04:19:42.612530+00:00",
+      "db": {
+        "object_id": "session_467e48f1f055dc30902ca65bf655d3d3",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_77ae4f4bebcaca48/sess_fe61e88d569883055f4c9586/整场直播.refresh0004.ts.partial",
+      "bytes": 243792760,
+      "mtime": "2026-08-31T04:34:42.545757+00:00",
+      "db": {
+        "object_id": "session_467e48f1f055dc30902ca65bf655d3d3",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_77ae4f4bebcaca48/sess_fe61e88d569883055f4c9586/整场直播.refresh0005.ts.partial",
+      "bytes": 176970980,
+      "mtime": "2026-08-31T04:48:27.573932+00:00",
+      "db": {
+        "object_id": "session_467e48f1f055dc30902ca65bf655d3d3",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_77ae4f4bebcaca48/sess_fe61e88d569883055f4c9586/整场直播.ts.partial",
+      "bytes": 245599252,
+      "mtime": "2026-08-31T03:34:42.579059+00:00",
+      "db": {
+        "object_id": "session_467e48f1f055dc30902ca65bf655d3d3",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_836db3961058b668/sess_74bd39a9f68b2de6db13d904/整场直播.refresh0001.ts.partial",
+      "bytes": 127424708,
+      "mtime": "2026-08-31T10:07:02.336420+00:00",
+      "db": {
+        "object_id": "session_360ab48b642a6fbd31ffd05c23b6a2c8",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_836db3961058b668/sess_74bd39a9f68b2de6db13d904/整场直播.refresh0002.ts.partial",
+      "bytes": 127562324,
+      "mtime": "2026-08-31T10:22:01.168270+00:00",
+      "db": {
+        "object_id": "session_360ab48b642a6fbd31ffd05c23b6a2c8",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_836db3961058b668/sess_74bd39a9f68b2de6db13d904/整场直播.refresh0003.ts.partial",
+      "bytes": 128407760,
+      "mtime": "2026-08-31T10:36:59.562436+00:00",
+      "db": {
+        "object_id": "session_360ab48b642a6fbd31ffd05c23b6a2c8",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_836db3961058b668/sess_74bd39a9f68b2de6db13d904/整场直播.refresh0004.ts.partial",
+      "bytes": 127109056,
+      "mtime": "2026-08-31T10:51:58.898125+00:00",
+      "db": {
+        "object_id": "session_360ab48b642a6fbd31ffd05c23b6a2c8",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_836db3961058b668/sess_74bd39a9f68b2de6db13d904/整场直播.refresh0005.ts.partial",
+      "bytes": 128963864,
+      "mtime": "2026-08-31T11:06:57.978751+00:00",
+      "db": {
+        "object_id": "session_360ab48b642a6fbd31ffd05c23b6a2c8",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_836db3961058b668/sess_74bd39a9f68b2de6db13d904/整场直播.refresh0006.ts.partial",
+      "bytes": 128458332,
+      "mtime": "2026-08-31T11:21:57.123063+00:00",
+      "db": {
+        "object_id": "session_360ab48b642a6fbd31ffd05c23b6a2c8",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_836db3961058b668/sess_74bd39a9f68b2de6db13d904/整场直播.refresh0007.ts.partial",
+      "bytes": 126777048,
+      "mtime": "2026-08-31T11:36:54.635041+00:00",
+      "db": {
+        "object_id": "session_360ab48b642a6fbd31ffd05c23b6a2c8",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_836db3961058b668/sess_74bd39a9f68b2de6db13d904/整场直播.refresh0008.ts.partial",
+      "bytes": 25165824,
+      "mtime": "2026-08-31T11:39:53.930348+00:00",
+      "db": {
+        "object_id": "session_360ab48b642a6fbd31ffd05c23b6a2c8",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_836db3961058b668/sess_74bd39a9f68b2de6db13d904/整场直播.ts.partial",
+      "bytes": 126326224,
+      "mtime": "2026-08-31T09:52:02.213432+00:00",
+      "db": {
+        "object_id": "session_360ab48b642a6fbd31ffd05c23b6a2c8",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_836db3961058b668/sess_fc8da343658338d77de0f998/整场直播.refresh0001.ts.partial",
+      "bytes": 126819724,
+      "mtime": "2026-08-31T02:38:08.673765+00:00",
+      "db": {
+        "object_id": "session_f378877b97099e078924840d351cd687",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_836db3961058b668/sess_fc8da343658338d77de0f998/整场直播.refresh0002.ts.partial",
+      "bytes": 127556684,
+      "mtime": "2026-08-31T02:53:07.151359+00:00",
+      "db": {
+        "object_id": "session_f378877b97099e078924840d351cd687",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_836db3961058b668/sess_fc8da343658338d77de0f998/整场直播.refresh0003.ts.partial",
+      "bytes": 127692796,
+      "mtime": "2026-08-31T03:08:05.328365+00:00",
+      "db": {
+        "object_id": "session_f378877b97099e078924840d351cd687",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_836db3961058b668/sess_fc8da343658338d77de0f998/整场直播.refresh0004.ts.partial",
+      "bytes": 127635080,
+      "mtime": "2026-08-31T03:23:06.217628+00:00",
+      "db": {
+        "object_id": "session_f378877b97099e078924840d351cd687",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_836db3961058b668/sess_fc8da343658338d77de0f998/整场直播.refresh0005.ts.partial",
+      "bytes": 128019916,
+      "mtime": "2026-08-31T03:38:03.838655+00:00",
+      "db": {
+        "object_id": "session_f378877b97099e078924840d351cd687",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_836db3961058b668/sess_fc8da343658338d77de0f998/整场直播.refresh0006.ts.partial",
+      "bytes": 128996012,
+      "mtime": "2026-08-31T03:53:01.619305+00:00",
+      "db": {
+        "object_id": "session_f378877b97099e078924840d351cd687",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_836db3961058b668/sess_fc8da343658338d77de0f998/整场直播.refresh0007.ts.partial",
+      "bytes": 126593748,
+      "mtime": "2026-08-31T04:08:02.031948+00:00",
+      "db": {
+        "object_id": "session_f378877b97099e078924840d351cd687",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_836db3961058b668/sess_fc8da343658338d77de0f998/整场直播.refresh0008.ts.partial",
+      "bytes": 19032744,
+      "mtime": "2026-08-31T04:12:51.346563+00:00",
+      "db": {
+        "object_id": "session_f378877b97099e078924840d351cd687",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_836db3961058b668/sess_fc8da343658338d77de0f998/整场直播.ts.partial",
+      "bytes": 126617812,
+      "mtime": "2026-08-31T02:23:08.847597+00:00",
+      "db": {
+        "object_id": "session_f378877b97099e078924840d351cd687",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_83f47f2ba13de9df/sess_46efc2965b4f302a410807e2/整场直播.refresh0001.ts.partial",
+      "bytes": 248739792,
+      "mtime": "2026-08-31T10:15:46.137745+00:00",
+      "db": {
+        "object_id": "session_77077e2a0aad2b73a21048f81c365a65",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_83f47f2ba13de9df/sess_46efc2965b4f302a410807e2/整场直播.refresh0002.ts.partial",
+      "bytes": 247477936,
+      "mtime": "2026-08-31T10:30:44.091800+00:00",
+      "db": {
+        "object_id": "session_77077e2a0aad2b73a21048f81c365a65",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_83f47f2ba13de9df/sess_46efc2965b4f302a410807e2/整场直播.refresh0003.ts.partial",
+      "bytes": 247328476,
+      "mtime": "2026-08-31T10:45:42.086433+00:00",
+      "db": {
+        "object_id": "session_77077e2a0aad2b73a21048f81c365a65",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_83f47f2ba13de9df/sess_46efc2965b4f302a410807e2/整场直播.refresh0004.ts.partial",
+      "bytes": 248579992,
+      "mtime": "2026-08-31T11:00:40.350109+00:00",
+      "db": {
+        "object_id": "session_77077e2a0aad2b73a21048f81c365a65",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_83f47f2ba13de9df/sess_46efc2965b4f302a410807e2/整场直播.refresh0005.ts.partial",
+      "bytes": 205095780,
+      "mtime": "2026-08-31T11:13:56.458932+00:00",
+      "db": {
+        "object_id": "session_77077e2a0aad2b73a21048f81c365a65",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_83f47f2ba13de9df/sess_46efc2965b4f302a410807e2/整场直播.ts.partial",
+      "bytes": 247095920,
+      "mtime": "2026-08-31T10:00:48.133035+00:00",
+      "db": {
+        "object_id": "session_77077e2a0aad2b73a21048f81c365a65",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_83f47f2ba13de9df/sess_b3052b13e6c2ddd582071f0d/整场直播.part01.refresh0001.ts.partial",
+      "bytes": 132791168,
+      "mtime": "2026-08-30T23:04:52.512507+00:00",
+      "db": {
+        "object_id": "session_c59f5abd9f4543a58a7314759656e5c3",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_83f47f2ba13de9df/sess_b3052b13e6c2ddd582071f0d/整场直播.part01.refresh0002.ts.partial",
+      "bytes": 124735932,
+      "mtime": "2026-08-30T23:19:37.318123+00:00",
+      "db": {
+        "object_id": "session_c59f5abd9f4543a58a7314759656e5c3",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_83f47f2ba13de9df/sess_b3052b13e6c2ddd582071f0d/整场直播.part01.ts.partial",
+      "bytes": 246001384,
+      "mtime": "2026-08-30T22:49:48.305187+00:00",
+      "db": {
+        "object_id": "session_c59f5abd9f4543a58a7314759656e5c3",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_83f47f2ba13de9df/sess_b3052b13e6c2ddd582071f0d/整场直播.ts.partial",
+      "bytes": 246578544,
+      "mtime": "2026-08-30T22:15:00.144338+00:00",
+      "db": {
+        "object_id": "session_c59f5abd9f4543a58a7314759656e5c3",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_83f47f2ba13de9df/sess_b860b776463f6739ba778549/整场直播.refresh0001.ts.partial",
+      "bytes": 248801080,
+      "mtime": "2026-08-31T05:15:57.874454+00:00",
+      "db": {
+        "object_id": "session_d45766e0a064c037a14abe044de3c551",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_83f47f2ba13de9df/sess_b860b776463f6739ba778549/整场直播.refresh0002.ts.partial",
+      "bytes": 247329604,
+      "mtime": "2026-08-31T05:30:55.973048+00:00",
+      "db": {
+        "object_id": "session_d45766e0a064c037a14abe044de3c551",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_83f47f2ba13de9df/sess_b860b776463f6739ba778549/整场直播.refresh0003.ts.partial",
+      "bytes": 247401608,
+      "mtime": "2026-08-31T05:45:53.991731+00:00",
+      "db": {
+        "object_id": "session_d45766e0a064c037a14abe044de3c551",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_83f47f2ba13de9df/sess_b860b776463f6739ba778549/整场直播.refresh0004.ts.partial",
+      "bytes": 133363252,
+      "mtime": "2026-08-31T06:00:56.171400+00:00",
+      "db": {
+        "object_id": "session_d45766e0a064c037a14abe044de3c551",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_83f47f2ba13de9df/sess_b860b776463f6739ba778549/整场直播.refresh0005.ts.partial",
+      "bytes": 92695092,
+      "mtime": "2026-08-31T06:11:38.676103+00:00",
+      "db": {
+        "object_id": "session_d45766e0a064c037a14abe044de3c551",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_83f47f2ba13de9df/sess_b860b776463f6739ba778549/整场直播.ts.partial",
+      "bytes": 247132204,
+      "mtime": "2026-08-31T05:00:59.942505+00:00",
+      "db": {
+        "object_id": "session_d45766e0a064c037a14abe044de3c551",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_86bb728a51564fb6/sess_13c603f1669f8fb361112924/整场直播.refresh0001.ts.partial",
+      "bytes": 197917376,
+      "mtime": "2026-08-31T09:37:53.483255+00:00",
+      "db": {
+        "object_id": "session_4d28cc24cabd0115356f092e859e88af",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_86bb728a51564fb6/sess_13c603f1669f8fb361112924/整场直播.refresh0002.ts.partial",
+      "bytes": 197878648,
+      "mtime": "2026-08-31T09:52:53.713459+00:00",
+      "db": {
+        "object_id": "session_4d28cc24cabd0115356f092e859e88af",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_86bb728a51564fb6/sess_13c603f1669f8fb361112924/整场直播.refresh0003.ts.partial",
+      "bytes": 217532356,
+      "mtime": "2026-08-31T10:07:53.153672+00:00",
+      "db": {
+        "object_id": "session_4d28cc24cabd0115356f092e859e88af",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_86bb728a51564fb6/sess_13c603f1669f8fb361112924/整场直播.refresh0004.ts.partial",
+      "bytes": 224919552,
+      "mtime": "2026-08-31T10:21:26.994162+00:00",
+      "db": {
+        "object_id": "session_4d28cc24cabd0115356f092e859e88af",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_86bb728a51564fb6/sess_13c603f1669f8fb361112924/整场直播.ts.partial",
+      "bytes": 197143004,
+      "mtime": "2026-08-31T09:22:53.341857+00:00",
+      "db": {
+        "object_id": "session_4d28cc24cabd0115356f092e859e88af",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_8e61cc2464a297e6/sess_203e5dd45f0860c6a71f75db/整场直播.refresh0001.ts.partial",
+      "bytes": 245532136,
+      "mtime": "2026-08-31T00:34:38.994920+00:00",
+      "db": {
+        "object_id": "session_b8bc6ae189c11676c8e6e980a54d80b1",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "COMPLETE",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_8e61cc2464a297e6/sess_203e5dd45f0860c6a71f75db/整场直播.refresh0002.ts.partial",
+      "bytes": 241524352,
+      "mtime": "2026-08-31T00:49:36.970183+00:00",
+      "db": {
+        "object_id": "session_b8bc6ae189c11676c8e6e980a54d80b1",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "COMPLETE",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_8e61cc2464a297e6/sess_203e5dd45f0860c6a71f75db/整场直播.refresh0003.ts.partial",
+      "bytes": 238071356,
+      "mtime": "2026-08-31T01:04:35.040821+00:00",
+      "db": {
+        "object_id": "session_b8bc6ae189c11676c8e6e980a54d80b1",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "COMPLETE",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_8e61cc2464a297e6/sess_203e5dd45f0860c6a71f75db/整场直播.refresh0004.ts.partial",
+      "bytes": 241902420,
+      "mtime": "2026-08-31T01:19:33.113913+00:00",
+      "db": {
+        "object_id": "session_b8bc6ae189c11676c8e6e980a54d80b1",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "COMPLETE",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_8e61cc2464a297e6/sess_203e5dd45f0860c6a71f75db/整场直播.refresh0005.ts.partial",
+      "bytes": 191214800,
+      "mtime": "2026-08-31T01:32:44.155272+00:00",
+      "db": {
+        "object_id": "session_b8bc6ae189c11676c8e6e980a54d80b1",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "COMPLETE",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_8e61cc2464a297e6/sess_203e5dd45f0860c6a71f75db/整场直播.ts.partial",
+      "bytes": 250756656,
+      "mtime": "2026-08-31T00:19:40.876451+00:00",
+      "db": {
+        "object_id": "session_b8bc6ae189c11676c8e6e980a54d80b1",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "COMPLETE",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_8fa98f187cbe460f/sess_1efccafccbfa12769dae1d6d/整场直播.refresh0001.ts.partial",
+      "bytes": 253334888,
+      "mtime": "2026-08-31T06:15:55.138493+00:00",
+      "db": {
+        "object_id": "session_c1a9112ceceab04314183356df3281d2",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_8fa98f187cbe460f/sess_1efccafccbfa12769dae1d6d/整场直播.refresh0002.ts.partial",
+      "bytes": 253258748,
+      "mtime": "2026-08-31T06:30:55.421012+00:00",
+      "db": {
+        "object_id": "session_c1a9112ceceab04314183356df3281d2",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_8fa98f187cbe460f/sess_1efccafccbfa12769dae1d6d/整场直播.refresh0003.ts.partial",
+      "bytes": 253162116,
+      "mtime": "2026-08-31T06:45:56.202632+00:00",
+      "db": {
+        "object_id": "session_c1a9112ceceab04314183356df3281d2",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_8fa98f187cbe460f/sess_1efccafccbfa12769dae1d6d/整场直播.refresh0004.ts.partial",
+      "bytes": 14036268,
+      "mtime": "2026-08-31T06:47:35.786144+00:00",
+      "db": {
+        "object_id": "session_c1a9112ceceab04314183356df3281d2",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_8fa98f187cbe460f/sess_1efccafccbfa12769dae1d6d/整场直播.ts.partial",
+      "bytes": 252957948,
+      "mtime": "2026-08-31T06:00:55.066824+00:00",
+      "db": {
+        "object_id": "session_c1a9112ceceab04314183356df3281d2",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_8fa98f187cbe460f/sess_8c506f1f3a4265d4cb143e17/整场直播.refresh0001.ts.partial",
+      "bytes": 164128888,
+      "mtime": "2026-08-31T02:12:18.275267+00:00",
+      "db": {
+        "object_id": "session_fd2cff0f358ad635bb5715bb9c8559b9",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_8fa98f187cbe460f/sess_8c506f1f3a4265d4cb143e17/整场直播.refresh0002.ts.partial",
+      "bytes": 163627304,
+      "mtime": "2026-08-31T02:27:16.117622+00:00",
+      "db": {
+        "object_id": "session_fd2cff0f358ad635bb5715bb9c8559b9",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_8fa98f187cbe460f/sess_8c506f1f3a4265d4cb143e17/整场直播.refresh0003.ts.partial",
+      "bytes": 246997032,
+      "mtime": "2026-08-31T02:42:14.147628+00:00",
+      "db": {
+        "object_id": "session_fd2cff0f358ad635bb5715bb9c8559b9",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_8fa98f187cbe460f/sess_8c506f1f3a4265d4cb143e17/整场直播.refresh0004.ts.partial",
+      "bytes": 18874368,
+      "mtime": "2026-08-31T02:43:06.169646+00:00",
+      "db": {
+        "object_id": "session_fd2cff0f358ad635bb5715bb9c8559b9",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_8fa98f187cbe460f/sess_8c506f1f3a4265d4cb143e17/整场直播.ts.partial",
+      "bytes": 183551920,
+      "mtime": "2026-08-31T01:57:18.096326+00:00",
+      "db": {
+        "object_id": "session_fd2cff0f358ad635bb5715bb9c8559b9",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c1f0dca03af0c0/sess_28ccca5e31c07ad417f44398/整场直播.refresh0001.ts.partial",
+      "bytes": 136649492,
+      "mtime": "2026-08-30T22:37:50.772831+00:00",
+      "db": {
+        "object_id": "session_c5134beeeb75841084173752e0d90e61",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c1f0dca03af0c0/sess_28ccca5e31c07ad417f44398/整场直播.refresh0002.ts.partial",
+      "bytes": 136650620,
+      "mtime": "2026-08-30T22:52:48.931297+00:00",
+      "db": {
+        "object_id": "session_c5134beeeb75841084173752e0d90e61",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c1f0dca03af0c0/sess_28ccca5e31c07ad417f44398/整场直播.refresh0003.ts.partial",
+      "bytes": 75321636,
+      "mtime": "2026-08-30T23:03:53.156876+00:00",
+      "db": {
+        "object_id": "session_c5134beeeb75841084173752e0d90e61",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c1f0dca03af0c0/sess_28ccca5e31c07ad417f44398/整场直播.ts.partial",
+      "bytes": 136328012,
+      "mtime": "2026-08-30T22:22:50.632658+00:00",
+      "db": {
+        "object_id": "session_c5134beeeb75841084173752e0d90e61",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c1f0dca03af0c0/sess_ef60460d43d9e4796a2e76f0/整场直播.refresh0001.ts.partial",
+      "bytes": 249066160,
+      "mtime": "2026-08-31T00:00:18.728983+00:00",
+      "db": {
+        "object_id": "session_5776e5b5f1c4bb52a0b4fc40364031c6",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c1f0dca03af0c0/sess_ef60460d43d9e4796a2e76f0/整场直播.refresh0002.ts.partial",
+      "bytes": 248854848,
+      "mtime": "2026-08-31T00:15:16.684770+00:00",
+      "db": {
+        "object_id": "session_5776e5b5f1c4bb52a0b4fc40364031c6",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c1f0dca03af0c0/sess_ef60460d43d9e4796a2e76f0/整场直播.refresh0003.ts.partial",
+      "bytes": 83683312,
+      "mtime": "2026-08-31T00:25:37.917578+00:00",
+      "db": {
+        "object_id": "session_5776e5b5f1c4bb52a0b4fc40364031c6",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c1f0dca03af0c0/sess_ef60460d43d9e4796a2e76f0/整场直播.ts.partial",
+      "bytes": 249002052,
+      "mtime": "2026-08-30T23:45:20.701749+00:00",
+      "db": {
+        "object_id": "session_5776e5b5f1c4bb52a0b4fc40364031c6",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c1f0dca03af0c0/sess_f17e95df492fe42a397100e0/整场直播.refresh0001.ts.partial",
+      "bytes": 225407676,
+      "mtime": "2026-08-31T01:34:29.997568+00:00",
+      "db": {
+        "object_id": "session_776972a7da694cbee3a35942e4b8e15d",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c1f0dca03af0c0/sess_f17e95df492fe42a397100e0/整场直播.refresh0002.ts.partial",
+      "bytes": 221134624,
+      "mtime": "2026-08-31T01:49:29.511065+00:00",
+      "db": {
+        "object_id": "session_776972a7da694cbee3a35942e4b8e15d",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c1f0dca03af0c0/sess_f17e95df492fe42a397100e0/整场直播.refresh0003.ts.partial",
+      "bytes": 211008004,
+      "mtime": "2026-08-31T02:04:30.537826+00:00",
+      "db": {
+        "object_id": "session_776972a7da694cbee3a35942e4b8e15d",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c1f0dca03af0c0/sess_f17e95df492fe42a397100e0/整场直播.refresh0004.ts.partial",
+      "bytes": 4752076,
+      "mtime": "2026-08-31T02:05:21.216999+00:00",
+      "db": {
+        "object_id": "session_776972a7da694cbee3a35942e4b8e15d",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c1f0dca03af0c0/sess_f17e95df492fe42a397100e0/整场直播.ts.partial",
+      "bytes": 232968848,
+      "mtime": "2026-08-31T01:19:30.140457+00:00",
+      "db": {
+        "object_id": "session_776972a7da694cbee3a35942e4b8e15d",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c8c4a8ea998e6e/sess_08e4188b1bcf94410ad2d3af/整场直播.refresh0001.ts.partial",
+      "bytes": 200050800,
+      "mtime": "2026-08-31T09:08:51.879721+00:00",
+      "db": {
+        "object_id": "session_b23192d5f8285213e9943c42cb905d44",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c8c4a8ea998e6e/sess_08e4188b1bcf94410ad2d3af/整场直播.refresh0002.ts.partial",
+      "bytes": 199219464,
+      "mtime": "2026-08-31T09:23:49.927758+00:00",
+      "db": {
+        "object_id": "session_b23192d5f8285213e9943c42cb905d44",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c8c4a8ea998e6e/sess_08e4188b1bcf94410ad2d3af/整场直播.refresh0003.ts.partial",
+      "bytes": 212002524,
+      "mtime": "2026-08-31T09:38:50.010819+00:00",
+      "db": {
+        "object_id": "session_b23192d5f8285213e9943c42cb905d44",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c8c4a8ea998e6e/sess_08e4188b1bcf94410ad2d3af/整场直播.refresh0004.ts.partial",
+      "bytes": 237764608,
+      "mtime": "2026-08-31T09:52:49.872265+00:00",
+      "db": {
+        "object_id": "session_b23192d5f8285213e9943c42cb905d44",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c8c4a8ea998e6e/sess_08e4188b1bcf94410ad2d3af/整场直播.ts.partial",
+      "bytes": 192734028,
+      "mtime": "2026-08-31T08:53:53.864594+00:00",
+      "db": {
+        "object_id": "session_b23192d5f8285213e9943c42cb905d44",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c8c4a8ea998e6e/sess_45d04a07827993aaee08df3d/整场直播.refresh0001.ts.partial",
+      "bytes": 65877080,
+      "mtime": "2026-08-30T13:09:37.246905+00:00",
+      "db": {
+        "object_id": "session_c21d1f47b1546038aca956d96dca5e9a",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c8c4a8ea998e6e/sess_45d04a07827993aaee08df3d/整场直播.refresh0002.ts.partial",
+      "bytes": 65435092,
+      "mtime": "2026-08-30T13:24:35.925516+00:00",
+      "db": {
+        "object_id": "session_c21d1f47b1546038aca956d96dca5e9a",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c8c4a8ea998e6e/sess_45d04a07827993aaee08df3d/整场直播.refresh0003.ts.partial",
+      "bytes": 81949200,
+      "mtime": "2026-08-30T13:39:32.969737+00:00",
+      "db": {
+        "object_id": "session_c21d1f47b1546038aca956d96dca5e9a",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c8c4a8ea998e6e/sess_45d04a07827993aaee08df3d/整场直播.refresh0004.ts.partial",
+      "bytes": 117358624,
+      "mtime": "2026-08-30T13:53:25.285981+00:00",
+      "db": {
+        "object_id": "session_c21d1f47b1546038aca956d96dca5e9a",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c8c4a8ea998e6e/sess_45d04a07827993aaee08df3d/整场直播.ts.partial",
+      "bytes": 73351396,
+      "mtime": "2026-08-30T12:54:36.828112+00:00",
+      "db": {
+        "object_id": "session_c21d1f47b1546038aca956d96dca5e9a",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c8c4a8ea998e6e/sess_52f0e54fe4dbc0302b2b4e9e/整场直播.refresh0001.ts.partial",
+      "bytes": 79713504,
+      "mtime": "2026-08-31T13:10:07.011660+00:00",
+      "db": {
+        "object_id": "session_7c1f9d35128c28d8b374016b4c0233f6",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c8c4a8ea998e6e/sess_52f0e54fe4dbc0302b2b4e9e/整场直播.refresh0002.ts.partial",
+      "bytes": 79747532,
+      "mtime": "2026-08-31T13:25:05.325914+00:00",
+      "db": {
+        "object_id": "session_7c1f9d35128c28d8b374016b4c0233f6",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c8c4a8ea998e6e/sess_52f0e54fe4dbc0302b2b4e9e/整场直播.refresh0003.ts.partial",
+      "bytes": 91601684,
+      "mtime": "2026-08-31T13:40:03.237857+00:00",
+      "db": {
+        "object_id": "session_7c1f9d35128c28d8b374016b4c0233f6",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c8c4a8ea998e6e/sess_52f0e54fe4dbc0302b2b4e9e/整场直播.refresh0004.ts.partial",
+      "bytes": 127139840,
+      "mtime": "2026-08-31T13:54:15.273334+00:00",
+      "db": {
+        "object_id": "session_7c1f9d35128c28d8b374016b4c0233f6",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c8c4a8ea998e6e/sess_52f0e54fe4dbc0302b2b4e9e/整场直播.ts.partial",
+      "bytes": 79882140,
+      "mtime": "2026-08-31T12:55:09.024527+00:00",
+      "db": {
+        "object_id": "session_7c1f9d35128c28d8b374016b4c0233f6",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_9664f575b6878d0d/sess_4c26995ec8700ef75d908179/整场直播.refresh0001.ts.partial",
+      "bytes": 189785060,
+      "mtime": "2026-08-31T00:36:12.613446+00:00",
+      "db": {
+        "object_id": "session_2acc12237bd2f123fa83ecef362aa375",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "COMPLETE",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_9664f575b6878d0d/sess_4c26995ec8700ef75d908179/整场直播.refresh0002.ts.partial",
+      "bytes": 200780052,
+      "mtime": "2026-08-31T00:51:16.850227+00:00",
+      "db": {
+        "object_id": "session_2acc12237bd2f123fa83ecef362aa375",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "COMPLETE",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_9664f575b6878d0d/sess_4c26995ec8700ef75d908179/整场直播.refresh0003.ts.partial",
+      "bytes": 185452412,
+      "mtime": "2026-08-31T01:06:14.830035+00:00",
+      "db": {
+        "object_id": "session_2acc12237bd2f123fa83ecef362aa375",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "COMPLETE",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_9664f575b6878d0d/sess_4c26995ec8700ef75d908179/整场直播.refresh0004.ts.partial",
+      "bytes": 189576756,
+      "mtime": "2026-08-31T01:21:12.951879+00:00",
+      "db": {
+        "object_id": "session_2acc12237bd2f123fa83ecef362aa375",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "COMPLETE",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_9664f575b6878d0d/sess_4c26995ec8700ef75d908179/整场直播.refresh0005.ts.partial",
+      "bytes": 195401560,
+      "mtime": "2026-08-31T01:36:10.876117+00:00",
+      "db": {
+        "object_id": "session_2acc12237bd2f123fa83ecef362aa375",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "COMPLETE",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_9664f575b6878d0d/sess_4c26995ec8700ef75d908179/整场直播.refresh0006.ts.partial",
+      "bytes": 102696880,
+      "mtime": "2026-08-31T01:46:26.895085+00:00",
+      "db": {
+        "object_id": "session_2acc12237bd2f123fa83ecef362aa375",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "COMPLETE",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_9664f575b6878d0d/sess_4c26995ec8700ef75d908179/整场直播.ts.partial",
+      "bytes": 189342320,
+      "mtime": "2026-08-31T00:21:14.360494+00:00",
+      "db": {
+        "object_id": "session_2acc12237bd2f123fa83ecef362aa375",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "COMPLETE",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_986a90186541e9b0/sess_3cfaa9b3868260f12f334d09/整场直播.refresh0001.ts.partial",
+      "bytes": 134654060,
+      "mtime": "2026-08-31T10:38:38.328283+00:00",
+      "db": {
+        "object_id": "session_ff4637dbff8c95982e9829a63f77f8f0",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_986a90186541e9b0/sess_3cfaa9b3868260f12f334d09/整场直播.refresh0002.ts.partial",
+      "bytes": 134576228,
+      "mtime": "2026-08-31T10:53:36.636583+00:00",
+      "db": {
+        "object_id": "session_ff4637dbff8c95982e9829a63f77f8f0",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_986a90186541e9b0/sess_3cfaa9b3868260f12f334d09/整场直播.refresh0003.ts.partial",
+      "bytes": 134735652,
+      "mtime": "2026-08-31T11:08:38.620607+00:00",
+      "db": {
+        "object_id": "session_ff4637dbff8c95982e9829a63f77f8f0",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_986a90186541e9b0/sess_3cfaa9b3868260f12f334d09/整场直播.refresh0004.ts.partial",
+      "bytes": 134825704,
+      "mtime": "2026-08-31T11:23:36.684815+00:00",
+      "db": {
+        "object_id": "session_ff4637dbff8c95982e9829a63f77f8f0",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_986a90186541e9b0/sess_3cfaa9b3868260f12f334d09/整场直播.refresh0005.ts.partial",
+      "bytes": 73400320,
+      "mtime": "2026-08-31T11:31:45.085900+00:00",
+      "db": {
+        "object_id": "session_ff4637dbff8c95982e9829a63f77f8f0",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_986a90186541e9b0/sess_3cfaa9b3868260f12f334d09/整场直播.ts.partial",
+      "bytes": 222498940,
+      "mtime": "2026-08-31T10:23:38.644550+00:00",
+      "db": {
+        "object_id": "session_ff4637dbff8c95982e9829a63f77f8f0",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_af34eac1ff917a9a/sess_d36c58731f3d1866aca81092/整场直播.refresh0001.ts.partial",
+      "bytes": 130766596,
+      "mtime": "2026-08-31T07:07:32.723877+00:00",
+      "db": {
+        "object_id": "session_9dba0cdabf4a7e2e7fd435df165cfe50",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_af34eac1ff917a9a/sess_d36c58731f3d1866aca81092/整场直播.refresh0002.ts.partial",
+      "bytes": 131262728,
+      "mtime": "2026-08-31T07:22:32.633156+00:00",
+      "db": {
+        "object_id": "session_9dba0cdabf4a7e2e7fd435df165cfe50",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_af34eac1ff917a9a/sess_d36c58731f3d1866aca81092/整场直播.refresh0003.ts.partial",
+      "bytes": 131439448,
+      "mtime": "2026-08-31T07:37:32.922801+00:00",
+      "db": {
+        "object_id": "session_9dba0cdabf4a7e2e7fd435df165cfe50",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_af34eac1ff917a9a/sess_d36c58731f3d1866aca81092/整场直播.refresh0004.ts.partial",
+      "bytes": 101968756,
+      "mtime": "2026-08-31T07:52:06.182180+00:00",
+      "db": {
+        "object_id": "session_9dba0cdabf4a7e2e7fd435df165cfe50",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_af34eac1ff917a9a/sess_d36c58731f3d1866aca81092/整场直播.ts.partial",
+      "bytes": 130097692,
+      "mtime": "2026-08-31T06:52:34.607613+00:00",
+      "db": {
+        "object_id": "session_9dba0cdabf4a7e2e7fd435df165cfe50",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_c053e231c459ecda/sess_2b91770ceef87d7cfd9718a7/整场直播.refresh0001.ts.partial",
+      "bytes": 139449376,
+      "mtime": "2026-08-31T07:27:18.669385+00:00",
+      "db": {
+        "object_id": "session_50c15a6f26162aa6ab18e04864b9a832",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_c053e231c459ecda/sess_2b91770ceef87d7cfd9718a7/整场直播.refresh0002.ts.partial",
+      "bytes": 139554468,
+      "mtime": "2026-08-31T07:42:16.632664+00:00",
+      "db": {
+        "object_id": "session_50c15a6f26162aa6ab18e04864b9a832",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_c053e231c459ecda/sess_2b91770ceef87d7cfd9718a7/整场直播.refresh0003.ts.partial",
+      "bytes": 139584924,
+      "mtime": "2026-08-31T07:57:14.770258+00:00",
+      "db": {
+        "object_id": "session_50c15a6f26162aa6ab18e04864b9a832",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_c053e231c459ecda/sess_2b91770ceef87d7cfd9718a7/整场直播.refresh0004.ts.partial",
+      "bytes": 139555032,
+      "mtime": "2026-08-31T08:12:12.678324+00:00",
+      "db": {
+        "object_id": "session_50c15a6f26162aa6ab18e04864b9a832",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_c053e231c459ecda/sess_2b91770ceef87d7cfd9718a7/整场直播.refresh0005.ts.partial",
+      "bytes": 139632488,
+      "mtime": "2026-08-31T08:27:12.842271+00:00",
+      "db": {
+        "object_id": "session_50c15a6f26162aa6ab18e04864b9a832",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_c053e231c459ecda/sess_2b91770ceef87d7cfd9718a7/整场直播.refresh0006.ts.partial",
+      "bytes": 28093968,
+      "mtime": "2026-08-31T08:32:51.948551+00:00",
+      "db": {
+        "object_id": "session_50c15a6f26162aa6ab18e04864b9a832",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_c053e231c459ecda/sess_2b91770ceef87d7cfd9718a7/整场直播.ts.partial",
+      "bytes": 139464040,
+      "mtime": "2026-08-31T07:12:20.850496+00:00",
+      "db": {
+        "object_id": "session_50c15a6f26162aa6ab18e04864b9a832",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_c053e231c459ecda/sess_3eb3f8bf26835f37c2318d1a/整场直播.refresh0001.ts.partial",
+      "bytes": 260506900,
+      "mtime": "2026-08-31T03:57:15.297374+00:00",
+      "db": {
+        "object_id": "session_5987394586e12113772e04383377a329",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "COMPLETE",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_c053e231c459ecda/sess_3eb3f8bf26835f37c2318d1a/整场直播.refresh0002.ts.partial",
+      "bytes": 260547320,
+      "mtime": "2026-08-31T04:12:15.260455+00:00",
+      "db": {
+        "object_id": "session_5987394586e12113772e04383377a329",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "COMPLETE",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_c053e231c459ecda/sess_3eb3f8bf26835f37c2318d1a/整场直播.refresh0003.ts.partial",
+      "bytes": 260816912,
+      "mtime": "2026-08-31T04:27:13.283947+00:00",
+      "db": {
+        "object_id": "session_5987394586e12113772e04383377a329",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "COMPLETE",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_c053e231c459ecda/sess_3eb3f8bf26835f37c2318d1a/整场直播.refresh0004.ts.partial",
+      "bytes": 260470804,
+      "mtime": "2026-08-31T04:42:11.260782+00:00",
+      "db": {
+        "object_id": "session_5987394586e12113772e04383377a329",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "COMPLETE",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_c053e231c459ecda/sess_3eb3f8bf26835f37c2318d1a/整场直播.refresh0005.ts.partial",
+      "bytes": 260399740,
+      "mtime": "2026-08-31T04:57:09.307009+00:00",
+      "db": {
+        "object_id": "session_5987394586e12113772e04383377a329",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "COMPLETE",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_c053e231c459ecda/sess_3eb3f8bf26835f37c2318d1a/整场直播.refresh0006.ts.partial",
+      "bytes": 132786280,
+      "mtime": "2026-08-31T05:05:08.165118+00:00",
+      "db": {
+        "object_id": "session_5987394586e12113772e04383377a329",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "COMPLETE",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_c053e231c459ecda/sess_3eb3f8bf26835f37c2318d1a/整场直播.ts.partial",
+      "bytes": 260721220,
+      "mtime": "2026-08-31T03:42:17.266411+00:00",
+      "db": {
+        "object_id": "session_5987394586e12113772e04383377a329",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "COMPLETE",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_c59658a52d6ad5a7/sess_90409f2eb76bb8754dbf56d7/整场直播.refresh0001.ts.partial",
+      "bytes": 256107324,
+      "mtime": "2026-08-30T14:59:37.660923+00:00",
+      "db": {
+        "object_id": "session_808c5516d0916b2ecfe7aac883959418",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_c59658a52d6ad5a7/sess_90409f2eb76bb8754dbf56d7/整场直播.refresh0002.ts.partial",
+      "bytes": 255944328,
+      "mtime": "2026-08-30T15:14:37.615327+00:00",
+      "db": {
+        "object_id": "session_808c5516d0916b2ecfe7aac883959418",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_c59658a52d6ad5a7/sess_90409f2eb76bb8754dbf56d7/整场直播.refresh0003.ts.partial",
+      "bytes": 256053556,
+      "mtime": "2026-08-30T15:29:47.710623+00:00",
+      "db": {
+        "object_id": "session_808c5516d0916b2ecfe7aac883959418",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_c59658a52d6ad5a7/sess_90409f2eb76bb8754dbf56d7/整场直播.refresh0004.ts.partial",
+      "bytes": 256057316,
+      "mtime": "2026-08-30T15:44:47.564412+00:00",
+      "db": {
+        "object_id": "session_808c5516d0916b2ecfe7aac883959418",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_c59658a52d6ad5a7/sess_90409f2eb76bb8754dbf56d7/整场直播.refresh0005.ts.partial",
+      "bytes": 256056564,
+      "mtime": "2026-08-30T15:59:49.601670+00:00",
+      "db": {
+        "object_id": "session_808c5516d0916b2ecfe7aac883959418",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_c59658a52d6ad5a7/sess_90409f2eb76bb8754dbf56d7/整场直播.refresh0006.ts.partial",
+      "bytes": 256059948,
+      "mtime": "2026-08-30T16:14:57.636353+00:00",
+      "db": {
+        "object_id": "session_808c5516d0916b2ecfe7aac883959418",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_c59658a52d6ad5a7/sess_90409f2eb76bb8754dbf56d7/整场直播.refresh0007.ts.partial",
+      "bytes": 150069872,
+      "mtime": "2026-08-30T16:24:39.998001+00:00",
+      "db": {
+        "object_id": "session_808c5516d0916b2ecfe7aac883959418",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_c59658a52d6ad5a7/sess_90409f2eb76bb8754dbf56d7/整场直播.ts.partial",
+      "bytes": 256081192,
+      "mtime": "2026-08-30T14:44:39.642253+00:00",
+      "db": {
+        "object_id": "session_808c5516d0916b2ecfe7aac883959418",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d0fa112503e2aabc/sess_09c668504d013ddcced8e429/整场直播.refresh0001.ts.partial",
+      "bytes": 137481956,
+      "mtime": "2026-08-30T14:32:21.158223+00:00",
+      "db": {
+        "object_id": "session_e5facf61caaf58cec588cedbaf0bd2c7",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d0fa112503e2aabc/sess_09c668504d013ddcced8e429/整场直播.refresh0002.ts.partial",
+      "bytes": 137609232,
+      "mtime": "2026-08-30T14:47:20.404517+00:00",
+      "db": {
+        "object_id": "session_e5facf61caaf58cec588cedbaf0bd2c7",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d0fa112503e2aabc/sess_09c668504d013ddcced8e429/整场直播.refresh0003.ts.partial",
+      "bytes": 80720808,
+      "mtime": "2026-08-30T14:58:45.131194+00:00",
+      "db": {
+        "object_id": "session_e5facf61caaf58cec588cedbaf0bd2c7",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d0fa112503e2aabc/sess_09c668504d013ddcced8e429/整场直播.ts.partial",
+      "bytes": 136831288,
+      "mtime": "2026-08-30T14:17:21.061659+00:00",
+      "db": {
+        "object_id": "session_e5facf61caaf58cec588cedbaf0bd2c7",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d0fa112503e2aabc/sess_578219d182e6b0fd3eea362e/整场直播.refresh0001.ts.partial",
+      "bytes": 62177052,
+      "mtime": "2026-08-31T14:23:26.111631+00:00",
+      "db": {
+        "object_id": "session_2985bdb1b77a6fe679b44489b49779e3",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d0fa112503e2aabc/sess_578219d182e6b0fd3eea362e/整场直播.ts.partial",
+      "bytes": 210146400,
+      "mtime": "2026-08-31T14:18:23.349883+00:00",
+      "db": {
+        "object_id": "session_2985bdb1b77a6fe679b44489b49779e3",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d0fa112503e2aabc/sess_e2e9bbf48468ef24019bff6f/整场直播.refresh0001.ts.partial",
+      "bytes": 205885568,
+      "mtime": "2026-08-31T07:30:57.082698+00:00",
+      "db": {
+        "object_id": "session_00eaa5d70ce4b6d1f631e9c51c7d2553",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "COMPLETE",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d0fa112503e2aabc/sess_e2e9bbf48468ef24019bff6f/整场直播.refresh0002.ts.partial",
+      "bytes": 206616700,
+      "mtime": "2026-08-31T07:45:56.989263+00:00",
+      "db": {
+        "object_id": "session_00eaa5d70ce4b6d1f631e9c51c7d2553",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "COMPLETE",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d0fa112503e2aabc/sess_e2e9bbf48468ef24019bff6f/整场直播.refresh0003.ts.partial",
+      "bytes": 153894544,
+      "mtime": "2026-08-31T07:58:03.965484+00:00",
+      "db": {
+        "object_id": "session_00eaa5d70ce4b6d1f631e9c51c7d2553",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "COMPLETE",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d0fa112503e2aabc/sess_e2e9bbf48468ef24019bff6f/整场直播.ts.partial",
+      "bytes": 205822024,
+      "mtime": "2026-08-31T07:15:58.662221+00:00",
+      "db": {
+        "object_id": "session_00eaa5d70ce4b6d1f631e9c51c7d2553",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "COMPLETE",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d84cba350eb545bf/sess_1089b9ba5fa1fb9b6cc7f13b/整场直播.refresh0001.ts.partial",
+      "bytes": 251463348,
+      "mtime": "2026-08-30T12:15:45.660694+00:00",
+      "db": {
+        "object_id": "session_db94c18a7e67a716c2451a3e8646df8b",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d84cba350eb545bf/sess_1089b9ba5fa1fb9b6cc7f13b/整场直播.refresh0002.ts.partial",
+      "bytes": 251516364,
+      "mtime": "2026-08-30T12:30:45.593319+00:00",
+      "db": {
+        "object_id": "session_db94c18a7e67a716c2451a3e8646df8b",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d84cba350eb545bf/sess_1089b9ba5fa1fb9b6cc7f13b/整场直播.refresh0003.ts.partial",
+      "bytes": 251315956,
+      "mtime": "2026-08-30T12:45:45.586946+00:00",
+      "db": {
+        "object_id": "session_db94c18a7e67a716c2451a3e8646df8b",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d84cba350eb545bf/sess_1089b9ba5fa1fb9b6cc7f13b/整场直播.refresh0004.ts.partial",
+      "bytes": 251251848,
+      "mtime": "2026-08-30T13:00:49.718086+00:00",
+      "db": {
+        "object_id": "session_db94c18a7e67a716c2451a3e8646df8b",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d84cba350eb545bf/sess_1089b9ba5fa1fb9b6cc7f13b/整场直播.refresh0005.ts.partial",
+      "bytes": 161882664,
+      "mtime": "2026-08-30T13:11:39.842522+00:00",
+      "db": {
+        "object_id": "session_db94c18a7e67a716c2451a3e8646df8b",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d84cba350eb545bf/sess_1089b9ba5fa1fb9b6cc7f13b/整场直播.ts.partial",
+      "bytes": 251320468,
+      "mtime": "2026-08-30T12:00:45.739199+00:00",
+      "db": {
+        "object_id": "session_db94c18a7e67a716c2451a3e8646df8b",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d84cba350eb545bf/sess_34252fbe0563dda4687b8610/整场直播.refresh0001.ts.partial",
+      "bytes": 256484076,
+      "mtime": "2026-08-31T04:46:32.513606+00:00",
+      "db": {
+        "object_id": "session_40cc42339a69b436a2e1fe5f713081b2",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d84cba350eb545bf/sess_34252fbe0563dda4687b8610/整场直播.refresh0002.ts.partial",
+      "bytes": 256259416,
+      "mtime": "2026-08-31T05:01:32.568238+00:00",
+      "db": {
+        "object_id": "session_40cc42339a69b436a2e1fe5f713081b2",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d84cba350eb545bf/sess_34252fbe0563dda4687b8610/整场直播.refresh0003.ts.partial",
+      "bytes": 256365824,
+      "mtime": "2026-08-31T05:16:30.544058+00:00",
+      "db": {
+        "object_id": "session_40cc42339a69b436a2e1fe5f713081b2",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d84cba350eb545bf/sess_34252fbe0563dda4687b8610/整场直播.refresh0004.ts.partial",
+      "bytes": 256246632,
+      "mtime": "2026-08-31T05:31:32.596581+00:00",
+      "db": {
+        "object_id": "session_40cc42339a69b436a2e1fe5f713081b2",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d84cba350eb545bf/sess_34252fbe0563dda4687b8610/整场直播.refresh0005.ts.partial",
+      "bytes": 90943684,
+      "mtime": "2026-08-31T05:38:22.510061+00:00",
+      "db": {
+        "object_id": "session_40cc42339a69b436a2e1fe5f713081b2",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d84cba350eb545bf/sess_34252fbe0563dda4687b8610/整场直播.ts.partial",
+      "bytes": 256418840,
+      "mtime": "2026-08-31T04:31:34.483085+00:00",
+      "db": {
+        "object_id": "session_40cc42339a69b436a2e1fe5f713081b2",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d84cba350eb545bf/sess_6c921286c333b33c5a2269f5/整场直播.refresh0001.ts.partial",
+      "bytes": 256645756,
+      "mtime": "2026-08-31T12:13:24.388586+00:00",
+      "db": {
+        "object_id": "session_38dd25725bc43a2e5edf72417d1d61b9",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d84cba350eb545bf/sess_6c921286c333b33c5a2269f5/整场直播.refresh0002.ts.partial",
+      "bytes": 256565668,
+      "mtime": "2026-08-31T12:28:22.463132+00:00",
+      "db": {
+        "object_id": "session_38dd25725bc43a2e5edf72417d1d61b9",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d84cba350eb545bf/sess_6c921286c333b33c5a2269f5/整场直播.refresh0003.ts.partial",
+      "bytes": 138018320,
+      "mtime": "2026-08-31T12:43:20.805226+00:00",
+      "db": {
+        "object_id": "session_38dd25725bc43a2e5edf72417d1d61b9",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d84cba350eb545bf/sess_6c921286c333b33c5a2269f5/整场直播.refresh0004.ts.partial",
+      "bytes": 256427864,
+      "mtime": "2026-08-31T12:58:20.486498+00:00",
+      "db": {
+        "object_id": "session_38dd25725bc43a2e5edf72417d1d61b9",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d84cba350eb545bf/sess_6c921286c333b33c5a2269f5/整场直播.refresh0005.ts.partial",
+      "bytes": 107963136,
+      "mtime": "2026-08-31T13:04:57.038373+00:00",
+      "db": {
+        "object_id": "session_38dd25725bc43a2e5edf72417d1d61b9",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d84cba350eb545bf/sess_6c921286c333b33c5a2269f5/整场直播.ts.partial",
+      "bytes": 256626392,
+      "mtime": "2026-08-31T11:58:26.322807+00:00",
+      "db": {
+        "object_id": "session_38dd25725bc43a2e5edf72417d1d61b9",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_da976e262ebf85ce/sess_ecc04488faa7cf3a5807e350/整场直播.refresh0001.ts.partial",
+      "bytes": 257208628,
+      "mtime": "2026-08-31T10:58:53.722757+00:00",
+      "db": {
+        "object_id": "session_5c5b9a7f6abee01da59589c90d41e39b",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_da976e262ebf85ce/sess_ecc04488faa7cf3a5807e350/整场直播.refresh0002.ts.partial",
+      "bytes": 256887900,
+      "mtime": "2026-08-31T11:13:51.812663+00:00",
+      "db": {
+        "object_id": "session_5c5b9a7f6abee01da59589c90d41e39b",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_da976e262ebf85ce/sess_ecc04488faa7cf3a5807e350/整场直播.refresh0003.ts.partial",
+      "bytes": 257385536,
+      "mtime": "2026-08-31T11:28:49.897168+00:00",
+      "db": {
+        "object_id": "session_5c5b9a7f6abee01da59589c90d41e39b",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_da976e262ebf85ce/sess_ecc04488faa7cf3a5807e350/整场直播.refresh0004.ts.partial",
+      "bytes": 257353388,
+      "mtime": "2026-08-31T11:43:50.045588+00:00",
+      "db": {
+        "object_id": "session_5c5b9a7f6abee01da59589c90d41e39b",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_da976e262ebf85ce/sess_ecc04488faa7cf3a5807e350/整场直播.refresh0005.ts.partial",
+      "bytes": 52428800,
+      "mtime": "2026-08-31T11:46:51.402194+00:00",
+      "db": {
+        "object_id": "session_5c5b9a7f6abee01da59589c90d41e39b",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_da976e262ebf85ce/sess_ecc04488faa7cf3a5807e350/整场直播.ts.partial",
+      "bytes": 257488372,
+      "mtime": "2026-08-31T10:43:55.568400+00:00",
+      "db": {
+        "object_id": "session_5c5b9a7f6abee01da59589c90d41e39b",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_e8f8785e8b29630c/sess_180bfa12dacf647106fc324e/整场直播.refresh0001.ts.partial",
+      "bytes": 252946104,
+      "mtime": "2026-08-30T13:51:12.580921+00:00",
+      "db": {
+        "object_id": "session_f941587f590eb58681a00688b1dfb5d1",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_e8f8785e8b29630c/sess_180bfa12dacf647106fc324e/整场直播.refresh0002.ts.partial",
+      "bytes": 252202188,
+      "mtime": "2026-08-30T14:06:12.579526+00:00",
+      "db": {
+        "object_id": "session_f941587f590eb58681a00688b1dfb5d1",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_e8f8785e8b29630c/sess_180bfa12dacf647106fc324e/整场直播.refresh0003.ts.partial",
+      "bytes": 249686748,
+      "mtime": "2026-08-30T14:21:14.580787+00:00",
+      "db": {
+        "object_id": "session_f941587f590eb58681a00688b1dfb5d1",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_e8f8785e8b29630c/sess_180bfa12dacf647106fc324e/整场直播.refresh0004.ts.partial",
+      "bytes": 248512124,
+      "mtime": "2026-08-30T14:36:16.557091+00:00",
+      "db": {
+        "object_id": "session_f941587f590eb58681a00688b1dfb5d1",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_e8f8785e8b29630c/sess_180bfa12dacf647106fc324e/整场直播.refresh0005.ts.partial",
+      "bytes": 135397788,
+      "mtime": "2026-08-30T14:45:35.877493+00:00",
+      "db": {
+        "object_id": "session_f941587f590eb58681a00688b1dfb5d1",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_e8f8785e8b29630c/sess_180bfa12dacf647106fc324e/整场直播.ts.partial",
+      "bytes": 252884628,
+      "mtime": "2026-08-30T13:35:50.724606+00:00",
+      "db": {
+        "object_id": "session_f941587f590eb58681a00688b1dfb5d1",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "PARTIAL",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_e8f8785e8b29630c/sess_30216d10982514c2af48d801/整场直播.refresh0001.ts.partial",
+      "bytes": 250377272,
+      "mtime": "2026-08-31T13:45:04.094756+00:00",
+      "db": {
+        "object_id": "session_e4b82c440b78af1d6a1561ea2b37d8f6",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "COMPLETE",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_e8f8785e8b29630c/sess_30216d10982514c2af48d801/整场直播.refresh0002.ts.partial",
+      "bytes": 251844612,
+      "mtime": "2026-08-31T14:00:02.111169+00:00",
+      "db": {
+        "object_id": "session_e4b82c440b78af1d6a1561ea2b37d8f6",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "COMPLETE",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_e8f8785e8b29630c/sess_30216d10982514c2af48d801/整场直播.refresh0003.ts.partial",
+      "bytes": 250325760,
+      "mtime": "2026-08-31T14:15:00.121647+00:00",
+      "db": {
+        "object_id": "session_e4b82c440b78af1d6a1561ea2b37d8f6",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "COMPLETE",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_e8f8785e8b29630c/sess_30216d10982514c2af48d801/整场直播.refresh0004.ts.partial",
+      "bytes": 248812736,
+      "mtime": "2026-08-31T14:29:58.100675+00:00",
+      "db": {
+        "object_id": "session_e4b82c440b78af1d6a1561ea2b37d8f6",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "COMPLETE",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_e8f8785e8b29630c/sess_30216d10982514c2af48d801/整场直播.refresh0005.ts.partial",
+      "bytes": 178301080,
+      "mtime": "2026-08-31T14:40:57.393584+00:00",
+      "db": {
+        "object_id": "session_e4b82c440b78af1d6a1561ea2b37d8f6",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "COMPLETE",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_e8f8785e8b29630c/sess_30216d10982514c2af48d801/整场直播.ts.partial",
+      "bytes": 252500544,
+      "mtime": "2026-08-31T13:30:06.257457+00:00",
+      "db": {
+        "object_id": "session_e4b82c440b78af1d6a1561ea2b37d8f6",
+        "session_status": "MEDIA_COMPLETE",
+        "completeness": "COMPLETE",
+        "job_status": "COMPLETE",
+        "pid": null,
+        "manifest_status": "VERIFIED"
+      }
+    }
+  ]
+}

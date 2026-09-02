@@ -1,0 +1,9 @@
+{
+  "status": "FAILED",
+  "attempt": 2,
+  "error_type": "JSONDecodeError",
+  "error_message": "Unterminated string starting at: line 846 column 7 (char 18344)",
+  "elapsed_seconds": 43.76,
+  "module": "v3_analysis_worker.request_analysis",
+  "checked_at": "2026-08-29T13:46:09.516379+00:00"
+}

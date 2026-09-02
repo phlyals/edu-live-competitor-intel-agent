@@ -1,0 +1,13 @@
+{
+  "audio_duration_seconds": null,
+  "transcript_total_chars": 0,
+  "covered_segments": [],
+  "gaps": [],
+  "coverage_rate": null,
+  "status": "UNCOMPUTABLE",
+  "message": "无法计算覆盖率：没有标记 FULL_SESSION 的整场转录，样本不能代表整场",
+  "session_id": "session_0923b62f50088b6401c06373fc916038",
+  "script": "check_transcription",
+  "checked_at": "2026-08-28T15:46:04.784221+00:00",
+  "error_code": "NO_FULL_TRANSCRIPT"
+}

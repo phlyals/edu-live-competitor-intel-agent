@@ -1,0 +1,4 @@
+142c5227fb65bc38d2efa2ecc6e061a1c67ab2902fb504e7d2e61f9bbc0c5a10  /Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-30-analysis-coverage-gate/staging/runtime/v3/test_v3_analysis_worker.py
+3ca62903d568219652274a06414176656388dd536beb092a647a2fdeeffd0e03  /Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-30-analysis-coverage-gate/staging/runtime/v3/v3_analysis_worker.py
+53cf0a7458c2bb69caaaa63e13e57d6f3eb408f4f7884c865916b6fcf95351e3  /Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-30-analysis-coverage-gate/staging/runtime/v3/v3_config.json
+86333ef446a8e9198637aebc99d0236c8c017936a930958bfd0397b6bf3ee862  /Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-30-analysis-coverage-gate/analysis-coverage-gate.patch

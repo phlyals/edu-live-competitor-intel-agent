@@ -1,0 +1,346 @@
+--- a/shared/avtranscribe/record_douyin_live.py
++++ b/shared/avtranscribe/record_douyin_live.py
+@@ -55,6 +55,71 @@
+ 
+ def redact_stream_urls(value: str) -> str:
+     return re.sub(r"https?://\S+", "<stream-url>", value or "")
++
++
++# Stable, non-sensitive diagnostics for FFmpeg stderr.  Raw signed URLs must
++# never be used as machine-readable error data.
++_FFMPEG_INTEGRITY_PATTERNS = (
++    ("STREAM_PREMATURE_END", re.compile(r"stream ends? prematurely|premature end", re.I)),
++    ("SEGMENT_SKIPPED", re.compile(r"failed too many times, skipping|skipping \d+ segments ahead, expired from playlists", re.I)),
++    ("SEGMENT_OPEN_FAILED", re.compile(r"failed to open segment", re.I)),
++    ("PLAYLIST_RELOAD_FAILED", re.compile(r"failed to reload playlist", re.I)),
++    ("INPUT_OPEN_FAILED", re.compile(r"error (?:when loading first segment|opening input(?: file| files)?)", re.I)),
++    ("DEMUX_IO_ERROR", re.compile(r"error during demuxing:\s*(?:input/output error|i/o error)", re.I)),
++    ("MUX_WRITE_ERROR", re.compile(r"error (?:writing|closing) (?:trailer|file)|av_interleaved_write_frame", re.I)),
++    ("INVALID_DATA", re.compile(r"invalid data found when processing input", re.I)),
++    ("PACKET_MISMATCH", re.compile(r"\bpacket mismatch\b", re.I)),
++    ("PACKET_CORRUPT", re.compile(r"\bpacket corrupt\b|\bcorrupt input packet\b", re.I)),
++    ("NON_MONOTONIC_DTS", re.compile(r"non[- ]monoton(?:ic|ous) dts", re.I)),
++    ("INVALID_TIMESTAMP_DROP", re.compile(r"\b(?:dts|pts)\b.*\binvalid dropping\b", re.I)),
++    ("TIMESTAMP_DISCONTINUITY", re.compile(r"\btimestamp discontinuity\b", re.I)),
++    ("EMPTY_SEGMENT", re.compile(r"\bempty segment\b", re.I)),
++    ("CODEC_PARAMETERS_MISSING", re.compile(r"could not find codec parameters", re.I)),
++    ("UNABLE_SEEK_PACKET", re.compile(r"unable to seek to the next packet", re.I)),
++)
++
++_FFMPEG_NETWORK_PATTERNS = (
++    ("HTTP_4XX", re.compile(r"http error 4\d\d|server returned 4\d\d", re.I)),
++    ("HTTP_5XX", re.compile(r"http error 5\d\d|server returned 5\d\d", re.I)),
++    ("NETWORK_TIMEOUT", re.compile(r"(?:operation )?timed out|timeout", re.I)),
++    ("DNS_FAILURE", re.compile(r"failed to resolve hostname|name or service not known|nodename nor servname provided", re.I)),
++    ("NETWORK_EOF", re.compile(r"error(?:=| reading http response: )end of file", re.I)),
++    ("NETWORK_CONNECTION", re.compile(r"connection (?:reset|refused|closed)|network is unreachable", re.I)),
++    ("RECONNECT_ATTEMPT", re.compile(r"will reconnect", re.I)),
++)
++
++
++def ffmpeg_tail_error_codes(value: str | list[str]) -> list[str]:
++    """Return stable diagnostic codes without retaining stderr content."""
++    lines = value if isinstance(value, list) else (value or "").splitlines()
++    codes: list[str] = []
++    for raw_line in lines:
++        line = redact_stream_urls(str(raw_line))
++        matched = False
++        for code, pattern in (*_FFMPEG_INTEGRITY_PATTERNS, *_FFMPEG_NETWORK_PATTERNS):
++            if pattern.search(line):
++                matched = True
++                if code not in codes:
++                    codes.append(code)
++        if not matched and re.search(r"\b(?:error|failed|fatal)\b", line, re.I):
++            if "UNKNOWN_FFMPEG_ERROR" not in codes:
++                codes.append("UNKNOWN_FFMPEG_ERROR")
++    return codes
++
++
++def classify_ffmpeg_tail(value: str | list[str]) -> str:
++    """Classify a bounded FFmpeg stderr tail for chunk acceptance."""
++    return classify_ffmpeg_error_codes(ffmpeg_tail_error_codes(value))
++
++
++def classify_ffmpeg_error_codes(codes: list[str]) -> str:
++    """Classify already-sanitized stable codes, including cumulative history."""
++    integrity_codes = {code for code, _ in _FFMPEG_INTEGRITY_PATTERNS}
++    if any(code in integrity_codes or code == "UNKNOWN_FFMPEG_ERROR" for code in codes):
++        return "INTEGRITY_ERROR"
++    if codes:
++        return "NETWORK_WARNING"
++    return "BENIGN"
+ 
+ 
+ def ffmpeg_binary() -> str | None:
+@@ -250,11 +315,13 @@
+     # Drain stderr continuously with a strict memory bound. Long warning-heavy
+     # streams must not accumulate hours of subprocess.run(capture_output) data.
+     tail = deque(maxlen=50)
++    observed_error_codes: list[str] = []
+     lock = threading.Lock()
+     now = lambda: datetime.now(timezone.utc).isoformat(timespec="milliseconds")
+     state = {"started_at": now(), "last_file_write_at": None, "ended_at": None,
+              "return_code": None, "exit_kind": None, "status": "STARTING",
+-             "output_path": str(output_path), "input_kind": "LIVE_HTTP" if network_input else "LOCAL_REPLAY"}
++             "output_path": str(output_path), "input_kind": "LIVE_HTTP" if network_input else "LOCAL_REPLAY",
++             "ffmpeg_tail_class": "BENIGN", "ffmpeg_error_codes": []}
+     if stream_metadata:
+         state["stream"] = stream_metadata
+     state_path = recording_state_path(output_path)
+@@ -264,8 +331,12 @@
+ 
+     def drain():
+         for line in iter(lambda: process.stderr.readline(8192), ""):
++            safe_line = redact_stream_urls(line.rstrip())
+             with lock:
+-                tail.append(redact_stream_urls(line.rstrip()))
++                tail.append(safe_line)
++                for code in ffmpeg_tail_error_codes([safe_line]):
++                    if code not in observed_error_codes:
++                        observed_error_codes.append(code)
+         process.stderr.close()
+ 
+     reader = threading.Thread(target=drain, daemon=True)
+@@ -298,6 +369,8 @@
+             state["checked_at"] = now()
+             with lock:
+                 state["ffmpeg_tail"] = list(tail)
++                state["ffmpeg_error_codes"] = list(observed_error_codes)
++                state["ffmpeg_tail_class"] = classify_ffmpeg_error_codes(state["ffmpeg_error_codes"])
+             temporary = state_path.with_name(state_path.name + f".{os.getpid()}.tmp")
+             temporary.write_text(json.dumps(state, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+             temporary.replace(state_path)
+@@ -394,10 +467,21 @@
+         duration = probe_duration(chunk) if chunk.is_file() and chunk.stat().st_size > 0 else None
+         if duration is not None:
+             outputs.append(chunk)
++        error_codes = ffmpeg_tail_error_codes(tail)
++        try:
++            persisted = json.loads(recording_state_path(chunk).read_text(encoding="utf-8"))
++            error_codes = list(dict.fromkeys([*persisted.get("ffmpeg_error_codes", []), *error_codes]))
++        except (OSError, json.JSONDecodeError, TypeError):
++            pass
++        tail_class = classify_ffmpeg_error_codes(error_codes)
+         attempts.append({"chunk_index": chunk_index, "output_path": str(chunk), "return_code": code,
+                          "duration_seconds": duration, "stream": fingerprint,
+-                         "stderr_tail": tail.splitlines()[-50:]})
+-        complete_chunk = code == 0 and duration is not None and duration >= refresh_seconds - 5
++                         "stderr_tail": tail.splitlines()[-50:],
++                         "ffmpeg_tail_class": tail_class,
++                         "ffmpeg_error_codes": error_codes})
++        complete_chunk = (code == 0 and duration is not None and
++                          duration >= refresh_seconds - 5 and
++                          tail_class != "INTEGRITY_ERROR")
+         if complete_chunk:
+             consecutive_failures = 0
+             prefetched = preresolution.get("info") if preresolution["ready"].is_set() else None
+--- a/profile/runtime/v3/test_v3_ffmpeg_tail_classifier.py
++++ b/profile/runtime/v3/test_v3_ffmpeg_tail_classifier.py
+@@ -0,0 +1,207 @@
++import io
++import json
++import tempfile
++import threading
++from pathlib import Path
++from types import SimpleNamespace
++import unittest
++from unittest.mock import AsyncMock, patch
++
++
++from test_v3_recording_transcription import shared_recorder as recorder
++
++
++def live(token: str) -> dict:
++    return {
++        "is_live": True,
++        "stream_url": f"https://cdn.example/live.flv?token={token}",
++        "stream_urls": [],
++        "stream_protocol": "FLV",
++        "anchor_name": "test",
++        "room_id": "room",
++        "quality": "LD",
++    }
++
++
++def no_preresolution(*_args):
++    return {
++        "cancel": threading.Event(),
++        "ready": threading.Event(),
++        "info": None,
++        "resolved_at": None,
++        "error_kind": None,
++        "thread": SimpleNamespace(join=lambda timeout=None: None),
++    }
++
++
++class ClassifierUnitTests(unittest.TestCase):
++    def test_benign_tail(self):
++        self.assertEqual(recorder.classify_ffmpeg_tail(""), "BENIGN")
++        self.assertEqual(
++            recorder.classify_ffmpeg_tail("[mpegts] deprecated pixel format used"),
++            "BENIGN",
++        )
++        self.assertEqual(recorder.ffmpeg_tail_error_codes(""), [])
++
++    def test_recovered_network_warning(self):
++        tail = "\n".join(
++            [
++                "[http] HTTP error 503 Service Unavailable",
++                "[http] Will reconnect at 1024 in 1 second(s), error=End of file.",
++                "[http] Error reading HTTP response: Operation timed out",
++            ]
++        )
++        self.assertEqual(recorder.classify_ffmpeg_tail(tail), "NETWORK_WARNING")
++        self.assertEqual(
++            recorder.ffmpeg_tail_error_codes(tail),
++            ["HTTP_5XX", "NETWORK_EOF", "RECONNECT_ATTEMPT", "NETWORK_TIMEOUT"],
++        )
++
++    def test_integrity_error_matrix(self):
++        cases = {
++            "STREAM_PREMATURE_END": "Stream ends prematurely at 488, should be 999",
++            "SEGMENT_SKIPPED": "Segment 123 of playlist 0 failed too many times, skipping",
++            "SEGMENT_OPEN_FAILED": "Failed to open segment 123 of playlist 0",
++            "PLAYLIST_RELOAD_FAILED": "Failed to reload playlist 0",
++            "INPUT_OPEN_FAILED": "Error opening input files: Server returned 404 Not Found",
++            "DEMUX_IO_ERROR": "Error during demuxing: Input/output error",
++            "MUX_WRITE_ERROR": "Error writing trailer: Immediate exit requested",
++            "INVALID_DATA": "Invalid data found when processing input",
++            "PACKET_MISMATCH": "Packet mismatch 444409027 5002764 125906883",
++            "PACKET_CORRUPT": "Packet corrupt (stream = 0, dts = 42)",
++            "NON_MONOTONIC_DTS": "Non-monotonic DTS; previous: 5, current: 4",
++            "INVALID_TIMESTAMP_DROP": "DTS 4292269698, next:899934938 st:0 invalid dropping",
++            "TIMESTAMP_DISCONTINUITY": "timestamp discontinuity (stream id=0)",
++            "EMPTY_SEGMENT": "Empty segment [https://example.invalid/a.ts]",
++            "CODEC_PARAMETERS_MISSING": "could not find codec parameters",
++            "UNABLE_SEEK_PACKET": "Unable to seek to the next packet",
++        }
++        for code, tail in cases.items():
++            with self.subTest(code=code):
++                self.assertEqual(recorder.classify_ffmpeg_tail(tail), "INTEGRITY_ERROR")
++                self.assertIn(code, recorder.ffmpeg_tail_error_codes(tail))
++
++    def test_unknown_ffmpeg_error_fails_closed(self):
++        tail = "Encoder failed for an unrecognized reason"
++        self.assertEqual(recorder.classify_ffmpeg_tail(tail), "INTEGRITY_ERROR")
++        self.assertEqual(recorder.ffmpeg_tail_error_codes(tail), ["UNKNOWN_FFMPEG_ERROR"])
++
++
++class PersistenceTests(unittest.TestCase):
++    def test_sidecar_persists_safe_codes_and_no_url(self):
++        warning = (
++            "[http] HTTP error 503 for "
++            "https://cdn.example/live.flv?token=DO_NOT_PERSIST\n"
++            "[http] Will reconnect at 10 in 1 second(s), error=End of file.\n"
++        )
++        process = SimpleNamespace(
++            pid=123,
++            stderr=io.StringIO(warning),
++            poll=lambda: 0,
++            wait=lambda: 0,
++        )
++        with tempfile.TemporaryDirectory() as folder:
++            output = Path(folder) / "capture.ts"
++            with patch.object(recorder.subprocess, "Popen", return_value=process):
++                code, tail = recorder.record_stream(
++                    "https://cdn.example/live.flv?token=INPUT_SECRET",
++                    output,
++                    900,
++                    "ffmpeg",
++                    stream_metadata={"url_sha256": "safe-digest"},
++                )
++            state = json.loads(recorder.recording_state_path(output).read_text())
++        serialized = json.dumps(state, ensure_ascii=False)
++        self.assertEqual(code, 0)
++        self.assertEqual(state["ffmpeg_tail_class"], "NETWORK_WARNING")
++        self.assertEqual(
++            state["ffmpeg_error_codes"],
++            ["HTTP_5XX", "NETWORK_EOF", "RECONNECT_ATTEMPT"],
++        )
++        self.assertNotIn("DO_NOT_PERSIST", serialized)
++        self.assertNotIn("INPUT_SECRET", serialized)
++        self.assertNotIn("cdn.example", serialized)
++        self.assertIn("<stream-url>", tail)
++
++    def test_early_integrity_error_survives_bounded_tail_eviction(self):
++        lines = ["Packet mismatch 1 2 3"] + [f"ordinary warning {index}" for index in range(80)]
++        process = SimpleNamespace(pid=123, stderr=io.StringIO("\n".join(lines) + "\n"), poll=lambda: 0, wait=lambda: 0)
++        with tempfile.TemporaryDirectory() as folder:
++            output = Path(folder) / "capture.ts"
++            with patch.object(recorder.subprocess, "Popen", return_value=process):
++                recorder.record_stream("/tmp/replay.mp4", output, 0, "ffmpeg")
++            state = json.loads(recorder.recording_state_path(output).read_text())
++        self.assertNotIn("Packet mismatch", "\n".join(state["ffmpeg_tail"]))
++        self.assertEqual(state["ffmpeg_tail_class"], "INTEGRITY_ERROR")
++        self.assertIn("PACKET_MISMATCH", state["ffmpeg_error_codes"])
++
++
++class ChunkAcceptanceTests(unittest.TestCase):
++    def run_refresh(self, responses, record_side_effects):
++        with tempfile.TemporaryDirectory() as folder:
++            calls = []
++
++            def record(_url, path, *_args):
++                index = len(calls)
++                calls.append(path)
++                path.write_bytes(b"media")
++                return record_side_effects[index]
++
++            with (
++                patch.object(recorder, "resolve_stream", AsyncMock(side_effect=responses)),
++                patch.object(recorder, "schedule_stream_preresolution", side_effect=no_preresolution),
++                patch.object(recorder, "record_stream", side_effect=record),
++                patch.object(recorder, "probe_duration", return_value=900),
++                patch.object(recorder.time, "sleep") as sleeps,
++            ):
++                result = recorder.record_live_with_refresh(
++                    "https://live.douyin.com/123",
++                    "LD",
++                    Path(folder) / "whole.ts.partial",
++                    "ffmpeg",
++                    900,
++                )
++                # Paths disappear with TemporaryDirectory; return only metadata.
++                return result[0], result[1]["attempts"], calls, [c.args[0] for c in sleeps.call_args_list]
++
++    def test_code_zero_integrity_error_is_not_complete_chunk(self):
++        responses = [live("one"), live("two"), {"is_live": False}, {"is_live": False}, {"is_live": False}]
++        code, attempts, calls, sleeps = self.run_refresh(
++            responses,
++            [
++                (0, "Stream ends prematurely at 100, should be 999"),
++            ],
++        )
++        self.assertEqual(code, 0)
++        self.assertEqual(len(calls), 1)
++        self.assertEqual(attempts[0]["ffmpeg_tail_class"], "INTEGRITY_ERROR")
++        self.assertIn("STREAM_PREMATURE_END", attempts[0]["ffmpeg_error_codes"])
++        self.assertIn(5, sleeps, "integrity failure must enter retry/backoff path")
++
++    def test_full_duration_recovered_network_warning_remains_acceptable(self):
++        responses = [
++            live("one"),
++            live("two"),
++            {"is_live": False},
++            {"is_live": False},
++            {"is_live": False},
++        ]
++        code, attempts, calls, _ = self.run_refresh(
++            responses,
++            [
++                (0, "HTTP error 503\nWill reconnect at 50 in 1 second(s), error=End of file."),
++                (0, ""),
++            ],
++        )
++        self.assertEqual(code, 0)
++        self.assertEqual(len(calls), 2, "network warning must not consume the next live result as a failure probe")
++        self.assertEqual(attempts[0]["ffmpeg_tail_class"], "NETWORK_WARNING")
++        self.assertEqual(attempts[1]["ffmpeg_tail_class"], "BENIGN")
++        serialized = json.dumps(attempts, ensure_ascii=False)
++        self.assertNotIn("token=one", serialized)
++        self.assertNotIn("token=two", serialized)
++        self.assertIn("url_sha256", serialized)
++
++
++if __name__ == "__main__":
++    unittest.main(verbosity=2)

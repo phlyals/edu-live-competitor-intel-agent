@@ -1,0 +1,176 @@
+--- a/shared/avtranscribe/record_douyin_live.py
++++ b/shared/avtranscribe/record_douyin_live.py
+@@ -32,6 +32,11 @@
+         "/Volumes/ExternalStorage/AgentInfrastructure/isolated/shared/DouyinLiveRecorder",
+     )
+ ).expanduser()
++
++# Resolve the next signed URL while the current FFmpeg process is still
++# recording.  This removes resolver latency from the sequential handoff while
++# keeping exactly one FFmpeg process active per room.
++REFRESH_PRERESOLVE_LEAD_SECONDS = 30.0
+ 
+ if str(RECORDER_ROOT) not in sys.path:
+     sys.path.insert(0, str(RECORDER_ROOT))
+@@ -170,6 +175,38 @@
+     if name.endswith(marker):
+         return output_path.with_name(f"{name[:-len(marker)]}.refresh{index:04d}{marker}")
+     return output_path.with_name(f"{output_path.stem}.refresh{index:04d}{output_path.suffix}")
++
++
++def schedule_stream_preresolution(url: str, quality: str, delay_seconds: float) -> dict:
++    """Resolve one future stream URL in a cancellable daemon thread.
++
++    The returned state intentionally contains the URL only in memory.  Callers
++    persist the existing safe fingerprint, never the signed URL itself.
++    """
++    state = {
++        "cancel": threading.Event(),
++        "ready": threading.Event(),
++        "info": None,
++        "resolved_at": None,
++        "error_kind": None,
++    }
++
++    def resolve_later() -> None:
++        if state["cancel"].wait(max(0.0, delay_seconds)):
++            state["ready"].set()
++            return
++        try:
++            state["info"] = asyncio.run(resolve_stream(url, quality))
++            state["resolved_at"] = datetime.now(timezone.utc).isoformat(timespec="milliseconds")
++        except Exception as exc:  # The normal on-demand path remains fallback.
++            state["error_kind"] = type(exc).__name__
++        finally:
++            state["ready"].set()
++
++    thread = threading.Thread(target=resolve_later, daemon=True, name="stream-url-preresolve")
++    state["thread"] = thread
++    thread.start()
++    return state
+ 
+ 
+ def record_stream(stream_url: str, output_path: Path, duration: float, ffmpeg: str,
+@@ -297,15 +334,23 @@
+ 
+ def record_live_with_refresh(url: str, quality: str, output_path: Path, ffmpeg: str,
+                              refresh_seconds: float) -> tuple[int, dict]:
+-    """Record bounded chunks, resolving a fresh signed URL for every chunk."""
++    """Record bounded chunks, pre-resolving the next signed URL."""
+     outputs: list[Path] = []
+     attempts: list[dict] = []
+     chunk_index = 0
+     consecutive_failures = 0
+     initial_resolution_misses = 0
+     last_info: dict = {}
++    pending_resolution: tuple[dict, str] | None = None
+     while True:
+-        info = asyncio.run(resolve_stream(url, quality))
++        if pending_resolution is None:
++            info = asyncio.run(resolve_stream(url, quality))
++            resolved_at = datetime.now(timezone.utc).isoformat(timespec="milliseconds")
++            resolution_source = "ON_DEMAND"
++        else:
++            info, resolved_at = pending_resolution
++            pending_resolution = None
++            resolution_source = "PRE_RESOLVED"
+         last_info = info
+         if not info.get("is_live") or not info.get("stream_url"):
+             if outputs:
+@@ -334,9 +379,18 @@
+             chunk_index += 1
+             chunk = refresh_output_path(output_path, chunk_index)
+         fingerprint = stream_fingerprint(info["stream_url"])
+-        code, tail = record_stream(info["stream_url"], chunk, refresh_seconds, ffmpeg, 0,
+-                                   {**fingerprint, "resolved_at": datetime.now(timezone.utc).isoformat(timespec="milliseconds"),
+-                                    "protocol": info.get("stream_protocol") or "UNKNOWN"})
++        lead_seconds = min(REFRESH_PRERESOLVE_LEAD_SECONDS, refresh_seconds / 2)
++        preresolution = schedule_stream_preresolution(
++            url, quality, max(0.0, refresh_seconds - lead_seconds)
++        )
++        try:
++            code, tail = record_stream(info["stream_url"], chunk, refresh_seconds, ffmpeg, 0,
++                                       {**fingerprint, "resolved_at": resolved_at,
++                                        "resolution_source": resolution_source,
++                                        "protocol": info.get("stream_protocol") or "UNKNOWN"})
++        finally:
++            preresolution["cancel"].set()
++            preresolution["thread"].join(timeout=0.05)
+         duration = probe_duration(chunk) if chunk.is_file() and chunk.stat().st_size > 0 else None
+         if duration is not None:
+             outputs.append(chunk)
+@@ -346,6 +400,9 @@
+         complete_chunk = code == 0 and duration is not None and duration >= refresh_seconds - 5
+         if complete_chunk:
+             consecutive_failures = 0
++            prefetched = preresolution.get("info") if preresolution["ready"].is_set() else None
++            if isinstance(prefetched, dict) and prefetched.get("is_live") and prefetched.get("stream_url"):
++                pending_resolution = (prefetched, preresolution["resolved_at"])
+         else:
+             consecutive_failures += 1
+             # A short final chunk can be a natural end. Require three fresh
+--- a/profile/runtime/v3/test_v3_recording_transcription.py
++++ b/profile/runtime/v3/test_v3_recording_transcription.py
+@@ -156,6 +156,62 @@
+         self.assertNotEqual(result['outputs'][0],result['outputs'][1])
+         self.assertNotEqual(calls.call_args_list[0].args[0],calls.call_args_list[1].args[0])
+         self.assertEqual(calls.call_args_list[0].args[5]['protocol'],'FLV')
++    def test_next_url_resolution_begins_before_current_recording_returns(self):
++        def live(token):
++            return {'is_live':True,'stream_url':f'https://cdn.example/live.flv?token={token}',
++                    'stream_urls':[],'stream_protocol':'FLV','anchor_name':'test','room_id':'room','quality':'LD'}
++        first_record_active=threading.Event();release_first=threading.Event();second_resolution_started=threading.Event()
++        resolve_count=0;record_urls=[];holder={}
++        async def resolve(_url,_quality):
++            nonlocal resolve_count
++            resolve_count+=1
++            if resolve_count==1:return live('one')
++            if resolve_count==2:second_resolution_started.set();return live('two')
++            return {'is_live':False,'stream_url':None}
++        def record(url,path,*_args):
++            record_urls.append(url);path.write_bytes(b'media')
++            if len(record_urls)==1:
++                first_record_active.set()
++                if not release_first.wait(2):raise AssertionError('test did not release first recording')
++                return 0,''
++            return 1,'simulated final short read'
++        def run():
++            try:
++                with tempfile.TemporaryDirectory() as d:
++                    holder['result']=shared_recorder.record_live_with_refresh('https://live.douyin.com/123','LD',Path(d)/'whole.ts.partial','ffmpeg',0.2)
++            except BaseException as exc:holder['error']=exc
++        with patch.object(shared_recorder,'resolve_stream',side_effect=resolve),patch.object(shared_recorder,'record_stream',side_effect=record),patch.object(shared_recorder,'probe_duration',side_effect=[0.2,None]),patch.object(shared_recorder.time,'sleep'),patch.object(shared_recorder,'REFRESH_PRERESOLVE_LEAD_SECONDS',0.1):
++            thread=threading.Thread(target=run);thread.start()
++            try:
++                self.assertTrue(first_record_active.wait(1))
++                self.assertTrue(second_resolution_started.wait(0.6),'next URL was not resolved while current recording was active')
++            finally:
++                release_first.set();thread.join(timeout=3)
++        self.assertFalse(thread.is_alive())
++        if 'error' in holder:raise holder['error']
++        self.assertEqual(holder['result'][0],0)
++        self.assertEqual(record_urls[:2],['https://cdn.example/live.flv?token=one','https://cdn.example/live.flv?token=two'])
++    def test_prefetched_url_is_never_written_to_attempt_metadata(self):
++        def live(token):
++            return {'is_live':True,'stream_url':f'https://cdn.example/live.flv?token={token}',
++                    'stream_urls':[],'stream_protocol':'FLV','anchor_name':'test','room_id':'room','quality':'LD'}
++        responses=[live('SECRET_ONE'),live('SECRET_TWO'),{'is_live':False},{'is_live':False},{'is_live':False}]
++        second_resolution_started=threading.Event();release=threading.Event();calls=0
++        async def resolve(_url,_quality):
++            nonlocal calls
++            value=responses[calls];calls+=1
++            if calls==2:second_resolution_started.set()
++            return value
++        def record(_url,path,*_args):
++            path.write_bytes(b'media')
++            if calls==1:release.wait(1);return 0,''
++            return 1,''
++        with tempfile.TemporaryDirectory() as d,patch.object(shared_recorder,'resolve_stream',side_effect=resolve),patch.object(shared_recorder,'record_stream',side_effect=record),patch.object(shared_recorder,'probe_duration',side_effect=[0.2,None]),patch.object(shared_recorder.time,'sleep'),patch.object(shared_recorder,'REFRESH_PRERESOLVE_LEAD_SECONDS',0.1):
++            holder={};thread=threading.Thread(target=lambda:holder.setdefault('result',shared_recorder.record_live_with_refresh('https://live.douyin.com/123','LD',Path(d)/'whole.ts.partial','ffmpeg',0.2)));thread.start()
++            self.assertTrue(second_resolution_started.wait(0.6));release.set();thread.join(timeout=3)
++            attempts=holder['result'][1]['attempts']
++        serialized=repr(attempts)
++        self.assertNotIn('SECRET_ONE',serialized);self.assertNotIn('SECRET_TWO',serialized);self.assertIn('url_sha256',serialized)
+     def test_local_replay_does_not_use_http_options_or_duration_limit(self):
+         with tempfile.TemporaryDirectory() as d:
+             process=SimpleNamespace(pid=123,stderr=io.StringIO(''),poll=lambda:0,wait=lambda:0)

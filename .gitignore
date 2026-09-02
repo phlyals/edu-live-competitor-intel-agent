@@ -19,8 +19,27 @@ logs/
 *.sqlite
 *.sqlite3
 *.sqlite-*
+*.dump
 __pycache__/
 *.py[cod]
+
+# Re-creatable Python environments and model caches
+.venv/
+**/.venv/
+venv/
+**/venv/
+**/models/models--*/
+**/.cache/
+
+# Generated full-tree clones and migration sandboxes
+**/full-tree-*/
+**/pg-integration-backup/
+**/isolated-postgres*/
+**/*备份*/
+
+# Recorder work-in-progress fragments (a trailing .partial bypasses *.ts)
+*.partial
+*.partial.*
 
 # Credentials and machine-local configuration
 .env
@@ -31,6 +50,12 @@ secrets.json
 *.pem
 *.key
 
+# Captured production profile/session snapshots may contain credentials or chat data
+**/修改前/config.yaml
+**/修改前/sessions.json
+**/修改前/*.jsonl
+**/修改前/
+
 # Media and generated processing results stay outside source control
 *.mp4
 *.ts
@@ -39,4 +64,5 @@ secrets.json
 *.wav
 *.mp3
 *.m4a
+*.opus
 analysis/drafts/

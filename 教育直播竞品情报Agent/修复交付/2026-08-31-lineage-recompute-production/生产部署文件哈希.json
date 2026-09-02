@@ -1,0 +1,21 @@
+{
+  "v3_schema.sql": "fa687adcfdd5fd0bf3ea309b2cde1ddd0f2486921f6c12a13c018f76c30d8530",
+  "v3_long_jobs.py": "903856ec7eb54bc9161409d4ffb7024bee08fc454b972f9da8ef18590a272095",
+  "v3_pipeline_worker.py": "e3ef476c285a2eebacb3ef4cfbd86426b9f4230931e74731b9a47544f8e485c1",
+  "v3_analysis_worker.py": "8de5162249705f4e7b95b5c65b1151a70dcf21158b01fac9c0e1e1a661517d91",
+  "v3_evidence_worker.py": "a19a55182095e3ef82a66cedbbcb41ea0d4a2ba288a49f817b8a1039e23caa01",
+  "v3_recompute_worker.py": "41ad0706a332dbb9f2b95a5fdf889e67ea583f4df9a39027108ecc5e67421c9f",
+  "v3_recompute.py": "fe02aacab052441d8d10bf87b26d428f7c963cf61976063268175f9093c499c0",
+  "v3_project_feishu.py": "3a2fa4c70e66af3550ee36b5b9b29d33fd759071de9a099af7f07523b1f91abb",
+  "v3_runtime.py": "723374ad5b5614ce6436ab55407d1d6cb2c61cb4fb06e3f63673d5f21b565a64",
+  "v3_migrate_pg.py": "4b8612f988ef8613d39049737edcf1d881c4f7943889531d9fa0f9effcff49a6",
+  "v3_lineage_recompute_migration.py": "52b1f9ccd70e55d69266aad2c2fdc63049ebbd7ebc2ea35d877687183f773b0f",
+  "v3_lineage_recompute_rollback.py": "344be5a87cff3c0f4ea3e457cd53e5823d0308a0c816e542dfe0e8b55c47595d",
+  "test_v3_long_job_claim_retry.py": "de6c64ea0eeddfbf603cc0f4bf1ffe5ebdbd751e72704591f829f24a393f04de",
+  "test_v3_sample_analysis_qualification.py": "c21bfc864edb067fbf871f223f50c90bfa363fabf517c44188da87f6404ff7a8",
+  "test_v3_analysis_coverage_gate.py": "4692eb40207b9e66b44570fc48f08f51b09143bfa90671d78dadbe1b898ed36d",
+  "test_v3_finalizer_evidence.py": "1474c98a254c6822c82ae90c4db6a9a1e249c4fba2cc984474f15e841a8b42d5",
+  "test_v3_lineage_recompute.py": "96e85b61aa53ee709676ce0f9792da66f67e0b06c9ca654e9236ae3f1f3d73c8",
+  "test_v3_lineage_recompute_postgres.py": "744889aadad632561b3df920f257ce4edf00525211c2d921a4ba9ef14586befc",
+  "migrations/004_lineage_recompute.sql": "0d968561c6a6c3c2878e6f75d8a9fbe146867ddd1227dc8ebbdb1999cc940611"
+}

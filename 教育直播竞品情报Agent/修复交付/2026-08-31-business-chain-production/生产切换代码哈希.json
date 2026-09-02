@@ -1,0 +1,26 @@
+{
+  "old": {
+    "v3_schema.sql": "4a0e412b4df39fc0fade09e10fdbdb525f252bd67dbf522467efc8c85a309a81",
+    "v3_runtime.py": "409cdcde5a8311ad8431453dbed175f88c9ad7212d5983e8488250c15a87531f",
+    "v3_evidence_worker.py": "5435f08203a03664aa782d663491c784f46822720581c4d2e7fb6b882c9e2d13",
+    "v3_project_feishu.py": "3a2fa4c70e66af3550ee36b5b9b29d33fd759071de9a099af7f07523b1f91abb",
+    "v3_config.json": "53cf0a7458c2bb69caaaa63e13e57d6f3eb408f4f7884c865916b6fcf95351e3"
+  },
+  "new": {
+    "v3_schema.sql": "2973b5e5fca7e96335531d0bb5569a0a3fd3d7892a62a7c533b4dd1d1e987923",
+    "v3_runtime.py": "c039b3a40217483540f6bd34e471ee2e1b9f2d013c7392612fb4a497f5c0068e",
+    "v3_evidence_worker.py": "3e0c4297548c06b05a81ef2c706718b337ec1361ed738d1d01ba58e2d85229c7",
+    "v3_project_feishu.py": "40604e15a326007d34aa1116304289ba34a240029bf4b2772ff8a7951fad70f7",
+    "v3_config.json": "2c630f4e894d991aa15521f6f1603f5cc632162efcb7e3407935f5dda7e09ed1",
+    "v3_migrate_pg.py": "c8a8d2aac00e97aa5cd62dc02e914ba935184d997e3b37813269fba1a1e62a8c",
+    "v3_business_chain.py": "dec7d185319cc3b36400093d019429caec8370430cb4979a6424e6393e195063",
+    "v3_comparison_worker.py": "b202290ac6c1ba53b5ea49d82f66aa1d383626f4a05f0d900db988095adee92d",
+    "v3_version_worker.py": "92ef17cd5c4dd816df64a8594dfba3550ca9675ea294a3dcd95bf162199b48ba",
+    "v3_strategy_worker.py": "65587e3d587c361b94931d7b027a73516fe287a86ace87f8885c182fffd8336d",
+    "v3_knowledge_worker.py": "fc21ee098e08732e92dc4e0534dc7e2c9203bfd832ff2ef6317471a662164b08",
+    "v3_business_chain_worker.py": "f0100c061e70fbb9fd19aabb2be95da630f0c99f73fb34a6c52affd4b13f7437",
+    "v3_business_chain_migration.py": "50f76f7dc2fc157423872b623f0e172c7d1fd60976ea77ae09a8e4537091ec5e",
+    "v3_business_chain_rollback.py": "af350291c54d3282533fbc96616c415f5815338b19101e232a69489f3e37a034",
+    "migrations/006_business_chain.sql": "b61e39498fed6e5c4bddfbe43e60f29de44069ba9d092013e794132289c9e721"
+  }
+}

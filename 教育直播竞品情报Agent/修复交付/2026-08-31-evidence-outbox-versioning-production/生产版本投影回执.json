@@ -1,0 +1,11 @@
+{
+  "outbox_id": "out_b4a6ff5012bc4808a51d29d55542de7b",
+  "payload_hash": "552b39272c52ae8461d49772acd0d32ee9f81f61fe5a7b6c729a5018ec881b89",
+  "projection_version": "projection_33499c05f16d44f4ec5aee7f24bc1af9e9ae1fd757523cabb17e234493d617b7",
+  "artifact_digest": "ca32b42663e8909773f3cc5e6b37bc1ae1a9fcec7aea702a45f316d168a6a0af",
+  "status": "VERIFIED",
+  "receipt_payload_hash": "552b39272c52ae8461d49772acd0d32ee9f81f61fe5a7b6c729a5018ec881b89",
+  "receipt_projection_version": "projection_33499c05f16d44f4ec5aee7f24bc1af9e9ae1fd757523cabb17e234493d617b7",
+  "receipt_artifact_digest": "ca32b42663e8909773f3cc5e6b37bc1ae1a9fcec7aea702a45f316d168a6a0af",
+  "receipt_json": "{\"delivery\":{\"profile_id\":\"edu_live_competitor_intel\",\"qualification_state\":\"FULL_SESSION_QUALIFIED\",\"report\":{\"created\":false,\"key\":\"analysis_c0d5fe33a0180f99e66fbca2\",\"record_id\":\"recvtNuMcxmQkP\",\"response\":{\"_notice\":{\"update\":{\"command\":\"lark-cli update\",\"current\":\"1.0.58\",\"latest\":\"1.0.92\",\"message\":\"lark-cli 1.0.92 available, current 1.0.58, run: lark-cli update\"}},\"data\":{\"record\":{\"update\":{\"分析ID\":\"analysis_c0d5fe33a0180f99e66fbca2\",\"分析文档\":\"[/Volumes/ExternalStorage/同行直播录制/analysis/drafts/runtime-v3/analysis/analysis_c0d5fe33a0180f99e66fbca2.json](http:///Volumes/ExternalStorage/同行直播录制/analysis/drafts/runtime-v3/analysis/analysis_c0d5fe33a0180f99e66fbca2.json)\",\"分析类型\":[\"单场分析\"],\"变化摘要\":null,\"当前场次ID\":\"session_d352eca016af9f5ec3698768dd69aa0f\",\"整体相似度\":0,\"状态\":[\"完成\"],\"证据说明\":\"Runtime V3 qualification=FULL_SESSION_QUALIFIED; lineage_state=CURRENT\"}},\"updated\":true},\"identity\":\"bot\",\"ok\":true},\"table_id\":\"tblFvjcwMN9VGVWm\"},\"status\":\"VERIFIED\"},\"profile_id\":\"edu_live_competitor_intel\",\"status\":\"VERIFIED\"}"
+}

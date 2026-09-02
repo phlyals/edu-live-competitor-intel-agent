@@ -1,0 +1,18 @@
+[
+  {
+    "session_id": "session_4aa2cdc669aeda1afab096f9fd85a7a5",
+    "pid": 30524,
+    "restart_count": 0,
+    "status": "RUNNING",
+    "partial_dir": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_d84cba350eb545bf/sess_0f4c8abcb4d9f99424f08b8d",
+    "bytes": 262337620
+  },
+  {
+    "session_id": "session_8a8c8c8abd54aa6c522f7398f822b6f6",
+    "pid": 23247,
+    "restart_count": 4,
+    "status": "RUNNING",
+    "partial_dir": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_0d701166362f3482/sess_5f2be48b2b3d2fb72c7dd127",
+    "bytes": 403452812
+  }
+]

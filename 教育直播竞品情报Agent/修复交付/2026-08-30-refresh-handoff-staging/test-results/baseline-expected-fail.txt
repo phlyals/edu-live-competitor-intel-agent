@@ -1,0 +1,16 @@
+test_next_url_resolution_begins_before_current_ffmpeg_returns (test_refresh_preresolve.RefreshPreresolutionTests)
+The old sequential implementation fails this ordering assertion. ... FAIL
+
+======================================================================
+FAIL: test_next_url_resolution_begins_before_current_ffmpeg_returns (test_refresh_preresolve.RefreshPreresolutionTests)
+The old sequential implementation fails this ordering assertion.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/ExternalStorage/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-30-refresh-handoff-staging/test_refresh_preresolve.py", line 83, in test_next_url_resolution_begins_before_current_ffmpeg_returns
+    self.assertTrue(
+AssertionError: False is not true : next URL was not resolved until after current FFmpeg returned
+
+----------------------------------------------------------------------
+Ran 1 test in 0.808s
+
+FAILED (failures=1)

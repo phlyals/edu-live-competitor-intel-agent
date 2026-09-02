@@ -1,0 +1,88 @@
+{
+  "scope": "staging-only",
+  "production_code_mutations": 0,
+  "production_database_mutations": 0,
+  "production_service_reloads": 0,
+  "production_media_mutations": 0,
+  "tests": [
+    {
+      "environment": "profile-runtime-venv",
+      "result": "OK",
+      "test_count": 152,
+      "seconds": 8.939,
+      "log_path": "/Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-30-analysis-coverage-gate/证据/profile-runtime-venv-完整回归.txt",
+      "sha256": "e2dd27b7bc9ff6d30a521c1702153c9dcf2e89fca7bc875e293fd39337633cba"
+    },
+    {
+      "environment": "launchagent-service-venv",
+      "result": "OK",
+      "test_count": 152,
+      "seconds": 9.739,
+      "log_path": "/Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-30-analysis-coverage-gate/证据/launchagent-service-venv-完整回归.txt",
+      "sha256": "8dd3aacdc54faa0f168155997e28b4740bd519e228aab1e22acaa790ab2cab07"
+    }
+  ],
+  "read_only_recalculation": {
+    "production_full_session": {
+      "artifact_path": "/Volumes/ExternalStorage/同行直播录制/analysis/drafts/runtime-v3/analysis/analysis_16bdca57a497943fd6eb0c05.json",
+      "transcript_path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c8c4a8ea998e6e/sess_3f33dd38cdc004f62bbf1d34/整场直播.cf465540aaa0.transcript.json",
+      "artifact_was_not_written": true,
+      "coverage": {
+        "schema_version": 2,
+        "coverage_scope": "FULL_SESSION",
+        "source_duration_seconds": 4387.491625,
+        "source_timestamp_covered_seconds": 4335.199999999997,
+        "source_transcript_coverage_rate": 0.9880816581615691,
+        "analyzed_timestamp_covered_seconds": 4335.199999999997,
+        "analysis_coverage_rate": 0.9880816581615691,
+        "timeline_coverage_rate": 0.9880816581615691,
+        "source_segment_count": 1454,
+        "analyzed_unique_segment_count": 1454,
+        "segment_coverage_rate": 1.0,
+        "source_segment_ids_sha256": "ebe11986e0bddaf6d8475bcdc6e1b32ca2088b5a0d818d8e61e5c696d6946aaf",
+        "successful_source_segment_ids_sha256": "ebe11986e0bddaf6d8475bcdc6e1b32ca2088b5a0d818d8e61e5c696d6946aaf",
+        "minimum_coverage_rate": 0.9,
+        "target_coverage_rate": 0.95,
+        "timestamps_valid": true,
+        "source_segment_ids_valid": true,
+        "all_chunks_complete": true,
+        "is_qualified": true,
+        "meets_target": true,
+        "validation_errors": []
+      },
+      "successful_source_id_count": 1454,
+      "artifact_json_roundtrip": true
+    },
+    "simulation_3787s": {
+      "artifact_path": "/Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-29-分析模块修复/验证/simulation_3787s.analysis.v3.json",
+      "transcript_path": "/Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-29-转录分析链路验收/artifacts/simulation_3787s.transcript.json",
+      "artifact_was_not_written": true,
+      "coverage": {
+        "schema_version": 2,
+        "coverage_scope": "FULL_SESSION",
+        "source_duration_seconds": 3787.1146875,
+        "source_timestamp_covered_seconds": 3716.669999999999,
+        "source_transcript_coverage_rate": 0.9813988502295652,
+        "analyzed_timestamp_covered_seconds": 3716.669999999999,
+        "analysis_coverage_rate": 0.9813988502295652,
+        "timeline_coverage_rate": 0.9813988502295652,
+        "source_segment_count": 1060,
+        "analyzed_unique_segment_count": 1060,
+        "segment_coverage_rate": 1.0,
+        "source_segment_ids_sha256": "3ab8a5a1a4dd38f3b23c41a01cfda78ae961422fcc65377c6354f4654621fffa",
+        "successful_source_segment_ids_sha256": "3ab8a5a1a4dd38f3b23c41a01cfda78ae961422fcc65377c6354f4654621fffa",
+        "minimum_coverage_rate": 0.9,
+        "target_coverage_rate": 0.95,
+        "timestamps_valid": true,
+        "source_segment_ids_valid": true,
+        "all_chunks_complete": true,
+        "is_qualified": true,
+        "meets_target": true,
+        "validation_errors": []
+      },
+      "successful_source_id_count": 1060,
+      "artifact_json_roundtrip": true
+    },
+    "candidate_production_mutations": 0
+  }
+}

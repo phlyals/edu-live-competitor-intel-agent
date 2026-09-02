@@ -1,0 +1,217 @@
+--- a/record_douyin_live.py
++++ b/record_douyin_live.py
+@@ -10,13 +10,17 @@
+ 
+ import argparse
+ import asyncio
++from collections import deque
+ import json
+ import os
+ import re
+ import shutil
+ import subprocess
+ import sys
+-from datetime import datetime
++import signal
++import threading
++import time
++from datetime import datetime, timezone
+ from pathlib import Path
+ from urllib.parse import urlparse
+ 
+@@ -129,22 +133,32 @@
+         return None
+ 
+ 
++def recording_state_path(output_path: Path) -> Path:
++    return output_path.with_name(output_path.name + ".recording-state.json")
++
++
+ def record_stream(stream_url: str, output_path: Path, duration: float, ffmpeg: str, segment_seconds: float = 0) -> tuple[int, str]:
+     output_path.parent.mkdir(parents=True, exist_ok=True)
++    network_input = urlparse(stream_url).scheme in {"http", "https"}
+     command = [
+         ffmpeg,
+         "-hide_banner",
+         "-loglevel",
+         "warning",
+-        "-y",
+-        "-rw_timeout",
+-        "15000000",
+-        "-reconnect",
+-        "1",
+-        "-reconnect_streamed",
+-        "1",
+-        "-reconnect_delay_max",
+-        "10",
++        "-nostdin", "-nostats", "-n",
++    ]
++    if network_input:
++        command.extend([
++            "-rw_timeout", "15000000", "-reconnect", "1",
++            "-reconnect_streamed", "1", "-reconnect_on_network_error", "1",
++            "-reconnect_on_http_error", "429,5xx", "-reconnect_delay_max", "10",
++            "-reconnect_max_retries", "5", "-reconnect_delay_total_max", "30",
++        ])
++        if duration == 0:
++            # EOF on a live HTTP connection is not proof that the room ended.
++            # Bound retries; the supervisor can then resolve a fresh stream URL.
++            command.extend(["-reconnect_at_eof", "1"])
++    command.extend([
+         "-i",
+         stream_url,
+         "-map",
+@@ -155,7 +169,7 @@
+         "copy",
+         "-f",
+         "segment" if segment_seconds > 0 else "mpegts",
+-    ]
++    ])
+     if duration > 0:
+         # Insert the finite-duration flag immediately before stream mapping;
+         # duration=0 intentionally means record until the live stream ends.
+@@ -164,13 +178,94 @@
+     if segment_seconds > 0:
+         command.extend(["-segment_time", str(segment_seconds), "-segment_format", "mpegts", "-reset_timestamps", "1"])
+     command.append(str(output_path))
+-    result = subprocess.run(command, capture_output=True, text=True, check=False)
+-    return result.returncode, redact_stream_urls((result.stderr or "").strip())[-2000:]
++    # Drain stderr continuously with a strict memory bound. Long warning-heavy
++    # streams must not accumulate hours of subprocess.run(capture_output) data.
++    tail = deque(maxlen=50)
++    lock = threading.Lock()
++    now = lambda: datetime.now(timezone.utc).isoformat(timespec="milliseconds")
++    state = {"started_at": now(), "last_file_write_at": None, "ended_at": None,
++             "return_code": None, "exit_kind": None, "status": "STARTING",
++             "output_path": str(output_path), "input_kind": "LIVE_HTTP" if network_input else "LOCAL_REPLAY"}
++    state_path = recording_state_path(output_path)
++    process = subprocess.Popen(command, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE,
++                               text=True, errors="replace")
++    state.update(pid=process.pid, status="RUNNING")
++
++    def drain():
++        for line in iter(lambda: process.stderr.readline(8192), ""):
++            with lock:
++                tail.append(redact_stream_urls(line.rstrip()))
++        process.stderr.close()
++
++    reader = threading.Thread(target=drain, daemon=True)
++    reader.start()
++    previous_handlers = {}
++
++    def request_stop(signum, _frame):
++        state["termination_signal"] = signum
++        if process.poll() is None:
++            try:
++                process.send_signal(signum)
++            except ProcessLookupError:
++                pass
++
++    if threading.current_thread() is threading.main_thread():
++        for signum in (signal.SIGTERM, signal.SIGINT):
++            previous_handlers[signum] = signal.signal(signum, request_stop)
++
++    def snapshot():
++        try:
++            paths = [output_path]
++            if segment_seconds > 0:
++                pattern = re.sub(r"%0?\d*d", "*", output_path.name)
++                paths = list(output_path.parent.glob(pattern))
++            stats = [p.stat() for p in paths if p.is_file()]
++            state["output_size_bytes"] = sum(s.st_size for s in stats)
++            if stats:
++                state["last_file_write_at"] = datetime.fromtimestamp(max(s.st_mtime for s in stats), timezone.utc).isoformat(timespec="milliseconds")
++            state["free_disk_bytes"] = shutil.disk_usage(output_path.parent).free
++            state["checked_at"] = now()
++            with lock:
++                state["ffmpeg_tail"] = list(tail)
++            temporary = state_path.with_name(state_path.name + f".{os.getpid()}.tmp")
++            temporary.write_text(json.dumps(state, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
++            temporary.replace(state_path)
++        except OSError as exc:
++            # Do not terminate a recording just because diagnostic writes fail.
++            state["telemetry_write_error"] = type(exc).__name__
++
++    try:
++        snapshot()
++        last_snapshot = time.monotonic()
++        while process.poll() is None:
++            time.sleep(0.2)
++            if time.monotonic() - last_snapshot >= 5:
++                snapshot()
++                last_snapshot = time.monotonic()
++        reader.join(timeout=2)
++        code = process.wait()
++        state.update(ended_at=now(), return_code=code, status="EXITED",
++                     exit_kind="SIGNAL" if code < 0 or state.get("termination_signal") else "NORMAL" if code == 0 else "ERROR")
++        snapshot()
++        with lock:
++            return code, "\n".join(tail)
++    finally:
++        if process.poll() is None:
++            process.terminate()
++            try:
++                process.wait(timeout=5)
++            except subprocess.TimeoutExpired:
++                process.kill()
++                process.wait()
++        for signum, handler in previous_handlers.items():
++            signal.signal(signum, handler)
+ 
+ 
+ def main() -> int:
+     parser = argparse.ArgumentParser(description="Check and record one Douyin live room")
+-    parser.add_argument("--url", required=True, help="Douyin live room URL")
++    source = parser.add_mutually_exclusive_group(required=True)
++    source.add_argument("--url", help="Douyin live room URL")
++    source.add_argument("--input-file", help="Local replay file; no room probe or network request")
+     parser.add_argument("--duration", type=float, default=1200, help="recording duration in seconds; 0 means until stream end")
+     parser.add_argument("--output-dir", default=".", help="directory for the recording")
+     parser.add_argument("--filename", default="00_直播录像.ts", help="recording filename")
+@@ -180,14 +275,19 @@
+     args = parser.parse_args()
+ 
+     try:
+-        validate_douyin_url(args.url)
++        if args.input_file:
++            input_file = Path(args.input_file).expanduser().resolve()
++            if not input_file.is_file() or args.check_only:
++                raise ValueError("回放输入必须是存在的本地文件，且不能用于 --check-only。")
++            info = {"is_live": True, "stream_url": str(input_file), "quality": "SOURCE"}
++        else:
++            validate_douyin_url(args.url)
++            if not RECORDER_ROOT.exists():
++                raise RuntimeError(f"DouyinLiveRecorder 不存在：{RECORDER_ROOT}")
++            info = asyncio.run(resolve_stream(args.url, args.quality))
+         if args.duration < 0:
+             raise ValueError("--duration 不能小于 0。")
+-        if not RECORDER_ROOT.exists():
+-            raise RuntimeError(f"DouyinLiveRecorder 不存在：{RECORDER_ROOT}")
+-
+-        info = asyncio.run(resolve_stream(args.url, args.quality))
+-        if not info["is_live"] or not info["stream_url"]:
++        if not info["is_live"]:
+             emit(
+                 {
+                     "status": "not_live",
+@@ -200,6 +300,8 @@
+                 }
+             )
+             return 2
++        if not info.get("stream_url"):
++            raise RuntimeError("直播状态为 LIVE，但没有可录制的流 URL；不能判定下播。")
+ 
+         result_base = {
+             "status": "live",
+@@ -222,7 +324,11 @@
+             return 3
+ 
+         output_path = (Path(args.output_dir).expanduser() / args.filename).resolve()
++        if output_path.exists():
++            raise ValueError("目标录制文件已存在，拒绝覆盖；请使用新的续录文件名。")
+         return_code, stderr_tail = record_stream(info["stream_url"], output_path, args.duration, ffmpeg, args.segment_seconds)
++        result_base.update(recording_state_path=str(recording_state_path(output_path)),
++                           ffmpeg_return_code=return_code, ffmpeg_tail=stderr_tail.splitlines()[-50:])
+         patterns = [output_path]
+         if args.segment_seconds > 0:
+             wildcard = output_path.name.replace("%05d", "*").replace("%04d", "*").replace("%03d", "*").replace("%02d", "*")

@@ -1,0 +1,142 @@
+{
+  "modules_present": [
+    "开场",
+    "干货",
+    "需求",
+    "信任",
+    "商品承接",
+    "成交",
+    "答疑"
+  ],
+  "expected_modules": [
+    "开场",
+    "干货",
+    "需求",
+    "信任",
+    "商品承接",
+    "成交",
+    "答疑"
+  ],
+  "missing_modules": [],
+  "modules_with_timestamps": [
+    {
+      "module": "开场",
+      "has_timestamps": true
+    },
+    {
+      "module": "干货",
+      "has_timestamps": true
+    },
+    {
+      "module": "需求",
+      "has_timestamps": true
+    },
+    {
+      "module": "信任",
+      "has_timestamps": true
+    },
+    {
+      "module": "商品承接",
+      "has_timestamps": true
+    },
+    {
+      "module": "成交",
+      "has_timestamps": true
+    },
+    {
+      "module": "答疑",
+      "has_timestamps": true
+    }
+  ],
+  "timestamps_in_coverage": [
+    {
+      "module": "开场",
+      "in_coverage": true,
+      "references": [
+        {
+          "start_time": 0.0,
+          "end_time": 2.0,
+          "in_coverage": true
+        }
+      ]
+    },
+    {
+      "module": "干货",
+      "in_coverage": true,
+      "references": [
+        {
+          "start_time": 0.0,
+          "end_time": 2.0,
+          "in_coverage": true
+        }
+      ]
+    },
+    {
+      "module": "需求",
+      "in_coverage": true,
+      "references": [
+        {
+          "start_time": 0.0,
+          "end_time": 2.0,
+          "in_coverage": true
+        }
+      ]
+    },
+    {
+      "module": "信任",
+      "in_coverage": true,
+      "references": [
+        {
+          "start_time": 0.0,
+          "end_time": 2.0,
+          "in_coverage": true
+        }
+      ]
+    },
+    {
+      "module": "商品承接",
+      "in_coverage": true,
+      "references": [
+        {
+          "start_time": 0.0,
+          "end_time": 2.0,
+          "in_coverage": true
+        }
+      ]
+    },
+    {
+      "module": "成交",
+      "in_coverage": true,
+      "references": [
+        {
+          "start_time": 0.0,
+          "end_time": 2.0,
+          "in_coverage": true
+        }
+      ]
+    },
+    {
+      "module": "答疑",
+      "in_coverage": true,
+      "references": [
+        {
+          "start_time": 0.0,
+          "end_time": 2.0,
+          "in_coverage": true
+        }
+      ]
+    }
+  ],
+  "is_complete": true,
+  "session_id": "fixture",
+  "script": "check_analysis",
+  "checked_at": "2026-08-28T15:47:46.655694+00:00",
+  "report_id": "a",
+  "status": "PASS",
+  "coverage_status": "PASS",
+  "message": "七模块及时间戳引用完整",
+  "transcript_id": "t",
+  "coverage_message": "覆盖率已计算；空白/静音也计入未覆盖时段，非识别准确率",
+  "test_fixture": true,
+  "test_note": "合成的 10 秒 WAV、转录和七模块报告；不是实播验收；临时源文件测试后删除"
+}

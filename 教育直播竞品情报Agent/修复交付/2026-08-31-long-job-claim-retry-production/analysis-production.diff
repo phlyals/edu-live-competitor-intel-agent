@@ -1,0 +1,1271 @@
+--- /Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/v3_analysis_worker.py	2026-08-31 00:14:22
++++ staging/runtime/v3/v3_analysis_worker.py	2026-08-31 00:53:10
+@@ -10,6 +10,7 @@
+ import os
+ import re
+ import signal
++import socket
+ import time
+ from pathlib import Path
+ 
+@@ -26,6 +27,18 @@
+     TRANSCRIPT_SCOPE_FULL,
+     file_sha256,
+ )
++from v3_long_jobs import (
++    ANALYSIS,
++    LeaseLostError,
++    claim_next,
++    fail_or_retry,
++    finish,
++    parse_checkpoint,
++    reconcile_exhausted,
++    renew,
++    save_checkpoint,
++    versioned_output_path,
++)
+ 
+ 
+ ROOT = Path(__file__).resolve().parents[1]
+@@ -34,6 +47,7 @@
+ RUNNING = True
+ ANALYSIS_CHUNK_CHAR_LIMIT = 5000
+ ANALYSIS_MAX_RETRIES = 3
++ANALYSIS_LEASE_SECONDS = 600
+ DEFAULT_ANALYSIS_COVERAGE_MINIMUM = 0.90
+ DEFAULT_ANALYSIS_COVERAGE_TARGET = 0.95
+ CHUNK_FIELDS = (
+@@ -47,6 +61,92 @@
+     RUNNING = False
+ 
+ 
++class AnalysisRequestError(RuntimeError):
++    """A redacted provider or model failure with an explicit retry policy."""
++
++    def __init__(
++        self,
++        code: str,
++        message: str,
++        *,
++        retryable: bool,
++        retry_after_seconds: float | None = None,
++        clear_checkpoint: bool = False,
++    ):
++        super().__init__(message)
++        self.code = code
++        self.retryable = bool(retryable)
++        self.retry_after_seconds = retry_after_seconds
++        self.clear_checkpoint = bool(clear_checkpoint)
++
++
++def worker_id() -> str:
++    return f"analysis-v3:{socket.gethostname()}:{os.getpid()}"
++
++
++def _retry_after(response: httpx.Response) -> float | None:
++    value = getattr(response, "headers", {}).get("retry-after")
++    try:
++        seconds = float(value)
++    except (TypeError, ValueError):
++        return None
++    return seconds if math.isfinite(seconds) and seconds >= 0 else None
++
++
++def _http_status_error(response: httpx.Response) -> AnalysisRequestError | None:
++    status = int(getattr(response, "status_code", 200))
++    if 200 <= status < 300:
++        return None
++    if status in {401, 403}:
++        return AnalysisRequestError(
++            f"HTTP_{status}_AUTH",
++            f"analysis provider rejected credentials ({status})",
++            retryable=False,
++        )
++    if status == 429:
++        return AnalysisRequestError(
++            "HTTP_429_RATE_LIMIT",
++            "analysis provider rate limited the request",
++            retryable=True,
++            retry_after_seconds=_retry_after(response),
++        )
++    if status == 408:
++        return AnalysisRequestError(
++            "HTTP_408_TIMEOUT",
++            "analysis provider reported a request timeout",
++            retryable=True,
++        )
++    if 500 <= status <= 599:
++        return AnalysisRequestError(
++            f"HTTP_{status}_SERVER",
++            f"analysis provider server error ({status})",
++            retryable=True,
++        )
++    return AnalysisRequestError(
++        f"HTTP_{status}_REQUEST",
++        f"analysis provider rejected the request ({status})",
++        retryable=False,
++    )
++
++
++def _request_exception(exc: Exception) -> AnalysisRequestError:
++    if isinstance(exc, (httpx.ConnectTimeout, httpx.ConnectError)):
++        return AnalysisRequestError(
++            "HTTP_CONNECT", "analysis provider connection failed", retryable=True
++        )
++    if isinstance(exc, httpx.TimeoutException):
++        return AnalysisRequestError(
++            "HTTP_TIMEOUT", "analysis provider request timed out", retryable=True
++        )
++    if isinstance(exc, httpx.RequestError):
++        return AnalysisRequestError(
++            "HTTP_NETWORK", "analysis provider network request failed", retryable=True
++        )
++    return AnalysisRequestError(
++        "HTTP_CLIENT", exc.__class__.__name__, retryable=False
++    )
++
++
+ def finite_number(value) -> float | None:
+     """Return a finite float, rejecting booleans and JSON NaN/Infinity."""
+     if isinstance(value, bool):
+@@ -261,10 +361,21 @@
+     return result
+ 
+ 
+-def request_chunk(chunk: dict) -> tuple[dict, dict]:
++def request_chunk(
++    chunk: dict,
++    *,
++    before_attempt=None,
++    sleep=time.sleep,
++    client_factory=None,
++) -> tuple[dict, dict]:
++    client_factory = client_factory or httpx.Client
+     key = read_env_key("DEEPSEEK_API_KEY")
+     if not key:
+-        raise RuntimeError("DEEPSEEK_API_KEY is not configured")
++        raise AnalysisRequestError(
++            "CONFIG_MISSING_API_KEY",
++            "DEEPSEEK_API_KEY is not configured",
++            retryable=False,
++        )
+     example = {field: [] for field in CHUNK_FIELDS}
+     system = (
+         "你是直播竞品情报分析器。输入每行格式为[source_segment_id]逐字稿原文。"
+@@ -276,38 +387,118 @@
+         "提及课程作者、其他老师或合作老师绝不能算当前讲师；无法唯一确认就返回空数组。JSON示例："
+         + json.dumps(example, ensure_ascii=False, separators=(",", ":"))
+     )
+-    body = {"model": "deepseek-chat", "temperature": 0, "max_tokens": 4096,
+-            "response_format": {"type": "json_object"},
+-            "messages": [{"role": "system", "content": system},
+-                         {"role": "user", "content": "请分析这一时间片并输出JSON：\n" + chunk["text"]}]}
+-    failures = []
++    body = {
++        "model": "deepseek-chat",
++        "temperature": 0,
++        "max_tokens": 4096,
++        "response_format": {"type": "json_object"},
++        "messages": [
++            {"role": "system", "content": system},
++            {"role": "user", "content": "请分析这一时间片并输出JSON：\n" + chunk["text"]},
++        ],
++    }
++    failures: list[str] = []
++    last_error: AnalysisRequestError | None = None
++    content = ""
+     for attempt in range(1, ANALYSIS_MAX_RETRIES + 1):
+-        with httpx.Client(timeout=180) as client:
+-            response = client.post("https://api.deepseek.com/chat/completions",
+-                                   headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json"}, json=body)
+-            response.raise_for_status()
+-            payload = response.json()
+-        choice = (payload.get("choices") or [{}])[0]
+-        finish_reason = choice.get("finish_reason")
+-        content = ((choice.get("message") or {}).get("content") or "").strip()
++        if before_attempt:
++            before_attempt(attempt)
+         try:
++            try:
++                with client_factory(timeout=180) as client:
++                    response = client.post(
++                        "https://api.deepseek.com/chat/completions",
++                        headers={
++                            "Authorization": f"Bearer {key}",
++                            "Content-Type": "application/json",
++                        },
++                        json=body,
++                    )
++            except Exception as exc:
++                raise _request_exception(exc) from exc
++            status_error = _http_status_error(response)
++            if status_error:
++                raise status_error
++            try:
++                payload = response.json()
++            except (json.JSONDecodeError, ValueError) as exc:
++                raise AnalysisRequestError(
++                    "HTTP_RESPONSE_JSON_INVALID",
++                    "analysis provider response envelope is not JSON",
++                    retryable=True,
++                ) from exc
++            if (
++                not isinstance(payload, dict)
++                or not isinstance(payload.get("choices"), list)
++                or not payload["choices"]
++            ):
++                raise AnalysisRequestError(
++                    "HTTP_RESPONSE_SCHEMA_INVALID",
++                    "analysis provider response has no choice",
++                    retryable=True,
++                )
++            choice = payload["choices"][0]
++            finish_reason = choice.get("finish_reason")
++            content = ((choice.get("message") or {}).get("content") or "").strip()
+             if finish_reason != "stop":
+-                raise ValueError(f"analysis completion did not stop normally: {finish_reason}")
+-            parsed = json.loads(content)
+-            result = validate_chunk_result(parsed, chunk)
+-            return result, {"response_id": payload.get("id"), "finish_reason": finish_reason,
+-                            "usage": payload.get("usage"), "attempt": attempt,
+-                            "content_hash": hashlib.sha256(content.encode()).hexdigest()}
+-        except (json.JSONDecodeError, ValueError) as exc:
+-            failures.append(f"attempt {attempt}: {exc}")
+-            body["messages"].append({"role": "assistant", "content": content[-1000:]})
+-            body["messages"].append({"role": "user", "content":
+-                f"上次输出无效：{exc}。重新生成更短的完整JSON；每字段最多1项，不能省略字段。"
+-                "source_segment_ids必须是含1到8个输入原始ID的JSON数组；"
+-                "只能引用输入中的source_segment_id；不要输出start/end或其他字段。"})
+-    raise RuntimeError(
+-        f"analysis chunk {chunk.get('index')} failed after retries: "
+-        + " | ".join(failures)
++                retryable = finish_reason not in {"content_filter", "safety"}
++                raise AnalysisRequestError(
++                    "MODEL_FINISH_INCOMPLETE" if retryable else "MODEL_FINISH_BLOCKED",
++                    f"analysis completion finish_reason={finish_reason!r}",
++                    retryable=retryable,
++                )
++            try:
++                parsed = json.loads(content)
++            except json.JSONDecodeError as exc:
++                raise AnalysisRequestError(
++                    "MODEL_JSON_INVALID",
++                    "analysis model output is not complete JSON",
++                    retryable=True,
++                ) from exc
++            try:
++                result = validate_chunk_result(parsed, chunk)
++            except ValueError as exc:
++                raise AnalysisRequestError(
++                    "MODEL_SCHEMA_INVALID", str(exc), retryable=True
++                ) from exc
++            return result, {
++                "response_id": payload.get("id"),
++                "finish_reason": finish_reason,
++                "usage": payload.get("usage"),
++                "attempt": attempt,
++                "content_hash": hashlib.sha256(content.encode()).hexdigest(),
++            }
++        except AnalysisRequestError as exc:
++            last_error = exc
++            failures.append(f"attempt {attempt}: {exc.code}")
++            if not exc.retryable:
++                raise
++            if attempt >= ANALYSIS_MAX_RETRIES:
++                break
++            if exc.code.startswith("MODEL_"):
++                body["messages"].append({
++                    "role": "assistant",
++                    "content": content[-1000:],
++                })
++                body["messages"].append({
++                    "role": "user",
++                    "content": (
++                        f"上次输出无效：{exc}。重新生成更短的完整JSON；每字段最多1项，不能省略字段。"
++                        "source_segment_ids必须是含1到8个输入原始ID的JSON数组；"
++                        "只能引用输入中的source_segment_id；不要输出start/end或其他字段。"
++                    ),
++                })
++            sleep(min(
++                30.0,
++                max(float(2 ** (attempt - 1)), float(exc.retry_after_seconds or 0)),
++            ))
++    assert last_error is not None
++    raise AnalysisRequestError(
++        last_error.code,
++        f"analysis chunk {chunk.get('index')} failed after bounded retries: "
++        + " | ".join(failures),
++        retryable=last_error.retryable,
++        retry_after_seconds=last_error.retry_after_seconds,
+     )
+ 
+ 
+@@ -792,39 +983,143 @@
+     return artifact, coverage
+ 
+ 
+-def request_analysis(text: str, source_duration: float | None = None, *,
+-                     source_rows: list[dict] | None = None,
+-                     coverage_scope: str = "FULL_SESSION",
+-                     minimum: float = DEFAULT_ANALYSIS_COVERAGE_MINIMUM,
+-                     target: float = DEFAULT_ANALYSIS_COVERAGE_TARGET,
+-                     transcript_quality: dict | None = None) -> tuple[dict, dict]:
+-    chunks = analysis_chunks(text, source_rows=source_rows)
+-    results, diagnostics, successful_ids = [], [], []
++def request_analysis(
++    text: str,
++    source_duration: float | None = None,
++    *,
++    source_rows: list[dict] | None = None,
++    coverage_scope: str = "FULL_SESSION",
++    minimum: float = DEFAULT_ANALYSIS_COVERAGE_MINIMUM,
++    target: float = DEFAULT_ANALYSIS_COVERAGE_TARGET,
++    transcript_quality: dict | None = None,
++    checkpoint: dict | None = None,
++    checkpoint_dir: Path | None = None,
++    on_checkpoint=None,
++    before_request=None,
++    request_fn=None,
++    char_limit: int = ANALYSIS_CHUNK_CHAR_LIMIT,
++) -> tuple[dict, dict]:
++    request_fn = request_fn or request_chunk
++    chunks = analysis_chunks(text, char_limit=char_limit, source_rows=source_rows)
++    source_hash = hashlib.sha256(text.encode()).hexdigest()
++    source_set_digest = _json_digest([
++        {
++            "source_segment_id": row["source_segment_id"],
++            "content_digest": row["content_digest"],
++        }
++        for row in (source_rows or [])
++    ])
++    state = (
++        checkpoint
++        if isinstance(checkpoint, dict)
++        and checkpoint.get("source_content_hash") == source_hash
++        and checkpoint.get("source_segment_set_digest") == source_set_digest
++        and checkpoint.get("analysis_spec_version") == ANALYSIS_SPEC_VERSION
++        and checkpoint.get("prompt_version") == PROMPT_VERSION
++        else {}
++    )
++    completed_chunks = (
++        dict(state.get("chunks"))
++        if isinstance(state.get("chunks"), dict)
++        else {}
++    )
++    results: list[dict] = []
++    diagnostics: list[dict] = []
++    successful_ids: list[str] = []
++    reused_chunks = 0
+     for chunk in chunks:
+-        result, diagnostic = request_chunk(chunk)
++        saved = completed_chunks.get(str(chunk["index"]))
++        result = diagnostic = None
++        if isinstance(saved, dict):
++            try:
++                result = validate_chunk_result(saved.get("result"), chunk)
++                diagnostic = (
++                    saved.get("diagnostic")
++                    if isinstance(saved.get("diagnostic"), dict)
++                    else {}
++                )
++                if (
++                    int(diagnostic.get("chunk_index", -1)) != chunk["index"]
++                    or int(diagnostic.get("row_count", -1)) != chunk["row_count"]
++                    or diagnostic.get("finish_reason") != "stop"
++                    or diagnostic.get("source_segment_ids_sha256")
++                    != _identifier_hash(chunk["source_segment_ids"])
++                ):
++                    result = diagnostic = None
++                checkpoint_path = Path(str(saved.get("path") or ""))
++                expected_hash = str(saved.get("sha256") or "")
++                if expected_hash and (
++                    not checkpoint_path.is_file()
++                    or file_sha256(checkpoint_path) != expected_hash
++                ):
++                    result = diagnostic = None
++            except (OSError, TypeError, ValueError):
++                result = diagnostic = None
++        if result is not None:
++            reused_chunks += 1
++        if result is None:
++            result, provider_diagnostic = request_fn(
++                chunk, before_attempt=before_request
++            )
++            diagnostic = {
++                "chunk_index": chunk["index"],
++                "start": chunk["start"],
++                "end": chunk["end"],
++                "row_count": chunk["row_count"],
++                "source_segment_ids": chunk["source_segment_ids"],
++                "source_segment_ids_sha256": _identifier_hash(
++                    chunk["source_segment_ids"]
++                ),
++                **provider_diagnostic,
++            }
++            record = {"result": result, "diagnostic": diagnostic}
++            if checkpoint_dir:
++                checkpoint_dir.mkdir(parents=True, exist_ok=True)
++                checkpoint_path = checkpoint_dir / f"chunk-{chunk['index']:05d}.json"
++                write_json_atomic(checkpoint_path, record)
++                record.update(
++                    path=str(checkpoint_path),
++                    sha256=file_sha256(checkpoint_path),
++                )
++            completed_chunks[str(chunk["index"])] = record
++            state = {
++                "schema_version": 2,
++                "phase": "ANALYZING_CHUNKS",
++                "source_content_hash": source_hash,
++                "source_segment_set_digest": source_set_digest,
++                "analysis_spec_version": ANALYSIS_SPEC_VERSION,
++                "model_version": MODEL_VERSION,
++                "prompt_version": PROMPT_VERSION,
++                "chunk_count": len(chunks),
++                "completed_chunk_count": len(completed_chunks),
++                "chunks": completed_chunks,
++            }
++            if on_checkpoint:
++                on_checkpoint(state)
+         results.append(result)
++        diagnostics.append(diagnostic)
+         successful_ids.extend(chunk["source_segment_ids"])
+-        diagnostics.append({"chunk_index": chunk["index"], "start": chunk["start"], "end": chunk["end"],
+-                            "row_count": chunk["row_count"],
+-                            "source_segment_ids": chunk["source_segment_ids"],
+-                            "source_segment_ids_sha256": _identifier_hash(chunk["source_segment_ids"]),
+-                            **diagnostic})
+     merged = merge_chunk_results(
+-        results, chunks, source_duration, coverage_scope=coverage_scope,
+-        minimum=minimum, target=target, transcript_quality=transcript_quality,
++        results, chunks, source_duration,
++        coverage_scope=coverage_scope,
++        minimum=minimum,
++        target=target,
++        transcript_quality=transcript_quality,
+         successful_source_segment_ids=successful_ids,
+     )
+-    return merged, {"provider": "deepseek", "model": "deepseek-chat", "response_ids": [d["response_id"] for d in diagnostics],
+-                    "source_content_hash": hashlib.sha256(text.encode()).hexdigest(), "chunk_count": len(chunks),
+-                    "source_segment_set_digest": _json_digest([
+-                        {"source_segment_id": row["source_segment_id"],
+-                         "content_digest": row["content_digest"]}
+-                        for row in (source_rows or [])
+-                    ]),
+-                    "successful_source_segment_count": len(successful_ids),
+-                    "successful_source_segment_ids_sha256": _identifier_hash(successful_ids),
+-                    "chunk_diagnostics": diagnostics,
+-                    "merge_engine": "deterministic-python-v4-source-ids-coverage-gated"}
++    return merged, {
++        "provider": "deepseek",
++        "model": MODEL_VERSION,
++        "response_ids": [item.get("response_id") for item in diagnostics],
++        "source_content_hash": source_hash,
++        "source_segment_set_digest": source_set_digest,
++        "chunk_count": len(chunks),
++        "successful_source_segment_count": len(successful_ids),
++        "successful_source_segment_ids_sha256": _identifier_hash(successful_ids),
++        "chunk_diagnostics": diagnostics,
++        "checkpoint_reused_chunk_count": reused_chunks,
++        "merge_engine": "deterministic-python-v4-source-ids-coverage-gated-checkpointed",
++    }
+ 
+ 
+ def _coverage_metadata(coverage: dict) -> dict:
+@@ -880,9 +1175,13 @@
+                 target_met += 1
+             if row.get("evidence_status") != "VERIFIED":
+                 evidence_pending += 1
+-        elif row["status"] in {"QUALITY_BLOCKED", "BLOCKED_SOURCE_QUALIFICATION"}:
++        elif row["status"] in {
++            "QUALITY_BLOCKED", "BLOCKED_SOURCE_QUALIFICATION", "FAILED_FINAL"
++        }:
+             blocked += 1
+-        elif row["status"] in {"PENDING", "WAITING_MODEL"}:
++        elif row["status"] in {
++            "PENDING", "WAITING_MODEL", "RETRY_WAIT", "RUNNING"
++        }:
+             waiting += 1
+     reasons = []
+     if blocked:
+@@ -903,16 +1202,17 @@
+     }
+ 
+ 
+-def _quality_block(
++def _quality_block_claim(
++    job: dict,
+     analysis_row: dict,
+     coverage: dict,
+     *,
+     reason: str,
+     analysis_metadata: dict,
+-) -> None:
+-    """Persist a non-formal diagnostic without binding analyses.output_path."""
+-    diagnostic_dir = ANALYSIS_ROOT / "quality-blocked"
+-    diagnostic_path = diagnostic_dir / f"{analysis_row['analysis_id']}.coverage.json"
++) -> str:
++    """Publish a fenced non-formal diagnostic and end the claimed job."""
++    diagnostic_base = ANALYSIS_ROOT / "quality-blocked" / f"{analysis_row['analysis_id']}.coverage.json"
++    diagnostic_path = versioned_output_path(diagnostic_base, job)
+     diagnostic = {
+         "analysis_id": analysis_row["analysis_id"],
+         "session_id": analysis_row["session_id"],
+@@ -921,6 +1221,8 @@
+         "analysis_spec_version": analysis_row["analysis_spec_version"],
+         "model_version": analysis_row["model_version"],
+         "prompt_version": analysis_row["prompt_version"],
++        "lease_epoch": int(job["lease_epoch"]),
++        "attempt": int(job["attempts"]),
+         "status": "QUALITY_BLOCKED",
+         "reason": reason,
+         "analysis_coverage": coverage,
+@@ -940,18 +1242,23 @@
+         "error_message": reason,
+         "checked_at": utc_now(),
+     }
++    checkpoint = {
++        **parse_checkpoint(job.get("checkpoint_json")),
++        "schema_version": 2,
++        "phase": "QUALITY_BLOCKED",
++        "diagnostic_path": str(diagnostic_path),
++        "diagnostic_sha256": diagnostic_digest,
++    }
+     with connect() as conn:
+-        conn.execute(
+-            "UPDATE analyses SET status='QUALITY_BLOCKED',lineage_state='BLOCKED',"
+-            "qualification_status='ANALYSIS_QUALITY_BLOCKED',metadata_json=? "
+-            "WHERE analysis_id=? AND transcript_id=? AND transcript_content_digest=? "
+-            "AND analysis_spec_version=? AND model_version=? AND prompt_version=?",
+-            (
+-                json.dumps(metadata, ensure_ascii=False, sort_keys=True),
+-                analysis_row["analysis_id"], analysis_row["transcript_id"],
+-                analysis_row["transcript_content_digest"], ANALYSIS_SPEC_VERSION,
+-                MODEL_VERSION, PROMPT_VERSION,
+-            ),
++        finish(
++            conn, ANALYSIS, job, "QUALITY_BLOCKED",
++            {
++                "lineage_state": "BLOCKED",
++                "qualification_status": "ANALYSIS_QUALITY_BLOCKED",
++                "metadata_json": json.dumps(metadata, ensure_ascii=False, sort_keys=True),
++                "checkpoint_json": json.dumps(checkpoint, ensure_ascii=False, sort_keys=True),
++            },
++            commit_transaction=False,
+         )
+         conn.execute(
+             "INSERT INTO evidence_bundles(bundle_id,object_type,object_id,status,manifest_path,"
+@@ -964,34 +1271,76 @@
+                 "bundle:" + analysis_row["analysis_id"], "analysis", analysis_row["analysis_id"],
+                 "QUALITY_BLOCKED", str(diagnostic_path), diagnostic_digest,
+                 ANALYSIS_SCOPE_FORMAL, "ANALYSIS_QUALITY_BLOCKED",
+-                json.dumps({"analysis_coverage": _coverage_metadata(coverage),
+-                            "reason": reason}, ensure_ascii=False, sort_keys=True),
++                json.dumps(
++                    {"analysis_coverage": _coverage_metadata(coverage), "reason": reason},
++                    ensure_ascii=False, sort_keys=True,
++                ),
+             ),
+         )
+         conn.commit()
++    return "QUALITY_BLOCKED"
+ 
+ 
+-def once() -> dict:
+-    completed = failed = quality_blocked = source_blocked = revalidated = 0
+-    minimum, target = load_analysis_quality_config()
+-    init_db()
++def _block_source_claim(
++    job: dict,
++    analysis_metadata: dict,
++    qualification_state: str,
++    qualification: dict,
++) -> str:
++    sample = qualification_state == SAMPLE_NONQUALIFYING
++    status = "SAMPLE_NONQUALIFYING" if sample else "BLOCKED_SOURCE_QUALIFICATION"
++    metadata = {
++        **analysis_metadata,
++        "qualification_state": qualification_state,
++        "formal_analysis_eligible": False,
++        "qualification": qualification,
++        "qualification_checked_at": utc_now(),
++    }
+     with connect() as conn:
+-        analyses = [
+-            dict(row) for row in conn.execute(
+-                "SELECT * FROM analyses WHERE analysis_type='single_session' "
+-                "AND analysis_spec_version=? AND model_version=? AND prompt_version=? "
+-                "AND status IN ('PENDING','WAITING_MODEL','QUALITY_BLOCKED','BLOCKED_SOURCE_QUALIFICATION') "
+-                "ORDER BY analysis_id",
+-                (ANALYSIS_SPEC_VERSION, MODEL_VERSION, PROMPT_VERSION),
+-            ).fetchall()
+-        ]
++        finish(
++            conn, ANALYSIS, job, status,
++            {
++                "lineage_state": "INVALIDATED" if sample else "BLOCKED",
++                "scope": "SAMPLE_AUXILIARY" if sample else job.get("scope"),
++                "qualification_status": (
++                    SAMPLE_NONQUALIFYING if sample else "SOURCE_NONQUALIFYING"
++                ),
++                "metadata_json": json.dumps(metadata, ensure_ascii=False, sort_keys=True),
++            },
++        )
++    return "SOURCE_BLOCKED"
+ 
+-    for analysis_row in analyses:
+-        if _current_analysis_gate(analysis_row, minimum, target):
+-            continue
+-        analysis_metadata = json_object(analysis_row.get("metadata_json"))
+-        expected_transcript_id = str(analysis_row.get("transcript_id") or "")
++
++def _release_failed_claim(
++    job: dict,
++    *,
++    error_type: str,
++    error_message: str,
++    retryable: bool,
++    retry_after_seconds: float | None = None,
++    checkpoint: dict | None = None,
++) -> str:
++    try:
+         with connect() as conn:
++            return fail_or_retry(
++                conn, ANALYSIS, job,
++                error_type=error_type,
++                error_message=error_message,
++                retryable=retryable,
++                retry_after_seconds=retry_after_seconds,
++                checkpoint=checkpoint,
++            )
++    except LeaseLostError:
++        return "LEASE_LOST"
++
++
++def process_claim(job: dict) -> str:
++    """Process exactly one fenced analysis lease."""
++    minimum, target = load_analysis_quality_config()
++    analysis_metadata = json_object(job.get("metadata_json"))
++    try:
++        expected_transcript_id = str(job.get("transcript_id") or "")
++        with connect() as conn:
+             row = conn.execute(
+                 "SELECT t.transcript_id,t.session_id,t.source_digest AS transcript_source_digest,"
+                 "t.status AS transcript_status,t.output_path AS transcript_path,"
+@@ -1000,7 +1349,7 @@
+                 "s.metadata_json AS session_metadata FROM transcripts t "
+                 "JOIN live_sessions s ON s.session_id=t.session_id "
+                 "WHERE t.transcript_id=? AND t.session_id=?",
+-                (expected_transcript_id, analysis_row["session_id"]),
++                (expected_transcript_id, job["session_id"]),
+             ).fetchone() if expected_transcript_id else None
+             row_dict = dict(row or {})
+             transcript_metadata = json_object(row_dict.get("transcript_metadata"))
+@@ -1008,7 +1357,7 @@
+             canonical = conn.execute(
+                 "SELECT checksum,path FROM recording_segments WHERE segment_id=? AND session_id=? "
+                 "AND status='COMPLETE' AND lifecycle_status='CANONICAL_ACTIVE'",
+-                (source_segment_id, analysis_row["session_id"]),
++                (source_segment_id, job["session_id"]),
+             ).fetchone() if source_segment_id else None
+             canonical_hash = str(canonical["checksum"] or "") if canonical else ""
+             canonical_path = Path(str(canonical["path"] or "")) if canonical else None
+@@ -1024,179 +1373,117 @@
+                     "SELECT upstream_id,upstream_version FROM lineage_edges "
+                     "WHERE downstream_type='analysis' AND downstream_id=? "
+                     "AND upstream_type='transcript' AND state='CURRENT' ORDER BY edge_id",
+-                    (analysis_row["analysis_id"],),
++                    (job["analysis_id"],),
+                 ).fetchall()
+             ]
+ 
+         eligible, qualification_state, qualification = transcript_qualification(
+             row_dict, canonical_source_digest=canonical_source_digest, minimum=minimum,
+         )
+-        expected_digest = str(analysis_row.get("transcript_content_digest") or "")
++        expected_digest = str(job.get("transcript_content_digest") or "")
+         transcript_path = Path(str(row_dict.get("transcript_path") or ""))
+         actual_digest = file_sha256(transcript_path) if transcript_path.is_file() else ""
+         immutable_reasons: list[str] = []
+-        if analysis_row.get("scope") != ANALYSIS_SCOPE_FORMAL:
++        if job.get("scope") != ANALYSIS_SCOPE_FORMAL:
+             immutable_reasons.append("ANALYSIS_SCOPE_NOT_FORMAL")
+-        if analysis_row.get("analysis_spec_version") != ANALYSIS_SPEC_VERSION:
++        if job.get("analysis_spec_version") != ANALYSIS_SPEC_VERSION:
+             immutable_reasons.append("ANALYSIS_SPEC_VERSION_MISMATCH")
+-        if analysis_row.get("model_version") != MODEL_VERSION:
++        if job.get("model_version") != MODEL_VERSION:
+             immutable_reasons.append("MODEL_VERSION_MISMATCH")
+-        if analysis_row.get("prompt_version") != PROMPT_VERSION:
++        if job.get("prompt_version") != PROMPT_VERSION:
+             immutable_reasons.append("PROMPT_VERSION_MISMATCH")
+         if not expected_digest or actual_digest != expected_digest:
+             immutable_reasons.append("TRANSCRIPT_CONTENT_DIGEST_MISMATCH")
+-        if analysis_row.get("source_digest") != expected_digest:
++        if job.get("source_digest") != expected_digest:
+             immutable_reasons.append("ANALYSIS_SOURCE_DIGEST_MISMATCH")
+-        expected_edge = [(expected_transcript_id, expected_digest)]
+-        if edges != expected_edge:
++        if edges != [(expected_transcript_id, expected_digest)]:
+             immutable_reasons.append("LINEAGE_NOT_EXACTLY_ONE_EXPECTED_TRANSCRIPT_DIGEST")
+         if not eligible or immutable_reasons:
+             qualification["reasons"] = [*qualification.get("reasons", []), *immutable_reasons]
+-            sample = qualification_state == SAMPLE_NONQUALIFYING
+-            blocked_status = "SAMPLE_NONQUALIFYING" if sample else "BLOCKED_SOURCE_QUALIFICATION"
+-            blocked_lineage = "INVALIDATED" if sample else "BLOCKED"
+-            blocked_scope = "SAMPLE_AUXILIARY" if sample else analysis_row.get("scope")
+-            blocked_qualification = SAMPLE_NONQUALIFYING if sample else "SOURCE_NONQUALIFYING"
+-            metadata = {
+-                **analysis_metadata,
+-                "qualification_state": qualification_state,
+-                "formal_analysis_eligible": False,
+-                "qualification": qualification,
+-                "qualification_checked_at": utc_now(),
+-            }
+-            with connect() as conn:
+-                conn.execute(
+-                    "UPDATE analyses SET status=?,lineage_state=?,scope=?,qualification_status=?,"
+-                    "metadata_json=? WHERE analysis_id=?",
+-                    (
+-                        blocked_status, blocked_lineage, blocked_scope,
+-                        blocked_qualification,
+-                        json.dumps(metadata, ensure_ascii=False, sort_keys=True),
+-                        analysis_row["analysis_id"],
+-                    ),
+-                )
+-                conn.commit()
+-            source_blocked += 1
+-            continue
++            return _block_source_claim(
++                job, analysis_metadata, qualification_state, qualification,
++            )
+ 
+-        try:
+-            text, source_rows, source_duration, scope, transcript_quality, _payload = prepare_analysis_source(
++        text, source_rows, source_duration, scope, transcript_quality, _payload = (
++            prepare_analysis_source(
+                 transcript_path, expected_transcript_id,
+                 row_dict.get("transcript_metadata"), minimum, target,
+             )
+-        except AnalysisSourceQualityError as exc:
+-            _quality_block(
+-                analysis_row, exc.coverage, reason=str(exc),
+-                analysis_metadata=analysis_metadata,
++        )
++        attempt_root = (
++            ANALYSIS_ROOT / "checkpoints" / job["analysis_id"]
++            / f"lease-{int(job['lease_epoch']):08d}.attempt-{int(job['attempts']):04d}"
++        )
++
++        def renew_claim(_attempt: int | None = None) -> None:
++            with connect() as conn:
++                renew(conn, ANALYSIS, job, lease_seconds=ANALYSIS_LEASE_SECONDS)
++            upsert_heartbeat(
++                "analysis-v3",
++                "READY",
++                {
++                    "phase": "ANALYSIS_REQUEST",
++                    "analysis_id": job["analysis_id"],
++                    "session_id": job["session_id"],
++                    "lease_epoch": int(job["lease_epoch"]),
++                    "attempt": int(job["attempts"]),
++                    "lease_until": job.get("lease_until"),
++                    "checked_at": utc_now(),
++                },
++                success=True,
+             )
+-            quality_blocked += 1
+-            continue
+-        except Exception as exc:
++
++        def persist_checkpoint(state: dict) -> None:
+             with connect() as conn:
+-                conn.execute(
+-                    "UPDATE analyses SET status='WAITING_MODEL',metadata_json=? WHERE analysis_id=?",
+-                    (json.dumps({**analysis_metadata, "error_type": exc.__class__.__name__,
+-                                 "error_message": str(exc)[:500], "checked_at": utc_now()},
+-                                ensure_ascii=False, sort_keys=True),
+-                     analysis_row["analysis_id"]),
+-                )
+-                conn.commit()
+-            failed += 1
+-            continue
++                save_checkpoint(conn, ANALYSIS, job, state)
++            upsert_heartbeat(
++                "analysis-v3",
++                "READY",
++                {
++                    "phase": "ANALYZING_CHUNKS",
++                    "analysis_id": job["analysis_id"],
++                    "session_id": job["session_id"],
++                    "lease_epoch": int(job["lease_epoch"]),
++                    "attempt": int(job["attempts"]),
++                    "completed_chunk_count": int(
++                        state.get("completed_chunk_count") or 0
++                    ),
++                    "chunk_count": int(state.get("chunk_count") or 0),
++                    "checked_at": utc_now(),
++                },
++                success=True,
++            )
+ 
+-        prior = None
+-        with connect() as conn:
+-            candidates = conn.execute(
+-                "SELECT a.*,e.status AS evidence_status,e.manifest_hash AS evidence_manifest_hash "
+-                "FROM analyses a JOIN evidence_bundles e ON e.object_type='analysis' "
+-                "AND e.object_id=a.analysis_id WHERE a.transcript_id=? "
+-                "AND a.transcript_content_digest=? AND a.analysis_type='single_session' "
+-                "AND a.status='COMPLETE' AND a.scope='FORMAL_SINGLE_SESSION' "
+-                "AND a.qualification_status='FULL_SESSION_QUALIFIED' "
+-                "AND a.output_path IS NOT NULL AND a.analysis_id<>? "
+-                "ORDER BY CASE WHEN a.lineage_state='CURRENT' THEN 0 ELSE 1 END,a.analysis_id",
+-                (expected_transcript_id, expected_digest, analysis_row["analysis_id"]),
+-            ).fetchall()
+-        for candidate in candidates:
+-            candidate_path = Path(str(candidate["output_path"] or ""))
+-            if not candidate_path.is_file():
+-                continue
+-            candidate_digest = file_sha256(candidate_path)
+-            if (
+-                candidate["evidence_status"] != "VERIFIED"
+-                or not candidate["artifact_digest"]
+-                or candidate_digest != candidate["artifact_digest"]
+-                or candidate_digest != candidate["evidence_manifest_hash"]
+-            ):
+-                continue
+-            try:
+-                prior_artifact = json.loads(candidate_path.read_text(encoding="utf-8"))
+-                if (
+-                    str(prior_artifact.get("analysis_id") or "") != str(candidate["analysis_id"])
+-                    or str(prior_artifact.get("session_id") or "") != str(candidate["session_id"])
+-                    or str(prior_artifact.get("transcript_id") or "") != expected_transcript_id
+-                ):
+-                    continue
+-                rebuilt, coverage = revalidate_existing_artifact(
+-                    prior_artifact, text, source_rows, source_duration, scope,
+-                    transcript_quality, minimum, target,
+-                )
+-            except (OSError, json.JSONDecodeError, TypeError, ValueError):
+-                continue
+-            prior = dict(candidate)
+-            engine = json_object(rebuilt.get("engine"))
+-            result = json_object(rebuilt.get("result"))
+-            engine.update({
+-                "revalidated_from_analysis_id": prior["analysis_id"],
+-                "revalidated_from_artifact_digest": prior.get("artifact_digest"),
+-                "coverage_gate_version": 2,
+-            })
+-            revalidated += 1
+-            break
+-        else:
+-            try:
+-                result, engine = request_analysis(
+-                    text, source_duration=source_duration, source_rows=source_rows,
+-                    coverage_scope=scope, minimum=minimum, target=target,
+-                    transcript_quality=transcript_quality,
+-                )
+-                coverage = result["analysis_coverage"]
+-            except AnalysisSourceQualityError as exc:
+-                _quality_block(
+-                    analysis_row, exc.coverage, reason=str(exc),
+-                    analysis_metadata=analysis_metadata,
+-                )
+-                quality_blocked += 1
+-                continue
+-            except Exception as exc:
+-                with connect() as conn:
+-                    conn.execute(
+-                        "UPDATE analyses SET status='WAITING_MODEL',metadata_json=? WHERE analysis_id=?",
+-                        (json.dumps({**analysis_metadata, "qualification_state": QUALIFIED,
+-                                     "formal_analysis_eligible": True,
+-                                     "error_type": exc.__class__.__name__,
+-                                     "error_message": str(exc)[:500],
+-                                     "checked_at": utc_now()},
+-                                    ensure_ascii=False, sort_keys=True),
+-                         analysis_row["analysis_id"]),
+-                    )
+-                    conn.commit()
+-                failed += 1
+-                continue
+-
++        result, engine = request_analysis(
++            text,
++            source_duration=source_duration,
++            source_rows=source_rows,
++            coverage_scope=scope,
++            minimum=minimum,
++            target=target,
++            transcript_quality=transcript_quality,
++            checkpoint=parse_checkpoint(job.get("checkpoint_json")),
++            checkpoint_dir=attempt_root,
++            on_checkpoint=persist_checkpoint,
++            before_request=renew_claim,
++        )
++        coverage = result["analysis_coverage"]
+         if not coverage.get("is_qualified"):
+-            _quality_block(
+-                analysis_row, coverage,
++            return _quality_block_claim(
++                job, job, coverage,
+                 reason="analysis coverage did not pass the formal 90% gate",
+                 analysis_metadata=analysis_metadata,
+             )
+-            quality_blocked += 1
+-            continue
+ 
+         try:
+             reference_manifest = source_reference_manifest(result)
+             if reference_manifest["reference_count"] < 1:
+-                raise ValueError("analysis returned no source-bound evidence references")
++                raise AnalysisRequestError(
++                    "MODEL_EVIDENCE_EMPTY",
++                    "analysis returned no source-bound evidence references",
++                    retryable=True,
++                    clear_checkpoint=True,
++                )
+             evidence = {
+                 **reference_manifest,
+                 "transcript_id": expected_transcript_id,
+@@ -1206,45 +1493,46 @@
+                 "model_generated_timestamps": False,
+                 "nearest_segment_fallback": False,
+             }
++        except AnalysisRequestError:
++            raise
+         except (KeyError, TypeError, ValueError) as exc:
+-            with connect() as conn:
+-                conn.execute(
+-                    "UPDATE analyses SET status='WAITING_MODEL',metadata_json=? "
+-                    "WHERE analysis_id=?",
+-                    (
+-                        json.dumps({
+-                            **analysis_metadata,
+-                            "error_type": "AnalysisEvidenceBindingError",
+-                            "error_message": str(exc)[:500],
+-                            "checked_at": utc_now(),
+-                        }, ensure_ascii=False, sort_keys=True),
+-                        analysis_row["analysis_id"],
+-                    ),
+-                )
+-                conn.commit()
+-            failed += 1
+-            continue
++            raise AnalysisRequestError(
++                "MODEL_EVIDENCE_INVALID",
++                str(exc),
++                retryable=True,
++                clear_checkpoint=True,
++            ) from exc
+ 
+         artifact = {
+-            "analysis_id": analysis_row["analysis_id"],
+-            "session_id": analysis_row["session_id"],
++            "analysis_id": job["analysis_id"],
++            "session_id": job["session_id"],
+             "transcript_id": expected_transcript_id,
+             "transcript_content_digest": expected_digest,
+             "analysis_spec_version": ANALYSIS_SPEC_VERSION,
+             "model_version": MODEL_VERSION,
+             "prompt_version": PROMPT_VERSION,
+             "qualification_state": QUALIFIED,
++            "lease_epoch": int(job["lease_epoch"]),
++            "attempt": int(job["attempts"]),
+             "engine": engine,
+             "created_at": utc_now(),
+             "evidence": evidence,
+             "result": result,
+         }
+         if artifact_binding_status(artifact) != "BOUND_V1":
+-            raise RuntimeError("analysis artifact failed strict source binding self-check")
+-        output_path = ANALYSIS_ROOT / f"{analysis_row['analysis_id']}.json"
++            raise AnalysisRequestError(
++                "ARTIFACT_BINDING_SELF_CHECK_FAILED",
++                "analysis artifact failed strict source binding self-check",
++                retryable=False,
++            )
++        output_path = versioned_output_path(
++            ANALYSIS_ROOT / f"{job['analysis_id']}.json", job
++        )
+         write_json_atomic(output_path, artifact)
+         artifact_digest = file_sha256(output_path)
+-        gate_status = "QUALIFIED_TARGET" if coverage.get("meets_target") else "QUALIFIED_MINIMUM"
++        gate_status = (
++            "QUALIFIED_TARGET" if coverage.get("meets_target") else "QUALIFIED_MINIMUM"
++        )
+         clean_metadata = {
+             key: value for key, value in analysis_metadata.items()
+             if key not in {
+@@ -1269,41 +1557,52 @@
+             "referenced_source_segment_count": evidence["reference_count"],
+             "transcript_artifact_sha256": evidence["transcript_artifact_sha256"],
+             "qualification_checked_at": utc_now(),
++            "lease_epoch": int(job["lease_epoch"]),
++            "attempt": int(job["attempts"]),
+         }
++        final_checkpoint = {
++            **parse_checkpoint(job.get("checkpoint_json")),
++            "schema_version": 2,
++            "phase": "COMPLETE",
++            "final_output_path": str(output_path),
++            "final_output_sha256": artifact_digest,
++        }
+         with connect() as conn:
+-            updated = conn.execute(
+-                "UPDATE analyses SET status='COMPLETE',output_path=?,artifact_digest=?,"
+-                "metadata_json=?,lineage_state='CURRENT',qualification_status=? "
+-                "WHERE analysis_id=? AND transcript_id=? AND transcript_content_digest=? "
+-                "AND analysis_spec_version=? AND model_version=? AND prompt_version=?",
+-                (
+-                    str(output_path), artifact_digest,
+-                    json.dumps(metadata, ensure_ascii=False, sort_keys=True), QUALIFIED,
+-                    analysis_row["analysis_id"], expected_transcript_id, expected_digest,
+-                    ANALYSIS_SPEC_VERSION, MODEL_VERSION, PROMPT_VERSION,
+-                ),
++            finish(
++                conn, ANALYSIS, job, "COMPLETE",
++                {
++                    "output_path": str(output_path),
++                    "artifact_digest": artifact_digest,
++                    "metadata_json": json.dumps(
++                        metadata, ensure_ascii=False, sort_keys=True
++                    ),
++                    "lineage_state": "CURRENT",
++                    "qualification_status": QUALIFIED,
++                    "checkpoint_json": json.dumps(
++                        final_checkpoint, ensure_ascii=False, sort_keys=True
++                    ),
++                },
++                commit_transaction=False,
+             )
+-            if updated.rowcount != 1:
+-                conn.rollback()
+-                raise RuntimeError("immutable analysis identity changed before completion")
+-
+             superseded_rows = conn.execute(
+                 "SELECT analysis_id,metadata_json FROM analyses WHERE transcript_id=? "
+                 "AND analysis_type='single_session' AND analysis_id<>? "
+                 "AND status='COMPLETE' AND lineage_state='CURRENT'",
+-                (expected_transcript_id, analysis_row["analysis_id"]),
++                (expected_transcript_id, job["analysis_id"]),
+             ).fetchall()
+             for old in superseded_rows:
+                 old_metadata = {
+                     **json_object(old["metadata_json"]),
+-                    "superseded_by_analysis_id": analysis_row["analysis_id"],
++                    "superseded_by_analysis_id": job["analysis_id"],
+                     "superseded_at": utc_now(),
+                 }
+                 conn.execute(
+                     "UPDATE analyses SET lineage_state='SUPERSEDED',metadata_json=? "
+                     "WHERE analysis_id=? AND lineage_state='CURRENT'",
+-                    (json.dumps(old_metadata, ensure_ascii=False, sort_keys=True),
+-                     old["analysis_id"]),
++                    (
++                        json.dumps(old_metadata, ensure_ascii=False, sort_keys=True),
++                        old["analysis_id"],
++                    ),
+                 )
+                 conn.execute(
+                     "UPDATE lineage_edges SET state='SUPERSEDED' "
+@@ -1311,23 +1610,27 @@
+                     "AND upstream_type='transcript' AND state='CURRENT'",
+                     (old["analysis_id"],),
+                 )
+-                superseded_outbox_id = enqueue_outbox_conn(
+-                    conn, object_type="semantic_projection", object_id=old["analysis_id"],
++                outbox_id = enqueue_outbox_conn(
++                    conn,
++                    object_type="semantic_projection",
++                    object_id=old["analysis_id"],
+                     destination="feishu_base",
+-                    payload={"analysis_id": old["analysis_id"],
+-                             "profile_id": "edu_live_competitor_intel",
+-                             "lineage_state": "SUPERSEDED",
+-                             "superseded_by_analysis_id": analysis_row["analysis_id"],
+-                             "release_after_evidence_analysis_id": analysis_row["analysis_id"],
+-                             "correction_version": 1},
+-                    scope=ANALYSIS_SCOPE_FORMAL, qualification_status=QUALIFIED,
++                    payload={
++                        "analysis_id": old["analysis_id"],
++                        "profile_id": "edu_live_competitor_intel",
++                        "lineage_state": "SUPERSEDED",
++                        "superseded_by_analysis_id": job["analysis_id"],
++                        "release_after_evidence_analysis_id": job["analysis_id"],
++                        "correction_version": 1,
++                    },
++                    scope=ANALYSIS_SCOPE_FORMAL,
++                    qualification_status=QUALIFIED,
+                 )
+                 conn.execute(
+-                    "UPDATE outbox SET status='HELD_EVIDENCE' WHERE outbox_id=? "
+-                    "AND status='PENDING'",
+-                    (superseded_outbox_id,),
++                    "UPDATE outbox SET status='HELD_EVIDENCE' "
++                    "WHERE outbox_id=? AND status='PENDING'",
++                    (outbox_id,),
+                 )
+-
+             conn.execute(
+                 "INSERT INTO evidence_bundles(bundle_id,object_type,object_id,status,"
+                 "manifest_path,manifest_hash,scope,qualification_status,metadata_json) "
+@@ -1337,9 +1640,9 @@
+                 "qualification_status=excluded.qualification_status,"
+                 "metadata_json=excluded.metadata_json",
+                 (
+-                    "bundle:" + analysis_row["analysis_id"], "analysis",
+-                    analysis_row["analysis_id"], "REQUIRED", str(output_path),
+-                    artifact_digest, ANALYSIS_SCOPE_FORMAL, QUALIFIED,
++                    "bundle:" + job["analysis_id"], "analysis", job["analysis_id"],
++                    "REQUIRED", str(output_path), artifact_digest,
++                    ANALYSIS_SCOPE_FORMAL, QUALIFIED,
+                     json.dumps({
+                         "transcript_id": expected_transcript_id,
+                         "transcript_content_digest": expected_digest,
+@@ -1357,35 +1660,114 @@
+                         "qualification_state": QUALIFIED,
+                         "formal_analysis_eligible": True,
+                         "release_projection_after_evidence": True,
++                        "lease_epoch": int(job["lease_epoch"]),
+                     }, ensure_ascii=False, sort_keys=True),
+                 ),
+             )
+-            current_outbox_id = enqueue_outbox_conn(
+-                conn, object_type="semantic_projection",
+-                object_id=analysis_row["analysis_id"], destination="feishu_base",
+-                payload={"analysis_id": analysis_row["analysis_id"],
+-                         "profile_id": "edu_live_competitor_intel",
+-                         "qualification_state": QUALIFIED,
+-                         "artifact_digest": artifact_digest,
+-                         "analysis_spec_version": ANALYSIS_SPEC_VERSION,
+-                         "release_after_evidence_analysis_id": analysis_row["analysis_id"]},
+-                scope=ANALYSIS_SCOPE_FORMAL, qualification_status=QUALIFIED,
++            current_outbox = enqueue_outbox_conn(
++                conn,
++                object_type="semantic_projection",
++                object_id=job["analysis_id"],
++                destination="feishu_base",
++                payload={
++                    "analysis_id": job["analysis_id"],
++                    "profile_id": "edu_live_competitor_intel",
++                    "qualification_state": QUALIFIED,
++                    "artifact_digest": artifact_digest,
++                    "analysis_spec_version": ANALYSIS_SPEC_VERSION,
++                    "release_after_evidence_analysis_id": job["analysis_id"],
++                },
++                scope=ANALYSIS_SCOPE_FORMAL,
++                qualification_status=QUALIFIED,
+             )
+             conn.execute(
+-                "UPDATE outbox SET status='HELD_EVIDENCE' WHERE outbox_id=? "
+-                "AND status='PENDING'",
+-                (current_outbox_id,),
++                "UPDATE outbox SET status='HELD_EVIDENCE' "
++                "WHERE outbox_id=? AND status='PENDING'",
++                (current_outbox,),
+             )
+             conn.commit()
+-        completed += 1
++        return "COMPLETE"
++    except LeaseLostError:
++        return "LEASE_LOST"
++    except AnalysisSourceQualityError as exc:
++        try:
++            return _quality_block_claim(
++                job, job, exc.coverage, reason=str(exc),
++                analysis_metadata=analysis_metadata,
++            )
++        except LeaseLostError:
++            return "LEASE_LOST"
++    except AnalysisRequestError as exc:
++        checkpoint = {} if exc.clear_checkpoint else parse_checkpoint(
++            job.get("checkpoint_json")
++        )
++        return _release_failed_claim(
++            job, error_type=exc.code, error_message=str(exc),
++            retryable=exc.retryable,
++            retry_after_seconds=exc.retry_after_seconds,
++            checkpoint=checkpoint,
++        )
++    except (OSError, json.JSONDecodeError, TypeError, ValueError) as exc:
++        return _release_failed_claim(
++            job, error_type="ANALYSIS_INPUT_INVALID",
++            error_message=str(exc), retryable=False,
++            checkpoint=parse_checkpoint(job.get("checkpoint_json")),
++        )
++    except Exception as exc:
++        return _release_failed_claim(
++            job, error_type="ANALYSIS_INTERNAL_ERROR",
++            error_message=f"{exc.__class__.__name__}: {str(exc)}",
++            retryable=True,
++            checkpoint=parse_checkpoint(job.get("checkpoint_json")),
++        )
+ 
++
++def once(*, max_jobs: int = 1) -> dict:
++    minimum, target = load_analysis_quality_config()
++    init_db()
++    with connect() as conn:
++        exhausted = reconcile_exhausted(conn, ANALYSIS)
++    outcomes = {
++        "claimed": 0,
++        "completed": 0,
++        "retry_wait": 0,
++        "failed_final": 0,
++        "lease_lost": 0,
++        "quality_blocked": 0,
++        "source_qualification_blocked": 0,
++        "revalidated": 0,
++    }
++    for _ in range(max(1, int(max_jobs))):
++        with connect() as conn:
++            job = claim_next(
++                conn,
++                ANALYSIS,
++                worker_id(),
++                lease_seconds=ANALYSIS_LEASE_SECONDS,
++                where_sql=(
++                    "analysis_type=? AND analysis_spec_version=? "
++                    "AND model_version=? AND prompt_version=?"
++                ),
++                where_params=(
++                    "single_session", ANALYSIS_SPEC_VERSION,
++                    MODEL_VERSION, PROMPT_VERSION,
++                ),
++            )
++        if not job:
++            break
++        outcomes["claimed"] += 1
++        outcome = process_claim(job)
++        outcomes["completed"] += int(outcome == "COMPLETE")
++        outcomes["retry_wait"] += int(outcome == "RETRY_WAIT")
++        outcomes["failed_final"] += int(outcome == "FAILED_FINAL")
++        outcomes["lease_lost"] += int(outcome == "LEASE_LOST")
++        outcomes["quality_blocked"] += int(outcome == "QUALITY_BLOCKED")
++        outcomes["source_qualification_blocked"] += int(outcome == "SOURCE_BLOCKED")
++
+     health_status, health = analysis_health_snapshot(minimum, target)
+     result = {
+-        "completed": completed,
+-        "revalidated": revalidated,
+-        "quality_blocked": quality_blocked,
+-        "source_qualification_blocked": source_blocked,
+-        "waiting_model": failed,
++        **outcomes,
++        "expired_exhausted": exhausted,
+         "minimum_coverage_rate": minimum,
+         "target_coverage_rate": target,
+         "analysis_spec_version": ANALYSIS_SPEC_VERSION,
+@@ -1393,7 +1775,12 @@
+         "checked_at": utc_now(),
+     }
+     healthy = (
+-        failed == 0 and quality_blocked == 0 and source_blocked == 0
++        outcomes["retry_wait"] == 0
++        and outcomes["failed_final"] == 0
++        and outcomes["lease_lost"] == 0
++        and outcomes["quality_blocked"] == 0
++        and outcomes["source_qualification_blocked"] == 0
++        and exhausted == 0
+         and health_status == "READY"
+     )
+     upsert_heartbeat(

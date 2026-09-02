@@ -1,0 +1,1735 @@
+--- /Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/v3_analysis_contract.py	2026-08-30 23:11:44
++++ /Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-30-analysis-coverage-production/staging/runtime/v3/v3_analysis_contract.py	2026-08-30 23:27:35
+@@ -12,7 +12,7 @@
+ QUALIFIED = "FULL_SESSION_QUALIFIED"
+ SAMPLE_NONQUALIFYING = "SAMPLE_NONQUALIFYING"
+ SOURCE_NONQUALIFYING = "SOURCE_NONQUALIFYING"
+-ANALYSIS_SPEC_VERSION = "single-session-evidence-v2"
++ANALYSIS_SPEC_VERSION = "single-session-evidence-v3-coverage"
+ PROMPT_VERSION = "deepseek-evidence-chunks-v3"
+ MODEL_VERSION = "deepseek-chat"
+ MIN_TIMESTAMP_COVERAGE_RATE = 0.90
+--- /Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/v3_analysis_worker.py	2026-08-30 23:11:44
++++ /Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-30-analysis-coverage-production/staging/runtime/v3/v3_analysis_worker.py	2026-08-30 23:38:31
+@@ -6,6 +6,7 @@
+ import argparse
+ import hashlib
+ import json
++import math
+ import os
+ import re
+ import signal
+@@ -33,11 +34,12 @@
+ RUNNING = True
+ ANALYSIS_CHUNK_CHAR_LIMIT = 5000
+ ANALYSIS_MAX_RETRIES = 3
++DEFAULT_ANALYSIS_COVERAGE_MINIMUM = 0.90
++DEFAULT_ANALYSIS_COVERAGE_TARGET = 0.95
+ CHUNK_FIELDS = (
+     "instructor", "course_content", "interaction_patterns", "product_handoff",
+     "hook", "pain_points", "claims", "cta", "risks", "evidence_refs",
+ )
+-FULL_SESSION_MIN_COVERAGE_RATE = 0.90
+ 
+ 
+ def stop(*_args):
+@@ -45,6 +47,31 @@
+     RUNNING = False
+ 
+ 
++def finite_number(value) -> float | None:
++    """Return a finite float, rejecting booleans and JSON NaN/Infinity."""
++    if isinstance(value, bool):
++        return None
++    try:
++        number = float(value)
++    except (TypeError, ValueError):
++        return None
++    return number if math.isfinite(number) else None
++
++
++def load_analysis_quality_config() -> tuple[float, float]:
++    path = ROOT / "v3" / "v3_config.json"
++    try:
++        config = json.loads(path.read_text(encoding="utf-8"))
++    except (OSError, json.JSONDecodeError):
++        config = {}
++    quality = config.get("analysis_quality") or {}
++    minimum = finite_number(quality.get("full_session_min_timestamp_coverage_rate"))
++    minimum = minimum if minimum is not None and 0 < minimum <= 1 else DEFAULT_ANALYSIS_COVERAGE_MINIMUM
++    target = finite_number(quality.get("full_session_target_timestamp_coverage_rate"))
++    target = target if target is not None and minimum <= target <= 1 else max(minimum, DEFAULT_ANALYSIS_COVERAGE_TARGET)
++    return minimum, target
++
++
+ def read_env_key(name: str) -> str:
+     value = os.environ.get(name, "").strip()
+     if value:
+@@ -75,6 +102,39 @@
+     return (text[:limit] if limit is not None else text), rows
+ 
+ 
++def source_rows_from_transcript(payload: dict, transcript_id: str) -> list[dict]:
++    """Build stable, auditable source rows from the original transcript.
++
++    ASR artifacts currently do not carry a segment primary key.  The transcript
++    id plus the original array index is stable for that immutable artifact and
++    avoids pretending a model-produced timestamp is a source identifier.
++    Invalid timestamps or empty text fail closed before any model call.
++    """
++    segments = payload.get("segments")
++    if not isinstance(segments, list) or not segments:
++        raise ValueError("analysis source transcript has no segment array")
++    rows: list[dict] = []
++    for index, item in enumerate(segments):
++        if not isinstance(item, dict):
++            raise ValueError(f"analysis source segment {index} is not an object")
++        start, end = finite_number(item.get("start")), finite_number(item.get("end"))
++        if start is None or end is None or start < 0 or end <= start:
++            raise ValueError(f"analysis source segment {index} has invalid timestamps")
++        text = str(item.get("normalized_text") or item.get("text") or "").strip()
++        if not text:
++            raise ValueError(f"analysis source segment {index} has no analyzable text")
++        segment_id = f"{transcript_id}:segment:{index:06d}"
++        rows.append({
++            "segment_index": index,
++            "source_segment_id": segment_id,
++            "start": start,
++            "end": end,
++            "text": text,
++            "line": f"[{start:.2f}-{end:.2f}] {text}",
++        })
++    return rows
++
++
+ def timed_lines(text: str) -> list[dict]:
+     rows = []
+     pattern = re.compile(r"^\[([0-9]+(?:\.[0-9]+)?)-([0-9]+(?:\.[0-9]+)?)\]\s*(.*)$")
+@@ -85,14 +145,16 @@
+         start, end = float(match.group(1)), float(match.group(2))
+         if start < 0 or end < start:
+             continue
+-        rows.append({"segment_index": len(rows), "start": start, "end": end,
+-                     "text": match.group(3), "line": line.strip()})
++        index = len(rows)
++        rows.append({"segment_index": index, "source_segment_id": f"line:segment:{index:06d}",
++                     "start": start, "end": end, "text": match.group(3), "line": line.strip()})
+     return rows
+ 
+ 
+-def analysis_chunks(text: str, char_limit: int = ANALYSIS_CHUNK_CHAR_LIMIT) -> list[dict]:
++def analysis_chunks(text: str, char_limit: int = ANALYSIS_CHUNK_CHAR_LIMIT,
++                    source_rows: list[dict] | None = None) -> list[dict]:
+     """Split only between timestamped rows; every row belongs to one chunk."""
+-    rows = timed_lines(text)
++    rows = list(source_rows) if source_rows is not None else timed_lines(text)
+     if not rows:
+         raise RuntimeError("analysis input has no timestamped transcript rows")
+     chunks = []
+@@ -103,6 +165,7 @@
+         if current and current_chars + line_chars > char_limit:
+             chunks.append({"index": len(chunks), "start": current[0]["start"], "end": current[-1]["end"],
+                            "text": "\n".join(item["line"] for item in current), "row_count": len(current),
++                           "source_segment_ids": [item["source_segment_id"] for item in current],
+                            "rows": current})
+             current, current_chars = [], 0
+             line_chars = len(row["line"])
+@@ -111,6 +174,7 @@
+     if current:
+         chunks.append({"index": len(chunks), "start": current[0]["start"], "end": current[-1]["end"],
+                        "text": "\n".join(item["line"] for item in current), "row_count": len(current),
++                       "source_segment_ids": [item["source_segment_id"] for item in current],
+                        "rows": current})
+     return chunks
+ 
+@@ -190,7 +254,163 @@
+     raise RuntimeError("analysis chunk failed after retries: " + " | ".join(failures))
+ 
+ 
+-def merge_chunk_results(results: list[dict], chunks: list[dict], source_duration: float | None) -> dict:
++def _identifier_hash(values: list[str]) -> str:
++    body = json.dumps(values, ensure_ascii=False, separators=(",", ":"))
++    return hashlib.sha256(body.encode("utf-8")).hexdigest()
++
++
++def _interval_union(rows: list[dict], duration: float) -> tuple[list[list[float]], list[dict], list[dict]]:
++    intervals: list[tuple[float, float]] = []
++    errors: list[dict] = []
++    for row in rows:
++        start, end = finite_number(row.get("start")), finite_number(row.get("end"))
++        if start is None or end is None or start < 0 or end <= start or end > duration:
++            errors.append({"code": "SOURCE_TIMESTAMP_OUT_OF_RANGE",
++                           "source_segment_id": row.get("source_segment_id"),
++                           "start": start, "end": end})
++            continue
++        intervals.append((start, end))
++    merged: list[list[float]] = []
++    for start, end in sorted(intervals):
++        if merged and start <= merged[-1][1]:
++            merged[-1][1] = max(merged[-1][1], end)
++        else:
++            merged.append([start, end])
++    gaps: list[dict] = []
++    cursor = 0.0
++    for start, end in merged:
++        if start > cursor:
++            gaps.append({"start_time": cursor, "end_time": start})
++        cursor = max(cursor, end)
++    if cursor < duration:
++        gaps.append({"start_time": cursor, "end_time": duration})
++    return merged, gaps, errors
++
++
++def calculate_analysis_coverage(
++    source_rows: list[dict],
++    successful_source_segment_ids: list[str],
++    source_duration: float | None,
++    *,
++    coverage_scope: str = "FULL_SESSION",
++    minimum: float = DEFAULT_ANALYSIS_COVERAGE_MINIMUM,
++    target: float = DEFAULT_ANALYSIS_COVERAGE_TARGET,
++    all_chunks_complete: bool = True,
++    transcript_quality: dict | None = None,
++) -> dict:
++    """Calculate coverage from source timestamp unions and successful IDs."""
++    duration = finite_number(source_duration)
++    threshold = finite_number(minimum)
++    threshold = threshold if threshold is not None and 0 < threshold <= 1 else DEFAULT_ANALYSIS_COVERAGE_MINIMUM
++    desired = finite_number(target)
++    desired = desired if desired is not None and threshold <= desired <= 1 else max(threshold, DEFAULT_ANALYSIS_COVERAGE_TARGET)
++    errors: list[dict] = []
++    if duration is None or duration <= 0:
++        errors.append({"code": "INVALID_SOURCE_DURATION"})
++        duration = 0.0
++
++    normalized_rows: list[dict] = []
++    source_ids: list[str] = []
++    for index, row in enumerate(source_rows):
++        source_id = str(row.get("source_segment_id") or f"source:segment:{index:06d}")
++        normalized = {**row, "source_segment_id": source_id}
++        normalized_rows.append(normalized)
++        source_ids.append(source_id)
++    if len(source_ids) != len(set(source_ids)):
++        errors.append({"code": "DUPLICATE_SOURCE_SEGMENT_ID"})
++
++    successful_ids = list(dict.fromkeys(str(item) for item in successful_source_segment_ids))
++    source_id_set = set(source_ids)
++    unknown_ids = sorted(set(successful_ids) - source_id_set)
++    if unknown_ids:
++        errors.append({"code": "UNKNOWN_SUCCESSFUL_SOURCE_SEGMENT_ID", "count": len(unknown_ids)})
++    successful_id_set = set(successful_ids) & source_id_set
++    analyzed_rows = [row for row in normalized_rows if row["source_segment_id"] in successful_id_set]
++
++    if duration > 0:
++        source_union, _source_gaps, source_errors = _interval_union(normalized_rows, duration)
++        analyzed_union, gaps, analyzed_errors = _interval_union(analyzed_rows, duration)
++        errors.extend(source_errors)
++        errors.extend(analyzed_errors)
++    else:
++        source_union, analyzed_union, gaps = [], [], []
++    source_covered = sum(end - start for start, end in source_union)
++    analyzed_covered = sum(end - start for start, end in analyzed_union)
++    source_rate = source_covered / duration if duration > 0 else 0.0
++    analysis_rate = analyzed_covered / duration if duration > 0 else 0.0
++    segment_rate = len(successful_id_set) / len(source_ids) if source_ids else 0.0
++
++    transcript_gate_ok = True
++    if transcript_quality is not None:
++        transcript_rate = finite_number(transcript_quality.get("coverage_rate"))
++        transcript_duration = finite_number(transcript_quality.get("audio_duration_seconds"))
++        transcript_gate_ok = (
++            transcript_quality.get("timestamps_valid") is True
++            and transcript_quality.get("is_qualified") is True
++            and transcript_rate is not None
++            and transcript_rate >= threshold
++            and transcript_duration is not None
++            and abs(transcript_duration - duration) <= 0.01
++            and abs(transcript_rate - source_rate) <= 1e-9
++        )
++        if not transcript_gate_ok:
++            errors.append({"code": "TRANSCRIPT_QUALITY_GATE_MISMATCH"})
++    if coverage_scope != "FULL_SESSION":
++        errors.append({"code": "SOURCE_SCOPE_NOT_FULL_SESSION", "coverage_scope": coverage_scope})
++    if not all_chunks_complete:
++        errors.append({"code": "ANALYSIS_CHUNKS_INCOMPLETE"})
++
++    timestamps_valid = not any(error["code"] in {
++        "INVALID_SOURCE_DURATION", "SOURCE_TIMESTAMP_OUT_OF_RANGE"
++    } for error in errors)
++    source_ids_valid = not any(error["code"] in {
++        "DUPLICATE_SOURCE_SEGMENT_ID", "UNKNOWN_SUCCESSFUL_SOURCE_SEGMENT_ID"
++    } for error in errors)
++    qualified = (
++        coverage_scope == "FULL_SESSION"
++        and timestamps_valid
++        and source_ids_valid
++        and transcript_gate_ok
++        and all_chunks_complete
++        and len(successful_id_set) == len(source_ids)
++        and source_rate >= threshold
++        and analysis_rate >= threshold
++    )
++    meets_target = qualified and source_rate >= desired and analysis_rate >= desired
++    return {
++        "schema_version": 2,
++        "coverage_scope": coverage_scope,
++        "source_duration_seconds": duration,
++        "source_timestamp_covered_seconds": source_covered,
++        "source_transcript_coverage_rate": source_rate,
++        "analyzed_timestamp_covered_seconds": analyzed_covered,
++        "analysis_coverage_rate": analysis_rate,
++        "timeline_coverage_rate": analysis_rate,
++        "source_segment_count": len(source_ids),
++        "analyzed_unique_segment_count": len(successful_id_set),
++        "segment_coverage_rate": segment_rate,
++        "source_segment_ids_sha256": _identifier_hash(source_ids),
++        "successful_source_segment_ids_sha256": _identifier_hash(successful_ids),
++        "successful_source_segment_ids": successful_ids,
++        "covered_segments": [{"start_time": start, "end_time": end} for start, end in analyzed_union],
++        "gaps": gaps,
++        "minimum_coverage_rate": threshold,
++        "target_coverage_rate": desired,
++        "timestamps_valid": timestamps_valid,
++        "source_segment_ids_valid": source_ids_valid,
++        "all_chunks_complete": all_chunks_complete,
++        "is_qualified": qualified,
++        "meets_target": meets_target,
++        "validation_errors": errors,
++    }
++
++
++def merge_chunk_results(results: list[dict], chunks: list[dict], source_duration: float | None,
++                        *, coverage_scope: str = "FULL_SESSION",
++                        minimum: float = DEFAULT_ANALYSIS_COVERAGE_MINIMUM,
++                        target: float = DEFAULT_ANALYSIS_COVERAGE_TARGET,
++                        transcript_quality: dict | None = None,
++                        successful_source_segment_ids: list[str] | None = None) -> dict:
+     merged = empty_chunk_result()
+     seen = {field: set() for field in CHUNK_FIELDS}
+     for result in results:
+@@ -206,12 +426,13 @@
+     instructor_names = list(dict.fromkeys(item["summary"] for item in instructor_items))
+     instructor_status = "NOT_STATED" if not instructor_names else "STATED" if len(instructor_names) == 1 else "CONFLICT"
+     duration = float(source_duration or chunks[-1]["end"])
+-    coverage = max(0.0, chunks[-1]["end"] - chunks[0]["start"])
+     module_sources = (("开场", "hook"), ("干货", "course_content"), ("需求", "pain_points"),
+                       ("信任", "claims"), ("商品承接", "product_handoff"), ("成交", "cta"),
+                       ("答疑", "interaction_patterns"))
+     modules = []
+     source_rows = [row for chunk in chunks for row in chunk["rows"]]
++    for index, row in enumerate(source_rows):
++        row.setdefault("source_segment_id", f"source:segment:{index:06d}")
+     for name, field in module_sources:
+         values = merged[field]
+         timestamps = []
+@@ -221,9 +442,21 @@
+                 candidates = source_rows
+             row = min(candidates, key=lambda candidate: abs(candidate["start"] - item["start"]))
+             timestamps.append({"start": row["start"], "end": row["end"],
+-                               "source_segment_index": row["segment_index"], "source_text": row["text"]})
++                               "source_segment_index": row["segment_index"],
++                               "source_segment_id": row.get("source_segment_id"),
++                               "source_text": row["text"]})
+         modules.append({"name": name, "summary": "；".join(item["summary"] for item in values[:5]),
+                         "timestamps": timestamps})
++    inferred_successful_ids = [
++        str(row["source_segment_id"])
++        for chunk in chunks[:len(results)] for row in chunk["rows"]
++    ]
++    successful_ids = successful_source_segment_ids if successful_source_segment_ids is not None else inferred_successful_ids
++    coverage = calculate_analysis_coverage(
++        source_rows, successful_ids, duration, coverage_scope=coverage_scope,
++        minimum=minimum, target=target,
++        all_chunks_complete=len(results) == len(chunks), transcript_quality=transcript_quality,
++    )
+     merged.update({
+         "schema_version": "2.0",
+         "instructor": {"status": instructor_status,
+@@ -231,15 +464,11 @@
+         "interaction": list(merged["interaction_patterns"]),
+         "product_fulfillment": list(merged["product_handoff"]),
+         "modules": modules,
+-        "analysis_coverage": {"source_duration_seconds": duration,
+-                              "first_timestamp_seconds": chunks[0]["start"],
+-                              "last_timestamp_seconds": chunks[-1]["end"],
+-                              "timeline_coverage_rate": coverage / duration if duration > 0 else None,
++        "analysis_coverage": {**coverage,
++                              "first_timestamp_seconds": min(row["start"] for row in source_rows),
++                              "last_timestamp_seconds": max(row["end"] for row in source_rows),
+                               "chunk_count": len(chunks),
+-                              "input_row_count": sum(chunk["row_count"] for chunk in chunks),
+-                              "analyzed_unique_segment_count": len({row["segment_index"] for row in source_rows}),
+-                              "segment_coverage_rate": 1.0,
+-                              "all_chunks_complete": True},
++                              "input_row_count": sum(chunk["row_count"] for chunk in chunks)},
+     })
+     return merged
+ 
+@@ -260,30 +489,40 @@
+             temporary.unlink()
+ 
+ 
+-def json_object(value: object) -> dict:
++class AnalysisSourceQualityError(RuntimeError):
++    def __init__(self, message: str, coverage: dict):
++        super().__init__(message)
++        self.coverage = coverage
++
++
++def json_object(value) -> dict:
++    if isinstance(value, dict):
++        return value
+     try:
+-        parsed = json.loads(value or "{}") if isinstance(value, str) else value
++        parsed = json.loads(value or "{}")
+     except (TypeError, json.JSONDecodeError):
+         return {}
+     return parsed if isinstance(parsed, dict) else {}
+ 
+ 
+-def transcript_qualification(row: dict, *, canonical_source_digest: str | None) -> tuple[bool, str, dict]:
+-    """Return formal-analysis eligibility for one exact transcript row.
+-
+-    This is deliberately repeated at the consumer boundary.  Pipeline task
+-    creation is not sufficient authorization: a stale/manual analysis row must
+-    still be unable to make a SAMPLE transcript reach the model or outbox.
+-    """
++def transcript_qualification(
++    row: dict,
++    *,
++    canonical_source_digest: str | None,
++    minimum: float,
++) -> tuple[bool, str, dict]:
++    """Recheck the exact immutable transcript at the analysis boundary."""
+     metadata = json_object(row.get("transcript_metadata"))
+     session_metadata = json_object(row.get("session_metadata"))
+     quality = metadata.get("timestamp_coverage") or {}
+-    try:
+-        rate = float(quality.get("coverage_rate"))
+-    except (TypeError, ValueError):
+-        rate = -1.0
+-    is_sample = metadata.get("sample_only") is True or metadata.get("coverage_scope") == "SAMPLE"
+-    reasons = []
++    rate = finite_number(quality.get("coverage_rate"))
++    is_sample = (
++        row.get("transcript_scope") == "SAMPLE"
++        or row.get("transcript_qualification_status") == SAMPLE_NONQUALIFYING
++        or metadata.get("sample_only") is True
++        or metadata.get("coverage_scope") == "SAMPLE"
++    )
++    reasons: list[str] = []
+     if is_sample:
+         reasons.append("SAMPLE_TRANSCRIPT")
+     if row.get("transcript_status") != "COMPLETE":
+@@ -296,98 +535,367 @@
+         reasons.append("NOT_FULL_SESSION")
+     if metadata.get("sample_only") is not False:
+         reasons.append("SAMPLE_FLAG_NOT_FALSE")
+-    if metadata.get("quality_gate_status") != "FULL_SESSION_QUALIFIED":
+-        reasons.append("QUALITY_GATE_NOT_QUALIFIED")
++    if metadata.get("quality_gate_status") != QUALIFIED:
++        reasons.append("TRANSCRIPT_QUALITY_GATE_NOT_QUALIFIED")
+     if quality.get("is_qualified") is not True or quality.get("timestamps_valid") is not True:
+-        reasons.append("TIMESTAMPS_NOT_QUALIFIED")
+-    if rate < FULL_SESSION_MIN_COVERAGE_RATE:
+-        reasons.append("TIMESTAMP_COVERAGE_BELOW_MINIMUM")
++        reasons.append("TRANSCRIPT_TIMESTAMPS_NOT_QUALIFIED")
++    if rate is None or rate < minimum:
++        reasons.append("TRANSCRIPT_COVERAGE_BELOW_MINIMUM")
+     if row.get("session_status") != "MEDIA_COMPLETE" or row.get("completeness") != "COMPLETE":
+         reasons.append("SESSION_NOT_MEDIA_COMPLETE")
+     if (session_metadata.get("media_coverage") or {}).get("continuous_capture") is not True:
+         reasons.append("SESSION_CAPTURE_NOT_CONTINUOUS")
+     if not canonical_source_digest:
+-        reasons.append("SOURCE_SEGMENT_NOT_CURRENT_CANONICAL")
++        reasons.append("CURRENT_CANONICAL_SOURCE_MISSING")
+     elif str(row.get("transcript_source_digest") or "") != canonical_source_digest:
+         reasons.append("TRANSCRIPT_SOURCE_DIGEST_NOT_CURRENT_CANONICAL")
+-    path = Path(str(row.get("transcript_path") or ""))
+-    if not path.is_file():
++    transcript_path = Path(str(row.get("transcript_path") or ""))
++    if not transcript_path.is_file():
+         reasons.append("TRANSCRIPT_ARTIFACT_MISSING")
+     details = {
+         "coverage_scope": metadata.get("coverage_scope"),
+         "sample_only": metadata.get("sample_only"),
+-        "coverage_rate": rate if rate >= 0 else None,
++        "coverage_rate": rate,
+         "source_segment_id": metadata.get("source_segment_id"),
+-        "expected_canonical_source_digest": canonical_source_digest,
+-        "transcript_source_digest": row.get("transcript_source_digest"),
++        "canonical_source_digest": canonical_source_digest,
+         "reasons": reasons,
+     }
+-    return not reasons, SAMPLE_NONQUALIFYING if is_sample else (QUALIFIED if not reasons else "SOURCE_NONQUALIFYING"), details
++    state = SAMPLE_NONQUALIFYING if is_sample else (QUALIFIED if not reasons else "SOURCE_NONQUALIFYING")
++    return not reasons, state, details
+ 
+ 
+-def request_analysis(text: str, source_duration: float | None = None) -> tuple[dict, dict]:
+-    chunks = analysis_chunks(text)
+-    results, diagnostics = [], []
++def prepare_analysis_source(path: Path, transcript_id: str, metadata_value,
++                            minimum: float, target: float) -> tuple[str, list[dict], float, str, dict | None, dict]:
++    """Read and qualify the exact lineage-bound FULL_SESSION transcript."""
++    payload = json.loads(path.read_text(encoding="utf-8"))
++    if not isinstance(payload, dict):
++        raise ValueError("analysis source transcript is not a JSON object")
++    metadata = json_object(metadata_value)
++    scope = str(metadata.get("coverage_scope") or payload.get("coverage_scope") or "")
++    if metadata.get("sample_only") is True:
++        scope = "SAMPLE"
++    transcript_quality = metadata.get("timestamp_coverage") or payload.get("timestamp_coverage")
++    if not isinstance(transcript_quality, dict):
++        transcript_quality = None
++    duration = (
++        finite_number((transcript_quality or {}).get("audio_duration_seconds"))
++        or finite_number(payload.get("duration"))
++    )
++    rows = source_rows_from_transcript(payload, transcript_id)
++    text = "\n".join(row["line"] for row in rows)
++    source_ids = [row["source_segment_id"] for row in rows]
++    preflight = calculate_analysis_coverage(
++        rows, source_ids, duration, coverage_scope=scope, minimum=minimum,
++        target=target, all_chunks_complete=True, transcript_quality=transcript_quality,
++    )
++    if not preflight["is_qualified"]:
++        raise AnalysisSourceQualityError("analysis source did not pass FULL_SESSION coverage gate", preflight)
++    return text, rows, float(duration), scope, transcript_quality, payload
++
++
++def revalidate_existing_artifact(artifact: dict, text: str, source_rows: list[dict],
++                                 source_duration: float, coverage_scope: str,
++                                 transcript_quality: dict | None,
++                                 minimum: float, target: float) -> tuple[dict, dict]:
++    """Recompute an old artifact without another model call.
++
++    Revalidation is allowed only when its content hash and every successful
++    chunk diagnostic exactly match the chunks deterministically rebuilt from
++    the current source transcript.
++    """
++    engine = json_object(artifact.get("engine"))
++    if engine.get("source_content_hash") != hashlib.sha256(text.encode()).hexdigest():
++        raise ValueError("existing analysis source hash does not match transcript")
++    chunks = analysis_chunks(text, source_rows=source_rows)
++    diagnostics = engine.get("chunk_diagnostics")
++    if not isinstance(diagnostics, list) or len(diagnostics) != len(chunks):
++        raise ValueError("existing analysis lacks complete chunk diagnostics")
++    successful_ids: list[str] = []
++    augmented: list[dict] = []
++    for expected, diagnostic in zip(chunks, diagnostics):
++        if not isinstance(diagnostic, dict):
++            raise ValueError("existing analysis has invalid chunk diagnostics")
++        if (
++            int(diagnostic.get("chunk_index", -1)) != expected["index"]
++            or int(diagnostic.get("row_count", -1)) != expected["row_count"]
++            or abs(float(diagnostic.get("start")) - expected["start"]) > 0.01
++            or abs(float(diagnostic.get("end")) - expected["end"]) > 0.01
++            or diagnostic.get("finish_reason") != "stop"
++        ):
++            raise ValueError("existing analysis chunk diagnostics do not match transcript")
++        successful_ids.extend(expected["source_segment_ids"])
++        augmented.append({**diagnostic,
++                          "source_segment_ids": expected["source_segment_ids"],
++                          "source_segment_ids_sha256": _identifier_hash(expected["source_segment_ids"])})
++    coverage = calculate_analysis_coverage(
++        source_rows, successful_ids, source_duration, coverage_scope=coverage_scope,
++        minimum=minimum, target=target, all_chunks_complete=True,
++        transcript_quality=transcript_quality,
++    )
++    result = json_object(artifact.get("result"))
++    result["analysis_coverage"] = {
++        **coverage,
++        "first_timestamp_seconds": min(row["start"] for row in source_rows),
++        "last_timestamp_seconds": max(row["end"] for row in source_rows),
++        "chunk_count": len(chunks),
++        "input_row_count": len(source_rows),
++    }
++    for module in result.get("modules") or []:
++        for reference in module.get("timestamps") or []:
++            index = reference.get("source_segment_index")
++            if isinstance(index, int) and 0 <= index < len(source_rows):
++                reference["source_segment_id"] = source_rows[index]["source_segment_id"]
++    engine.update({
++        "chunk_count": len(chunks),
++        "successful_source_segment_count": len(successful_ids),
++        "successful_source_segment_ids_sha256": _identifier_hash(successful_ids),
++        "chunk_diagnostics": augmented,
++        "merge_engine": "deterministic-python-v3-coverage-gated-revalidation",
++    })
++    artifact["engine"] = engine
++    artifact["result"] = result
++    return artifact, coverage
++
++
++def request_analysis(text: str, source_duration: float | None = None, *,
++                     source_rows: list[dict] | None = None,
++                     coverage_scope: str = "FULL_SESSION",
++                     minimum: float = DEFAULT_ANALYSIS_COVERAGE_MINIMUM,
++                     target: float = DEFAULT_ANALYSIS_COVERAGE_TARGET,
++                     transcript_quality: dict | None = None) -> tuple[dict, dict]:
++    chunks = analysis_chunks(text, source_rows=source_rows)
++    results, diagnostics, successful_ids = [], [], []
+     for chunk in chunks:
+         result, diagnostic = request_chunk(chunk)
+         results.append(result)
++        successful_ids.extend(chunk["source_segment_ids"])
+         diagnostics.append({"chunk_index": chunk["index"], "start": chunk["start"], "end": chunk["end"],
+-                            "row_count": chunk["row_count"], **diagnostic})
+-    merged = merge_chunk_results(results, chunks, source_duration)
++                            "row_count": chunk["row_count"],
++                            "source_segment_ids": chunk["source_segment_ids"],
++                            "source_segment_ids_sha256": _identifier_hash(chunk["source_segment_ids"]),
++                            **diagnostic})
++    merged = merge_chunk_results(
++        results, chunks, source_duration, coverage_scope=coverage_scope,
++        minimum=minimum, target=target, transcript_quality=transcript_quality,
++        successful_source_segment_ids=successful_ids,
++    )
+     return merged, {"provider": "deepseek", "model": "deepseek-chat", "response_ids": [d["response_id"] for d in diagnostics],
+                     "source_content_hash": hashlib.sha256(text.encode()).hexdigest(), "chunk_count": len(chunks),
+-                    "chunk_diagnostics": diagnostics, "merge_engine": "deterministic-python-v2"}
++                    "successful_source_segment_count": len(successful_ids),
++                    "successful_source_segment_ids_sha256": _identifier_hash(successful_ids),
++                    "chunk_diagnostics": diagnostics, "merge_engine": "deterministic-python-v3-coverage-gated"}
++
++
++def _coverage_metadata(coverage: dict) -> dict:
++    """Keep the DB health summary small; exact IDs and gaps stay in artifact."""
++    excluded = {"successful_source_segment_ids", "covered_segments", "gaps"}
++    return {key: value for key, value in coverage.items() if key not in excluded}
++
++
++def _current_analysis_gate(row, minimum: float, target: float) -> bool:
++    metadata = json_object(row.get("metadata_json"))
++    coverage = metadata.get("analysis_coverage") or {}
++    stored_minimum = finite_number(coverage.get("minimum_coverage_rate"))
++    stored_target = finite_number(coverage.get("target_coverage_rate"))
++    if (
++        coverage.get("schema_version") != 2
++        or stored_minimum is None or abs(stored_minimum - minimum) > 1e-12
++        or stored_target is None or abs(stored_target - target) > 1e-12
++    ):
++        return False
++    if row.get("status") == "COMPLETE":
++        rate = finite_number(coverage.get("analysis_coverage_rate"))
++        return bool(
++            coverage.get("coverage_scope") == "FULL_SESSION"
++            and coverage.get("timestamps_valid") is True
++            and coverage.get("source_segment_ids_valid") is True
++            and coverage.get("all_chunks_complete") is True
++            and coverage.get("is_qualified") is True
++            and rate is not None and rate >= minimum
++            and row.get("output_path") and Path(row["output_path"]).is_file()
++        )
++    return row.get("status") == "QUALITY_BLOCKED" and coverage.get("is_qualified") is False
++
++
++def analysis_health_snapshot(minimum: float, target: float) -> tuple[str, dict]:
++    """Report persistent quality debt, not only failures from this loop."""
++    with connect() as conn:
++        rows = [
++            dict(row) for row in conn.execute(
++                "SELECT a.*,e.status AS evidence_status FROM analyses a "
++                "LEFT JOIN evidence_bundles e ON e.object_type='analysis' "
++                "AND e.object_id=a.analysis_id WHERE a.analysis_type='single_session' "
++                "AND a.analysis_spec_version=? AND a.model_version=? AND a.prompt_version=? "
++                "AND a.lineage_state<>'SUPERSEDED' ORDER BY a.analysis_id",
++                (ANALYSIS_SPEC_VERSION, MODEL_VERSION, PROMPT_VERSION),
++            ).fetchall()
++        ]
++    qualified = target_met = blocked = waiting = evidence_pending = 0
++    for row in rows:
++        if row["status"] == "COMPLETE" and _current_analysis_gate(row, minimum, target):
++            qualified += 1
++            coverage = json_object(row.get("metadata_json")).get("analysis_coverage") or {}
++            if coverage.get("meets_target") is True:
++                target_met += 1
++            if row.get("evidence_status") != "VERIFIED":
++                evidence_pending += 1
++        elif row["status"] in {"QUALITY_BLOCKED", "BLOCKED_SOURCE_QUALIFICATION"}:
++            blocked += 1
++        elif row["status"] in {"PENDING", "WAITING_MODEL"}:
++            waiting += 1
++    reasons = []
++    if blocked:
++        reasons.append("ANALYSIS_QUALITY_BLOCKED")
++    if waiting:
++        reasons.append("ANALYSIS_WORK_PENDING")
++    if evidence_pending:
++        reasons.append("ANALYSIS_EVIDENCE_PENDING")
++    status = "DEGRADED" if reasons else "READY"
++    return status, {
++        "current_spec_total": len(rows),
++        "current_spec_qualified": qualified,
++        "current_spec_meets_target": target_met,
++        "current_spec_blocked": blocked,
++        "current_spec_waiting": waiting,
++        "current_spec_evidence_pending": evidence_pending,
++        "health_reasons": reasons,
++    }
+ 
+ 
++def _quality_block(
++    analysis_row: dict,
++    coverage: dict,
++    *,
++    reason: str,
++    analysis_metadata: dict,
++) -> None:
++    """Persist a non-formal diagnostic without binding analyses.output_path."""
++    diagnostic_dir = ANALYSIS_ROOT / "quality-blocked"
++    diagnostic_path = diagnostic_dir / f"{analysis_row['analysis_id']}.coverage.json"
++    diagnostic = {
++        "analysis_id": analysis_row["analysis_id"],
++        "session_id": analysis_row["session_id"],
++        "transcript_id": analysis_row["transcript_id"],
++        "transcript_content_digest": analysis_row["transcript_content_digest"],
++        "analysis_spec_version": analysis_row["analysis_spec_version"],
++        "model_version": analysis_row["model_version"],
++        "prompt_version": analysis_row["prompt_version"],
++        "status": "QUALITY_BLOCKED",
++        "reason": reason,
++        "analysis_coverage": coverage,
++        "checked_at": utc_now(),
++    }
++    write_json_atomic(diagnostic_path, diagnostic)
++    diagnostic_digest = file_sha256(diagnostic_path)
++    metadata = {
++        **analysis_metadata,
++        "coverage_scope": coverage.get("coverage_scope"),
++        "analysis_coverage": _coverage_metadata(coverage),
++        "quality_gate_status": "QUALITY_BLOCKED",
++        "is_formal_output": False,
++        "quality_diagnostic_path": str(diagnostic_path),
++        "quality_diagnostic_digest": diagnostic_digest,
++        "error_type": "AnalysisCoverageQualityBlocked",
++        "error_message": reason,
++        "checked_at": utc_now(),
++    }
++    with connect() as conn:
++        conn.execute(
++            "UPDATE analyses SET status='QUALITY_BLOCKED',lineage_state='BLOCKED',"
++            "qualification_status='ANALYSIS_QUALITY_BLOCKED',metadata_json=? "
++            "WHERE analysis_id=? AND transcript_id=? AND transcript_content_digest=? "
++            "AND analysis_spec_version=? AND model_version=? AND prompt_version=?",
++            (
++                json.dumps(metadata, ensure_ascii=False, sort_keys=True),
++                analysis_row["analysis_id"], analysis_row["transcript_id"],
++                analysis_row["transcript_content_digest"], ANALYSIS_SPEC_VERSION,
++                MODEL_VERSION, PROMPT_VERSION,
++            ),
++        )
++        conn.execute(
++            "INSERT INTO evidence_bundles(bundle_id,object_type,object_id,status,manifest_path,"
++            "manifest_hash,scope,qualification_status,metadata_json) VALUES(?,?,?,?,?,?,?,?,?) "
++            "ON CONFLICT(object_type,object_id) DO UPDATE SET status=excluded.status,"
++            "manifest_path=excluded.manifest_path,manifest_hash=excluded.manifest_hash,"
++            "scope=excluded.scope,qualification_status=excluded.qualification_status,"
++            "metadata_json=excluded.metadata_json",
++            (
++                "bundle:" + analysis_row["analysis_id"], "analysis", analysis_row["analysis_id"],
++                "QUALITY_BLOCKED", str(diagnostic_path), diagnostic_digest,
++                ANALYSIS_SCOPE_FORMAL, "ANALYSIS_QUALITY_BLOCKED",
++                json.dumps({"analysis_coverage": _coverage_metadata(coverage),
++                            "reason": reason}, ensure_ascii=False, sort_keys=True),
++            ),
++        )
++        conn.commit()
++
++
+ def once() -> dict:
+-    completed = failed = blocked = 0
++    completed = failed = quality_blocked = source_blocked = revalidated = 0
++    minimum, target = load_analysis_quality_config()
+     init_db()
+     with connect() as conn:
+-        analyses = conn.execute(
+-            "SELECT * FROM analyses WHERE analysis_type='single_session' "
+-            "AND lineage_state='CURRENT' AND status IN ('PENDING','WAITING_MODEL') ORDER BY analysis_id"
+-        ).fetchall()
+-    for analysis_row_raw in analyses:
+-        analysis_row = dict(analysis_row_raw)
+-        analysis_metadata = json_object(analysis_row["metadata_json"])
++        analyses = [
++            dict(row) for row in conn.execute(
++                "SELECT * FROM analyses WHERE analysis_type='single_session' "
++                "AND analysis_spec_version=? AND model_version=? AND prompt_version=? "
++                "AND status IN ('PENDING','WAITING_MODEL','QUALITY_BLOCKED','BLOCKED_SOURCE_QUALIFICATION') "
++                "ORDER BY analysis_id",
++                (ANALYSIS_SPEC_VERSION, MODEL_VERSION, PROMPT_VERSION),
++            ).fetchall()
++        ]
++
++    for analysis_row in analyses:
++        if _current_analysis_gate(analysis_row, minimum, target):
++            continue
++        analysis_metadata = json_object(analysis_row.get("metadata_json"))
+         expected_transcript_id = str(analysis_row.get("transcript_id") or "")
+         with connect() as conn:
+-            edges = conn.execute(
+-                "SELECT DISTINCT upstream_id,upstream_version FROM lineage_edges WHERE downstream_type='analysis' "
+-                "AND downstream_id=? AND upstream_type='transcript' AND state='CURRENT' ORDER BY upstream_id",
+-                (analysis_row["analysis_id"],),
+-            ).fetchall()
+-            upstreams = [(str(edge["upstream_id"]), str(edge["upstream_version"])) for edge in edges]
+             row = conn.execute(
+-                "SELECT t.transcript_id,t.session_id,t.source_digest AS transcript_source_digest,t.status AS transcript_status,t.output_path AS transcript_path,"
++                "SELECT t.transcript_id,t.session_id,t.source_digest AS transcript_source_digest,"
++                "t.status AS transcript_status,t.output_path AS transcript_path,"
+                 "t.scope AS transcript_scope,t.qualification_status AS transcript_qualification_status,"
+                 "t.metadata_json AS transcript_metadata,s.status AS session_status,s.completeness,"
+-                "s.metadata_json AS session_metadata FROM transcripts t JOIN live_sessions s ON s.session_id=t.session_id "
++                "s.metadata_json AS session_metadata FROM transcripts t "
++                "JOIN live_sessions s ON s.session_id=t.session_id "
+                 "WHERE t.transcript_id=? AND t.session_id=?",
+                 (expected_transcript_id, analysis_row["session_id"]),
+             ).fetchone() if expected_transcript_id else None
+-            transcript_metadata = json_object(row["transcript_metadata"]) if row else {}
++            row_dict = dict(row or {})
++            transcript_metadata = json_object(row_dict.get("transcript_metadata"))
+             source_segment_id = str(transcript_metadata.get("source_segment_id") or "")
+-            canonical_row = conn.execute(
++            canonical = conn.execute(
+                 "SELECT checksum,path FROM recording_segments WHERE segment_id=? AND session_id=? "
+                 "AND status='COMPLETE' AND lifecycle_status='CANONICAL_ACTIVE'",
+                 (source_segment_id, analysis_row["session_id"]),
+             ).fetchone() if source_segment_id else None
+-            canonical_checksum = str(canonical_row["checksum"] or "") if canonical_row else ""
+-            canonical_path = Path(str(canonical_row["path"] or "")) if canonical_row else None
+-            if not canonical_checksum and canonical_path and canonical_path.is_file():
+-                canonical_checksum = file_sha256(canonical_path)
+-            canonical_source_digest = hashlib.sha256(("FULL_SESSION:" + canonical_checksum).encode()).hexdigest() if canonical_checksum else None
+-        row_dict = dict(row or {})
+-        eligible, qualification_state, qualification = transcript_qualification(row_dict, canonical_source_digest=canonical_source_digest)
++            canonical_hash = str(canonical["checksum"] or "") if canonical else ""
++            canonical_path = Path(str(canonical["path"] or "")) if canonical else None
++            if canonical and not canonical_hash and canonical_path and canonical_path.is_file():
++                canonical_hash = file_sha256(canonical_path)
++            canonical_source_digest = (
++                hashlib.sha256(("FULL_SESSION:" + canonical_hash).encode()).hexdigest()
++                if canonical_hash else None
++            )
++            edges = [
++                (str(edge["upstream_id"]), str(edge["upstream_version"]))
++                for edge in conn.execute(
++                    "SELECT upstream_id,upstream_version FROM lineage_edges "
++                    "WHERE downstream_type='analysis' AND downstream_id=? "
++                    "AND upstream_type='transcript' AND state='CURRENT' ORDER BY edge_id",
++                    (analysis_row["analysis_id"],),
++                ).fetchall()
++            ]
++
++        eligible, qualification_state, qualification = transcript_qualification(
++            row_dict, canonical_source_digest=canonical_source_digest, minimum=minimum,
++        )
+         expected_digest = str(analysis_row.get("transcript_content_digest") or "")
+         transcript_path = Path(str(row_dict.get("transcript_path") or ""))
+         actual_digest = file_sha256(transcript_path) if transcript_path.is_file() else ""
+-        immutable_reasons = []
++        immutable_reasons: list[str] = []
+         if analysis_row.get("scope") != ANALYSIS_SCOPE_FORMAL:
+             immutable_reasons.append("ANALYSIS_SCOPE_NOT_FORMAL")
+-        if analysis_row.get("qualification_status") != QUALIFIED:
+-            immutable_reasons.append("ANALYSIS_QUALIFICATION_COLUMN_NOT_QUALIFIED")
+         if analysis_row.get("analysis_spec_version") != ANALYSIS_SPEC_VERSION:
+             immutable_reasons.append("ANALYSIS_SPEC_VERSION_MISMATCH")
+         if analysis_row.get("model_version") != MODEL_VERSION:
+@@ -398,28 +906,17 @@
+             immutable_reasons.append("TRANSCRIPT_CONTENT_DIGEST_MISMATCH")
+         if analysis_row.get("source_digest") != expected_digest:
+             immutable_reasons.append("ANALYSIS_SOURCE_DIGEST_MISMATCH")
+-        lineage_valid = bool(expected_transcript_id and upstreams == [(expected_transcript_id, expected_digest)])
+-        if not lineage_valid or immutable_reasons:
+-            eligible = False
+-            qualification_state = "SOURCE_NONQUALIFYING"
++        expected_edge = [(expected_transcript_id, expected_digest)]
++        if edges != expected_edge:
++            immutable_reasons.append("LINEAGE_NOT_EXACTLY_ONE_EXPECTED_TRANSCRIPT_DIGEST")
++        if not eligible or immutable_reasons:
+             qualification["reasons"] = [*qualification.get("reasons", []), *immutable_reasons]
+-            if not lineage_valid:
+-                qualification["reasons"].append("LINEAGE_NOT_EXACTLY_ONE_EXPECTED_TRANSCRIPT_DIGEST")
+-            qualification["expected_transcript_id"] = expected_transcript_id or None
+-            qualification["expected_transcript_content_digest"] = expected_digest or None
+-            qualification["actual_transcript_content_digest"] = actual_digest or None
+-            qualification["current_upstreams"] = upstreams
+-        if not eligible:
+-            transcript_metadata = json_object(row_dict.get("transcript_metadata"))
+-            sample = bool(
+-                row_dict.get("transcript_scope") == "SAMPLE"
+-                or row_dict.get("transcript_qualification_status") == SAMPLE_NONQUALIFYING
+-                or transcript_metadata.get("sample_only") is True
+-            )
+-            if sample:
+-                qualification_state = SAMPLE_NONQUALIFYING
+-            status = "SAMPLE_NONQUALIFYING" if sample else "BLOCKED_SOURCE_QUALIFICATION"
+-            updated_metadata = {
++            sample = qualification_state == SAMPLE_NONQUALIFYING
++            blocked_status = "SAMPLE_NONQUALIFYING" if sample else "BLOCKED_SOURCE_QUALIFICATION"
++            blocked_lineage = "INVALIDATED" if sample else "BLOCKED"
++            blocked_scope = "SAMPLE_AUXILIARY" if sample else analysis_row.get("scope")
++            blocked_qualification = SAMPLE_NONQUALIFYING if sample else "SOURCE_NONQUALIFYING"
++            metadata = {
+                 **analysis_metadata,
+                 "qualification_state": qualification_state,
+                 "formal_analysis_eligible": False,
+@@ -428,47 +925,274 @@
+             }
+             with connect() as conn:
+                 conn.execute(
+-                    "UPDATE analyses SET status=?,lineage_state=?,scope=?,qualification_status=?,metadata_json=? WHERE analysis_id=?",
+-                    (status, "INVALIDATED" if status == "SAMPLE_NONQUALIFYING" else "BLOCKED",
+-                     "SAMPLE_AUXILIARY" if status == "SAMPLE_NONQUALIFYING" else analysis_row.get("scope"),
+-                     SAMPLE_NONQUALIFYING if status == "SAMPLE_NONQUALIFYING" else "SOURCE_NONQUALIFYING",
+-                     json.dumps(updated_metadata, ensure_ascii=False, sort_keys=True), analysis_row["analysis_id"]),
++                    "UPDATE analyses SET status=?,lineage_state=?,scope=?,qualification_status=?,"
++                    "metadata_json=? WHERE analysis_id=?",
++                    (
++                        blocked_status, blocked_lineage, blocked_scope,
++                        blocked_qualification,
++                        json.dumps(metadata, ensure_ascii=False, sort_keys=True),
++                        analysis_row["analysis_id"],
++                    ),
+                 )
+                 conn.commit()
+-            blocked += 1
++            source_blocked += 1
+             continue
+-        row = {**analysis_row, **row_dict, "transcript_id": expected_transcript_id}
++
+         try:
+-            text, transcript_rows = transcript_text(Path(row["transcript_path"]))
+-            transcript_payload = json.loads(Path(row["transcript_path"]).read_text(encoding="utf-8"))
+-            source_duration = transcript_payload.get("duration") or max(
+-                (float(item.get("end") or 0) for item in transcript_rows), default=0
++            text, source_rows, source_duration, scope, transcript_quality, _payload = prepare_analysis_source(
++                transcript_path, expected_transcript_id,
++                row_dict.get("transcript_metadata"), minimum, target,
+             )
+-            result, engine = request_analysis(text, source_duration=float(source_duration or 0))
+-            output_path = ANALYSIS_ROOT / f"{row['analysis_id']}.json"
+-            artifact = {"analysis_id": row["analysis_id"], "session_id": row["session_id"], "transcript_id": row["transcript_id"], "transcript_content_digest": expected_digest, "analysis_spec_version": ANALYSIS_SPEC_VERSION, "model_version": MODEL_VERSION, "prompt_version": PROMPT_VERSION, "qualification_state": QUALIFIED, "engine": engine, "created_at": utc_now(), "result": result}
+-            write_json_atomic(output_path, artifact)
+-            artifact_digest = file_sha256(output_path)
++        except AnalysisSourceQualityError as exc:
++            _quality_block(
++                analysis_row, exc.coverage, reason=str(exc),
++                analysis_metadata=analysis_metadata,
++            )
++            quality_blocked += 1
++            continue
++        except Exception as exc:
+             with connect() as conn:
+-                completed_metadata = {**analysis_metadata, **engine, "semantic_engine": MODEL_VERSION, "transcript_segment_count": len(transcript_rows), "qualification_state": QUALIFIED, "formal_analysis_eligible": True, "qualification": qualification, "qualification_checked_at": utc_now(), "artifact_digest": artifact_digest}
+-                updated = conn.execute("UPDATE analyses SET status='COMPLETE',output_path=?,artifact_digest=?,metadata_json=?,lineage_state='CURRENT' WHERE analysis_id=? AND transcript_id=? AND transcript_content_digest=? AND analysis_spec_version=? AND model_version=? AND prompt_version=?", (str(output_path), artifact_digest, json.dumps(completed_metadata, ensure_ascii=False, sort_keys=True), row["analysis_id"], expected_transcript_id, expected_digest, ANALYSIS_SPEC_VERSION, MODEL_VERSION, PROMPT_VERSION))
+-                if updated.rowcount != 1:
+-                    raise RuntimeError("immutable analysis identity changed before completion")
+-                conn.execute("INSERT INTO evidence_bundles(bundle_id,object_type,object_id,status,manifest_path,manifest_hash,scope,qualification_status,metadata_json) VALUES(?,?,?,?,?,?,?,?,?) ON CONFLICT(object_type,object_id) DO UPDATE SET status=excluded.status,manifest_path=excluded.manifest_path,manifest_hash=excluded.manifest_hash,scope=excluded.scope,qualification_status=excluded.qualification_status,metadata_json=excluded.metadata_json", ("bundle:" + row["analysis_id"], "analysis", row["analysis_id"], "REQUIRED", str(output_path), artifact_digest, ANALYSIS_SCOPE_FORMAL, QUALIFIED, json.dumps({"transcript_id": row["transcript_id"], "transcript_content_digest": expected_digest, "artifact_digest": artifact_digest, "qualification_state": QUALIFIED, "formal_analysis_eligible": True}, ensure_ascii=False, sort_keys=True)))
+-                enqueue_outbox_conn(conn, object_type="semantic_projection", object_id=row["analysis_id"], destination="feishu_base", payload={"analysis_id": row["analysis_id"], "profile_id": "edu_live_competitor_intel", "qualification_state": QUALIFIED, "artifact_digest": artifact_digest}, scope=ANALYSIS_SCOPE_FORMAL, qualification_status=QUALIFIED)
+-                conn.commit()
+-            completed += 1
+-        except Exception as exc:  # fail closed; no fabricated analysis
+-            with connect() as conn:
+-                conn.execute("UPDATE analyses SET status='WAITING_MODEL',metadata_json=? WHERE analysis_id=?", (json.dumps({**analysis_metadata, "qualification_state": "FULL_SESSION_QUALIFIED", "formal_analysis_eligible": True, "error_type": exc.__class__.__name__, "error_message": str(exc)[:500], "checked_at": utc_now()}, ensure_ascii=False, sort_keys=True), row["analysis_id"]))
++                conn.execute(
++                    "UPDATE analyses SET status='WAITING_MODEL',metadata_json=? WHERE analysis_id=?",
++                    (json.dumps({**analysis_metadata, "error_type": exc.__class__.__name__,
++                                 "error_message": str(exc)[:500], "checked_at": utc_now()},
++                                ensure_ascii=False, sort_keys=True),
++                     analysis_row["analysis_id"]),
++                )
+                 conn.commit()
+             failed += 1
+-    result = {"completed": completed, "waiting_model": failed, "source_qualification_blocked": blocked, "checked_at": utc_now()}
+-    healthy = failed == 0 and blocked == 0
+-    upsert_heartbeat("analysis-v3", "READY" if healthy else "DEGRADED", result, success=healthy)
+-    return result
++            continue
+ 
++        prior = None
++        with connect() as conn:
++            candidates = conn.execute(
++                "SELECT a.*,e.status AS evidence_status,e.manifest_hash AS evidence_manifest_hash "
++                "FROM analyses a JOIN evidence_bundles e ON e.object_type='analysis' "
++                "AND e.object_id=a.analysis_id WHERE a.transcript_id=? "
++                "AND a.transcript_content_digest=? AND a.analysis_type='single_session' "
++                "AND a.status='COMPLETE' AND a.scope='FORMAL_SINGLE_SESSION' "
++                "AND a.qualification_status='FULL_SESSION_QUALIFIED' "
++                "AND a.output_path IS NOT NULL AND a.analysis_id<>? "
++                "ORDER BY CASE WHEN a.lineage_state='CURRENT' THEN 0 ELSE 1 END,a.analysis_id",
++                (expected_transcript_id, expected_digest, analysis_row["analysis_id"]),
++            ).fetchall()
++        for candidate in candidates:
++            candidate_path = Path(str(candidate["output_path"] or ""))
++            if not candidate_path.is_file():
++                continue
++            candidate_digest = file_sha256(candidate_path)
++            if (
++                candidate["evidence_status"] != "VERIFIED"
++                or not candidate["artifact_digest"]
++                or candidate_digest != candidate["artifact_digest"]
++                or candidate_digest != candidate["evidence_manifest_hash"]
++            ):
++                continue
++            try:
++                prior_artifact = json.loads(candidate_path.read_text(encoding="utf-8"))
++                if (
++                    str(prior_artifact.get("analysis_id") or "") != str(candidate["analysis_id"])
++                    or str(prior_artifact.get("session_id") or "") != str(candidate["session_id"])
++                    or str(prior_artifact.get("transcript_id") or "") != expected_transcript_id
++                ):
++                    continue
++                rebuilt, coverage = revalidate_existing_artifact(
++                    prior_artifact, text, source_rows, source_duration, scope,
++                    transcript_quality, minimum, target,
++                )
++            except (OSError, json.JSONDecodeError, TypeError, ValueError):
++                continue
++            prior = dict(candidate)
++            engine = json_object(rebuilt.get("engine"))
++            result = json_object(rebuilt.get("result"))
++            engine.update({
++                "revalidated_from_analysis_id": prior["analysis_id"],
++                "revalidated_from_artifact_digest": prior.get("artifact_digest"),
++                "coverage_gate_version": 2,
++            })
++            revalidated += 1
++            break
++        else:
++            try:
++                result, engine = request_analysis(
++                    text, source_duration=source_duration, source_rows=source_rows,
++                    coverage_scope=scope, minimum=minimum, target=target,
++                    transcript_quality=transcript_quality,
++                )
++                coverage = result["analysis_coverage"]
++            except AnalysisSourceQualityError as exc:
++                _quality_block(
++                    analysis_row, exc.coverage, reason=str(exc),
++                    analysis_metadata=analysis_metadata,
++                )
++                quality_blocked += 1
++                continue
++            except Exception as exc:
++                with connect() as conn:
++                    conn.execute(
++                        "UPDATE analyses SET status='WAITING_MODEL',metadata_json=? WHERE analysis_id=?",
++                        (json.dumps({**analysis_metadata, "qualification_state": QUALIFIED,
++                                     "formal_analysis_eligible": True,
++                                     "error_type": exc.__class__.__name__,
++                                     "error_message": str(exc)[:500],
++                                     "checked_at": utc_now()},
++                                    ensure_ascii=False, sort_keys=True),
++                         analysis_row["analysis_id"]),
++                    )
++                    conn.commit()
++                failed += 1
++                continue
+ 
++        if not coverage.get("is_qualified"):
++            _quality_block(
++                analysis_row, coverage,
++                reason="analysis coverage did not pass the formal 90% gate",
++                analysis_metadata=analysis_metadata,
++            )
++            quality_blocked += 1
++            continue
++
++        artifact = {
++            "analysis_id": analysis_row["analysis_id"],
++            "session_id": analysis_row["session_id"],
++            "transcript_id": expected_transcript_id,
++            "transcript_content_digest": expected_digest,
++            "analysis_spec_version": ANALYSIS_SPEC_VERSION,
++            "model_version": MODEL_VERSION,
++            "prompt_version": PROMPT_VERSION,
++            "qualification_state": QUALIFIED,
++            "engine": engine,
++            "created_at": utc_now(),
++            "result": result,
++        }
++        output_path = ANALYSIS_ROOT / f"{analysis_row['analysis_id']}.json"
++        write_json_atomic(output_path, artifact)
++        artifact_digest = file_sha256(output_path)
++        gate_status = "QUALIFIED_TARGET" if coverage.get("meets_target") else "QUALIFIED_MINIMUM"
++        metadata = {
++            **analysis_metadata,
++            **engine,
++            "semantic_engine": MODEL_VERSION,
++            "transcript_segment_count": len(source_rows),
++            "coverage_scope": scope,
++            "analysis_coverage": _coverage_metadata(coverage),
++            "quality_gate_status": gate_status,
++            "is_formal_output": True,
++            "qualification_state": QUALIFIED,
++            "formal_analysis_eligible": True,
++            "artifact_digest": artifact_digest,
++            "qualification_checked_at": utc_now(),
++        }
++        with connect() as conn:
++            updated = conn.execute(
++                "UPDATE analyses SET status='COMPLETE',output_path=?,artifact_digest=?,"
++                "metadata_json=?,lineage_state='CURRENT',qualification_status=? "
++                "WHERE analysis_id=? AND transcript_id=? AND transcript_content_digest=? "
++                "AND analysis_spec_version=? AND model_version=? AND prompt_version=?",
++                (
++                    str(output_path), artifact_digest,
++                    json.dumps(metadata, ensure_ascii=False, sort_keys=True), QUALIFIED,
++                    analysis_row["analysis_id"], expected_transcript_id, expected_digest,
++                    ANALYSIS_SPEC_VERSION, MODEL_VERSION, PROMPT_VERSION,
++                ),
++            )
++            if updated.rowcount != 1:
++                conn.rollback()
++                raise RuntimeError("immutable analysis identity changed before completion")
++
++            superseded_rows = conn.execute(
++                "SELECT analysis_id,metadata_json FROM analyses WHERE transcript_id=? "
++                "AND analysis_type='single_session' AND analysis_id<>? "
++                "AND status='COMPLETE' AND lineage_state='CURRENT'",
++                (expected_transcript_id, analysis_row["analysis_id"]),
++            ).fetchall()
++            for old in superseded_rows:
++                old_metadata = {
++                    **json_object(old["metadata_json"]),
++                    "superseded_by_analysis_id": analysis_row["analysis_id"],
++                    "superseded_at": utc_now(),
++                }
++                conn.execute(
++                    "UPDATE analyses SET lineage_state='SUPERSEDED',metadata_json=? "
++                    "WHERE analysis_id=? AND lineage_state='CURRENT'",
++                    (json.dumps(old_metadata, ensure_ascii=False, sort_keys=True),
++                     old["analysis_id"]),
++                )
++                conn.execute(
++                    "UPDATE lineage_edges SET state='SUPERSEDED' "
++                    "WHERE downstream_type='analysis' AND downstream_id=? "
++                    "AND upstream_type='transcript' AND state='CURRENT'",
++                    (old["analysis_id"],),
++                )
++                enqueue_outbox_conn(
++                    conn, object_type="semantic_projection", object_id=old["analysis_id"],
++                    destination="feishu_base",
++                    payload={"analysis_id": old["analysis_id"],
++                             "profile_id": "edu_live_competitor_intel",
++                             "lineage_state": "SUPERSEDED",
++                             "superseded_by_analysis_id": analysis_row["analysis_id"],
++                             "correction_version": 1},
++                    scope=ANALYSIS_SCOPE_FORMAL, qualification_status=QUALIFIED,
++                )
++
++            conn.execute(
++                "INSERT INTO evidence_bundles(bundle_id,object_type,object_id,status,"
++                "manifest_path,manifest_hash,scope,qualification_status,metadata_json) "
++                "VALUES(?,?,?,?,?,?,?,?,?) ON CONFLICT(object_type,object_id) DO UPDATE SET "
++                "status=excluded.status,manifest_path=excluded.manifest_path,"
++                "manifest_hash=excluded.manifest_hash,scope=excluded.scope,"
++                "qualification_status=excluded.qualification_status,"
++                "metadata_json=excluded.metadata_json",
++                (
++                    "bundle:" + analysis_row["analysis_id"], "analysis",
++                    analysis_row["analysis_id"], "REQUIRED", str(output_path),
++                    artifact_digest, ANALYSIS_SCOPE_FORMAL, QUALIFIED,
++                    json.dumps({
++                        "transcript_id": expected_transcript_id,
++                        "transcript_content_digest": expected_digest,
++                        "artifact_digest": artifact_digest,
++                        "analysis_coverage": _coverage_metadata(coverage),
++                        "qualification_state": QUALIFIED,
++                        "formal_analysis_eligible": True,
++                    }, ensure_ascii=False, sort_keys=True),
++                ),
++            )
++            enqueue_outbox_conn(
++                conn, object_type="semantic_projection",
++                object_id=analysis_row["analysis_id"], destination="feishu_base",
++                payload={"analysis_id": analysis_row["analysis_id"],
++                         "profile_id": "edu_live_competitor_intel",
++                         "qualification_state": QUALIFIED,
++                         "artifact_digest": artifact_digest,
++                         "analysis_spec_version": ANALYSIS_SPEC_VERSION},
++                scope=ANALYSIS_SCOPE_FORMAL, qualification_status=QUALIFIED,
++            )
++            conn.commit()
++        completed += 1
++
++    health_status, health = analysis_health_snapshot(minimum, target)
++    result = {
++        "completed": completed,
++        "revalidated": revalidated,
++        "quality_blocked": quality_blocked,
++        "source_qualification_blocked": source_blocked,
++        "waiting_model": failed,
++        "minimum_coverage_rate": minimum,
++        "target_coverage_rate": target,
++        "analysis_spec_version": ANALYSIS_SPEC_VERSION,
++        **health,
++        "checked_at": utc_now(),
++    }
++    healthy = (
++        failed == 0 and quality_blocked == 0 and source_blocked == 0
++        and health_status == "READY"
++    )
++    upsert_heartbeat(
++        "analysis-v3", "READY" if healthy else "DEGRADED",
++        result, success=healthy,
++    )
++    return result
++
+ def main() -> int:
+     parser = argparse.ArgumentParser()
+     parser.add_argument("command", choices=("once", "daemon"))
+--- /Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/v3_project_feishu.py	2026-08-30 23:11:45
++++ /Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-30-analysis-coverage-production/staging/runtime/v3/v3_project_feishu.py	2026-08-30 23:28:03
+@@ -186,10 +186,29 @@
+         and metadata.get("qualification_state") == "FULL_SESSION_QUALIFIED"
+         and metadata.get("formal_analysis_eligible") is True
+     )
++    superseded_formal = bool(
++        is_single
++        and analysis.get("status") == "COMPLETE"
++        and analysis.get("lineage_state") == "SUPERSEDED"
++        and scope_column == "FORMAL_SINGLE_SESSION"
++        and qualification_column == "FULL_SESSION_QUALIFIED"
++    )
+     if is_sample:
+         projection_type, projection_status = "部分场辅助", "证据不足"
+         qualification = "SAMPLE_NONQUALIFYING"
+         evidence = "SAMPLE_NONQUALIFYING：仅300秒样本，不是整场分析，不可用于正式决策或后续交付；lineage_state=" + str(analysis.get("lineage_state") or "INVALIDATED")
++    elif superseded_formal:
++        projection_type, projection_status = "单场分析", "完成"
++        qualification = "SUPERSEDED_FORMAL_VERSION"
++        evidence = (
++            "SUPERSEDED_FORMAL_VERSION：该报告来源完整，但已被新版分析替代，"
++            "不再是当前决策版本；superseded_by="
++            + str(metadata.get("superseded_by_analysis_id") or "UNKNOWN")
++        )
++    elif analysis.get("status") == "QUALITY_BLOCKED":
++        projection_type, projection_status = "部分场辅助", "证据不足"
++        qualification = "ANALYSIS_QUALITY_BLOCKED"
++        evidence = "ANALYSIS_QUALITY_BLOCKED：分析覆盖率未达到90%硬门槛，不可作为正式输出"
+     elif is_single and not qualified:
+         projection_type, projection_status = "部分场辅助", "证据不足"
+         qualification = "SOURCE_NONQUALIFYING"
+--- /Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/v3_sample_analysis_migration.py	2026-08-30 23:11:45
++++ /Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-30-analysis-coverage-production/staging/runtime/v3/v3_sample_analysis_migration.py	2026-08-30 23:28:17
+@@ -153,7 +153,7 @@
+         for table in ("transcripts", "analyses", "evidence_bundles", "outbox", "delivery_receipts"):
+             cur.execute(f"SELECT count(*) AS n FROM {table} WHERE scope='UNCLASSIFIED' OR qualification_status='UNCLASSIFIED'")
+             unclassified[table] = cur.fetchone()["n"]
+-        cur.execute("SELECT analysis_id,transcript_id,transcript_content_digest FROM analyses WHERE scope=%s AND qualification_status=%s", (ANALYSIS_SCOPE_FORMAL, QUALIFIED))
++        cur.execute("SELECT analysis_id,transcript_id,transcript_content_digest FROM analyses WHERE scope=%s AND qualification_status=%s AND lineage_state IN ('CURRENT','CANDIDATE')", (ANALYSIS_SCOPE_FORMAL, QUALIFIED))
+         lineage_errors = []
+         for analysis in cur.fetchall():
+             cur.execute("SELECT upstream_id,upstream_version FROM lineage_edges WHERE downstream_type='analysis' AND downstream_id=%s AND upstream_type='transcript' AND state='CURRENT'", (analysis["analysis_id"],))
+--- /Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/v3_config.json	2026-08-30 22:20:20
++++ /Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-30-analysis-coverage-production/staging/runtime/v3/v3_config.json	2026-08-30 23:27:43
+@@ -104,5 +104,9 @@
+     "material_retention_override": true,
+     "real_live_use_of_new_script": true,
+     "irreversible_delete": true
++  },
++  "analysis_quality": {
++    "full_session_min_timestamp_coverage_rate": 0.9,
++    "full_session_target_timestamp_coverage_rate": 0.95
+   }
+ }
+--- /Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/test_v3_analysis_worker.py	2026-08-29 22:52:25
++++ /Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-30-analysis-coverage-production/staging/runtime/v3/test_v3_analysis_worker.py	2026-08-30 23:31:13
+@@ -77,8 +77,11 @@
+         self.assertEqual(result["product_fulfillment"], result["product_handoff"])
+         self.assertEqual([module["name"] for module in result["modules"]],
+                          ["开场", "干货", "需求", "信任", "商品承接", "成交", "答疑"])
+-        self.assertEqual(result["analysis_coverage"]["timeline_coverage_rate"], .99)
++        # Only 0-10 and 50-70 are covered.  The outer 0-99 span must not hide
++        # the internal forty-second gap.
++        self.assertEqual(result["analysis_coverage"]["timeline_coverage_rate"], .30)
+         self.assertEqual(result["analysis_coverage"]["segment_coverage_rate"], 1)
++        self.assertFalse(result["analysis_coverage"]["is_qualified"])
+         self.assertIn("source_segment_index", result["modules"][1]["timestamps"][0])
+         for key in ("course_content", "interaction", "product_handoff", "claims", "evidence_refs"):
+             self.assertIn(key, result)
+--- /Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/test_v3_sample_analysis_qualification.py	2026-08-30 23:11:45
++++ /Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-30-analysis-coverage-production/staging/runtime/v3/test_v3_sample_analysis_qualification.py	2026-08-30 23:33:21
+@@ -30,7 +30,8 @@
+         "quality_gate_status": "FULL_SESSION_QUALIFIED",
+         "source_segment_id": segment_id,
+         "timestamp_coverage": {
+-            "coverage_rate": 0.96,
++            "audio_duration_seconds": 10,
++            "coverage_rate": 1.0,
+             "is_qualified": True,
+             "timestamps_valid": True,
+         },
+@@ -187,7 +188,21 @@
+             conn.execute("INSERT INTO analyses(analysis_id,session_id,transcript_id,analysis_type,source_digest,status,lineage_state,scope,qualification_status,transcript_content_digest,analysis_spec_version,model_version,prompt_version,metadata_json) VALUES('a','s','full','single_session',?,'PENDING','CURRENT',?,?,?,?,?,?,?)", (content_digest,'FORMAL_SINGLE_SESSION','FULL_SESSION_QUALIFIED',content_digest,contract.ANALYSIS_SPEC_VERSION,contract.MODEL_VERSION,contract.PROMPT_VERSION,json.dumps({"source_transcript_id":"full","qualification_state":"FULL_SESSION_QUALIFIED","formal_analysis_eligible":True})))
+             conn.execute("INSERT INTO lineage_edges VALUES('e','analysis','a','transcript','full',?,'CURRENT','now')",(content_digest,))
+         heartbeat = Mock(); enqueue = Mock()
+-        with patch.object(analysis, "connect", connect_factory(self.db)), patch.object(analysis, "init_db"), patch.object(analysis, "upsert_heartbeat", heartbeat), patch.object(analysis, "ANALYSIS_ROOT", analysis_root), patch.object(analysis, "request_analysis", return_value=({"schema_version":"test"},{"provider":"test"})), patch.object(analysis, "enqueue_outbox_conn", enqueue):
++        accepted_coverage = {
++            "schema_version": 2,
++            "coverage_scope": "FULL_SESSION",
++            "analysis_coverage_rate": 1.0,
++            "source_transcript_coverage_rate": 1.0,
++            "segment_coverage_rate": 1.0,
++            "timestamps_valid": True,
++            "source_segment_ids_valid": True,
++            "all_chunks_complete": True,
++            "is_qualified": True,
++            "meets_target": True,
++            "minimum_coverage_rate": 0.9,
++            "target_coverage_rate": 0.95,
++        }
++        with patch.object(analysis, "connect", connect_factory(self.db)), patch.object(analysis, "init_db"), patch.object(analysis, "upsert_heartbeat", heartbeat), patch.object(analysis, "ANALYSIS_ROOT", analysis_root), patch.object(analysis, "request_analysis", return_value=({"schema_version":"test","modules":[],"analysis_coverage":accepted_coverage},{"provider":"test"})), patch.object(analysis, "enqueue_outbox_conn", enqueue):
+             result = analysis.once()
+         self.assertEqual(result["completed"], 1); enqueue.assert_called_once()
+         with connect_factory(self.db)() as conn:
+--- /dev/null	2026-08-30 23:40:21
++++ /Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-30-analysis-coverage-production/staging/runtime/v3/test_v3_analysis_coverage_gate.py	2026-08-30 23:38:51
+@@ -0,0 +1,445 @@
++import hashlib
++import json
++import sys
++from pathlib import Path
++from unittest.mock import patch
++
++PRODUCTION_V3 = Path("/Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3")
++sys.path.append(str(PRODUCTION_V3))
++
++from test_v3_workflow import RuntimeCase
++
++import v3_analysis_worker as analysis
++import v3_pipeline_worker as pipeline
++import v3_project_feishu as projector
++from v3_analysis_contract import (
++    ANALYSIS_SCOPE_FORMAL,
++    ANALYSIS_SPEC_VERSION,
++    MODEL_VERSION,
++    PROMPT_VERSION,
++    QUALIFIED,
++)
++
++
++def coverage_rows(*intervals):
++    return [
++        {
++            "segment_index": index,
++            "source_segment_id": f"t:segment:{index:06d}",
++            "start": start,
++            "end": end,
++            "text": "内容",
++            "line": f"[{start:.2f}-{end:.2f}] 内容",
++        }
++        for index, (start, end) in enumerate(intervals)
++    ]
++
++
++class CoverageMathTests(RuntimeCase):
++    def test_internal_gaps_are_not_counted_as_covered(self):
++        rows = coverage_rows((0, 10), (90, 100))
++        result = analysis.calculate_analysis_coverage(
++            rows, [row["source_segment_id"] for row in rows], 100,
++        )
++        self.assertEqual(result["analysis_coverage_rate"], 0.2)
++        self.assertEqual(result["gaps"], [{"start_time": 10, "end_time": 90}])
++        self.assertFalse(result["is_qualified"])
++
++    def test_successful_ids_drive_timeline_and_segment_rates(self):
++        rows = coverage_rows((0, 50), (50, 100))
++        result = analysis.calculate_analysis_coverage(
++            rows, [rows[0]["source_segment_id"]], 100,
++        )
++        self.assertEqual(result["analysis_coverage_rate"], 0.5)
++        self.assertEqual(result["segment_coverage_rate"], 0.5)
++        self.assertEqual(result["analyzed_unique_segment_count"], 1)
++        self.assertFalse(result["is_qualified"])
++
++    def test_minimum_and_target_are_distinct(self):
++        rows = coverage_rows((0, 90))
++        minimum = analysis.calculate_analysis_coverage(
++            rows, [rows[0]["source_segment_id"]], 100, minimum=0.90, target=0.95,
++        )
++        target = analysis.calculate_analysis_coverage(
++            coverage_rows((0, 95)), ["t:segment:000000"], 100,
++            minimum=0.90, target=0.95,
++        )
++        self.assertTrue(minimum["is_qualified"])
++        self.assertFalse(minimum["meets_target"])
++        self.assertTrue(target["is_qualified"])
++        self.assertTrue(target["meets_target"])
++
++    def test_sample_duplicate_unknown_and_transcript_mismatch_fail_closed(self):
++        rows = coverage_rows((0, 50), (50, 100))
++        sample = analysis.calculate_analysis_coverage(
++            rows, [row["source_segment_id"] for row in rows], 100,
++            coverage_scope="SAMPLE",
++        )
++        self.assertFalse(sample["is_qualified"])
++        rows[1]["source_segment_id"] = rows[0]["source_segment_id"]
++        invalid = analysis.calculate_analysis_coverage(
++            rows, [rows[0]["source_segment_id"], "unknown"], 100,
++        )
++        codes = [item["code"] for item in invalid["validation_errors"]]
++        self.assertIn("DUPLICATE_SOURCE_SEGMENT_ID", codes)
++        self.assertIn("UNKNOWN_SUCCESSFUL_SOURCE_SEGMENT_ID", codes)
++        mismatch = analysis.calculate_analysis_coverage(
++            coverage_rows((0, 95)), ["t:segment:000000"], 100,
++            transcript_quality={
++                "audio_duration_seconds": 100,
++                "coverage_rate": 0.99,
++                "timestamps_valid": True,
++                "is_qualified": True,
++            },
++        )
++        self.assertFalse(mismatch["is_qualified"])
++        self.assertIn(
++            "TRANSCRIPT_QUALITY_GATE_MISMATCH",
++            [item["code"] for item in mismatch["validation_errors"]],
++        )
++
++    def test_revalidation_requires_exact_complete_chunk_diagnostics(self):
++        rows = coverage_rows((0, 50), (50, 100))
++        text = "\n".join(row["line"] for row in rows)
++        chunks = analysis.analysis_chunks(text, source_rows=rows)
++        artifact = {
++            "engine": {
++                "source_content_hash": hashlib.sha256(text.encode()).hexdigest(),
++                "chunk_diagnostics": [
++                    {
++                        "chunk_index": chunk["index"],
++                        "start": chunk["start"],
++                        "end": chunk["end"],
++                        "row_count": chunk["row_count"],
++                        "finish_reason": "stop",
++                    }
++                    for chunk in chunks
++                ],
++            },
++            "result": {"modules": []},
++        }
++        updated, result = analysis.revalidate_existing_artifact(
++            artifact, text, rows, 100, "FULL_SESSION", None, 0.90, 0.95,
++        )
++        self.assertTrue(result["is_qualified"])
++        self.assertEqual(
++            updated["result"]["analysis_coverage"]["analysis_coverage_rate"], 1.0,
++        )
++        artifact["engine"]["chunk_diagnostics"][0]["row_count"] = 999
++        with self.assertRaisesRegex(ValueError, "do not match"):
++            analysis.revalidate_existing_artifact(
++                artifact, text, rows, 100, "FULL_SESSION", None, 0.90, 0.95,
++            )
++
++
++class CoverageVersionIntegrationTests(RuntimeCase):
++    def setUp(self):
++        super().setUp()
++        self.pipeline_patch = patch.object(pipeline, "connect", side_effect=self.connect)
++        self.analysis_patch = patch.object(analysis, "connect", side_effect=self.connect)
++        self.pipeline_patch.start()
++        self.analysis_patch.start()
++        self.media = self.root / "整场直播.ts"
++        self.transcript = self.root / "full.transcript.json"
++        self.old_artifact = self.root / "legacy.analysis.json"
++        self.media.write_bytes(b"media")
++        self.media_hash = hashlib.sha256(self.media.read_bytes()).hexdigest()
++        self.transcript_id = "transcript-full"
++        self.session_id = "session-full"
++
++    def tearDown(self):
++        self.analysis_patch.stop()
++        self.pipeline_patch.stop()
++        super().tearDown()
++
++    def seed(self, intervals=((0, 95),), *, include_old=True):
++        segments = [
++            {"start": start, "end": end, "text": f"内容{index}"}
++            for index, (start, end) in enumerate(intervals)
++        ]
++        quality = {
++            "schema_version": 1,
++            "audio_duration_seconds": 100,
++            "coverage_rate": 0.95,
++            "timestamps_valid": True,
++            "is_qualified": True,
++            "meets_target": True,
++            "minimum_coverage_rate": 0.90,
++            "target_coverage_rate": 0.95,
++        }
++        payload = {
++            "status": "READY",
++            "duration": 100,
++            "coverage_scope": "FULL_SESSION",
++            "segments": segments,
++            "timestamp_coverage": quality,
++        }
++        self.transcript.write_text(json.dumps(payload, ensure_ascii=False))
++        transcript_digest = hashlib.sha256(self.transcript.read_bytes()).hexdigest()
++        source_digest = hashlib.sha256(
++            ("FULL_SESSION:" + self.media_hash).encode()
++        ).hexdigest()
++        metadata = {
++            "coverage_scope": "FULL_SESSION",
++            "sample_only": False,
++            "quality_gate_status": QUALIFIED,
++            "source_segment_id": "canonical",
++            "timestamp_coverage": quality,
++        }
++        with self.connect() as conn:
++            conn.execute(
++                "INSERT INTO competitors(competitor_id,platform,platform_account_id,"
++                "account_name,first_seen_at,last_seen_at) VALUES"
++                "('c','test','c','test','2026-01-01','2026-01-01')"
++            )
++            conn.execute(
++                "INSERT INTO monitor_targets(monitor_target_id,competitor_id,status,"
++                "live_url,live_status) VALUES"
++                "('m','c','ACTIVE','https://example.invalid/live','OFFLINE_CONFIRMED')"
++            )
++            conn.execute(
++                "INSERT INTO live_sessions(session_id,monitor_target_id,platform_session_id,"
++                "status,started_at,ended_at,completeness,source_url,metadata_json) "
++                "VALUES(?,?,?,?,?,?,?,?,?)",
++                (
++                    self.session_id, "m", "room", "MEDIA_COMPLETE",
++                    "2026-08-30T00:00:00Z", "2026-08-30T00:01:40Z",
++                    "COMPLETE", "https://example.invalid/live",
++                    json.dumps({"media_coverage": {"continuous_capture": True}}),
++                ),
++            )
++            conn.execute(
++                "INSERT INTO recording_segments(segment_id,session_id,path,checksum,"
++                "captured_from,captured_to,status,bytes,lifecycle_status) "
++                "VALUES(?,?,?,?,?,?,?,?,?)",
++                (
++                    "canonical", self.session_id, str(self.media), self.media_hash,
++                    "2026-08-30T00:00:00Z", "2026-08-30T00:01:40Z",
++                    "COMPLETE", len(self.media.read_bytes()), "CANONICAL_ACTIVE",
++                ),
++            )
++            conn.execute(
++                "INSERT INTO transcripts(transcript_id,session_id,source_digest,engine,model,"
++                "status,source_path,output_path,created_at,scope,qualification_status,"
++                "metadata_json) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",
++                (
++                    self.transcript_id, self.session_id, source_digest,
++                    "faster-whisper", "small", "COMPLETE", str(self.media),
++                    str(self.transcript), "2026-08-30T00:02:00Z",
++                    "FULL_SESSION", QUALIFIED,
++                    json.dumps(metadata),
++                ),
++            )
++        if include_old:
++            rows = analysis.source_rows_from_transcript(payload, self.transcript_id)
++            text = "\n".join(row["line"] for row in rows)
++            chunks = analysis.analysis_chunks(text, source_rows=rows)
++            old_engine = {
++                "provider": "deepseek",
++                "model": MODEL_VERSION,
++                "source_content_hash": hashlib.sha256(text.encode()).hexdigest(),
++                "chunk_diagnostics": [
++                    {
++                        "chunk_index": chunk["index"],
++                        "start": chunk["start"],
++                        "end": chunk["end"],
++                        "row_count": chunk["row_count"],
++                        "finish_reason": "stop",
++                    }
++                    for chunk in chunks
++                ],
++            }
++            old_payload = {
++                "analysis_id": "analysis-old",
++                "session_id": self.session_id,
++                "transcript_id": self.transcript_id,
++                "engine": old_engine,
++                "result": {"modules": []},
++            }
++            self.old_artifact.write_text(json.dumps(old_payload, ensure_ascii=False))
++            old_digest = hashlib.sha256(self.old_artifact.read_bytes()).hexdigest()
++            with self.connect() as conn:
++                conn.execute(
++                    "INSERT INTO analyses(analysis_id,session_id,transcript_id,analysis_type,"
++                    "source_digest,status,output_path,lineage_state,scope,qualification_status,"
++                    "transcript_content_digest,analysis_spec_version,model_version,prompt_version,"
++                    "artifact_digest,metadata_json) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
++                    (
++                        "analysis-old", self.session_id, self.transcript_id,
++                        "single_session", transcript_digest, "COMPLETE",
++                        str(self.old_artifact), "CURRENT", ANALYSIS_SCOPE_FORMAL,
++                        QUALIFIED, transcript_digest, "single-session-evidence-v2",
++                        MODEL_VERSION, PROMPT_VERSION, old_digest,
++                        json.dumps({
++                            "qualification_state": QUALIFIED,
++                            "formal_analysis_eligible": True,
++                        }),
++                    ),
++                )
++                conn.execute(
++                    "INSERT INTO lineage_edges(edge_id,downstream_type,downstream_id,"
++                    "upstream_type,upstream_id,upstream_version,state,created_at) "
++                    "VALUES(?,?,?,?,?,?,?,?)",
++                    (
++                        "edge-old", "analysis", "analysis-old", "transcript",
++                        self.transcript_id, transcript_digest, "CURRENT",
++                        "2026-08-30T00:03:00Z",
++                    ),
++                )
++                conn.execute(
++                    "INSERT INTO evidence_bundles(bundle_id,object_type,object_id,status,"
++                    "manifest_path,manifest_hash,verified_at,scope,qualification_status,"
++                    "metadata_json) VALUES(?,?,?,?,?,?,?,?,?,?)",
++                    (
++                        "bundle:analysis-old", "analysis", "analysis-old", "VERIFIED",
++                        str(self.old_artifact), old_digest,
++                        "2026-08-30T00:04:00Z", ANALYSIS_SCOPE_FORMAL,
++                        QUALIFIED, "{}",
++                    ),
++                )
++        return transcript_digest
++
++    def create_candidate(self):
++        with patch.object(
++            pipeline, "load_pipeline_config",
++            return_value={
++                "transcript_quality": {
++                    "full_session_min_timestamp_coverage_rate": 0.90,
++                },
++            },
++        ):
++            self.assertEqual(pipeline.create_analysis_tasks(), 1)
++            self.assertEqual(pipeline.create_analysis_tasks(), 0)
++        with self.connect() as conn:
++            return dict(conn.execute(
++                "SELECT * FROM analyses WHERE analysis_spec_version=?",
++                (ANALYSIS_SPEC_VERSION,),
++            ).fetchone())
++
++    def test_new_coverage_version_revalidates_without_model_and_supersedes_old(self):
++        self.seed()
++        candidate = self.create_candidate()
++        old_bytes = self.old_artifact.read_bytes()
++        with patch.object(analysis, "init_db"), \
++             patch.object(analysis, "ANALYSIS_ROOT", self.root / "analysis"), \
++             patch.object(analysis, "load_analysis_quality_config", return_value=(0.90, 0.95)), \
++             patch.object(analysis, "request_analysis") as model, \
++             patch.object(analysis, "upsert_heartbeat"):
++            result = analysis.once()
++        model.assert_not_called()
++        self.assertEqual(result["completed"], 1)
++        self.assertEqual(result["revalidated"], 1)
++        self.assertEqual(result["current_spec_evidence_pending"], 1)
++        self.assertEqual(self.old_artifact.read_bytes(), old_bytes)
++        with self.connect() as conn:
++            current = conn.execute(
++                "SELECT * FROM analyses WHERE analysis_id=?",
++                (candidate["analysis_id"],),
++            ).fetchone()
++            old = conn.execute(
++                "SELECT * FROM analyses WHERE analysis_id='analysis-old'"
++            ).fetchone()
++            bundle = conn.execute(
++                "SELECT * FROM evidence_bundles WHERE object_id=?",
++                (candidate["analysis_id"],),
++            ).fetchone()
++            outbox = list(conn.execute(
++                "SELECT object_id FROM outbox WHERE object_type='semantic_projection' "
++                "ORDER BY object_id"
++            ))
++        self.assertEqual((current["status"], current["lineage_state"]), ("COMPLETE", "CURRENT"))
++        self.assertEqual(old["lineage_state"], "SUPERSEDED")
++        artifact = json.loads(Path(current["output_path"]).read_text())
++        coverage = artifact["result"]["analysis_coverage"]
++        self.assertEqual(coverage["analysis_coverage_rate"], 0.95)
++        self.assertTrue(coverage["meets_target"])
++        self.assertEqual(bundle["status"], "REQUIRED")
++        self.assertEqual({row["object_id"] for row in outbox}, {candidate["analysis_id"], "analysis-old"})
++        with self.connect() as conn:
++            conn.execute(
++                "UPDATE evidence_bundles SET status='VERIFIED' WHERE object_id=?",
++                (candidate["analysis_id"],),
++            )
++        with patch.object(analysis, "init_db"), \
++             patch.object(analysis, "upsert_heartbeat") as heartbeat:
++            replay = analysis.once()
++        self.assertEqual(replay["current_spec_qualified"], 1)
++        self.assertEqual(replay["current_spec_evidence_pending"], 0)
++        self.assertEqual(replay["health_reasons"], [])
++        self.assertEqual(heartbeat.call_args.args[1], "READY")
++
++    def test_low_analysis_coverage_is_blocked_without_superseding_old(self):
++        self.seed(intervals=((0, 47.5), (47.5, 95)), include_old=True)
++        candidate = self.create_candidate()
++        with self.connect() as conn:
++            conn.execute(
++                "UPDATE evidence_bundles SET status='BLOCKED_EVIDENCE' "
++                "WHERE object_id='analysis-old'"
++            )
++        rows = coverage_rows((0, 47.5), (47.5, 95))
++        low = analysis.calculate_analysis_coverage(
++            rows, [rows[0]["source_segment_id"]], 100,
++            transcript_quality={
++                "audio_duration_seconds": 100,
++                "coverage_rate": 0.95,
++                "timestamps_valid": True,
++                "is_qualified": True,
++            },
++        )
++        with patch.object(analysis, "init_db"), \
++             patch.object(analysis, "ANALYSIS_ROOT", self.root / "analysis"), \
++             patch.object(analysis, "load_analysis_quality_config", return_value=(0.90, 0.95)), \
++             patch.object(analysis, "request_analysis", return_value=(
++                 {"modules": [], "analysis_coverage": low},
++                 {"source_content_hash": "new"},
++             )), \
++             patch.object(analysis, "upsert_heartbeat"):
++            result = analysis.once()
++        self.assertEqual(result["quality_blocked"], 1)
++        with self.connect() as conn:
++            blocked = conn.execute(
++                "SELECT * FROM analyses WHERE analysis_id=?",
++                (candidate["analysis_id"],),
++            ).fetchone()
++            old = conn.execute(
++                "SELECT * FROM analyses WHERE analysis_id='analysis-old'"
++            ).fetchone()
++            bundle = conn.execute(
++                "SELECT * FROM evidence_bundles WHERE object_id=?",
++                (candidate["analysis_id"],),
++            ).fetchone()
++        self.assertEqual(blocked["status"], "QUALITY_BLOCKED")
++        self.assertIsNone(blocked["output_path"])
++        self.assertEqual(blocked["qualification_status"], "ANALYSIS_QUALITY_BLOCKED")
++        self.assertEqual(old["lineage_state"], "CURRENT")
++        self.assertEqual(bundle["status"], "QUALITY_BLOCKED")
++        status, health = analysis.analysis_health_snapshot(0.90, 0.95)
++        self.assertEqual(status, "DEGRADED")
++        self.assertEqual(health["current_spec_blocked"], 1)
++        self.assertIn("ANALYSIS_QUALITY_BLOCKED", health["health_reasons"])
++
++    def test_superseded_projection_is_historical_not_sample(self):
++        fields, qualification = projector.analysis_projection_fields({
++            "analysis_id": "old",
++            "session_id": "s",
++            "analysis_type": "single_session",
++            "status": "COMPLETE",
++            "lineage_state": "SUPERSEDED",
++            "scope": ANALYSIS_SCOPE_FORMAL,
++            "qualification_status": QUALIFIED,
++            "output_path": "/old.json",
++            "metadata_json": json.dumps({
++                "qualification_state": QUALIFIED,
++                "formal_analysis_eligible": True,
++                "superseded_by_analysis_id": "new",
++            }),
++        })
++        self.assertEqual(qualification, "SUPERSEDED_FORMAL_VERSION")
++        self.assertEqual(fields["分析类型"], "单场分析")
++        self.assertEqual(fields["状态"], "完成")
++        self.assertIn("superseded_by=new", fields["证据说明"])
++
++
++if __name__ == "__main__":
++    import unittest
++    unittest.main(verbosity=2)

@@ -1,0 +1,13 @@
+{
+  "before": {
+    "sha256": "f9cf878d81b2721631046fba9d9f5610b7115c583bc26d77cc41a5ba908cd9a0",
+    "bytes": 477124,
+    "mtime_ns": 1788099675538582091
+  },
+  "after": {
+    "sha256": "f9cf878d81b2721631046fba9d9f5610b7115c583bc26d77cc41a5ba908cd9a0",
+    "bytes": 477124,
+    "mtime_ns": 1788099675538582091
+  },
+  "unchanged": true
+}

@@ -1,0 +1,28 @@
+{
+  "old": {
+    "v3_schema.sql": "fba1cbd7439520f2a9f34dd8af5151bec336d035e3e807ea9bb4422ef457de8e",
+    "v3_long_jobs.py": "facbcab588d789ab4a04d1729c1bed6a337bcb29644a2a0009a3cdcd5a159362",
+    "v3_pipeline_worker.py": "996d830fa5427f837bdd1381e154d16e5ee4bd2119b7b3519c7c30ae083e6af8",
+    "v3_analysis_worker.py": "f85b01c21b85672e29b9db84cfac316e11ea34f3d6d49c979757851d8d3328a8",
+    "v3_evidence_worker.py": "7196f0ba53105ead2844ff8d6a6008a87dab20e394530fa08cb815eb2142ff58",
+    "v3_recompute_worker.py": "f9696cb29a97b43f5a130b1c62bb5ee13bc438061f6d3b3b29e592adb67ee22b",
+    "v3_project_feishu.py": "0287f1c5c9d426614f3ce05ed62033fba66a7188866aa36165288ae25bb5aea7",
+    "v3_runtime.py": "9517abf237ab8ffc8102876bc36b7bae0b098d82d63b24374d25887dc00c4da4",
+    "v3_migrate_pg.py": "4230fd8e008c044ed37e0eaf882ac289f2a0afda31c0cb43cf0af1f6dff266aa"
+  },
+  "new": {
+    "v3_schema.sql": "fa687adcfdd5fd0bf3ea309b2cde1ddd0f2486921f6c12a13c018f76c30d8530",
+    "v3_long_jobs.py": "903856ec7eb54bc9161409d4ffb7024bee08fc454b972f9da8ef18590a272095",
+    "v3_pipeline_worker.py": "e3ef476c285a2eebacb3ef4cfbd86426b9f4230931e74731b9a47544f8e485c1",
+    "v3_analysis_worker.py": "8de5162249705f4e7b95b5c65b1151a70dcf21158b01fac9c0e1e1a661517d91",
+    "v3_evidence_worker.py": "a19a55182095e3ef82a66cedbbcb41ea0d4a2ba288a49f817b8a1039e23caa01",
+    "v3_recompute_worker.py": "41ad0706a332dbb9f2b95a5fdf889e67ea583f4df9a39027108ecc5e67421c9f",
+    "v3_project_feishu.py": "3a2fa4c70e66af3550ee36b5b9b29d33fd759071de9a099af7f07523b1f91abb",
+    "v3_runtime.py": "723374ad5b5614ce6436ab55407d1d6cb2c61cb4fb06e3f63673d5f21b565a64",
+    "v3_migrate_pg.py": "4b8612f988ef8613d39049737edcf1d881c4f7943889531d9fa0f9effcff49a6",
+    "v3_recompute.py": "fe02aacab052441d8d10bf87b26d428f7c963cf61976063268175f9093c499c0",
+    "v3_lineage_recompute_migration.py": "52b1f9ccd70e55d69266aad2c2fdc63049ebbd7ebc2ea35d877687183f773b0f",
+    "v3_lineage_recompute_rollback.py": "344be5a87cff3c0f4ea3e457cd53e5823d0308a0c816e542dfe0e8b55c47595d",
+    "migrations/004_lineage_recompute.sql": "0d968561c6a6c3c2878e6f75d8a9fbe146867ddd1227dc8ebbdb1999cc940611"
+  }
+}

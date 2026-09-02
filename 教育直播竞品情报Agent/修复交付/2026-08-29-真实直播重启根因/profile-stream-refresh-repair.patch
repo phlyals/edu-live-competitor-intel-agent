@@ -1,0 +1,121 @@
+--- a/runtime/bin/recorder.py
++++ b/runtime/bin/recorder.py
+@@ -139,6 +139,7 @@
+     requested_duration = float(args.duration if args.duration is not None else (v3_config.get("recording_duration_seconds") or 0))
+     requested_quality = str(args.quality or v3_config.get("recording_quality") or "LD").upper()
+     segment_seconds = float(v3_config.get("recording_segment_seconds") or 0)
++    refresh_seconds = float(v3_config.get("recording_stream_refresh_seconds") or 0)
+     safety = config.get("safety") or {}
+     if args.check_only:
+         if not safety.get("live_monitor", False) and not v3_activation_active() and not args.approved_read_only_probe:
+@@ -196,7 +197,7 @@
+         return emit({"status": "ERROR", "reason": "Session output already exists; use --resume to continue the same session", "recording_started": False})
+     part_index = len(existing_parts)
+     filename = "整场直播.ts.partial" if part_index == 0 else f"整场直播.part{part_index:02d}.ts.partial"
+-    while (partial_dir / filename).exists():
++    while (partial_dir / filename).exists() or (partial_dir / (filename + ".recording-state.json")).exists():
+         part_index += 1
+         filename = f"整场直播.part{part_index:02d}.ts.partial"
+ 
+@@ -206,6 +207,7 @@
+         "--filename", filename,
+         "--quality", requested_quality,
+         "--segment-seconds", str(segment_seconds),
++        "--refresh-seconds", str(refresh_seconds),
+     ]
+     return_code, payload = run_shared(command)
+     if payload.get("status") != "recorded" or return_code != 0:
+@@ -217,6 +219,7 @@
+             "ffmpeg_return_code": payload.get("ffmpeg_return_code"),
+             "ffmpeg_tail": payload.get("ffmpeg_tail") or payload.get("ffmpeg_error_tail"),
+             "recording_state_path": payload.get("recording_state_path"),
++            "stream_attempts": payload.get("stream_attempts"),
+             "recording_started": (partial_dir / filename).is_file() and (partial_dir / filename).stat().st_size>0,
+         })
+     # Keep the whole-session file in partial storage until Runtime V3 confirms
+@@ -237,12 +240,14 @@
+         "segment_count": len(list(partial_dir.glob("*.ts.partial"))),
+         "quality": requested_quality,
+         "segment_seconds": segment_seconds,
++        "refresh_seconds": refresh_seconds,
+         "recorded_duration_seconds": payload.get("recorded_duration_seconds"),
+         "part_index": part_index,
+         "return_code": return_code,
+         "ffmpeg_return_code": payload.get("ffmpeg_return_code"),
+         "ffmpeg_tail": payload.get("ffmpeg_tail"),
+         "recording_state_path": payload.get("recording_state_path"),
++        "stream_attempts": payload.get("stream_attempts"),
+     })
+ 
+ 
+--- a/runtime/v3/test_v3_recording_transcription.py
++++ b/runtime/v3/test_v3_recording_transcription.py
+@@ -76,6 +76,17 @@
+             return 0,{'status':'recorded'}
+         result,_=self.call_recorder(['--url','https://live.douyin.com/123','--account-id','acct','--session-id','sess','--approved'],shared)
+         self.assertEqual(result['status'],'RECORDED');self.assertEqual(original.stat().st_size,0)
++    def test_sidecar_reserves_failed_output_filename(self):
++        folder=self.partial/'acct'/'sess';folder.mkdir(parents=True)
++        (folder/'整场直播.ts.partial.recording-state.json').write_text('{}')
++        def shared(cmd):
++            name=cmd[cmd.index('--filename')+1]
++            self.assertNotEqual(name,'整场直播.ts.partial')
++            (folder/name).write_bytes(b'recovered')
++            return 0,{'status':'recorded'}
++        result,run=self.call_recorder(['--url','https://live.douyin.com/123','--account-id','acct','--session-id','sess','--approved'],shared)
++        self.assertEqual(result['status'],'RECORDED')
++        self.assertIn('--refresh-seconds',run.call_args.args[0])
+ 
+ 
+ class SharedRecorderTests(unittest.TestCase):
+@@ -113,15 +124,38 @@
+             state=json.loads(shared_recorder.recording_state_path(output).read_text())
+             self.assertNotEqual(code,0);self.assertEqual(state['return_code'],code)
+             self.assertEqual(state['exit_kind'],'ERROR');self.assertTrue(state['ffmpeg_tail'])
+-    def test_http_eof_and_network_retry_are_bounded(self):
++    def test_http_retry_is_bounded_without_reusing_url_at_eof(self):
+         with tempfile.TemporaryDirectory() as d:
+             process=SimpleNamespace(pid=123,stderr=io.StringIO(''),poll=lambda:0,wait=lambda:0)
+             with patch.object(shared_recorder.subprocess,'Popen',return_value=process) as run:
+                 shared_recorder.record_stream('https://example.invalid/live',Path(d)/'capture.ts',0,'ffmpeg')
+             command=run.call_args.args[0]
+-            self.assertIn('-reconnect_at_eof',command);self.assertIn('-reconnect_on_network_error',command)
++            self.assertNotIn('-reconnect_at_eof',command);self.assertIn('-reconnect_on_network_error',command)
+             self.assertIn('-reconnect_delay_total_max',command);self.assertIn('-n',command)
+             self.assertNotIn('-t',command)
++    def test_stream_fingerprint_never_persists_query_values(self):
++        url='https://cdn.example/live/path.flv?token=SECRET&expire=12345'
++        value=shared_recorder.stream_fingerprint(url)
++        self.assertEqual(value['hostname'],'cdn.example')
++        self.assertEqual(value['query_keys'],['expire','token'])
++        self.assertNotIn('SECRET',json.dumps(value))
++        self.assertNotIn('12345',json.dumps(value))
++    def test_flv_is_preferred_over_hls(self):
++        self.assertEqual(shared_recorder.ordered_stream_urls({'m3u8_url':'hls','flv_url':'flv'}),['flv','hls'])
++    def test_live_recording_refreshes_url_and_uses_unique_chunks(self):
++        def live(token):
++            return {'is_live':True,'stream_url':f'https://cdn.example/live.flv?token={token}','stream_urls':[],
++                    'stream_protocol':'FLV','anchor_name':'test','room_id':'room','quality':'LD'}
++        responses=[live('one'),live('two'),{'is_live':False},{'is_live':False},{'is_live':False}]
++        with tempfile.TemporaryDirectory() as d,patch.object(shared_recorder,'resolve_stream',AsyncMock(side_effect=responses)),patch.object(shared_recorder.time,'sleep'):
++            def record(url,path,duration,ffmpeg,segment,metadata):
++                path.write_bytes(b'media');return 0,''
++            with patch.object(shared_recorder,'record_stream',side_effect=record) as calls,patch.object(shared_recorder,'probe_duration',return_value=900):
++                code,result=shared_recorder.record_live_with_refresh('https://live.douyin.com/123','LD',Path(d)/'whole.ts.partial','ffmpeg',900)
++        self.assertEqual(code,0);self.assertEqual(len(result['outputs']),2)
++        self.assertNotEqual(result['outputs'][0],result['outputs'][1])
++        self.assertNotEqual(calls.call_args_list[0].args[0],calls.call_args_list[1].args[0])
++        self.assertEqual(calls.call_args_list[0].args[5]['protocol'],'FLV')
+     def test_local_replay_does_not_use_http_options_or_duration_limit(self):
+         with tempfile.TemporaryDirectory() as d:
+             process=SimpleNamespace(pid=123,stderr=io.StringIO(''),poll=lambda:0,wait=lambda:0)
+--- a/runtime/v3/v3_config.json
++++ b/runtime/v3/v3_config.json
+@@ -78,6 +78,7 @@
+   "recording_quality": "LD",
+   "recording_mode": "LOWEST_VIDEO_WITH_AUDIO",
+   "recording_segment_seconds": 0,
++  "recording_stream_refresh_seconds": 900,
+   "recording_single_final_file": true,
+   "recording_duration_seconds": 0,
+   "normal_recording_concurrency": 30,

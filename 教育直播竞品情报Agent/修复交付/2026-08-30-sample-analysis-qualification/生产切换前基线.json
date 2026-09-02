@@ -1,0 +1,159 @@
+{
+  "observed_at": "2026-08-30T15:10:24.562683+00:00",
+  "transaction_read_only": "on",
+  "heartbeats": [
+    {
+      "service_name": "analysis-v3",
+      "pid": 85928,
+      "status": "READY",
+      "last_heartbeat_at": "2026-08-30T15:10:20.912Z",
+      "last_success_at": "2026-08-30T15:10:20.912Z",
+      "details_json": "{\"checked_at\":\"2026-08-30T15:10:20.911Z\",\"completed\":0,\"waiting_model\":0}"
+    },
+    {
+      "service_name": "evidence-v3",
+      "pid": 705,
+      "status": "READY",
+      "last_heartbeat_at": "2026-08-30T15:10:21.092Z",
+      "last_success_at": "2026-08-30T15:10:21.092Z",
+      "details_json": "{\"blocked\":0,\"checked_at\":\"2026-08-30T15:10:21.091Z\",\"verified\":0}"
+    },
+    {
+      "service_name": "feishu-ingress-v3",
+      "pid": 59028,
+      "status": "READY",
+      "last_heartbeat_at": "2026-08-30T15:10:15.937Z",
+      "last_success_at": "2026-08-30T15:10:15.937Z",
+      "details_json": "{\"app_id\":\"cli_a978a6e73f785cc5\",\"connection_mode\":\"websocket\",\"profile_id\":\"edu_live_competitor_intel\",\"websocket_connected\":true}"
+    },
+    {
+      "service_name": "pipeline-v3",
+      "pid": 30982,
+      "status": "READY",
+      "last_heartbeat_at": "2026-08-30T15:10:19.339Z",
+      "last_success_at": "2026-08-30T15:10:19.339Z",
+      "details_json": "{\"analysis_tasks\":0,\"checked_at\":\"2026-08-30T15:10:19.339Z\",\"eligible_canonical_pending\":0,\"eligible_canonical_total\":1,\"full_session_meets_target\":1,\"full_session_qualified\":1,\"health_reasons\":[],\"quality_blocked\":0,\"segments\":108,\"stale_backlog\":{\"missing_output\":0,\"missing_source\":0,\"unrecoverable\":0},\"transcripts\":0}"
+    },
+    {
+      "service_name": "recompute-v3",
+      "pid": 708,
+      "status": "READY",
+      "last_heartbeat_at": "2026-08-30T15:10:19.801Z",
+      "last_success_at": "2026-08-30T15:10:19.801Z",
+      "details_json": "{\"checked_at\":\"2026-08-30T15:10:19.801Z\",\"stale_items\":0}"
+    },
+    {
+      "service_name": "retention-v3",
+      "pid": 34907,
+      "status": "READY",
+      "last_heartbeat_at": "2026-08-30T15:09:40.455Z",
+      "last_success_at": "2026-08-30T15:09:40.455Z",
+      "details_json": "{\"delete_enabled\":false,\"idle\":true,\"mode\":\"DELETE_DISABLED\",\"next_scan_in_seconds\":2517}"
+    },
+    {
+      "service_name": "runtime-v3",
+      "pid": 16001,
+      "status": "READY",
+      "last_heartbeat_at": "2026-08-30T15:09:50.481Z",
+      "last_success_at": "2026-08-30T15:09:50.481Z",
+      "details_json": "{\"audio_retention_hours\": 168, \"capacity_test_concurrency\": 65, \"due_target_count\": 19, \"expected_max_recording_concurrency\": 50, \"final_ready\": false, \"full_fleet\": true, \"live_count\": 1, \"normal_recording_concurrency\": 30, \"production_gate\": \"BLOCKED\", \"recording_duration_seconds\": 0, \"recording_health\": {\"finalized\": 117, \"restarted\": 0, \"running\": 2}, \"recording_mode\": \"LOWEST_VIDEO_WITH_AUDIO\", \"recording_quality\": \"LD\", \"recording_segment_seconds\": 0, \"result_count\": 19, \"speech_audio_bitrate_kbps\": 48, \"speech_audio_format\": \"opus\", \"target_count\": 41, \"unknown_count\": 0, \"video_retention_hours\": 72}"
+    }
+  ],
+  "active_recording_jobs": [
+    {
+      "job_id": "recjob_90409f2eb76bb8754dbf56d7",
+      "session_id": "session_808c5516d0916b2ecfe7aac883959418",
+      "status": "RUNNING",
+      "pid": 35736,
+      "partial_dir": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_c59658a52d6ad5a7/sess_90409f2eb76bb8754dbf56d7",
+      "restart_count": 0,
+      "updated_at": "2026-08-30T15:09:49.610Z",
+      "session_status": "RECORDING",
+      "pid_alive": true,
+      "media_files": [
+        {
+          "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_c59658a52d6ad5a7/sess_90409f2eb76bb8754dbf56d7/整场直播.refresh0001.ts.partial",
+          "bytes": 256107324,
+          "mtime_ns": 1788101977660922470
+        },
+        {
+          "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_c59658a52d6ad5a7/sess_90409f2eb76bb8754dbf56d7/整场直播.refresh0002.ts.partial",
+          "bytes": 183762944,
+          "mtime_ns": 1788102623697036599
+        },
+        {
+          "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_c59658a52d6ad5a7/sess_90409f2eb76bb8754dbf56d7/整场直播.ts.partial",
+          "bytes": 256081192,
+          "mtime_ns": 1788101079642253292
+        }
+      ]
+    },
+    {
+      "job_id": "recjob_6a668c48730ed52bca520bdd",
+      "session_id": "session_5458206e276cbb3e734a50067bf2097d",
+      "status": "RUNNING",
+      "pid": 43809,
+      "partial_dir": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_2830f009c4673f6f/sess_6a668c48730ed52bca520bdd",
+      "restart_count": 0,
+      "updated_at": "2026-08-30T15:09:50.433Z",
+      "session_status": "RECORDING",
+      "pid_alive": true,
+      "media_files": [
+        {
+          "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_2830f009c4673f6f/sess_6a668c48730ed52bca520bdd/整场直播.refresh0001.ts.partial",
+          "bytes": 98566144,
+          "mtime_ns": 1788102622603448730
+        },
+        {
+          "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_2830f009c4673f6f/sess_6a668c48730ed52bca520bdd/整场直播.ts.partial",
+          "bytes": 131101988,
+          "mtime_ns": 1788101950697060949
+        }
+      ]
+    }
+  ],
+  "analyses": [
+    {
+      "analysis_id": "analysis_16bdca57a497943fd6eb0c05",
+      "status": "COMPLETE",
+      "lineage_state": "CURRENT"
+    },
+    {
+      "analysis_id": "analysis_8801cb766ceca4ab6327511a",
+      "status": "COMPLETE",
+      "lineage_state": "CURRENT"
+    },
+    {
+      "analysis_id": "analysis_f261f8101b4ea725a954c23f",
+      "status": "COMPLETE",
+      "lineage_state": "CURRENT"
+    }
+  ],
+  "outbox_counts": [
+    {
+      "status": "DEAD_LETTER",
+      "count": 1
+    },
+    {
+      "status": "SENT",
+      "count": 366
+    }
+  ],
+  "config": {
+    "retention_delete_enabled": false,
+    "transcript_quality": {
+      "full_session_min_timestamp_coverage_rate": 0.9,
+      "full_session_target_timestamp_coverage_rate": 0.95
+    }
+  },
+  "production_hashes": {
+    "v3_pipeline_worker.py": "6ea4316a18ad08dfa0712bbbb7636b71c33cecd707c2a745e1505fc6609be1e4",
+    "v3_analysis_worker.py": "2a07ef319a8e56a3951cb45eac18185f0fd2e8914770bbbd59dcca27a8d0ac18",
+    "v3_evidence_worker.py": "fcc8125eacf0c95f80f1e4ceeeb80bbe6d5c723b670635f2bd2f53495cd8fc4f",
+    "v3_project_feishu.py": "762eecaf58d4da7d3248f713760195fbc66579723c92ce26a7af880e4b239e09",
+    "v3_runtime.py": "9f717c03e7781711815dc68bbf3ffc47d557babbf6026a77228c33083083aad1",
+    "v3_schema.sql": "8d543b0f2c77e767ec7ecd32eca31ddb363e33e8fc77090326152422c4ba39c2",
+    "test_v3_segment_lifecycle.py": "451cae27e6688953e2bd36b55b135ac7df4fc352ad4f24e1e99540a4a78376e1"
+  },
+  "os_processes": "  705 Fri Aug 28 11:08:20 2026     /Users/mac/.local/share/edu-live-runtime-v3-venv/bin/python /Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/v3_evidence_worker.py daemon\n  708 Fri Aug 28 11:08:20 2026     /Users/mac/.local/share/edu-live-runtime-v3-venv/bin/python /Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/v3_recompute_worker.py daemon\n16001 Sun Aug 30 21:54:52 2026     /Users/mac/.local/share/edu-live-runtime-v3-venv/bin/python /Volumes/ExternalStorage/AgentInfrastructure/isolated/profiles/edu_live_competitor_intel/runtime/v3/v3_worker.py daemon --start-recordings --interval 30\n30982 Sun Aug 30 22:21:11 2026     /Users/mac/.local/share/edu-live-runtime-v3-venv/bin/python /Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/v3_pipeline_worker.py daemon\n34907 Sun Aug 30 12:49:19 2026     /Users/mac/.local/share/edu-live-runtime-v3-venv/bin/python /Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/v3_retention_worker.py daemon --interval 3600\n85928 Sat Aug 29 22:56:59 2026     /Users/mac/.local/share/edu-live-runtime-v3-venv/bin/python /Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/v3_analysis_worker.py daemon\n"
+}

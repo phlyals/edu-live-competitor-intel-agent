@@ -1,0 +1,100 @@
+--- /Volumes/ExternalStorage/AgentInfrastructure/isolated/shared/avtranscribe/record_douyin_live.py
++++ staging/record_douyin_live.py
+@@ -55,6 +55,59 @@
+ 
+ def redact_stream_urls(value: str) -> str:
+     return re.sub(r"https?://\S+", "<stream-url>", value or "")
++
++
++# Stable, non-sensitive diagnostics for FFmpeg stderr.  Raw signed URLs must
++# never be used as machine-readable error data.
++_FFMPEG_INTEGRITY_PATTERNS = (
++    ("STREAM_PREMATURE_END", re.compile(r"stream ends prematurely", re.I)),
++    ("SEGMENT_SKIPPED", re.compile(r"segment .+ failed too many times|skipping", re.I)),
++    ("SEGMENT_OPEN_FAILED", re.compile(r"failed to open segment", re.I)),
++    ("PLAYLIST_RELOAD_FAILED", re.compile(r"failed to reload playlist", re.I)),
++    ("INPUT_OPEN_FAILED", re.compile(r"error (?:when loading first segment|opening input(?: file| files)?)", re.I)),
++    ("DEMUX_ERROR", re.compile(r"error during demuxing", re.I)),
++    ("MUX_WRITE_ERROR", re.compile(r"error (?:writing|closing) (?:trailer|file)|av_interleaved_write_frame", re.I)),
++    ("CORRUPT_MEDIA", re.compile(r"\bcorrupt(?:ed|ion)?\b|invalid data found", re.I)),
++    ("TIMESTAMP_DISCONTINUITY", re.compile(r"non[- ]monoton(?:ic|ous) dts", re.I)),
++)
++
++_FFMPEG_NETWORK_PATTERNS = (
++    ("HTTP_4XX", re.compile(r"http error 4\d\d|server returned 4\d\d", re.I)),
++    ("HTTP_5XX", re.compile(r"http error 5\d\d|server returned 5\d\d", re.I)),
++    ("NETWORK_TIMEOUT", re.compile(r"(?:operation )?timed out|timeout", re.I)),
++    ("NETWORK_EOF", re.compile(r"error(?:=| reading http response: )end of file", re.I)),
++    ("NETWORK_CONNECTION", re.compile(r"connection (?:reset|refused|closed)|network is unreachable", re.I)),
++    ("RECONNECT_ATTEMPT", re.compile(r"will reconnect", re.I)),
++)
++
++
++def ffmpeg_tail_error_codes(value: str | list[str]) -> list[str]:
++    """Return stable diagnostic codes without retaining stderr content."""
++    lines = value if isinstance(value, list) else (value or "").splitlines()
++    codes: list[str] = []
++    for raw_line in lines:
++        line = redact_stream_urls(str(raw_line))
++        matched = False
++        for code, pattern in (*_FFMPEG_INTEGRITY_PATTERNS, *_FFMPEG_NETWORK_PATTERNS):
++            if pattern.search(line):
++                matched = True
++                if code not in codes:
++                    codes.append(code)
++        if not matched and re.search(r"\b(?:error|failed|fatal)\b", line, re.I):
++            if "UNKNOWN_FFMPEG_ERROR" not in codes:
++                codes.append("UNKNOWN_FFMPEG_ERROR")
++    return codes
++
++
++def classify_ffmpeg_tail(value: str | list[str]) -> str:
++    """Classify a bounded FFmpeg stderr tail for chunk acceptance."""
++    codes = ffmpeg_tail_error_codes(value)
++    integrity_codes = {code for code, _ in _FFMPEG_INTEGRITY_PATTERNS}
++    if any(code in integrity_codes or code == "UNKNOWN_FFMPEG_ERROR" for code in codes):
++        return "INTEGRITY_ERROR"
++    if codes:
++        return "NETWORK_WARNING"
++    return "BENIGN"
+ 
+ 
+ def ffmpeg_binary() -> str | None:
+@@ -254,7 +307,8 @@
+     now = lambda: datetime.now(timezone.utc).isoformat(timespec="milliseconds")
+     state = {"started_at": now(), "last_file_write_at": None, "ended_at": None,
+              "return_code": None, "exit_kind": None, "status": "STARTING",
+-             "output_path": str(output_path), "input_kind": "LIVE_HTTP" if network_input else "LOCAL_REPLAY"}
++             "output_path": str(output_path), "input_kind": "LIVE_HTTP" if network_input else "LOCAL_REPLAY",
++             "ffmpeg_tail_class": "BENIGN", "ffmpeg_error_codes": []}
+     if stream_metadata:
+         state["stream"] = stream_metadata
+     state_path = recording_state_path(output_path)
+@@ -298,6 +352,8 @@
+             state["checked_at"] = now()
+             with lock:
+                 state["ffmpeg_tail"] = list(tail)
++                state["ffmpeg_tail_class"] = classify_ffmpeg_tail(state["ffmpeg_tail"])
++                state["ffmpeg_error_codes"] = ffmpeg_tail_error_codes(state["ffmpeg_tail"])
+             temporary = state_path.with_name(state_path.name + f".{os.getpid()}.tmp")
+             temporary.write_text(json.dumps(state, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+             temporary.replace(state_path)
+@@ -394,10 +450,16 @@
+         duration = probe_duration(chunk) if chunk.is_file() and chunk.stat().st_size > 0 else None
+         if duration is not None:
+             outputs.append(chunk)
++        tail_class = classify_ffmpeg_tail(tail)
++        error_codes = ffmpeg_tail_error_codes(tail)
+         attempts.append({"chunk_index": chunk_index, "output_path": str(chunk), "return_code": code,
+                          "duration_seconds": duration, "stream": fingerprint,
+-                         "stderr_tail": tail.splitlines()[-50:]})
+-        complete_chunk = code == 0 and duration is not None and duration >= refresh_seconds - 5
++                         "stderr_tail": tail.splitlines()[-50:],
++                         "ffmpeg_tail_class": tail_class,
++                         "ffmpeg_error_codes": error_codes})
++        complete_chunk = (code == 0 and duration is not None and
++                          duration >= refresh_seconds - 5 and
++                          tail_class != "INTEGRITY_ERROR")
+         if complete_chunk:
+             consecutive_failures = 0
+             prefetched = preresolution.get("info") if preresolution["ready"].is_set() else None

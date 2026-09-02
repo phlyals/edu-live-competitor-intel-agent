@@ -1,0 +1,179 @@
+{
+  "checked_at": "2026-09-01T12:19:52.983634+00:00",
+  "database_read_only": "on",
+  "task": {
+    "task_id": "task_db30ca313b934a97a81404fc37b08ebb",
+    "status": "RUNNING",
+    "current_step": "PRODUCT_RESOLVED",
+    "resume_from": "SCANNING",
+    "attempts": 4,
+    "max_attempts": 7,
+    "error_type": null,
+    "error_message": null,
+    "updated_at": "2026-09-01T12:13:55.202Z"
+  },
+  "review": {
+    "review_id": "review_62fe3cd307db300b3310b7ba",
+    "status": "CANCELLED",
+    "decided_at": "2026-09-01T11:56:16.899Z",
+    "decided_by": "user-scope-decision",
+    "decision_notes": "用户此前已明确：当前场景不要求人工金标或逐段时间戳核验；取消过期ASR人工复核，不标记为生产就绪。"
+  },
+  "heartbeats": [
+    {
+      "service_name": "feishu-ingress-v3",
+      "pid": 50258,
+      "status": "READY",
+      "last_heartbeat_at": "2026-09-01T12:19:28.402Z"
+    },
+    {
+      "service_name": "runtime-v3",
+      "pid": 40565,
+      "status": "DEGRADED",
+      "last_heartbeat_at": "2026-09-01T12:18:42.881Z"
+    }
+  ],
+  "recordings": [
+    {
+      "session_id": "session_4aa2cdc669aeda1afab096f9fd85a7a5",
+      "pid": 30524,
+      "restart_count": 0,
+      "status": "RUNNING",
+      "updated_at": "2026-09-01T12:18:40.764Z"
+    },
+    {
+      "session_id": "session_8a8c8c8abd54aa6c522f7398f822b6f6",
+      "pid": 23247,
+      "restart_count": 4,
+      "status": "RUNNING",
+      "updated_at": "2026-09-01T12:18:42.821Z"
+    },
+    {
+      "session_id": "session_c9951000c71aaa9dc6723e39b72251a5",
+      "pid": 43802,
+      "restart_count": 1,
+      "status": "RUNNING",
+      "updated_at": "2026-09-01T12:18:42.587Z"
+    }
+  ],
+  "new_notifications": [
+    {
+      "outbox_id": "out_196e8342070148c4b24bbfa02c5cb4e4",
+      "status": "SENT",
+      "attempts": 2,
+      "last_attempt_at": "2026-09-01T12:00:05.826Z",
+      "payload_json": {
+        "chat_id": "oc_1244bad51b930ecf960f36af9eafd98c",
+        "idempotency_key": "a26ef8c2-8c2d-53ab-a575-f7c4a6691187",
+        "profile_id": "edu_live_competitor_intel",
+        "source_message_id": "om_x100b665ed91d7cb8b4c403f97c87423",
+        "task_id": "task_db30ca313b934a97a81404fc37b08ebb",
+        "text": "✅ 已继续处理\n商品：3839136509492068370\n系统会从上次中断处继续，不会重复创建任务。\n有结果后我会继续通知你。"
+      },
+      "receipt_json": {
+        "delivery": {
+          "_notice": {
+            "update": {
+              "command": "lark-cli update",
+              "current": "1.0.58",
+              "latest": "1.0.92",
+              "message": "lark-cli 1.0.92 available, current 1.0.58, run: lark-cli update"
+            }
+          },
+          "data": {
+            "chat_id": "oc_1244bad51b930ecf960f36af9eafd98c",
+            "create_time": "2026-09-01 20:01:27",
+            "message_id": "om_x100b665fa7a3b138b16e6b52ba1e8a3"
+          },
+          "identity": "bot",
+          "ok": true
+        },
+        "profile_id": "edu_live_competitor_intel",
+        "status": "VERIFIED"
+      }
+    },
+    {
+      "outbox_id": "out_b47f6955b165443abb07d332b6f96bf8",
+      "status": "SENT",
+      "attempts": 2,
+      "last_attempt_at": "2026-09-01T12:09:32.464Z",
+      "payload_json": {
+        "chat_id": "oc_1244bad51b930ecf960f36af9eafd98c",
+        "idempotency_key": "ba4d6d6b-90ee-5039-a560-d41237054181",
+        "profile_id": "edu_live_competitor_intel",
+        "source_message_id": "om_x100b665e0353048cb32d8ba22906909",
+        "task_id": "task_db30ca313b934a97a81404fc37b08ebb",
+        "text": "✅ 已继续处理\n商品：3839136509492068370\n系统会从上次中断处继续，不会重复创建任务。\n有结果后我会继续通知你。"
+      },
+      "receipt_json": {
+        "delivery": {
+          "_notice": {
+            "update": {
+              "command": "lark-cli update",
+              "current": "1.0.58",
+              "latest": "1.0.92",
+              "message": "lark-cli 1.0.92 available, current 1.0.58, run: lark-cli update"
+            }
+          },
+          "data": {
+            "chat_id": "oc_1244bad51b930ecf960f36af9eafd98c",
+            "create_time": "2026-09-01 20:09:33",
+            "message_id": "om_x100b6658491020a8b2bdf847c33edbf"
+          },
+          "identity": "bot",
+          "ok": true
+        },
+        "profile_id": "edu_live_competitor_intel",
+        "status": "VERIFIED"
+      }
+    },
+    {
+      "outbox_id": "out_e3a29ed432514974a47a480d2a149b84",
+      "status": "SENT",
+      "attempts": 1,
+      "last_attempt_at": "2026-09-01T12:13:54.341Z",
+      "payload_json": {
+        "chat_id": "oc_1244bad51b930ecf960f36af9eafd98c",
+        "idempotency_key": "313b3659-c4a9-5cb5-b140-e23e8222f39d",
+        "profile_id": "edu_live_competitor_intel",
+        "source_message_id": "om_x100b665e58ae00b4b1ca1c25bc54aee",
+        "task_id": "task_db30ca313b934a97a81404fc37b08ebb",
+        "text": "✅ 已自动继续处理\n商品：3839136509492068370\n刚才是系统的页面分批设置不正确，现已修复。\n你不用重新登录，也不用再次回复。"
+      },
+      "receipt_json": {
+        "delivery": {
+          "_notice": {
+            "update": {
+              "command": "lark-cli update",
+              "current": "1.0.58",
+              "latest": "1.0.92",
+              "message": "lark-cli 1.0.92 available, current 1.0.58, run: lark-cli update"
+            }
+          },
+          "data": {
+            "chat_id": "oc_1244bad51b930ecf960f36af9eafd98c",
+            "create_time": "2026-09-01 20:13:55",
+            "message_id": "om_x100b665856f1aca0b1dece5b1029ccf"
+          },
+          "identity": "bot",
+          "ok": true
+        },
+        "profile_id": "edu_live_competitor_intel",
+        "status": "VERIFIED"
+      }
+    }
+  ],
+  "scan_progress": {
+    "attempt": 4,
+    "total": 151,
+    "page": 4,
+    "row_offset": 8,
+    "completed_pages": 3,
+    "observations": 44,
+    "identities": 25,
+    "opened": 44,
+    "closed": 44,
+    "done": false
+  },
+  "generic_session_index": {}
+}

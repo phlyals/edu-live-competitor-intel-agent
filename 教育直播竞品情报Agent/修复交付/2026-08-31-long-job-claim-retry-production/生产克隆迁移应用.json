@@ -1,0 +1,18 @@
+{
+  "status": "APPLIED",
+  "migration_version": "1",
+  "plan_sha256": "0846d329e7eb9ef37dd4760ad9712bbc2ec94c59e712c6949583e45851eda9e2",
+  "backup_path": "/Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-31-long-job-claim-retry-production/生产克隆迁移备份/pre-long-job-claim-retry-20260831-010141-003772.json",
+  "backup_sha256": "270d87c7c9dae22facb07c7a1f1f6383df7ed83192ad931418093ff3267c9fca",
+  "postconditions": {
+    "healthy": true,
+    "schema_missing": {},
+    "indexes": [
+      "idx_analyses_long_job_due",
+      "idx_transcripts_long_job_due"
+    ],
+    "marker": "1",
+    "row_errors": [],
+    "checkpoint_invalid": []
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "checked_at": "2026-08-30T07:48:55.778227+00:00",
+  "transaction_read_only": "on",
+  "backup_directory": "/Volumes/ExternalStorage/AgentInfrastructure/backups/edu-refresh-preresolve-fix-20260830",
+  "hashes": {
+    "shared": "d215c0b527350304e79d6b18f886b43fec320d18e7577710a6fddfd0b7b74ba9",
+    "test": "6186250e4c79a0fc0afcabdac45af8b0711d0b981680a73272462137701e29e1",
+    "candidate": "59c52f017a3f99840051a5b2b575b041d38702f9d2e76ad47a1093ce714c2322"
+  },
+  "active_recorders": [
+    {
+      "session_id": "session_31b4f2bc78e5459a96660d15a8c01199",
+      "pid": 55036,
+      "job_status": "RUNNING",
+      "session_status": "RECORDING",
+      "monitor_status": "LIVE",
+      "partial_dir": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_650c33d1973a5825/sess_276e38684a5294c8342e733c",
+      "bytes": 1117050776
+    },
+    {
+      "session_id": "session_a1b2face8810ffbc83f36038b2e488f7",
+      "pid": 55980,
+      "job_status": "RUNNING",
+      "session_status": "RECORDING",
+      "monitor_status": "LIVE",
+      "partial_dir": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_d0fa112503e2aabc/sess_48a4eb557ab1e47ea86559d0",
+      "bytes": 611263628
+    }
+  ],
+  "services": {
+    "runtime-v3": {
+      "state": "running",
+      "pid": "71442",
+      "runs": "61"
+    },
+    "pipeline-v3": {
+      "state": "running",
+      "pid": "91389",
+      "runs": "34"
+    },
+    "analysis-v3": {
+      "state": "running",
+      "pid": "85928",
+      "runs": "2"
+    },
+    "evidence-v3": {
+      "state": "running",
+      "pid": "705",
+      "runs": "1"
+    },
+    "recompute-v3": {
+      "state": "running",
+      "pid": "708",
+      "runs": "1"
+    },
+    "retention-v3": {
+      "state": "running",
+      "pid": "34907",
+      "runs": "2"
+    }
+  },
+  "retention": {
+    "delete_enabled": false,
+    "idle": true,
+    "mode": "DELETE_DISABLED",
+    "next_scan_in_seconds": 46
+  }
+}

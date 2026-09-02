@@ -1,0 +1,41 @@
+{
+  "transaction_read_only": "on",
+  "analysis_id": "analysis_16bdca57a497943fd6eb0c05",
+  "transcript_id": "transcript_875ba0bd045001857d6cd2dc",
+  "source_rows": 1454,
+  "coverage": {
+    "schema_version": 2,
+    "coverage_scope": "FULL_SESSION",
+    "source_duration_seconds": 4387.491625,
+    "source_timestamp_covered_seconds": 4335.199999999997,
+    "source_transcript_coverage_rate": 0.9880816581615691,
+    "analyzed_timestamp_covered_seconds": 4335.199999999997,
+    "analysis_coverage_rate": 0.9880816581615691,
+    "timeline_coverage_rate": 0.9880816581615691,
+    "source_segment_count": 1454,
+    "analyzed_unique_segment_count": 1454,
+    "segment_coverage_rate": 1.0,
+    "source_segment_ids_sha256": "ebe11986e0bddaf6d8475bcdc6e1b32ca2088b5a0d818d8e61e5c696d6946aaf",
+    "successful_source_segment_ids_sha256": "ebe11986e0bddaf6d8475bcdc6e1b32ca2088b5a0d818d8e61e5c696d6946aaf",
+    "minimum_coverage_rate": 0.9,
+    "target_coverage_rate": 0.95,
+    "timestamps_valid": true,
+    "source_segment_ids_valid": true,
+    "all_chunks_complete": true,
+    "is_qualified": true,
+    "meets_target": true,
+    "validation_errors": []
+  },
+  "gap_count": 123,
+  "before": {
+    "artifact_sha256": "45b576f6e35c6db85135f544abf879792180a81c682c91df82f6d7b1e5f5222e",
+    "artifact_mtime_ns": 1788087154611783073,
+    "transcript_sha256": "f9cf878d81b2721631046fba9d9f5610b7115c583bc26d77cc41a5ba908cd9a0"
+  },
+  "after": {
+    "artifact_sha256": "45b576f6e35c6db85135f544abf879792180a81c682c91df82f6d7b1e5f5222e",
+    "artifact_mtime_ns": 1788087154611783073
+  },
+  "artifact_unchanged": true,
+  "rebuilt_json_roundtrip": true
+}

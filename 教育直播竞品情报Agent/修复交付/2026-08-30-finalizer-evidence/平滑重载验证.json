@@ -1,0 +1,148 @@
+{
+  "checked_at": "2026-08-30T13:22:00.098212+00:00",
+  "transaction_read_only": "on",
+  "sample_1": [
+    {
+      "session_id": "session_301089a174e24811a1a3e0376ac4e40d",
+      "pid": 72241,
+      "pid_alive": true,
+      "job_status": "RUNNING",
+      "session_status": "RECORDING",
+      "bytes": 207057876
+    },
+    {
+      "session_id": "session_a11008384fa574090555c6e1389a4686",
+      "pid": 50442,
+      "pid_alive": true,
+      "job_status": "RUNNING",
+      "session_status": "RECORDING",
+      "bytes": 293599500
+    },
+    {
+      "session_id": "session_c21d1f47b1546038aca956d96dca5e9a",
+      "pid": 36906,
+      "pid_alive": true,
+      "job_status": "RUNNING",
+      "session_status": "RECORDING",
+      "bytes": 191919420
+    }
+  ],
+  "sample_2": [
+    {
+      "session_id": "session_301089a174e24811a1a3e0376ac4e40d",
+      "pid": 72241,
+      "pid_alive": true,
+      "job_status": "RUNNING",
+      "session_status": "RECORDING",
+      "bytes": 211514324
+    },
+    {
+      "session_id": "session_a11008384fa574090555c6e1389a4686",
+      "pid": 50442,
+      "pid_alive": true,
+      "job_status": "RUNNING",
+      "session_status": "RECORDING",
+      "bytes": 296483084
+    },
+    {
+      "session_id": "session_c21d1f47b1546038aca956d96dca5e9a",
+      "pid": 36906,
+      "pid_alive": true,
+      "job_status": "RUNNING",
+      "session_status": "RECORDING",
+      "bytes": 193230140
+    }
+  ],
+  "growth_bytes": {
+    "session_301089a174e24811a1a3e0376ac4e40d": 4456448,
+    "session_a11008384fa574090555c6e1389a4686": 2883584,
+    "session_c21d1f47b1546038aca956d96dca5e9a": 1310720
+  },
+  "runtime_heartbeat": {
+    "pid": 90013,
+    "status": "READY",
+    "last_heartbeat_at": "2026-08-30T13:21:17.328Z",
+    "details": {
+      "audio_retention_hours": 168,
+      "capacity_test_concurrency": 65,
+      "due_target_count": 2,
+      "expected_max_recording_concurrency": 50,
+      "final_ready": false,
+      "full_fleet": true,
+      "live_count": 1,
+      "normal_recording_concurrency": 30,
+      "production_gate": "BLOCKED",
+      "recording_duration_seconds": 0,
+      "recording_health": {
+        "finalized": 108,
+        "restarted": 0,
+        "running": 4
+      },
+      "recording_mode": "LOWEST_VIDEO_WITH_AUDIO",
+      "recording_quality": "LD",
+      "recording_segment_seconds": 0,
+      "result_count": 2,
+      "speech_audio_bitrate_kbps": 48,
+      "speech_audio_format": "opus",
+      "target_count": 41,
+      "unknown_count": 1,
+      "video_retention_hours": 72
+    }
+  },
+  "retention": {
+    "delete_enabled": false,
+    "idle": true,
+    "mode": "DELETE_DISABLED",
+    "next_scan_in_seconds": 1782
+  },
+  "services": {
+    "runtime-v3": {
+      "state": "running",
+      "pid": "90013",
+      "runs": "62",
+      "last_exit_code": "0"
+    },
+    "pipeline-v3": {
+      "state": "running",
+      "pid": "91389",
+      "runs": "34",
+      "last_exit_code": "1"
+    },
+    "analysis-v3": {
+      "state": "running",
+      "pid": "85928",
+      "runs": "2",
+      "last_exit_code": "0"
+    },
+    "evidence-v3": {
+      "state": "running",
+      "pid": "705",
+      "runs": "1",
+      "last_exit_code": "(never exited)"
+    },
+    "recompute-v3": {
+      "state": "running",
+      "pid": "708",
+      "runs": "1",
+      "last_exit_code": "(never exited)"
+    },
+    "retention-v3": {
+      "state": "running",
+      "pid": "34907",
+      "runs": "2",
+      "last_exit_code": null
+    }
+  },
+  "service_pids_expected": {
+    "runtime-v3": "90013",
+    "pipeline-v3": "91389",
+    "analysis-v3": "85928",
+    "evidence-v3": "705",
+    "recompute-v3": "708",
+    "retention-v3": "34907"
+  },
+  "service_pids_match": true,
+  "baseline_media_missing": [],
+  "loaded_worker_sha256": "04353e3f05ce09479869f925b1cc4b51ac044d05e64268c0575377c0f4564f62",
+  "pass": true
+}

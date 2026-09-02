@@ -1,0 +1,64 @@
+{
+  "captured_at": "2026-09-01T10:22:28.344446+00:00",
+  "database_read_only": "on",
+  "recording_jobs": [
+    {
+      "session_id": "session_2a60bb19e6d7a74489225cdb1acdc281",
+      "pid": 19976,
+      "restart_count": 3,
+      "partial_dir": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_86bb728a51564fb6/sess_d4104909ca45b1e764eed9b4",
+      "updated_at": "2026-09-01T10:21:55.745Z",
+      "session_status": "RECORDING",
+      "actual_bytes": 729329309,
+      "file_count": 10,
+      "pid_alive": null
+    },
+    {
+      "session_id": "session_b5bad54f795b4f18e9ac9aabcaea94b6",
+      "pid": 58011,
+      "restart_count": 9,
+      "partial_dir": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_836db3961058b668/sess_4caf2931eb28c1d516f5455e",
+      "updated_at": "2026-09-01T10:21:55.659Z",
+      "session_status": "RECORDING",
+      "actual_bytes": 143456639,
+      "file_count": 4,
+      "pid_alive": null
+    },
+    {
+      "session_id": "session_b9859257df275605d47840e2d086d191",
+      "pid": 40809,
+      "restart_count": 2,
+      "partial_dir": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_87b3bb4c9e29eb3b/sess_3f0b3aa868fd45141e1817fc",
+      "updated_at": "2026-09-01T10:21:55.339Z",
+      "session_status": "RECORDING",
+      "actual_bytes": 310706452,
+      "file_count": 6,
+      "pid_alive": null
+    },
+    {
+      "session_id": "session_cd601ac4090a6982be220bcc6c4cfe23",
+      "pid": 60948,
+      "restart_count": 0,
+      "partial_dir": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_986a90186541e9b0/sess_8fca5d3f7513230108b58c1c",
+      "updated_at": "2026-09-01T10:21:55.523Z",
+      "session_status": "RECORDING",
+      "actual_bytes": 77595834,
+      "file_count": 2,
+      "pid_alive": null
+    }
+  ],
+  "heartbeats": [
+    {
+      "service_name": "feishu-ingress-v3",
+      "pid": 67817,
+      "status": "READY",
+      "last_heartbeat_at": "2026-09-01T10:22:27.934Z"
+    },
+    {
+      "service_name": "runtime-v3",
+      "pid": 70565,
+      "status": "READY",
+      "last_heartbeat_at": "2026-09-01T10:21:55.750Z"
+    }
+  ]
+}

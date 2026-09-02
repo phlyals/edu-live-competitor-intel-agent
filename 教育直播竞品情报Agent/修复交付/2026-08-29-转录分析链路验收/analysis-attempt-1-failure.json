@@ -1,0 +1,9 @@
+{
+  "status": "FAILED",
+  "attempt": 1,
+  "error_type": "JSONDecodeError",
+  "error_message": "Expecting value: line 817 column 15 (char 18194)",
+  "elapsed_seconds": 44.43,
+  "module": "v3_analysis_worker.request_analysis",
+  "checked_at": "2026-08-29T13:45:07.820066+00:00"
+}

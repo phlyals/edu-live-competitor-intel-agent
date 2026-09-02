@@ -1,0 +1,26 @@
+{
+  "installed_at": "2026-08-30T15:42:17.674495+00:00",
+  "backup_dir": "/Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/backups/analysis-coverage-code-20260830-2342",
+  "backed_up": [
+    "v3_analysis_contract.py",
+    "v3_analysis_worker.py",
+    "v3_project_feishu.py",
+    "v3_sample_analysis_migration.py",
+    "v3_config.json",
+    "test_v3_analysis_worker.py",
+    "test_v3_sample_analysis_qualification.py"
+  ],
+  "new_files": [
+    "test_v3_analysis_coverage_gate.py"
+  ],
+  "installed_hashes": {
+    "v3_analysis_contract.py": "8fcbd147e10caec40699c992a512b0639e7d1e7ffc0a6ce4927583de27a3f64f",
+    "v3_analysis_worker.py": "1fce88f930efbd4c6b334fb78f4578b3909f76b0890b45196f48211a8b08469f",
+    "v3_project_feishu.py": "0287f1c5c9d426614f3ce05ed62033fba66a7188866aa36165288ae25bb5aea7",
+    "v3_sample_analysis_migration.py": "713041deaabcf9bba83a63f4e20513d6c34e4148ffdb0838dd3442014495f17d",
+    "v3_config.json": "53cf0a7458c2bb69caaaa63e13e57d6f3eb408f4f7884c865916b6fcf95351e3",
+    "test_v3_analysis_worker.py": "621aecf66d9108c21b362ab33d3f212727ec7d588badb39c5f163a1a86a8b00b",
+    "test_v3_sample_analysis_qualification.py": "c64d57e1aaf3e3e652bc3390c24453ee3485180d2ae5ce229ed8cdadcdcb95f9",
+    "test_v3_analysis_coverage_gate.py": "5b8a96e912eae498b4d935b0b194d0cd92b85fc1b7d014bc957abcbb98d25abb"
+  }
+}

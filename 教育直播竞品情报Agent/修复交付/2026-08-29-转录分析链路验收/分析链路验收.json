@@ -1,0 +1,31 @@
+{
+  "status": "FAIL",
+  "valid_analysis_report_created": false,
+  "attempt_count": 2,
+  "errors": [
+    "JSONDecodeError: Expecting value at char 18194",
+    "JSONDecodeError: Unterminated string at char 18344"
+  ],
+  "analysis_input_chars": 16000,
+  "analysis_input_sha256": "19381e707c04243931105d3e4d4cfb20445a755949a7c45b202e819ae839a35f",
+  "analysis_input_first_timestamp": 0.0,
+  "analysis_input_last_timestamp": 1395.72,
+  "audio_duration_seconds": 3787.244688,
+  "analysis_timeline_input_rate": 0.36853177309149876,
+  "transcript_total_segments": 1060,
+  "required_schema": [
+    "hook",
+    "pain_points",
+    "claims",
+    "cta",
+    "interaction_patterns",
+    "risks",
+    "evidence_refs"
+  ],
+  "requested_quality_fields": {
+    "instructor": "not_available_no_valid_report",
+    "course_content": "not_available_no_valid_report",
+    "interaction": "not_available_no_valid_report"
+  },
+  "conclusion": "Existing analysis module failed twice to return parseable JSON; no report can be quality-approved. Its 16000-character input also covers only the leading part of the session."
+}

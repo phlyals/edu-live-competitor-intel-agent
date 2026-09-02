@@ -1,0 +1,66 @@
+{
+  "ok": true,
+  "identity": "bot",
+  "data": {
+    "data": [
+      [
+        "analysis_16bdca57a497943fd6eb0c05",
+        [
+          "单场分析"
+        ],
+        [
+          "完成"
+        ],
+        "SUPERSEDED_FORMAL_VERSION：该报告来源完整，但已被新版分析替代，不再是当前决策版本；superseded_by=analysis_d52f07f183321d1b75620e21",
+        "[/Volumes/ExternalStorage/同行直播录制/analysis/drafts/runtime-v3/analysis/analysis_16bdca57a497943fd6eb0c05.json](http:///Volumes/ExternalStorage/同行直播录制/analysis/drafts/runtime-v3/analysis/analysis_16bdca57a497943fd6eb0c05.json)"
+      ],
+      [
+        "analysis_d52f07f183321d1b75620e21",
+        [
+          "单场分析"
+        ],
+        [
+          "完成"
+        ],
+        "Runtime V3 qualification=FULL_SESSION_QUALIFIED; lineage_state=CURRENT",
+        "[/Volumes/ExternalStorage/同行直播录制/analysis/drafts/runtime-v3/analysis/analysis_d52f07f183321d1b75620e21.json](http:///Volumes/ExternalStorage/同行直播录制/analysis/drafts/runtime-v3/analysis/analysis_d52f07f183321d1b75620e21.json)"
+      ]
+    ],
+    "field_id_list": [
+      "fldJHD3u8s",
+      "fldqvUFzdp",
+      "fldesKMtmk",
+      "fldTkDKe5z",
+      "fldyZiL4Jv"
+    ],
+    "field_type_list": [
+      "text",
+      "select",
+      "select",
+      "text",
+      "text"
+    ],
+    "fields": [
+      "分析ID",
+      "分析类型",
+      "状态",
+      "证据说明",
+      "分析文档"
+    ],
+    "has_more": false,
+    "record_id_list": [
+      "recvtMbwsB1VU4",
+      "recvtNn690USO7"
+    ],
+    "rev": 20,
+    "timezone": "Asia/Shanghai"
+  },
+  "_notice": {
+    "update": {
+      "command": "lark-cli update",
+      "current": "1.0.58",
+      "latest": "1.0.92",
+      "message": "lark-cli 1.0.92 available, current 1.0.58, run: lark-cli update"
+    }
+  }
+}

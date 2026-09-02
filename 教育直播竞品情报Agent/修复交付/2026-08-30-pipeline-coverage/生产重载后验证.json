@@ -1,0 +1,229 @@
+{
+  "observed_at": "2026-08-30T14:21:48.122725+00:00",
+  "transaction_read_only": "on",
+  "pipeline": {
+    "service_name": "pipeline-v3",
+    "pid": 30982,
+    "status": "READY",
+    "last_heartbeat_at": "2026-08-30T14:21:46.478Z",
+    "last_success_at": "2026-08-30T14:21:46.478Z",
+    "details_json": "{\"analysis_tasks\":0,\"checked_at\":\"2026-08-30T14:21:46.478Z\",\"eligible_canonical_pending\":0,\"eligible_canonical_total\":1,\"full_session_meets_target\":1,\"full_session_qualified\":1,\"health_reasons\":[],\"quality_blocked\":0,\"segments\":104,\"stale_backlog\":{\"missing_output\":0,\"missing_source\":0,\"unrecoverable\":0},\"transcripts\":0}"
+  },
+  "pipeline_details": {
+    "analysis_tasks": 0,
+    "checked_at": "2026-08-30T14:21:46.478Z",
+    "eligible_canonical_pending": 0,
+    "eligible_canonical_total": 1,
+    "full_session_meets_target": 1,
+    "full_session_qualified": 1,
+    "health_reasons": [],
+    "quality_blocked": 0,
+    "segments": 104,
+    "stale_backlog": {
+      "missing_output": 0,
+      "missing_source": 0,
+      "unrecoverable": 0
+    },
+    "transcripts": 0
+  },
+  "full_session_transcripts": [
+    {
+      "transcript_id": "transcript_875ba0bd045001857d6cd2dc",
+      "session_id": "session_d352eca016af9f5ec3698768dd69aa0f",
+      "status": "COMPLETE",
+      "coverage_rate": 0.9880816581615691,
+      "minimum": 0.9,
+      "target": 0.95,
+      "qualified": true,
+      "meets_target": true,
+      "schema_version": 1,
+      "output_path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c8c4a8ea998e6e/sess_3f33dd38cdc004f62bbf1d34/整场直播.cf465540aaa0.transcript.json"
+    }
+  ],
+  "retention_delete_enabled": false,
+  "active_recorders": [
+    {
+      "job_id": "recjob_b02574aa870775054f6777a4",
+      "session_id": "session_301089a174e24811a1a3e0376ac4e40d",
+      "status": "RUNNING",
+      "pid": 72241,
+      "partial_dir": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_2830f009c4673f6f/sess_b02574aa870775054f6777a4",
+      "restart_count": 0,
+      "updated_at": "2026-08-30T14:21:21.559Z",
+      "pid_alive": true,
+      "media_files": []
+    },
+    {
+      "job_id": "recjob_180bfa12dacf647106fc324e",
+      "session_id": "session_f941587f590eb58681a00688b1dfb5d1",
+      "status": "RUNNING",
+      "pid": 89484,
+      "partial_dir": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_e8f8785e8b29630c/sess_180bfa12dacf647106fc324e",
+      "restart_count": 0,
+      "updated_at": "2026-08-30T14:21:21.323Z",
+      "pid_alive": true,
+      "media_files": []
+    },
+    {
+      "job_id": "recjob_866923f0e08c195f90161f8a",
+      "session_id": "session_ff57b5a50cbe69850e8ade07ebf3671d",
+      "status": "RUNNING",
+      "pid": 7267,
+      "partial_dir": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_3209ade1e6024113/sess_866923f0e08c195f90161f8a",
+      "restart_count": 0,
+      "updated_at": "2026-08-30T14:21:21.027Z",
+      "pid_alive": true,
+      "media_files": []
+    },
+    {
+      "job_id": "recjob_09c668504d013ddcced8e429",
+      "session_id": "session_e5facf61caaf58cec588cedbaf0bd2c7",
+      "status": "RUNNING",
+      "pid": 20352,
+      "partial_dir": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_d0fa112503e2aabc/sess_09c668504d013ddcced8e429",
+      "restart_count": 0,
+      "updated_at": "2026-08-30T14:21:21.453Z",
+      "pid_alive": true,
+      "media_files": []
+    }
+  ],
+  "recorder_continuity": [
+    {
+      "job_id": "recjob_b02574aa870775054f6777a4",
+      "same_pid": true,
+      "pid_alive": true,
+      "file_growth": []
+    },
+    {
+      "job_id": "recjob_180bfa12dacf647106fc324e",
+      "same_pid": true,
+      "pid_alive": true,
+      "file_growth": []
+    },
+    {
+      "job_id": "recjob_866923f0e08c195f90161f8a",
+      "same_pid": true,
+      "pid_alive": true,
+      "file_growth": []
+    },
+    {
+      "job_id": "recjob_09c668504d013ddcced8e429",
+      "same_pid": true,
+      "pid_alive": true,
+      "file_growth": []
+    }
+  ],
+  "post_reload_media_growth_5s": [
+    {
+      "job_id": "recjob_b02574aa870775054f6777a4",
+      "files": [
+        {
+          "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_2830f009c4673f6f/sess_b02574aa870775054f6777a4/整场直播.refresh0002.ts.partial",
+          "before_bytes": 205413500,
+          "after_bytes": 205413500,
+          "grew": false
+        },
+        {
+          "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_2830f009c4673f6f/sess_b02574aa870775054f6777a4/整场直播.refresh0003.ts.partial",
+          "before_bytes": 205455988,
+          "after_bytes": 205455988,
+          "grew": false
+        },
+        {
+          "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_2830f009c4673f6f/sess_b02574aa870775054f6777a4/整场直播.ts.partial",
+          "before_bytes": 205222868,
+          "after_bytes": 205222868,
+          "grew": false
+        },
+        {
+          "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_2830f009c4673f6f/sess_b02574aa870775054f6777a4/整场直播.refresh0001.ts.partial",
+          "before_bytes": 205471404,
+          "after_bytes": 205471404,
+          "grew": false
+        },
+        {
+          "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_2830f009c4673f6f/sess_b02574aa870775054f6777a4/整场直播.refresh0004.ts.partial",
+          "before_bytes": 176160768,
+          "after_bytes": 176160768,
+          "grew": false
+        }
+      ]
+    },
+    {
+      "job_id": "recjob_180bfa12dacf647106fc324e",
+      "files": [
+        {
+          "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_e8f8785e8b29630c/sess_180bfa12dacf647106fc324e/整场直播.refresh0002.ts.partial",
+          "before_bytes": 252202188,
+          "after_bytes": 252202188,
+          "grew": false
+        },
+        {
+          "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_e8f8785e8b29630c/sess_180bfa12dacf647106fc324e/整场直播.refresh0003.ts.partial",
+          "before_bytes": 249686748,
+          "after_bytes": 249686748,
+          "grew": false
+        },
+        {
+          "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_e8f8785e8b29630c/sess_180bfa12dacf647106fc324e/整场直播.ts.partial",
+          "before_bytes": 252884628,
+          "after_bytes": 252884628,
+          "grew": false
+        },
+        {
+          "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_e8f8785e8b29630c/sess_180bfa12dacf647106fc324e/整场直播.refresh0001.ts.partial",
+          "before_bytes": 252946104,
+          "after_bytes": 252946104,
+          "grew": false
+        },
+        {
+          "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_e8f8785e8b29630c/sess_180bfa12dacf647106fc324e/整场直播.refresh0004.ts.partial",
+          "before_bytes": 13631488,
+          "after_bytes": 15204352,
+          "grew": true
+        }
+      ]
+    },
+    {
+      "job_id": "recjob_866923f0e08c195f90161f8a",
+      "files": [
+        {
+          "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_3209ade1e6024113/sess_866923f0e08c195f90161f8a/整场直播.refresh0002.ts.partial",
+          "before_bytes": 103284736,
+          "after_bytes": 104595456,
+          "grew": true
+        },
+        {
+          "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_3209ade1e6024113/sess_866923f0e08c195f90161f8a/整场直播.ts.partial",
+          "before_bytes": 252989720,
+          "after_bytes": 252989720,
+          "grew": false
+        },
+        {
+          "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_3209ade1e6024113/sess_866923f0e08c195f90161f8a/整场直播.refresh0001.ts.partial",
+          "before_bytes": 252756036,
+          "after_bytes": 252756036,
+          "grew": false
+        }
+      ]
+    },
+    {
+      "job_id": "recjob_09c668504d013ddcced8e429",
+      "files": [
+        {
+          "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_d0fa112503e2aabc/sess_09c668504d013ddcced8e429/整场直播.ts.partial",
+          "before_bytes": 136831288,
+          "after_bytes": 136831288,
+          "grew": false
+        },
+        {
+          "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_d0fa112503e2aabc/sess_09c668504d013ddcced8e429/整场直播.refresh0001.ts.partial",
+          "before_bytes": 43515904,
+          "after_bytes": 44302336,
+          "grew": true
+        }
+      ]
+    }
+  ],
+  "media_growth_checked_at": "2026-08-30T14:22:11.949974+00:00"
+}

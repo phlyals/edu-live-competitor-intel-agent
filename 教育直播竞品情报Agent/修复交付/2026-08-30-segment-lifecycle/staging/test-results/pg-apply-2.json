@@ -1,0 +1,6 @@
+{
+  "mode": "APPLY",
+  "database": "segment_lifecycle_test",
+  "status": "ALREADY_APPLIED",
+  "migration_key": "recording_segment_lifecycle_v1"
+}

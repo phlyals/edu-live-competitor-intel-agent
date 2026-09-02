@@ -1,0 +1,120 @@
+{
+  "transaction_read_only": "on",
+  "migration_health": {
+    "healthy": true,
+    "schema": {
+      "missing_lineage_columns": [],
+      "recompute_requests_exists": true
+    },
+    "indexes": [
+      "idx_lineage_upstream_version",
+      "idx_recompute_requests_candidate",
+      "idx_recompute_requests_due"
+    ],
+    "marker": "1",
+    "edge_errors": [],
+    "request_errors": [],
+    "legacy_request_errors": []
+  },
+  "bindings": [
+    {
+      "binding_status": "CONTENT_DIGEST_VERIFIED",
+      "count": 3
+    },
+    {
+      "binding_status": "LEGACY_UNVERIFIED",
+      "count": 7
+    }
+  ],
+  "current_formal_edge": [
+    {
+      "edge_id": "lineage_f518142aee8f36da788ae28a",
+      "upstream_id": "transcript_875ba0bd045001857d6cd2dc",
+      "upstream_version": "f9cf878d81b2721631046fba9d9f5610b7115c583bc26d77cc41a5ba908cd9a0",
+      "binding_status": "CONTENT_DIGEST_VERIFIED",
+      "upstream_engine_version": "faster-whisper",
+      "upstream_model_version": "faster-whisper-small",
+      "downstream_model_version": "deepseek-chat",
+      "downstream_prompt_version": "deepseek-source-segment-ids-v1",
+      "downstream_schema_version": "single-session-evidence-v4-source-ids",
+      "state": "CURRENT"
+    }
+  ],
+  "requests": [],
+  "analyses": [
+    {
+      "analysis_id": "analysis_16bdca57a497943fd6eb0c05",
+      "status": "COMPLETE",
+      "lineage_state": "SUPERSEDED",
+      "artifact_digest": "45b576f6e35c6db85135f544abf879792180a81c682c91df82f6d7b1e5f5222e",
+      "output_path": "/Volumes/ExternalStorage/同行直播录制/analysis/drafts/runtime-v3/analysis/analysis_16bdca57a497943fd6eb0c05.json",
+      "file_exists": true,
+      "digest_matches": true
+    },
+    {
+      "analysis_id": "analysis_c0d5fe33a0180f99e66fbca2",
+      "status": "COMPLETE",
+      "lineage_state": "CURRENT",
+      "artifact_digest": "ca32b42663e8909773f3cc5e6b37bc1ae1a9fcec7aea702a45f316d168a6a0af",
+      "output_path": "/Volumes/ExternalStorage/同行直播录制/analysis/drafts/runtime-v3/analysis/analysis_c0d5fe33a0180f99e66fbca2.json",
+      "file_exists": true,
+      "digest_matches": true
+    },
+    {
+      "analysis_id": "analysis_d52f07f183321d1b75620e21",
+      "status": "COMPLETE",
+      "lineage_state": "SUPERSEDED",
+      "artifact_digest": "d37b7363bb5a01ccc9c7c69665887f26bea534bd16aeba49ce4e88a08a48343d",
+      "output_path": "/Volumes/ExternalStorage/同行直播录制/analysis/drafts/runtime-v3/analysis/analysis_d52f07f183321d1b75620e21.json",
+      "file_exists": true,
+      "digest_matches": true
+    }
+  ],
+  "heartbeats": [
+    {
+      "service_name": "analysis-v3",
+      "pid": 40012,
+      "status": "READY",
+      "last_heartbeat_at": "2026-08-30T17:53:16.259Z",
+      "details_json": "{\"analysis_spec_version\":\"single-session-evidence-v4-source-ids\",\"checked_at\":\"2026-08-30T17:53:16.258Z\",\"claimed\":0,\"completed\":0,\"current_spec_blocked\":0,\"current_spec_evidence_pending\":0,\"current_spec_meets_target\":1,\"current_spec_qualified\":1,\"current_spec_total\":1,\"current_spec_waiting\":0,\"expired_exhausted\":0,\"failed_final\":0,\"health_reasons\":[],\"lease_lost\":0,\"minimum_coverage_rate\":0.9,\"quality_blocked\":0,\"retry_wait\":0,\"revalidated\":0,\"source_qualification_blocked\":0,\"target_coverage_rate\":0.95}"
+    },
+    {
+      "service_name": "evidence-v3",
+      "pid": 40014,
+      "status": "READY",
+      "last_heartbeat_at": "2026-08-30T17:53:16.233Z",
+      "details_json": "{\"blocked\":0,\"checked_at\":\"2026-08-30T17:53:16.233Z\",\"released_projections\":0,\"verified\":0}"
+    },
+    {
+      "service_name": "pipeline-v3",
+      "pid": 40010,
+      "status": "READY",
+      "last_heartbeat_at": "2026-08-30T17:53:02.261Z",
+      "details_json": "{\"analysis_tasks\":0,\"checked_at\":\"2026-08-30T17:53:02.261Z\",\"eligible_canonical_pending\":0,\"eligible_canonical_total\":1,\"full_session_meets_target\":1,\"full_session_qualified\":1,\"health_reasons\":[],\"quality_blocked\":0,\"segments\":111,\"stale_backlog\":{\"missing_output\":0,\"missing_source\":0,\"unrecoverable\":0},\"transcripts\":0}"
+    },
+    {
+      "service_name": "recompute-v3",
+      "pid": 40008,
+      "status": "READY",
+      "last_heartbeat_at": "2026-08-30T17:53:16.233Z",
+      "details_json": "{\"candidate_created\":0,\"candidate_failed\":0,\"candidate_promoted\":0,\"candidate_waiting\":0,\"checked_at\":\"2026-08-30T17:53:16.233Z\",\"claimed\":0,\"expired_exhausted\":0,\"failed_final\":0,\"lease_lost\":0,\"obsolete\":0,\"retry_wait\":0}"
+    }
+  ],
+  "review_counts": [
+    {
+      "status": "PENDING",
+      "count": 1
+    }
+  ],
+  "outbox_counts": [
+    {
+      "status": "DEAD_LETTER",
+      "count": 1
+    },
+    {
+      "status": "SENT",
+      "count": 375
+    }
+  ],
+  "retention_delete_enabled": false
+}

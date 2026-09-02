@@ -1,0 +1,130 @@
+{
+  "checked_at": "2026-08-30T13:02:51.785881+00:00",
+  "transaction_read_only": "on",
+  "sample_1": [
+    {
+      "session_id": "session_3ea4d56fbdf35de2bba7681a0b8e348e",
+      "pid": 25852,
+      "pid_alive": true,
+      "job_status": "RUNNING",
+      "session_status": "RECORDING",
+      "partial_dir": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_0d701166362f3482/sess_d8a4d4628b76596244287bd3",
+      "bytes": 1650523656
+    },
+    {
+      "session_id": "session_a11008384fa574090555c6e1389a4686",
+      "pid": 50442,
+      "pid_alive": true,
+      "job_status": "RUNNING",
+      "session_status": "RECORDING",
+      "partial_dir": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_08513b0271791c3c/sess_6097a2e5cd5a7f46efd0801e",
+      "bytes": 121372672
+    },
+    {
+      "session_id": "session_c21d1f47b1546038aca956d96dca5e9a",
+      "pid": 36906,
+      "pid_alive": true,
+      "job_status": "RUNNING",
+      "session_status": "RECORDING",
+      "partial_dir": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_91c8c4a8ea998e6e/sess_45d04a07827993aaee08df3d",
+      "bytes": 108216548
+    },
+    {
+      "session_id": "session_db94c18a7e67a716c2451a3e8646df8b",
+      "pid": 59399,
+      "pid_alive": true,
+      "job_status": "RUNNING",
+      "session_status": "RECORDING",
+      "partial_dir": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_d84cba350eb545bf/sess_1089b9ba5fa1fb9b6cc7f13b",
+      "bytes": 1284130960
+    }
+  ],
+  "sample_2": [
+    {
+      "session_id": "session_3ea4d56fbdf35de2bba7681a0b8e348e",
+      "pid": 25852,
+      "pid_alive": true,
+      "job_status": "RUNNING",
+      "session_status": "RECORDING",
+      "partial_dir": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_0d701166362f3482/sess_d8a4d4628b76596244287bd3",
+      "bytes": 1650523656
+    },
+    {
+      "session_id": "session_a11008384fa574090555c6e1389a4686",
+      "pid": 50442,
+      "pid_alive": true,
+      "job_status": "RUNNING",
+      "session_status": "RECORDING",
+      "partial_dir": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_08513b0271791c3c/sess_6097a2e5cd5a7f46efd0801e",
+      "bytes": 123731968
+    },
+    {
+      "session_id": "session_c21d1f47b1546038aca956d96dca5e9a",
+      "pid": 36906,
+      "pid_alive": true,
+      "job_status": "RUNNING",
+      "session_status": "RECORDING",
+      "partial_dir": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_91c8c4a8ea998e6e/sess_45d04a07827993aaee08df3d",
+      "bytes": 109265124
+    },
+    {
+      "session_id": "session_db94c18a7e67a716c2451a3e8646df8b",
+      "pid": 59399,
+      "pid_alive": true,
+      "job_status": "RUNNING",
+      "session_status": "RECORDING",
+      "partial_dir": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_d84cba350eb545bf/sess_1089b9ba5fa1fb9b6cc7f13b",
+      "bytes": 1288325264
+    }
+  ],
+  "growth_bytes": {
+    "session_3ea4d56fbdf35de2bba7681a0b8e348e": 0,
+    "session_a11008384fa574090555c6e1389a4686": 2359296,
+    "session_c21d1f47b1546038aca956d96dca5e9a": 1048576,
+    "session_db94c18a7e67a716c2451a3e8646df8b": 4194304
+  },
+  "services": {
+    "runtime-v3": {
+      "state": "running",
+      "pid": "71442",
+      "runs": "61"
+    },
+    "pipeline-v3": {
+      "state": "running",
+      "pid": "91389",
+      "runs": "34"
+    },
+    "analysis-v3": {
+      "state": "running",
+      "pid": "85928",
+      "runs": "2"
+    },
+    "evidence-v3": {
+      "state": "running",
+      "pid": "705",
+      "runs": "1"
+    },
+    "recompute-v3": {
+      "state": "running",
+      "pid": "708",
+      "runs": "1"
+    },
+    "retention-v3": {
+      "state": "running",
+      "pid": "34907",
+      "runs": "2"
+    }
+  },
+  "service_pids_unchanged": true,
+  "retention": {
+    "delete_enabled": false,
+    "idle": true,
+    "mode": "DELETE_DISABLED",
+    "next_scan_in_seconds": 2933
+  },
+  "shared_sha256": "d757840ca0f3746850bb00ca6b6b89bdee89dfa8119b023af95427f50e62931c",
+  "new_sidecars_after_install": 5,
+  "structured_new_sidecars": 0,
+  "raw_signed_value_leaks": [],
+  "pass": true
+}

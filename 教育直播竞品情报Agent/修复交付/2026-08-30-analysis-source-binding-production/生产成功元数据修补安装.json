@@ -1,0 +1,13 @@
+{
+  "installed_at": "2026-08-30T16:14:22.407002+00:00",
+  "reason": "clear stale retry diagnostics after successful immutable publish",
+  "backup_dir": "/Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/backups/source-binding-success-cleanup-20260831-0013",
+  "before": {
+    "v3_analysis_worker.py": "fc855b5591a7541ab72e65e3bfc92fce158de1548a1ba7cf259837fb9721c707",
+    "test_v3_analysis_coverage_gate.py": "255d6e01b73378243046ebb4ec7fb644a171d60bcf7482a4f5c694d3c7e058f6"
+  },
+  "after": {
+    "v3_analysis_worker.py": "295d57afec67c992fc76438fc6d6c2137fc389ac29f3a5b09186f18095f29aa0",
+    "test_v3_analysis_coverage_gate.py": "b8520a0eef7fcc0c54062c9a37a01bc30bc9f73ce2be3d204daa745ccf473adb"
+  }
+}

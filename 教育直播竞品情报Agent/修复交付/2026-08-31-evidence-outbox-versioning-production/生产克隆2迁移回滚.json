@@ -1,0 +1,5 @@
+{
+  "status": "ROLLED_BACK_ROWS",
+  "backup_sha256": "3a010640fd8440e4a91161ce8770c4b99475f598e0075bf3e64b4a7eae135646",
+  "columns_retained": true
+}

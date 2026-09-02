@@ -1,0 +1,10 @@
+/Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-30-analysis-coverage-gate/full-suite-snapshot-20260830-2245/test_v3_analysis_worker.py
+/Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-30-analysis-coverage-gate/full-suite-snapshot-20260830-2245/test_v3_feishu_ingress.py
+/Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-30-analysis-coverage-gate/full-suite-snapshot-20260830-2245/test_v3_ffmpeg_tail_classifier.py
+/Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-30-analysis-coverage-gate/full-suite-snapshot-20260830-2245/test_v3_finalizer_evidence.py
+/Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-30-analysis-coverage-gate/full-suite-snapshot-20260830-2245/test_v3_minimal_repair.py
+/Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-30-analysis-coverage-gate/full-suite-snapshot-20260830-2245/test_v3_pipeline_coverage.py
+/Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-30-analysis-coverage-gate/full-suite-snapshot-20260830-2245/test_v3_recording_transcription.py
+/Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-30-analysis-coverage-gate/full-suite-snapshot-20260830-2245/test_v3_segment_lifecycle.py
+/Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-30-analysis-coverage-gate/full-suite-snapshot-20260830-2245/test_v3_segment_lifecycle_migration.py
+/Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-30-analysis-coverage-gate/full-suite-snapshot-20260830-2245/test_v3_workflow.py

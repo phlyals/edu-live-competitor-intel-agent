@@ -1,0 +1,85 @@
+{
+  "generated_from_isolated_staging": true,
+  "files": {
+    "README.md": {
+      "sha256": "0770a5b9ad90ea8d2466a4cf7c6d34d30357976108e8342a6e8ce94a7ecda9c8",
+      "bytes": 1961
+    },
+    "candidate/runtime/v3/v3_db.py": {
+      "sha256": "8c83163b3c217c27f1b9b183d40f3b35e6070c2d8290a2c48b1ba76bd6d43dd9",
+      "bytes": 6601
+    },
+    "candidate/runtime/v3/v3_pipeline_worker.py": {
+      "sha256": "aedaa9245b85b08e9e73994214eed916957c5eb4c1349b3c7bb584b8f938678c",
+      "bytes": 16364
+    },
+    "candidate/runtime/v3/v3_runtime.py": {
+      "sha256": "9f717c03e7781711815dc68bbf3ffc47d557babbf6026a77228c33083083aad1",
+      "bytes": 54057
+    },
+    "candidate/runtime/v3/v3_schema.sql": {
+      "sha256": "3176aeb29cf9fbbcf24938100a9d5f0c89bab9a8e91a7adc60f3749bcf6c464a",
+      "bytes": 20238
+    },
+    "candidate/runtime/v3/v3_worker.py": {
+      "sha256": "14b1fa57713de531d837a00a0f6280d68c1e9eb0f0456c962925bac62d8a3628",
+      "bytes": 90187
+    },
+    "migration/segment_lifecycle_migration.py": {
+      "sha256": "55ed6b12ed53823aaa8b6861f8b9b825c1a09ba8100fd185d25e8479b752f5ce",
+      "bytes": 17661
+    },
+    "patches/segment-lifecycle.patch": {
+      "sha256": "1083c7c78fc75be5af686d0654bc8dc15d023c04977ee0816b56d1b4792ec184",
+      "bytes": 12325
+    },
+    "sql/001_recording_segment_lifecycle.sql": {
+      "sha256": "b76b6de7db208ecdcdbfcd4fa0eeadfa3292a8db7c2fd1a6a31ef37bdffda9e4",
+      "bytes": 1005
+    },
+    "test-results/pg-apply-1.json": {
+      "sha256": "b556f6b89c2b8c3ebb5e7adb7e8b35185e6001831083d1089e2457dc36250f24",
+      "bytes": 517
+    },
+    "test-results/pg-apply-2.json": {
+      "sha256": "f57054c1a1883e30d8630733532c406ce2cc1a5b95d0f115b1240364d2ddf8ca",
+      "bytes": 145
+    },
+    "test-results/pg-dry-run.json": {
+      "sha256": "92e4f6c031ba8fd56df043e615fe6673c67ed9f118642bd1563d34824dd23553",
+      "bytes": 407
+    },
+    "test-results/pg-integration-summary.json": {
+      "sha256": "a67c986224f708f8b7d42e0e2cc1b1d698ab6e5d5d86dc5cae1358992c3ab149",
+      "bytes": 134
+    },
+    "test-results/summary.json": {
+      "sha256": "3fa69e8dd6e1e0561caa969077b7c3581268e5ce2e7610f854e8599d2bce780f",
+      "bytes": 777
+    },
+    "test-results/unit-service-venv.txt": {
+      "sha256": "21302caa247c584bec28c5353c88f3fbd14c827fb25868333574027494f76fde",
+      "bytes": 1223
+    },
+    "tests/run_ephemeral_postgres.sh": {
+      "sha256": "7afc4c026254f1a6a4638656348317bec376cef0ba8007f2df7a20122846b8cf",
+      "bytes": 5808
+    },
+    "tests/test_candidate_code.py": {
+      "sha256": "f88ab872de5600f30612594567a33b932223030077e7dca3c1d508f342022c4a",
+      "bytes": 6434
+    },
+    "tests/test_segment_lifecycle_sqlite.py": {
+      "sha256": "8cce0f55500b91338e573f9ea3b82f9092c751930951be7349c2faf9ec50a951",
+      "bytes": 5693
+    },
+    "上线与回滚.md": {
+      "sha256": "f9965de0273ec4d8040753070cd2438947f66ba83d949e7371fe3c786a601fb1",
+      "bytes": 2972
+    },
+    "交付报告.md": {
+      "sha256": "e1df86fee54bd54f4257de22b7b603687041e3600c6408a65ec5ec9c8bfcce39",
+      "bytes": 3417
+    }
+  }
+}

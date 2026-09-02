@@ -1,0 +1,130 @@
+{
+  "transaction_read_only": "on",
+  "heartbeats": [
+    {
+      "service_name": "analysis-v3",
+      "pid": 18388,
+      "status": "READY",
+      "last_heartbeat_at": "2026-08-30T17:06:55.388Z",
+      "last_success_at": "2026-08-30T17:06:55.388Z",
+      "details_json": "{\"analysis_spec_version\":\"single-session-evidence-v4-source-ids\",\"checked_at\":\"2026-08-30T17:06:55.388Z\",\"claimed\":0,\"completed\":0,\"current_spec_blocked\":0,\"current_spec_evidence_pending\":0,\"current_spec_meets_target\":1,\"current_spec_qualified\":1,\"current_spec_total\":1,\"current_spec_waiting\":0,\"expired_exhausted\":0,\"failed_final\":0,\"health_reasons\":[],\"lease_lost\":0,\"minimum_coverage_rate\":0.9,\"quality_blocked\":0,\"retry_wait\":0,\"revalidated\":0,\"source_qualification_blocked\":0,\"target_coverage_rate\":0.95}"
+    },
+    {
+      "service_name": "pipeline-v3",
+      "pid": 18386,
+      "status": "READY",
+      "last_heartbeat_at": "2026-08-30T17:07:26.430Z",
+      "last_success_at": "2026-08-30T17:07:26.430Z",
+      "details_json": "{\"analysis_tasks\":0,\"checked_at\":\"2026-08-30T17:07:26.430Z\",\"eligible_canonical_pending\":0,\"eligible_canonical_total\":1,\"full_session_meets_target\":1,\"full_session_qualified\":1,\"health_reasons\":[],\"quality_blocked\":0,\"segments\":110,\"stale_backlog\":{\"missing_output\":0,\"missing_source\":0,\"unrecoverable\":0},\"transcripts\":0}"
+    }
+  ],
+  "long_job_rows": [
+    {
+      "kind": "analysis",
+      "status": "COMPLETE",
+      "attempts": 0,
+      "max_attempts": 5,
+      "lease_epoch": 0,
+      "lease_owner": null,
+      "lease_until": null,
+      "next_attempt_at": null,
+      "count": 5
+    },
+    {
+      "kind": "analysis",
+      "status": "SAMPLE_NONQUALIFYING",
+      "attempts": 0,
+      "max_attempts": 5,
+      "lease_epoch": 0,
+      "lease_owner": null,
+      "lease_until": null,
+      "next_attempt_at": null,
+      "count": 2
+    },
+    {
+      "kind": "analysis",
+      "status": "SKIPPED_HISTORICAL",
+      "attempts": 0,
+      "max_attempts": 5,
+      "lease_epoch": 0,
+      "lease_owner": null,
+      "lease_until": null,
+      "next_attempt_at": null,
+      "count": 1
+    },
+    {
+      "kind": "transcript",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "attempts": 0,
+      "max_attempts": 5,
+      "lease_epoch": 0,
+      "lease_owner": null,
+      "lease_until": null,
+      "next_attempt_at": null,
+      "count": 245
+    },
+    {
+      "kind": "transcript",
+      "status": "COMPLETE",
+      "attempts": 0,
+      "max_attempts": 5,
+      "lease_epoch": 0,
+      "lease_owner": null,
+      "lease_until": null,
+      "next_attempt_at": null,
+      "count": 6
+    }
+  ],
+  "actionable": [],
+  "marker": [
+    {
+      "key": "long_job_claim_retry_revision",
+      "value": "1",
+      "updated_at": "2026-08-30T17:03:08.187Z"
+    }
+  ],
+  "recorder": [
+    {
+      "session_id": "session_585f96d367ba7a062a99dd7788a271fd",
+      "status": "RUNNING",
+      "pid": 95627,
+      "restart_count": 1,
+      "partial_dir": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_3e8022c5df7ea4c8/sess_b457c76b94e5737d01c48b15",
+      "updated_at": "2026-08-30T17:07:18.616Z"
+    }
+  ],
+  "current_analysis": [
+    {
+      "analysis_id": "analysis_c0d5fe33a0180f99e66fbca2",
+      "status": "COMPLETE",
+      "lineage_state": "CURRENT",
+      "qualification_status": "FULL_SESSION_QUALIFIED",
+      "output_path": "/Volumes/ExternalStorage/同行直播录制/analysis/drafts/runtime-v3/analysis/analysis_c0d5fe33a0180f99e66fbca2.json",
+      "artifact_digest": "ca32b42663e8909773f3cc5e6b37bc1ae1a9fcec7aea702a45f316d168a6a0af",
+      "file_exists": true,
+      "actual_sha256": "ca32b42663e8909773f3cc5e6b37bc1ae1a9fcec7aea702a45f316d168a6a0af",
+      "digest_matches": true
+    }
+  ],
+  "outbox_counts": [
+    {
+      "status": "DEAD_LETTER",
+      "count": 1
+    },
+    {
+      "status": "SENT",
+      "count": 375
+    }
+  ],
+  "retention_delete_enabled": false,
+  "recorder_media_growth_bytes": {
+    "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_3e8022c5df7ea4c8/sess_b457c76b94e5737d01c48b15/整场直播.ts.partial.recording-state.json": 0,
+    "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_3e8022c5df7ea4c8/sess_b457c76b94e5737d01c48b15/整场直播.refresh0003.ts.partial.recording-state.json": 0,
+    "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_3e8022c5df7ea4c8/sess_b457c76b94e5737d01c48b15/整场直播.refresh0002.ts.partial": 0,
+    "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_3e8022c5df7ea4c8/sess_b457c76b94e5737d01c48b15/整场直播.refresh0003.ts.partial": 1310720,
+    "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_3e8022c5df7ea4c8/sess_b457c76b94e5737d01c48b15/整场直播.refresh0001.ts.partial.recording-state.json": 0,
+    "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_3e8022c5df7ea4c8/sess_b457c76b94e5737d01c48b15/整场直播.ts.partial": 0,
+    "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_3e8022c5df7ea4c8/sess_b457c76b94e5737d01c48b15/整场直播.refresh0002.ts.partial.recording-state.json": 0,
+    "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_3e8022c5df7ea4c8/sess_b457c76b94e5737d01c48b15/整场直播.refresh0001.ts.partial": 0
+  }
+}

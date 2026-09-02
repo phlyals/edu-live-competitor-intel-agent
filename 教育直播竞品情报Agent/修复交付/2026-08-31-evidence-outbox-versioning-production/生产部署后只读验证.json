@@ -1,0 +1,131 @@
+{
+  "transaction_read_only": "on",
+  "migration_health": {
+    "healthy": true,
+    "missing_columns": {
+      "outbox": [],
+      "delivery_receipts": []
+    },
+    "indexes": [
+      "idx_delivery_receipts_projection_version",
+      "idx_outbox_projection_binding",
+      "uq_outbox_projection_version"
+    ],
+    "marker": "1",
+    "errors": [],
+    "held_evidence_outbox": []
+  },
+  "versioned_projections": [
+    {
+      "outbox_id": "out_b4a6ff5012bc4808a51d29d55542de7b",
+      "object_id": "analysis_c0d5fe33a0180f99e66fbca2",
+      "status": "SENT",
+      "payload_hash": "552b39272c52ae8461d49772acd0d32ee9f81f61fe5a7b6c729a5018ec881b89",
+      "projection_version": "projection_33499c05f16d44f4ec5aee7f24bc1af9e9ae1fd757523cabb17e234493d617b7",
+      "artifact_digest": "ca32b42663e8909773f3cc5e6b37bc1ae1a9fcec7aea702a45f316d168a6a0af",
+      "evidence_bundle_id": "bundle:analysis_c0d5fe33a0180f99e66fbca2",
+      "evidence_manifest_hash": "ca32b42663e8909773f3cc5e6b37bc1ae1a9fcec7aea702a45f316d168a6a0af",
+      "evidence_verified_at": "2026-08-30T16:15:17.679Z",
+      "projection_binding_status": "VERSIONED_EVIDENCE",
+      "receipt_id": "receipt:out_b4a6ff5012bc4808a51d29d55542de7b",
+      "receipt_status": "VERIFIED",
+      "receipt_hash": "552b39272c52ae8461d49772acd0d32ee9f81f61fe5a7b6c729a5018ec881b89",
+      "receipt_version": "projection_33499c05f16d44f4ec5aee7f24bc1af9e9ae1fd757523cabb17e234493d617b7",
+      "receipt_artifact": "ca32b42663e8909773f3cc5e6b37bc1ae1a9fcec7aea702a45f316d168a6a0af"
+    }
+  ],
+  "legacy_projection_counts": [
+    {
+      "projection_binding_status": "LEGACY_EVIDENCE_BOUND",
+      "status": "SENT",
+      "count": 5
+    },
+    {
+      "projection_binding_status": "UNCLASSIFIED",
+      "status": "SENT",
+      "count": 4
+    },
+    {
+      "projection_binding_status": "VERSIONED_EVIDENCE",
+      "status": "SENT",
+      "count": 1
+    }
+  ],
+  "reconciliations": [
+    {
+      "table_name": "MISSING_OUTBOX",
+      "status": "REPAIRED",
+      "count": 1
+    },
+    {
+      "table_name": "MISSING_RECEIPT",
+      "status": "RESOLVED",
+      "count": 1
+    }
+  ],
+  "heartbeats": [
+    {
+      "service_name": "analysis-v3",
+      "pid": 61713,
+      "status": "READY",
+      "last_heartbeat_at": "2026-08-30T18:33:53.488Z",
+      "details_json": "{\"analysis_spec_version\":\"single-session-evidence-v4-source-ids\",\"checked_at\":\"2026-08-30T18:33:53.488Z\",\"claimed\":0,\"completed\":0,\"current_spec_blocked\":0,\"current_spec_evidence_pending\":0,\"current_spec_meets_target\":1,\"current_spec_qualified\":1,\"current_spec_total\":1,\"current_spec_waiting\":0,\"expired_exhausted\":0,\"failed_final\":0,\"health_reasons\":[],\"lease_lost\":0,\"minimum_coverage_rate\":0.9,\"quality_blocked\":0,\"retry_wait\":0,\"revalidated\":0,\"source_qualification_blocked\":0,\"target_coverage_rate\":0.95}"
+    },
+    {
+      "service_name": "evidence-v3",
+      "pid": 61715,
+      "status": "READY",
+      "last_heartbeat_at": "2026-08-30T18:33:53.463Z",
+      "details_json": "{\"blocked\":0,\"checked_at\":\"2026-08-30T18:33:53.463Z\",\"reconciliation\":{\"blocked_outbox\":0,\"checked_at\":\"2026-08-30T18:33:53.463Z\",\"legacy_held_cancelled\":0,\"missing_receipts\":0,\"receipt_mismatches\":0,\"recreated_outbox\":0,\"tasks_completed\":0},\"verified\":0,\"versioned_projections\":0}"
+    },
+    {
+      "service_name": "pipeline-v3",
+      "pid": 61711,
+      "status": "READY",
+      "last_heartbeat_at": "2026-08-30T18:33:52.955Z",
+      "details_json": "{\"analysis_tasks\":0,\"checked_at\":\"2026-08-30T18:33:52.955Z\",\"eligible_canonical_pending\":0,\"eligible_canonical_total\":1,\"full_session_meets_target\":1,\"full_session_qualified\":1,\"health_reasons\":[],\"quality_blocked\":0,\"segments\":111,\"stale_backlog\":{\"missing_output\":0,\"missing_source\":0,\"unrecoverable\":0},\"transcripts\":0}"
+    },
+    {
+      "service_name": "projection-reconciler-v3",
+      "pid": 62558,
+      "status": "READY",
+      "last_heartbeat_at": "2026-08-30T18:33:01.714Z",
+      "details_json": "{\"blocked_outbox\":0,\"checked_at\":\"2026-08-30T18:33:01.714Z\",\"legacy_held_cancelled\":0,\"missing_receipts\":0,\"receipt_mismatches\":0,\"recreated_outbox\":0,\"tasks_completed\":0}"
+    },
+    {
+      "service_name": "recompute-v3",
+      "pid": 61709,
+      "status": "READY",
+      "last_heartbeat_at": "2026-08-30T18:33:49.962Z",
+      "details_json": "{\"candidate_created\":0,\"candidate_failed\":0,\"candidate_promoted\":0,\"candidate_waiting\":0,\"checked_at\":\"2026-08-30T18:33:49.962Z\",\"claimed\":0,\"expired_exhausted\":0,\"failed_final\":0,\"lease_lost\":0,\"obsolete\":0,\"retry_wait\":0}"
+    },
+    {
+      "service_name": "retention-v3",
+      "pid": 61718,
+      "status": "READY",
+      "last_heartbeat_at": "2026-08-30T18:33:48.057Z",
+      "details_json": "{\"delete_enabled\":false,\"idle\":true,\"mode\":\"DELETE_DISABLED\",\"next_scan_in_seconds\":3479}"
+    },
+    {
+      "service_name": "runtime-v3",
+      "pid": 61751,
+      "status": "READY",
+      "last_heartbeat_at": "2026-08-30T18:33:55.431Z",
+      "details_json": "{\"audio_retention_hours\": 168, \"capacity_test_concurrency\": 65, \"due_target_count\": 41, \"expected_max_recording_concurrency\": 50, \"final_ready\": false, \"full_fleet\": true, \"live_count\": 0, \"normal_recording_concurrency\": 30, \"production_gate\": \"BLOCKED\", \"recording_duration_seconds\": 0, \"recording_health\": {\"finalized\": 121, \"restarted\": 0, \"running\": 0}, \"recording_mode\": \"LOWEST_VIDEO_WITH_AUDIO\", \"recording_quality\": \"LD\", \"recording_segment_seconds\": 0, \"result_count\": 41, \"speech_audio_bitrate_kbps\": 48, \"speech_audio_format\": \"opus\", \"target_count\": 41, \"unknown_count\": 0, \"video_retention_hours\": 72}"
+    }
+  ],
+  "active_long_jobs": [],
+  "held_outbox": [],
+  "current_analysis": [
+    {
+      "analysis_id": "analysis_c0d5fe33a0180f99e66fbca2",
+      "status": "COMPLETE",
+      "lineage_state": "CURRENT",
+      "artifact_digest": "ca32b42663e8909773f3cc5e6b37bc1ae1a9fcec7aea702a45f316d168a6a0af",
+      "output_path": "/Volumes/ExternalStorage/同行直播录制/analysis/drafts/runtime-v3/analysis/analysis_c0d5fe33a0180f99e66fbca2.json",
+      "file_exists": true,
+      "digest_matches": true
+    }
+  ],
+  "retention_delete_enabled": false
+}

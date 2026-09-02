@@ -1,0 +1,21 @@
+{
+  "checked_at": "2026-08-30T05:14:18.709075+00:00",
+  "status": "PASS",
+  "deployment_state": "TESTED_NOT_LOADED_ACTIVE_RECORDINGS",
+  "suites": [
+    {
+      "python": "/Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/.venv/bin/python",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "...........................................................................................................\n----------------------------------------------------------------------\nRan 107 tests in 9.769s\n\nOK\n",
+      "expected_tests": 107
+    },
+    {
+      "python": "/Users/mac/.local/share/edu-live-runtime-v3-venv/bin/python",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "...........................................................................................................\n----------------------------------------------------------------------\nRan 107 tests in 5.793s\n\nOK\n",
+      "expected_tests": 107
+    }
+  ]
+}

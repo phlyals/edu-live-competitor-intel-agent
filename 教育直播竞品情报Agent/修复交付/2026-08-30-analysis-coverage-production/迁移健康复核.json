@@ -1,0 +1,29 @@
+{
+  "status": "ALREADY_APPLIED",
+  "migration_version": "2",
+  "health": {
+    "healthy": true,
+    "schema_missing": {},
+    "indexes": [
+      "idx_analyses_qualification",
+      "idx_analyses_transcript_id",
+      "idx_outbox_qualification",
+      "uq_analyses_transcript_spec"
+    ],
+    "trigger": true,
+    "unclassified": {
+      "transcripts": 0,
+      "analyses": 0,
+      "evidence_bundles": 0,
+      "outbox": 0,
+      "delivery_receipts": 0
+    },
+    "lineage_errors": [],
+    "sample_lineage_errors": [],
+    "correction_errors": [],
+    "bad_formal": 0,
+    "bad_sample": 0,
+    "bad_formal_evidence": 0,
+    "bad_sample_evidence": 0
+  }
+}

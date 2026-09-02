@@ -1,0 +1,13 @@
+{
+  "file_exists": true,
+  "file_path": "/Volumes/ExternalStorage/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-29-流刷新模拟验证/run-002/整场直播.ts",
+  "duration_seconds": 3787.423333,
+  "file_size_mb": 716.18,
+  "expected_duration_seconds": 3787.299122,
+  "is_complete": true,
+  "session_id": "simulation_3787s_two_interruptions",
+  "script": "check_recording",
+  "checked_at": "2026-08-29T11:29:33.388211+00:00",
+  "status": "PASS",
+  "message": "录制时长误差在 5% 以内"
+}

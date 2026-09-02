@@ -1,0 +1,14 @@
+{
+  "checked_at": "2026-08-29T14:55:56.713755+00:00",
+  "files_checked": 9,
+  "changed_existing_files": [
+    {
+      "path": "/Volumes/ExternalStorage/AgentInfrastructure/isolated/profiles/edu_live_competitor_intel/runtime/v3/v3_analysis_worker.py",
+      "before": "fec45f322c1728474b8dbbd976349853db3f605e2cdd3a3b6ecf5393d2815a27",
+      "after": "2a07ef319a8e56a3951cb45eac18185f0fd2e8914770bbbd59dcca27a8d0ac18"
+    }
+  ],
+  "only_analysis_module_changed": true,
+  "new_test_file": "/Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/test_v3_analysis_worker.py",
+  "recording_transcription_pipeline_acceptance_unchanged": true
+}

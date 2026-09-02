@@ -1,0 +1,15 @@
+{
+  "started_at": "2026-08-28T16:25:57.694+00:00",
+  "last_file_write_at": "2026-08-28T16:26:18.281+00:00",
+  "ended_at": "2026-08-28T16:26:18.499+00:00",
+  "return_code": 0,
+  "exit_kind": "NORMAL",
+  "status": "EXITED",
+  "output_path": "/Volumes/ExternalStorage/同行直播录制/exports/recording-repair-verification-20260829/full-replay/整场直播.ts",
+  "input_kind": "LOCAL_REPLAY",
+  "pid": 27630,
+  "output_size_bytes": 750941184,
+  "free_disk_bytes": 640578199552,
+  "checked_at": "2026-08-28T16:26:18.500+00:00",
+  "ffmpeg_tail": []
+}

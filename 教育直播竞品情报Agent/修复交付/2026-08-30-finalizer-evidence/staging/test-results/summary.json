@@ -1,0 +1,43 @@
+{
+  "scope": "isolated_candidate_only",
+  "deployed": false,
+  "production_code_modified": false,
+  "database_modified": false,
+  "services_reloaded": false,
+  "production_media_modified": false,
+  "production_v3_worker_sha256_before_and_after": "19fb28d9635af81227b178980cefbb111f1133272a2f0e45c9a55476a058181f",
+  "candidate_sha256": "04353e3f05ce09479869f925b1cc4b51ac044d05e64268c0575377c0f4564f62",
+  "candidate_patch_sha256": "d10389b9f18402ae3dceb83e92cba4bcf73a8e75f01530adf87368e59aa64bd7",
+  "tests_patch_sha256": "8dfa4e3cca31a942bfd4db3feaa6e12b739ea78f1291d41c72995602f976f073",
+  "patch_replay": {
+    "result": "PASS",
+    "replayed_candidate_sha256": "04353e3f05ce09479869f925b1cc4b51ac044d05e64268c0575377c0f4564f62"
+  },
+  "old_implementation": {
+    "result": "EXPECTED_FAILURE",
+    "tests": 7,
+    "failures": 6,
+    "errors": 1,
+    "evidence": "old-implementation.txt"
+  },
+  "candidate_profile_venv": {
+    "result": "PASS",
+    "tests": 7,
+    "failures": 0,
+    "errors": 0,
+    "evidence": "candidate-unit-profile-venv.txt"
+  },
+  "candidate_service_venv": {
+    "result": "PASS",
+    "tests": 7,
+    "failures": 0,
+    "errors": 0,
+    "evidence": "candidate-unit-service-venv.txt"
+  },
+  "real_ffmpeg_integration": {
+    "result": "PASS",
+    "audio_video_probe_valid": true,
+    "source_files_retained": true,
+    "evidence": "real-ffmpeg-integration.json and test_real_ffmpeg_concat_retains_sources_and_validates_audio_video"
+  }
+}

@@ -1,0 +1,1902 @@
+--- /Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/v3_pipeline_worker.py	2026-08-30 22:20:20
++++ /Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-30-sample-analysis-qualification/staging/runtime/v3/v3_pipeline_worker.py	2026-08-30 22:43:24
+@@ -21,6 +21,16 @@
+ from pathlib import Path
+ 
+ from v3_runtime import connect, init_db, upsert_heartbeat, utc_now
++from v3_analysis_contract import (
++    ANALYSIS_SCOPE_FORMAL,
++    ANALYSIS_SPEC_VERSION,
++    MODEL_VERSION as ANALYSIS_MODEL_VERSION,
++    PROMPT_VERSION as ANALYSIS_PROMPT_VERSION,
++    QUALIFIED,
++    SAMPLE_NONQUALIFYING,
++    TRANSCRIPT_SCOPE_FULL,
++    TRANSCRIPT_SCOPE_SAMPLE,
++)
+ 
+ 
+ ROOT = Path(__file__).resolve().parents[1]
+@@ -311,7 +321,9 @@
+             audio = preferred_audio if full_session or preferred_audio.is_file() or not legacy_audio.is_file() else legacy_audio
+         if not extract_audio(media, audio, max_seconds=0 if full_session else 300, bitrate_kbps=int(config.get("asr_audio_bitrate_kbps") or 48)):
+             with connect() as conn:
+-                conn.execute("INSERT OR IGNORE INTO transcripts(transcript_id,session_id,source_digest,engine,model,status,source_path,created_at,metadata_json) VALUES(?,?,?,?,?,?,?,?,?)", ("transcript_" + hashlib.sha256(f"{session['session_id']}:{source_digest}".encode()).hexdigest()[:24], session["session_id"], source_digest, "faster-whisper", str(config.get('asr_model') or 'faster-whisper-small'), "WAITING_TOOL", str(media), utc_now(), json.dumps({"reason": "audio extraction/duration validation failed", "segment_id": session["segment_id"]}, ensure_ascii=False)))
++                waiting_scope = TRANSCRIPT_SCOPE_FULL if full_session else TRANSCRIPT_SCOPE_SAMPLE
++                waiting_qualification = "PENDING_QUALIFICATION" if full_session else SAMPLE_NONQUALIFYING
++                conn.execute("INSERT OR IGNORE INTO transcripts(transcript_id,session_id,source_digest,engine,model,status,source_path,created_at,scope,qualification_status,metadata_json) VALUES(?,?,?,?,?,?,?,?,?,?,?)", ("transcript_" + hashlib.sha256(f"{session['session_id']}:{source_digest}".encode()).hexdigest()[:24], session["session_id"], source_digest, "faster-whisper", str(config.get('asr_model') or 'faster-whisper-small'), "WAITING_TOOL", str(media), utc_now(), waiting_scope, waiting_qualification, json.dumps({"reason": "audio extraction/duration validation failed", "segment_id": session["segment_id"], "coverage_scope": waiting_scope, "sample_only": not full_session}, ensure_ascii=False)))
+                 conn.commit()
+             continue
+         out = previous_output if full_session and previous_output and previous_output.is_file() else audio.with_suffix(".transcript.json")
+@@ -374,7 +386,13 @@
+             transcript_id = "transcript_" + hashlib.sha256(f"{session['session_id']}:{source_digest}".encode()).hexdigest()[:24]
+             model_name = str(config.get("asr_model") or "faster-whisper-small")
+             metadata = {**result, "coverage_scope": 'FULL_SESSION' if full_session else 'SAMPLE', "source_segment_id": session["segment_id"], "sample_only": not full_session, "sample_seconds": None if full_session else 300, "model_name": model_name, "audio_format": audio.suffix.lower().lstrip("."), "audio_bitrate_kbps": int(config.get("asr_audio_bitrate_kbps") or 48)}
+-            conn.execute("INSERT INTO transcripts(transcript_id,session_id,source_digest,engine,model,status,language,source_path,output_path,low_confidence_count,created_at,metadata_json) VALUES(?,?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT(session_id,source_digest) DO UPDATE SET status=excluded.status,language=excluded.language,output_path=excluded.output_path,low_confidence_count=excluded.low_confidence_count,metadata_json=excluded.metadata_json", (transcript_id, session["session_id"], source_digest, "faster-whisper", model_name, status, result.get("language"), str(audio), str(out) if out.is_file() else None, int(result.get("low_confidence_count") or 0), utc_now(), json.dumps(metadata, ensure_ascii=False)))
++            transcript_scope = TRANSCRIPT_SCOPE_FULL if full_session else TRANSCRIPT_SCOPE_SAMPLE
++            qualification_status = (
++                QUALIFIED if full_session and status == "COMPLETE"
++                else "QUALITY_BLOCKED" if full_session and status == "QUALITY_BLOCKED"
++                else SAMPLE_NONQUALIFYING
++            )
++            conn.execute("INSERT INTO transcripts(transcript_id,session_id,source_digest,engine,model,status,language,source_path,output_path,low_confidence_count,created_at,scope,qualification_status,metadata_json) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT(session_id,source_digest) DO UPDATE SET status=excluded.status,language=excluded.language,output_path=excluded.output_path,low_confidence_count=excluded.low_confidence_count,scope=excluded.scope,qualification_status=excluded.qualification_status,metadata_json=excluded.metadata_json", (transcript_id, session["session_id"], source_digest, "faster-whisper", model_name, status, result.get("language"), str(audio), str(out) if out.is_file() else None, int(result.get("low_confidence_count") or 0), utc_now(), transcript_scope, qualification_status, json.dumps(metadata, ensure_ascii=False)))
+             if status == "COMPLETE" and full_session:
+                 try:
+                     end_time = datetime.fromisoformat(str(session.get("ended_at") or utc_now()).replace("Z", "+00:00"))
+@@ -390,14 +408,105 @@
+ 
+ 
+ def create_analysis_tasks() -> int:
++    """Create formal analyses only from the current qualified full transcript.
++
++    SAMPLE transcripts are useful ASR diagnostics, but they cannot represent a
++    whole live session.  Keep them in ``transcripts`` and fail closed here so a
++    300-second sample can never become a formal ``single_session`` analysis.
++    """
+     created = 0
+-    with connect() as conn:
+-        rows = conn.execute("SELECT t.transcript_id,t.session_id,t.output_path FROM transcripts t WHERE t.status='COMPLETE' AND t.output_path LIKE '%.json' AND NOT EXISTS (SELECT 1 FROM analyses a WHERE a.session_id=t.session_id AND a.status NOT IN ('SKIPPED_HISTORICAL'))").fetchall()
++    config = load_pipeline_config()
++    quality_config = config.get("transcript_quality") or {}
++    coverage_threshold = quality_config.get(
++        "full_session_min_timestamp_coverage_rate",
++        DEFAULT_FULL_SESSION_COVERAGE_THRESHOLD,
++    )
++    with connect() as conn:
++        rows = conn.execute(
++            "SELECT t.transcript_id,t.session_id,t.source_digest,t.status,t.output_path,t.scope,t.qualification_status,t.metadata_json,"
++            "s.status AS session_status,s.completeness,s.metadata_json AS session_metadata "
++            "FROM transcripts t JOIN live_sessions s ON s.session_id=t.session_id "
++            "WHERE t.status='COMPLETE' AND t.output_path LIKE '%.json'"
++        ).fetchall()
++        canonical_by_session: dict[str, dict[str, str]] = {}
++        for segment in conn.execute(
++            "SELECT segment_id,session_id,checksum,path FROM recording_segments "
++            "WHERE status='COMPLETE' AND lifecycle_status='CANONICAL_ACTIVE'"
++        ):
++            checksum = str(segment["checksum"] or "")
++            path = Path(str(segment["path"] or ""))
++            if not checksum and path.is_file():
++                checksum = digest(path)
++            if checksum:
++                expected_source_digest = hashlib.sha256(("FULL_SESSION:" + checksum).encode()).hexdigest()
++                canonical_by_session.setdefault(str(segment["session_id"]), {})[str(segment["segment_id"])] = expected_source_digest
+         for row in rows:
+-            aid = "analysis_" + hashlib.sha256(row["transcript_id"].encode()).hexdigest()[:24]
+-            conn.execute("INSERT OR IGNORE INTO analyses(analysis_id,session_id,analysis_type,source_digest,status,output_path,lineage_state,metadata_json) VALUES(?,?,?,?,?,?,?,?)", (aid, row["session_id"], "single_session", hashlib.sha256(str(row["output_path"]).encode()).hexdigest(), "PENDING", None, "CURRENT", json.dumps({"requires_model_analysis": True}, ensure_ascii=False)))
+-            conn.execute("INSERT OR IGNORE INTO lineage_edges(edge_id,downstream_type,downstream_id,upstream_type,upstream_id,upstream_version,created_at) VALUES(?,?,?,?,?,?,?)", ("lineage_" + hashlib.sha256(aid.encode()).hexdigest()[:24], "analysis", aid, "transcript", row["transcript_id"], hashlib.sha256(str(row["output_path"]).encode()).hexdigest(), utc_now()))
+-            created += 1
++            metadata = _metadata(row["metadata_json"])
++            quality = metadata.get("timestamp_coverage") or {}
++            session_metadata = _metadata(row["session_metadata"])
++            current_segments = canonical_by_session.get(str(row["session_id"]), {})
++            source_segment_id = str(metadata.get("source_segment_id") or "")
++            eligible = (
++                _qualified_full_session(row, coverage_threshold)
++                and row["scope"] == TRANSCRIPT_SCOPE_FULL
++                and row["qualification_status"] == QUALIFIED
++                and metadata.get("sample_only") is False
++                and metadata.get("quality_gate_status") == "FULL_SESSION_QUALIFIED"
++                and source_segment_id in current_segments
++                and str(row["source_digest"] or "") == current_segments.get(source_segment_id)
++                and row["session_status"] == "MEDIA_COMPLETE"
++                and row["completeness"] == "COMPLETE"
++                and (session_metadata.get("media_coverage") or {}).get("continuous_capture") is True
++                and row["output_path"]
++                and Path(str(row["output_path"])).is_file()
++            )
++            if not eligible:
++                continue
++            transcript_path = Path(str(row["output_path"]))
++            transcript_content_digest = digest(transcript_path)
++            existing = conn.execute(
++                "SELECT analysis_id FROM analyses WHERE transcript_id=? AND analysis_type='single_session' "
++                "AND transcript_content_digest=? AND analysis_spec_version=? AND model_version=? AND prompt_version=? LIMIT 1",
++                (row["transcript_id"], transcript_content_digest, ANALYSIS_SPEC_VERSION,
++                 ANALYSIS_MODEL_VERSION, ANALYSIS_PROMPT_VERSION),
++            ).fetchone()
++            if existing:
++                continue
++            aid = "analysis_" + hashlib.sha256(
++                f"{row['transcript_id']}:{transcript_content_digest}:{ANALYSIS_SPEC_VERSION}:"
++                f"{ANALYSIS_MODEL_VERSION}:{ANALYSIS_PROMPT_VERSION}".encode()
++            ).hexdigest()[:24]
++            upstream_version = transcript_content_digest
++            analysis_metadata = {
++                "requires_model_analysis": True,
++                "qualification_state": "FULL_SESSION_QUALIFIED",
++                "formal_analysis_eligible": True,
++                "source_transcript_id": row["transcript_id"],
++                "source_transcript_digest": row["source_digest"],
++                "source_coverage_scope": "FULL_SESSION",
++                "source_timestamp_coverage_rate": quality.get("coverage_rate"),
++                "source_segment_id": metadata.get("source_segment_id"),
++                "transcript_content_digest": transcript_content_digest,
++                "analysis_spec_version": ANALYSIS_SPEC_VERSION,
++                "model_version": ANALYSIS_MODEL_VERSION,
++                "prompt_version": ANALYSIS_PROMPT_VERSION,
++            }
++            inserted = conn.execute(
++                "INSERT OR IGNORE INTO analyses(analysis_id,session_id,transcript_id,analysis_type,source_digest,status,output_path,lineage_state,scope,qualification_status,transcript_content_digest,analysis_spec_version,model_version,prompt_version,metadata_json) "
++                "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
++                (aid, row["session_id"], row["transcript_id"], "single_session", transcript_content_digest,
++                 "PENDING", None, "CURRENT", ANALYSIS_SCOPE_FORMAL, QUALIFIED,
++                 transcript_content_digest, ANALYSIS_SPEC_VERSION, ANALYSIS_MODEL_VERSION,
++                 ANALYSIS_PROMPT_VERSION, json.dumps(analysis_metadata, ensure_ascii=False, sort_keys=True)),
++            )
++            conn.execute(
++                "INSERT OR IGNORE INTO lineage_edges(edge_id,downstream_type,downstream_id,upstream_type,upstream_id,upstream_version,state,created_at) "
++                "VALUES(?,?,?,?,?,?,?,?)",
++                ("lineage_" + hashlib.sha256(f"{aid}:{row['transcript_id']}:{upstream_version}".encode()).hexdigest()[:24],
++                 "analysis", aid, "transcript", row["transcript_id"], upstream_version, "CURRENT", utc_now()),
++            )
++            if inserted.rowcount == 1:
++                created += 1
+         conn.commit()
+     return created
+ 
+--- /Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/v3_analysis_worker.py	2026-08-29 22:52:25
++++ /Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-30-sample-analysis-qualification/staging/runtime/v3/v3_analysis_worker.py	2026-08-30 22:37:49
+@@ -15,6 +15,16 @@
+ import httpx
+ 
+ from v3_runtime import connect, enqueue_outbox_conn, init_db, upsert_heartbeat, utc_now
++from v3_analysis_contract import (
++    ANALYSIS_SCOPE_FORMAL,
++    ANALYSIS_SPEC_VERSION,
++    MODEL_VERSION,
++    PROMPT_VERSION,
++    QUALIFIED,
++    SAMPLE_NONQUALIFYING,
++    TRANSCRIPT_SCOPE_FULL,
++    file_sha256,
++)
+ 
+ 
+ ROOT = Path(__file__).resolve().parents[1]
+@@ -27,6 +37,7 @@
+     "instructor", "course_content", "interaction_patterns", "product_handoff",
+     "hook", "pain_points", "claims", "cta", "risks", "evidence_refs",
+ )
++FULL_SESSION_MIN_COVERAGE_RATE = 0.90
+ 
+ 
+ def stop(*_args):
+@@ -247,8 +258,73 @@
+     finally:
+         if temporary.exists():
+             temporary.unlink()
++
++
++def json_object(value: object) -> dict:
++    try:
++        parsed = json.loads(value or "{}") if isinstance(value, str) else value
++    except (TypeError, json.JSONDecodeError):
++        return {}
++    return parsed if isinstance(parsed, dict) else {}
+ 
+ 
++def transcript_qualification(row: dict, *, canonical_source_digest: str | None) -> tuple[bool, str, dict]:
++    """Return formal-analysis eligibility for one exact transcript row.
++
++    This is deliberately repeated at the consumer boundary.  Pipeline task
++    creation is not sufficient authorization: a stale/manual analysis row must
++    still be unable to make a SAMPLE transcript reach the model or outbox.
++    """
++    metadata = json_object(row.get("transcript_metadata"))
++    session_metadata = json_object(row.get("session_metadata"))
++    quality = metadata.get("timestamp_coverage") or {}
++    try:
++        rate = float(quality.get("coverage_rate"))
++    except (TypeError, ValueError):
++        rate = -1.0
++    is_sample = metadata.get("sample_only") is True or metadata.get("coverage_scope") == "SAMPLE"
++    reasons = []
++    if is_sample:
++        reasons.append("SAMPLE_TRANSCRIPT")
++    if row.get("transcript_status") != "COMPLETE":
++        reasons.append("TRANSCRIPT_NOT_COMPLETE")
++    if row.get("transcript_scope") != TRANSCRIPT_SCOPE_FULL:
++        reasons.append("TRANSCRIPT_SCOPE_NOT_FULL_SESSION")
++    if row.get("transcript_qualification_status") != QUALIFIED:
++        reasons.append("TRANSCRIPT_QUALIFICATION_COLUMN_NOT_QUALIFIED")
++    if metadata.get("coverage_scope") != "FULL_SESSION":
++        reasons.append("NOT_FULL_SESSION")
++    if metadata.get("sample_only") is not False:
++        reasons.append("SAMPLE_FLAG_NOT_FALSE")
++    if metadata.get("quality_gate_status") != "FULL_SESSION_QUALIFIED":
++        reasons.append("QUALITY_GATE_NOT_QUALIFIED")
++    if quality.get("is_qualified") is not True or quality.get("timestamps_valid") is not True:
++        reasons.append("TIMESTAMPS_NOT_QUALIFIED")
++    if rate < FULL_SESSION_MIN_COVERAGE_RATE:
++        reasons.append("TIMESTAMP_COVERAGE_BELOW_MINIMUM")
++    if row.get("session_status") != "MEDIA_COMPLETE" or row.get("completeness") != "COMPLETE":
++        reasons.append("SESSION_NOT_MEDIA_COMPLETE")
++    if (session_metadata.get("media_coverage") or {}).get("continuous_capture") is not True:
++        reasons.append("SESSION_CAPTURE_NOT_CONTINUOUS")
++    if not canonical_source_digest:
++        reasons.append("SOURCE_SEGMENT_NOT_CURRENT_CANONICAL")
++    elif str(row.get("transcript_source_digest") or "") != canonical_source_digest:
++        reasons.append("TRANSCRIPT_SOURCE_DIGEST_NOT_CURRENT_CANONICAL")
++    path = Path(str(row.get("transcript_path") or ""))
++    if not path.is_file():
++        reasons.append("TRANSCRIPT_ARTIFACT_MISSING")
++    details = {
++        "coverage_scope": metadata.get("coverage_scope"),
++        "sample_only": metadata.get("sample_only"),
++        "coverage_rate": rate if rate >= 0 else None,
++        "source_segment_id": metadata.get("source_segment_id"),
++        "expected_canonical_source_digest": canonical_source_digest,
++        "transcript_source_digest": row.get("transcript_source_digest"),
++        "reasons": reasons,
++    }
++    return not reasons, SAMPLE_NONQUALIFYING if is_sample else (QUALIFIED if not reasons else "SOURCE_NONQUALIFYING"), details
++
++
+ def request_analysis(text: str, source_duration: float | None = None) -> tuple[dict, dict]:
+     chunks = analysis_chunks(text)
+     results, diagnostics = [], []
+@@ -264,11 +340,104 @@
+ 
+ 
+ def once() -> dict:
+-    completed = failed = 0
++    completed = failed = blocked = 0
+     init_db()
+     with connect() as conn:
+-        rows = conn.execute("SELECT a.*,t.output_path AS transcript_path,t.transcript_id FROM analyses a JOIN transcripts t ON t.session_id=a.session_id WHERE a.status IN ('PENDING','WAITING_MODEL') AND t.status='COMPLETE' ORDER BY a.analysis_id").fetchall()
+-    for row in rows:
++        analyses = conn.execute(
++            "SELECT * FROM analyses WHERE analysis_type='single_session' "
++            "AND lineage_state='CURRENT' AND status IN ('PENDING','WAITING_MODEL') ORDER BY analysis_id"
++        ).fetchall()
++    for analysis_row_raw in analyses:
++        analysis_row = dict(analysis_row_raw)
++        analysis_metadata = json_object(analysis_row["metadata_json"])
++        expected_transcript_id = str(analysis_row.get("transcript_id") or "")
++        with connect() as conn:
++            edges = conn.execute(
++                "SELECT DISTINCT upstream_id,upstream_version FROM lineage_edges WHERE downstream_type='analysis' "
++                "AND downstream_id=? AND upstream_type='transcript' AND state='CURRENT' ORDER BY upstream_id",
++                (analysis_row["analysis_id"],),
++            ).fetchall()
++            upstreams = [(str(edge["upstream_id"]), str(edge["upstream_version"])) for edge in edges]
++            row = conn.execute(
++                "SELECT t.transcript_id,t.session_id,t.source_digest AS transcript_source_digest,t.status AS transcript_status,t.output_path AS transcript_path,"
++                "t.scope AS transcript_scope,t.qualification_status AS transcript_qualification_status,"
++                "t.metadata_json AS transcript_metadata,s.status AS session_status,s.completeness,"
++                "s.metadata_json AS session_metadata FROM transcripts t JOIN live_sessions s ON s.session_id=t.session_id "
++                "WHERE t.transcript_id=? AND t.session_id=?",
++                (expected_transcript_id, analysis_row["session_id"]),
++            ).fetchone() if expected_transcript_id else None
++            transcript_metadata = json_object(row["transcript_metadata"]) if row else {}
++            source_segment_id = str(transcript_metadata.get("source_segment_id") or "")
++            canonical_row = conn.execute(
++                "SELECT checksum,path FROM recording_segments WHERE segment_id=? AND session_id=? "
++                "AND status='COMPLETE' AND lifecycle_status='CANONICAL_ACTIVE'",
++                (source_segment_id, analysis_row["session_id"]),
++            ).fetchone() if source_segment_id else None
++            canonical_checksum = str(canonical_row["checksum"] or "") if canonical_row else ""
++            canonical_path = Path(str(canonical_row["path"] or "")) if canonical_row else None
++            if not canonical_checksum and canonical_path and canonical_path.is_file():
++                canonical_checksum = file_sha256(canonical_path)
++            canonical_source_digest = hashlib.sha256(("FULL_SESSION:" + canonical_checksum).encode()).hexdigest() if canonical_checksum else None
++        row_dict = dict(row or {})
++        eligible, qualification_state, qualification = transcript_qualification(row_dict, canonical_source_digest=canonical_source_digest)
++        expected_digest = str(analysis_row.get("transcript_content_digest") or "")
++        transcript_path = Path(str(row_dict.get("transcript_path") or ""))
++        actual_digest = file_sha256(transcript_path) if transcript_path.is_file() else ""
++        immutable_reasons = []
++        if analysis_row.get("scope") != ANALYSIS_SCOPE_FORMAL:
++            immutable_reasons.append("ANALYSIS_SCOPE_NOT_FORMAL")
++        if analysis_row.get("qualification_status") != QUALIFIED:
++            immutable_reasons.append("ANALYSIS_QUALIFICATION_COLUMN_NOT_QUALIFIED")
++        if analysis_row.get("analysis_spec_version") != ANALYSIS_SPEC_VERSION:
++            immutable_reasons.append("ANALYSIS_SPEC_VERSION_MISMATCH")
++        if analysis_row.get("model_version") != MODEL_VERSION:
++            immutable_reasons.append("MODEL_VERSION_MISMATCH")
++        if analysis_row.get("prompt_version") != PROMPT_VERSION:
++            immutable_reasons.append("PROMPT_VERSION_MISMATCH")
++        if not expected_digest or actual_digest != expected_digest:
++            immutable_reasons.append("TRANSCRIPT_CONTENT_DIGEST_MISMATCH")
++        if analysis_row.get("source_digest") != expected_digest:
++            immutable_reasons.append("ANALYSIS_SOURCE_DIGEST_MISMATCH")
++        lineage_valid = bool(expected_transcript_id and upstreams == [(expected_transcript_id, expected_digest)])
++        if not lineage_valid or immutable_reasons:
++            eligible = False
++            qualification_state = "SOURCE_NONQUALIFYING"
++            qualification["reasons"] = [*qualification.get("reasons", []), *immutable_reasons]
++            if not lineage_valid:
++                qualification["reasons"].append("LINEAGE_NOT_EXACTLY_ONE_EXPECTED_TRANSCRIPT_DIGEST")
++            qualification["expected_transcript_id"] = expected_transcript_id or None
++            qualification["expected_transcript_content_digest"] = expected_digest or None
++            qualification["actual_transcript_content_digest"] = actual_digest or None
++            qualification["current_upstreams"] = upstreams
++        if not eligible:
++            transcript_metadata = json_object(row_dict.get("transcript_metadata"))
++            sample = bool(
++                row_dict.get("transcript_scope") == "SAMPLE"
++                or row_dict.get("transcript_qualification_status") == SAMPLE_NONQUALIFYING
++                or transcript_metadata.get("sample_only") is True
++            )
++            if sample:
++                qualification_state = SAMPLE_NONQUALIFYING
++            status = "SAMPLE_NONQUALIFYING" if sample else "BLOCKED_SOURCE_QUALIFICATION"
++            updated_metadata = {
++                **analysis_metadata,
++                "qualification_state": qualification_state,
++                "formal_analysis_eligible": False,
++                "qualification": qualification,
++                "qualification_checked_at": utc_now(),
++            }
++            with connect() as conn:
++                conn.execute(
++                    "UPDATE analyses SET status=?,lineage_state=?,scope=?,qualification_status=?,metadata_json=? WHERE analysis_id=?",
++                    (status, "INVALIDATED" if status == "SAMPLE_NONQUALIFYING" else "BLOCKED",
++                     "SAMPLE_AUXILIARY" if status == "SAMPLE_NONQUALIFYING" else analysis_row.get("scope"),
++                     SAMPLE_NONQUALIFYING if status == "SAMPLE_NONQUALIFYING" else "SOURCE_NONQUALIFYING",
++                     json.dumps(updated_metadata, ensure_ascii=False, sort_keys=True), analysis_row["analysis_id"]),
++                )
++                conn.commit()
++            blocked += 1
++            continue
++        row = {**analysis_row, **row_dict, "transcript_id": expected_transcript_id}
+         try:
+             text, transcript_rows = transcript_text(Path(row["transcript_path"]))
+             transcript_payload = json.loads(Path(row["transcript_path"]).read_text(encoding="utf-8"))
+@@ -277,21 +446,26 @@
+             )
+             result, engine = request_analysis(text, source_duration=float(source_duration or 0))
+             output_path = ANALYSIS_ROOT / f"{row['analysis_id']}.json"
+-            artifact = {"analysis_id": row["analysis_id"], "session_id": row["session_id"], "transcript_id": row["transcript_id"], "engine": engine, "created_at": utc_now(), "result": result}
++            artifact = {"analysis_id": row["analysis_id"], "session_id": row["session_id"], "transcript_id": row["transcript_id"], "transcript_content_digest": expected_digest, "analysis_spec_version": ANALYSIS_SPEC_VERSION, "model_version": MODEL_VERSION, "prompt_version": PROMPT_VERSION, "qualification_state": QUALIFIED, "engine": engine, "created_at": utc_now(), "result": result}
+             write_json_atomic(output_path, artifact)
++            artifact_digest = file_sha256(output_path)
+             with connect() as conn:
+-                conn.execute("UPDATE analyses SET status='COMPLETE',output_path=?,metadata_json=?,lineage_state='CURRENT' WHERE analysis_id=?", (str(output_path), json.dumps({**engine, "semantic_engine": "deepseek-chat", "transcript_segment_count": len(transcript_rows)}, ensure_ascii=False, sort_keys=True), row["analysis_id"]))
+-                conn.execute("INSERT INTO evidence_bundles(bundle_id,object_type,object_id,status,manifest_path,manifest_hash,metadata_json) VALUES(?,?,?,?,?,?,?) ON CONFLICT(object_type,object_id) DO UPDATE SET status=excluded.status,manifest_path=excluded.manifest_path,manifest_hash=excluded.manifest_hash,metadata_json=excluded.metadata_json", ("bundle:" + row["analysis_id"], "analysis", row["analysis_id"], "REQUIRED", str(output_path), hashlib.sha256(output_path.read_bytes()).hexdigest(), json.dumps({"transcript_id": row["transcript_id"]}, ensure_ascii=False)))
+-                enqueue_outbox_conn(conn, object_type="semantic_projection", object_id=row["analysis_id"], destination="feishu_base", payload={"analysis_id": row["analysis_id"], "profile_id": "edu_live_competitor_intel"})
++                completed_metadata = {**analysis_metadata, **engine, "semantic_engine": MODEL_VERSION, "transcript_segment_count": len(transcript_rows), "qualification_state": QUALIFIED, "formal_analysis_eligible": True, "qualification": qualification, "qualification_checked_at": utc_now(), "artifact_digest": artifact_digest}
++                updated = conn.execute("UPDATE analyses SET status='COMPLETE',output_path=?,artifact_digest=?,metadata_json=?,lineage_state='CURRENT' WHERE analysis_id=? AND transcript_id=? AND transcript_content_digest=? AND analysis_spec_version=? AND model_version=? AND prompt_version=?", (str(output_path), artifact_digest, json.dumps(completed_metadata, ensure_ascii=False, sort_keys=True), row["analysis_id"], expected_transcript_id, expected_digest, ANALYSIS_SPEC_VERSION, MODEL_VERSION, PROMPT_VERSION))
++                if updated.rowcount != 1:
++                    raise RuntimeError("immutable analysis identity changed before completion")
++                conn.execute("INSERT INTO evidence_bundles(bundle_id,object_type,object_id,status,manifest_path,manifest_hash,scope,qualification_status,metadata_json) VALUES(?,?,?,?,?,?,?,?,?) ON CONFLICT(object_type,object_id) DO UPDATE SET status=excluded.status,manifest_path=excluded.manifest_path,manifest_hash=excluded.manifest_hash,scope=excluded.scope,qualification_status=excluded.qualification_status,metadata_json=excluded.metadata_json", ("bundle:" + row["analysis_id"], "analysis", row["analysis_id"], "REQUIRED", str(output_path), artifact_digest, ANALYSIS_SCOPE_FORMAL, QUALIFIED, json.dumps({"transcript_id": row["transcript_id"], "transcript_content_digest": expected_digest, "artifact_digest": artifact_digest, "qualification_state": QUALIFIED, "formal_analysis_eligible": True}, ensure_ascii=False, sort_keys=True)))
++                enqueue_outbox_conn(conn, object_type="semantic_projection", object_id=row["analysis_id"], destination="feishu_base", payload={"analysis_id": row["analysis_id"], "profile_id": "edu_live_competitor_intel", "qualification_state": QUALIFIED, "artifact_digest": artifact_digest}, scope=ANALYSIS_SCOPE_FORMAL, qualification_status=QUALIFIED)
+                 conn.commit()
+             completed += 1
+         except Exception as exc:  # fail closed; no fabricated analysis
+             with connect() as conn:
+-                conn.execute("UPDATE analyses SET status='WAITING_MODEL',metadata_json=? WHERE analysis_id=?", (json.dumps({"error_type": exc.__class__.__name__, "error_message": str(exc)[:500], "checked_at": utc_now()}, ensure_ascii=False), row["analysis_id"]))
++                conn.execute("UPDATE analyses SET status='WAITING_MODEL',metadata_json=? WHERE analysis_id=?", (json.dumps({**analysis_metadata, "qualification_state": "FULL_SESSION_QUALIFIED", "formal_analysis_eligible": True, "error_type": exc.__class__.__name__, "error_message": str(exc)[:500], "checked_at": utc_now()}, ensure_ascii=False, sort_keys=True), row["analysis_id"]))
+                 conn.commit()
+             failed += 1
+-    result = {"completed": completed, "waiting_model": failed, "checked_at": utc_now()}
+-    upsert_heartbeat("analysis-v3", "READY" if failed == 0 else "DEGRADED", result, success=failed == 0)
++    result = {"completed": completed, "waiting_model": failed, "source_qualification_blocked": blocked, "checked_at": utc_now()}
++    healthy = failed == 0 and blocked == 0
++    upsert_heartbeat("analysis-v3", "READY" if healthy else "DEGRADED", result, success=healthy)
+     return result
+ 
+ 
+--- /Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/v3_evidence_worker.py	2026-08-25 16:34:05
++++ /Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-30-sample-analysis-qualification/staging/runtime/v3/v3_evidence_worker.py	2026-08-30 22:50:05
+@@ -11,6 +11,7 @@
+ from pathlib import Path
+ 
+ from v3_runtime import connect, init_db, upsert_heartbeat, utc_now
++from v3_analysis_contract import file_sha256
+ 
+ RUNNING = True
+ 
+@@ -20,6 +21,112 @@
+     RUNNING = False
+ 
+ 
++def json_object(value) -> dict:
++    try:
++        parsed = json.loads(value or "{}")
++    except (TypeError, json.JSONDecodeError):
++        return {}
++    return parsed if isinstance(parsed, dict) else {}
++
++
++def block_bundle(conn, row, reason: str, details: dict | None = None, *, sample: bool = False) -> None:
++    metadata = {
++        **json_object(row["metadata_json"]),
++        "reason": reason,
++        "qualification_state": "SAMPLE_NONQUALIFYING" if sample else "SOURCE_NONQUALIFYING",
++        "checked_at": utc_now(),
++        **(details or {}),
++    }
++    conn.execute(
++        "UPDATE evidence_bundles SET status=?,verified_at=NULL,scope=?,qualification_status=?,metadata_json=? WHERE bundle_id=?",
++        ("INVALIDATED_SAMPLE" if sample else "BLOCKED_EVIDENCE",
++         "SAMPLE_AUXILIARY" if sample else row["scope"],
++         "SAMPLE_NONQUALIFYING" if sample else "SOURCE_NONQUALIFYING",
++         json.dumps(metadata, ensure_ascii=False, sort_keys=True), row["bundle_id"]),
++    )
++
++
++def verify_analysis_identity(conn, row, path: Path, actual_digest: str) -> tuple[bool, str, dict]:
++    analysis = conn.execute(
++        "SELECT analysis_id,session_id,transcript_id,analysis_type,status,output_path,lineage_state,scope,"
++        "qualification_status,transcript_content_digest,analysis_spec_version,model_version,prompt_version,"
++        "artifact_digest,metadata_json FROM analyses WHERE analysis_id=?",
++        (row["object_id"],),
++    ).fetchone()
++    if not analysis:
++        return False, "analysis_missing", {}
++    analysis_meta = json_object(analysis["metadata_json"])
++    sample = bool(
++        analysis["status"] == "SAMPLE_NONQUALIFYING"
++        or analysis["qualification_status"] == "SAMPLE_NONQUALIFYING"
++        or row["qualification_status"] == "SAMPLE_NONQUALIFYING"
++        or analysis_meta.get("qualification_state") == "SAMPLE_NONQUALIFYING"
++    )
++    if sample:
++        return False, "sample_analysis_is_nonqualifying", {"sample": True}
++    required = (
++        analysis["status"] == "COMPLETE"
++        and analysis["lineage_state"] == "CURRENT"
++        and analysis["scope"] == "FORMAL_SINGLE_SESSION"
++        and analysis["qualification_status"] == "FULL_SESSION_QUALIFIED"
++        and row["scope"] == "FORMAL_SINGLE_SESSION"
++        and row["qualification_status"] == "FULL_SESSION_QUALIFIED"
++        and analysis_meta.get("qualification_state") == "FULL_SESSION_QUALIFIED"
++        and analysis_meta.get("formal_analysis_eligible") is True
++    )
++    if not required:
++        return False, "analysis_source_not_qualified", {"sample": False}
++    expected_artifact = str(analysis["artifact_digest"] or "")
++    bundle_digest = str(row["manifest_hash"] or "")
++    if not expected_artifact or actual_digest != expected_artifact or actual_digest != bundle_digest:
++        return False, "artifact_digest_three_way_mismatch", {"sample": False, "actual_digest": actual_digest, "analysis_artifact_digest": expected_artifact or None, "bundle_manifest_hash": bundle_digest or None}
++    if str(path) != str(analysis["output_path"] or ""):
++        return False, "analysis_bundle_path_mismatch", {"sample": False, "analysis_output_path": analysis["output_path"]}
++    edges = conn.execute(
++        "SELECT upstream_id,upstream_version FROM lineage_edges WHERE downstream_type='analysis' AND downstream_id=? "
++        "AND upstream_type='transcript' AND state='CURRENT' ORDER BY edge_id",
++        (analysis["analysis_id"],),
++    ).fetchall()
++    edge_values = [(str(edge["upstream_id"]), str(edge["upstream_version"])) for edge in edges]
++    expected_edge = [(str(analysis["transcript_id"] or ""), str(analysis["transcript_content_digest"] or ""))]
++    if edge_values != expected_edge:
++        return False, "analysis_lineage_identity_mismatch", {"sample": False, "current_edges": edge_values, "expected_edge": expected_edge}
++    transcript = conn.execute(
++        "SELECT output_path,scope,qualification_status FROM transcripts WHERE transcript_id=?",
++        (analysis["transcript_id"],),
++    ).fetchone()
++    transcript_path = Path(str(transcript["output_path"] or "")) if transcript else Path("")
++    if not transcript or transcript["scope"] != "FULL_SESSION" or transcript["qualification_status"] != "FULL_SESSION_QUALIFIED" or not transcript_path.is_file():
++        return False, "qualified_transcript_missing", {"sample": False}
++    transcript_digest = file_sha256(transcript_path)
++    if transcript_digest != analysis["transcript_content_digest"]:
++        return False, "transcript_content_digest_mismatch", {"sample": False, "actual_transcript_digest": transcript_digest, "analysis_transcript_digest": analysis["transcript_content_digest"]}
++    try:
++        artifact = json.loads(path.read_text(encoding="utf-8"))
++    except (OSError, json.JSONDecodeError):
++        return False, "analysis_artifact_invalid_json", {"sample": False}
++    root_expected = {"analysis_id": analysis["analysis_id"], "session_id": analysis["session_id"], "transcript_id": analysis["transcript_id"]}
++    if any(str(artifact.get(key) or "") != str(value or "") for key, value in root_expected.items()):
++        return False, "analysis_artifact_root_identity_mismatch", {"sample": False}
++    version_expected = {
++        "transcript_content_digest": analysis["transcript_content_digest"],
++        "analysis_spec_version": analysis["analysis_spec_version"],
++        "model_version": analysis["model_version"],
++        "prompt_version": analysis["prompt_version"],
++    }
++    version_fields_present = all(artifact.get(key) is not None for key in version_expected)
++    legacy_mode = analysis_meta.get("artifact_identity_mode") == "LEGACY_ROOT_IDS_PLUS_THREE_WAY_DIGEST"
++    if version_fields_present:
++        if any(str(artifact.get(key)) != str(value) for key, value in version_expected.items()):
++            return False, "analysis_artifact_version_identity_mismatch", {"sample": False}
++        identity_mode = "VERSIONED_ROOT_IDENTITY"
++    elif legacy_mode:
++        identity_mode = "LEGACY_ROOT_IDS_PLUS_THREE_WAY_DIGEST"
++    else:
++        return False, "analysis_artifact_version_identity_missing", {"sample": False}
++    return True, "verified", {"sample": False, "identity_mode": identity_mode, "analysis_id": analysis["analysis_id"], "transcript_id": analysis["transcript_id"], "transcript_content_digest": analysis["transcript_content_digest"], "artifact_digest": actual_digest, "analysis_spec_version": analysis["analysis_spec_version"], "model_version": analysis["model_version"], "prompt_version": analysis["prompt_version"]}
++
++
+ def once() -> dict:
+     verified = blocked = 0
+     init_db()
+@@ -28,15 +135,22 @@
+         for row in rows:
+             path = Path(str(row["manifest_path"] or ""))
+             if not path.is_file():
+-                conn.execute("UPDATE evidence_bundles SET status='BLOCKED_EVIDENCE',verified_at=NULL,metadata_json=? WHERE bundle_id=?", (json.dumps({"reason": "manifest_missing", "checked_at": utc_now()}, ensure_ascii=False), row["bundle_id"]))
++                block_bundle(conn, row, "manifest_missing")
+                 blocked += 1
+                 continue
+-            digest = hashlib.sha256(path.read_bytes()).hexdigest()
+-            if row["manifest_hash"] and digest != row["manifest_hash"]:
+-                conn.execute("UPDATE evidence_bundles SET status='BLOCKED_EVIDENCE',verified_at=NULL,metadata_json=? WHERE bundle_id=?", (json.dumps({"reason": "manifest_hash_mismatch", "actual": digest, "expected": row["manifest_hash"]}, ensure_ascii=False), row["bundle_id"]))
++            digest = file_sha256(path)
++            if row["object_type"] == "analysis":
++                ok, reason, details = verify_analysis_identity(conn, row, path, digest)
++                if not ok:
++                    block_bundle(conn, row, reason, details, sample=bool(details.get("sample")))
++                    blocked += 1
++                    continue
++            elif row["manifest_hash"] and digest != row["manifest_hash"]:
++                block_bundle(conn, row, "manifest_hash_mismatch", {"actual": digest, "expected": row["manifest_hash"]})
+                 blocked += 1
+                 continue
+-            conn.execute("UPDATE evidence_bundles SET status='VERIFIED',verified_at=?,manifest_hash=?,metadata_json=? WHERE bundle_id=?", (utc_now(), digest, json.dumps({"verified": True, "checked_at": utc_now()}, ensure_ascii=False), row["bundle_id"]))
++            metadata = {**json_object(row["metadata_json"]), "verified": True, "checked_at": utc_now(), **(details if row["object_type"] == "analysis" else {})}
++            conn.execute("UPDATE evidence_bundles SET status='VERIFIED',verified_at=?,manifest_hash=?,metadata_json=? WHERE bundle_id=?", (utc_now(), digest, json.dumps(metadata, ensure_ascii=False, sort_keys=True), row["bundle_id"]))
+             verified += 1
+         conn.commit()
+     result = {"verified": verified, "blocked": blocked, "checked_at": utc_now()}
+--- /Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/v3_project_feishu.py	2026-08-28 22:06:14
++++ /Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-30-sample-analysis-qualification/staging/runtime/v3/v3_project_feishu.py	2026-08-30 22:33:25
+@@ -158,6 +158,58 @@
+     else:
+         recording_state = "待开始"
+     return scene_state, recording_state, complete_text
++
++
++def analysis_projection_fields(analysis: dict) -> tuple[dict, str]:
++    """Map qualification state without presenting a SAMPLE as formal output."""
++    try:
++        metadata = json.loads(analysis.get("metadata_json") or "{}")
++    except (TypeError, json.JSONDecodeError):
++        metadata = {}
++    if not isinstance(metadata, dict):
++        metadata = {}
++    analysis_type = str(analysis.get("analysis_type") or "single_session")
++    is_single = analysis_type == "single_session"
++    qualification_column = str(analysis.get("qualification_status") or "")
++    scope_column = str(analysis.get("scope") or "")
++    is_sample = bool(
++        analysis.get("status") == "SAMPLE_NONQUALIFYING"
++        or qualification_column == "SAMPLE_NONQUALIFYING"
++        or scope_column == "SAMPLE_AUXILIARY"
++        or metadata.get("qualification_state") == "SAMPLE_NONQUALIFYING"
++    )
++    qualified = bool(
++        is_single
++        and analysis.get("lineage_state") == "CURRENT"
++        and scope_column == "FORMAL_SINGLE_SESSION"
++        and qualification_column == "FULL_SESSION_QUALIFIED"
++        and metadata.get("qualification_state") == "FULL_SESSION_QUALIFIED"
++        and metadata.get("formal_analysis_eligible") is True
++    )
++    if is_sample:
++        projection_type, projection_status = "部分场辅助", "证据不足"
++        qualification = "SAMPLE_NONQUALIFYING"
++        evidence = "SAMPLE_NONQUALIFYING：仅300秒样本，不是整场分析，不可用于正式决策或后续交付；lineage_state=" + str(analysis.get("lineage_state") or "INVALIDATED")
++    elif is_single and not qualified:
++        projection_type, projection_status = "部分场辅助", "证据不足"
++        qualification = "SOURCE_NONQUALIFYING"
++        evidence = "SOURCE_NONQUALIFYING：未通过当前整场转录资格校验，不可作为正式单场分析；lineage_state=" + str(analysis.get("lineage_state") or "UNKNOWN")
++    else:
++        projection_type = "单场分析" if is_single else analysis_type
++        projection_status = "完成" if analysis.get("status") == "COMPLETE" else "分析中"
++        qualification = "FULL_SESSION_QUALIFIED" if is_single else "HISTORICAL_FORMAL"
++        evidence = "Runtime V3 qualification=" + qualification + "; lineage_state=" + str(analysis.get("lineage_state") or "CURRENT")
++    fields = {
++        "分析ID": analysis["analysis_id"],
++        "当前场次ID": analysis["session_id"],
++        "分析类型": projection_type,
++        "状态": projection_status,
++        "分析文档": analysis.get("output_path") or "",
++        "证据说明": evidence,
++        "变化摘要": "",
++        "整体相似度": 0,
++    }
++    return fields, qualification
+ 
+ 
+ def project(*, dry_run: bool = False, product_id: str | None = None) -> dict:
+@@ -234,7 +286,7 @@
+         fields = {"转录ID": transcript["transcript_id"], "场次ID": transcript["session_id"], "引擎": transcript["engine"], "模型": transcript["model"], "状态": "完成" if transcript["status"] == "COMPLETE" else "转录中", "原始媒体路径": transcript.get("source_path") or "", "带时间戳逐字稿路径": transcript.get("output_path") or "", "清洗稿路径": transcript.get("metadata_json") or "", "语言": transcript.get("language") or "zh", "低置信度片段数": transcript.get("low_confidence_count") or 0, "证据说明": "Runtime V3 provenance"}
+         reports.append(upsert(config, tables["06_转录证据"], "转录ID", transcript["transcript_id"], fields, dry_run=dry_run))
+     for analysis in analyses:
+-        fields = {"分析ID": analysis["analysis_id"], "当前场次ID": analysis["session_id"], "分析类型": "单场分析", "状态": "完成" if analysis["status"] == "COMPLETE" else "分析中", "分析文档": analysis.get("output_path") or "", "证据说明": "Runtime V3 lineage_state=" + str(analysis.get("lineage_state") or "CURRENT"), "变化摘要": "", "整体相似度": 0}
++        fields, _qualification = analysis_projection_fields(analysis)
+         reports.append(upsert(config, tables["07_场次分析"], "分析ID", analysis["analysis_id"], fields, dry_run=dry_run))
+     for strategy in strategies:
+         fields = {"候选ID": strategy["candidate_id"], "策略候选": strategy["strategy_type"], "验证状态": "单场观察", "正式写入状态": "未申请", "类别": "其他", "来源场次ID": strategy.get("session_id") or "", "来源同行ID": "", "证据时间戳": "", "人工结论": "待审核", "正式知识Diff": ""}
+@@ -280,9 +332,9 @@
+         row = conn.execute("SELECT * FROM analyses WHERE analysis_id=? AND status!='SKIPPED_HISTORICAL'", (analysis_id,)).fetchone()
+     if not row:
+         raise RuntimeError(f"analysis not found: {analysis_id}")
+-    fields = {"分析ID": row["analysis_id"], "当前场次ID": row["session_id"], "分析类型": "单场分析", "状态": "完成" if row["status"] == "COMPLETE" else "分析中", "分析文档": row["output_path"] or "", "证据说明": "Runtime V3 lineage_state=" + str(row["lineage_state"] or "CURRENT"), "变化摘要": "", "整体相似度": 0}
++    fields, qualification = analysis_projection_fields(dict(row))
+     report = upsert(config, table_id, "分析ID", row["analysis_id"], fields, dry_run=dry_run)
+-    return {"status": "DRY_RUN" if dry_run else "VERIFIED", "report": report, "profile_id": config["lark_cli_profile"]}
++    return {"status": "DRY_RUN" if dry_run else "VERIFIED", "qualification_state": qualification, "report": report, "profile_id": config["lark_cli_profile"]}
+ 
+ 
+ def project_session(session_id: str, *, dry_run: bool = False) -> dict:
+--- /Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/v3_runtime.py	2026-08-30 21:53:21
++++ /Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-30-sample-analysis-qualification/staging/runtime/v3/v3_runtime.py	2026-08-30 22:33:16
+@@ -27,7 +27,7 @@
+ RUNTIME_ROOT = PROFILE_ROOT / "runtime"
+ V3_ROOT = RUNTIME_ROOT / "v3"
+ DB_PATH = RUNTIME_ROOT / "runtime_v3.db"
+-SCHEMA_PATH = V3_ROOT / "v3_schema.sql"
++SCHEMA_PATH = Path(__file__).resolve().parent / "v3_schema.sql"
+ CONFIG_PATH = V3_ROOT / "v3_config.json"
+ PROFILE_ID = "edu_live_competitor_intel"
+ BOT_NAME = "直播竞品情报主管"
+@@ -480,6 +480,8 @@
+     destination: str,
+     payload: dict,
+     max_attempts: int = OUTBOX_MAX_ATTEMPTS,
++    scope: str = "UNCLASSIFIED",
++    qualification_status: str = "UNCLASSIFIED",
+ ) -> str:
+     if max_attempts <= 0:
+         raise ValueError("outbox max_attempts must be positive")
+@@ -488,9 +490,10 @@
+     key = f"{destination}:{object_type}:{object_id}:{payload_hash}"
+     conn.execute(
+         "INSERT INTO outbox(outbox_id,dedupe_key,object_type,object_id,destination,status,attempts,max_attempts,"
+-        "next_attempt_at,payload_hash,payload_json) VALUES(?,?,?,?,?,'PENDING',0,?,?,?,?) "
++        "next_attempt_at,payload_hash,payload_json,scope,qualification_status) VALUES(?,?,?,?,?,'PENDING',0,?,?,?,?,?,?) "
+         "ON CONFLICT(dedupe_key) DO NOTHING",
+-        (outbox_id, key, object_type, object_id, destination, max_attempts, utc_now(), payload_hash, json_text(payload)),
++        (outbox_id, key, object_type, object_id, destination, max_attempts, utc_now(), payload_hash,
++         json_text(payload), scope, qualification_status),
+     )
+     row = conn.execute("SELECT outbox_id FROM outbox WHERE dedupe_key=?", (key,)).fetchone()
+     if not row:
+@@ -498,7 +501,9 @@
+     return str(row[0])
+ 
+ 
+-def enqueue_outbox(*, object_type: str, object_id: str, destination: str, payload: dict, max_attempts: int = OUTBOX_MAX_ATTEMPTS) -> str:
++def enqueue_outbox(*, object_type: str, object_id: str, destination: str, payload: dict,
++                   max_attempts: int = OUTBOX_MAX_ATTEMPTS, scope: str = "UNCLASSIFIED",
++                   qualification_status: str = "UNCLASSIFIED") -> str:
+     with connect() as conn:
+         return enqueue_outbox_conn(
+             conn,
+@@ -507,6 +512,8 @@
+             destination=destination,
+             payload=payload,
+             max_attempts=max_attempts,
++            scope=scope,
++            qualification_status=qualification_status,
+         )
+ 
+ 
+@@ -585,13 +592,14 @@
+         receipt_status = str(receipt.get("status") or "SENT")
+         conn.execute("UPDATE outbox SET status='SENT',lease_owner=NULL,lease_until=NULL,receipt_json=?,last_error_type=NULL,last_error=NULL WHERE outbox_id=?", (json_text(receipt), outbox_id))
+         conn.execute(
+-            "INSERT INTO delivery_receipts(receipt_id,outbox_id,destination,object_type,object_id,status,payload_hash,sent_at,verified_at,receipt_json) "
+-            "VALUES(?,?,?,?,?,?,?,?,?,?) ON CONFLICT(outbox_id) DO UPDATE SET status=excluded.status,"
+-            "sent_at=excluded.sent_at,verified_at=excluded.verified_at,receipt_json=excluded.receipt_json",
++            "INSERT INTO delivery_receipts(receipt_id,outbox_id,destination,object_type,object_id,status,payload_hash,sent_at,verified_at,receipt_json,scope,qualification_status) "
++            "VALUES(?,?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT(outbox_id) DO UPDATE SET status=excluded.status,"
++            "sent_at=excluded.sent_at,verified_at=excluded.verified_at,receipt_json=excluded.receipt_json,"
++            "scope=excluded.scope,qualification_status=excluded.qualification_status",
+             (
+                 f"receipt:{outbox_id}", outbox_id, row["destination"], row["object_type"], row["object_id"],
+                 receipt_status, row["payload_hash"], now, now if receipt_status == "VERIFIED" else None,
+-                json_text(receipt),
++                json_text(receipt), row["scope"], row["qualification_status"],
+             ),
+         )
+         conn.commit()
+--- /Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/v3_schema.sql	2026-08-30 21:53:21
++++ /Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-30-sample-analysis-qualification/staging/runtime/v3/v3_schema.sql	2026-08-30 22:48:41
+@@ -241,6 +241,8 @@
+     output_path TEXT,
+     low_confidence_count INTEGER NOT NULL DEFAULT 0,
+     created_at TEXT NOT NULL,
++    scope TEXT NOT NULL DEFAULT 'UNCLASSIFIED',
++    qualification_status TEXT NOT NULL DEFAULT 'UNCLASSIFIED',
+     metadata_json TEXT NOT NULL DEFAULT '{}',
+     UNIQUE(session_id, source_digest)
+ );
+@@ -248,14 +250,28 @@
+ CREATE TABLE IF NOT EXISTS analyses (
+     analysis_id TEXT PRIMARY KEY,
+     session_id TEXT NOT NULL REFERENCES live_sessions(session_id),
++    transcript_id TEXT REFERENCES transcripts(transcript_id),
+     analysis_type TEXT NOT NULL,
+     source_digest TEXT NOT NULL,
+     status TEXT NOT NULL DEFAULT 'PENDING',
+     output_path TEXT,
+     lineage_state TEXT NOT NULL DEFAULT 'CURRENT',
+-    metadata_json TEXT NOT NULL DEFAULT '{}',
+-    UNIQUE(session_id, analysis_type, source_digest)
++    scope TEXT NOT NULL DEFAULT 'UNCLASSIFIED',
++    qualification_status TEXT NOT NULL DEFAULT 'UNCLASSIFIED',
++    transcript_content_digest TEXT,
++    analysis_spec_version TEXT,
++    model_version TEXT,
++    prompt_version TEXT,
++    artifact_digest TEXT,
++    metadata_json TEXT NOT NULL DEFAULT '{}'
+ );
++
++CREATE UNIQUE INDEX IF NOT EXISTS uq_analyses_transcript_spec
++ON analyses(transcript_id, analysis_type, transcript_content_digest, analysis_spec_version, model_version, prompt_version)
++WHERE transcript_id IS NOT NULL AND transcript_content_digest IS NOT NULL
++  AND analysis_spec_version IS NOT NULL AND model_version IS NOT NULL AND prompt_version IS NOT NULL;
++CREATE INDEX IF NOT EXISTS idx_analyses_transcript_id ON analyses(transcript_id);
++CREATE INDEX IF NOT EXISTS idx_analyses_qualification ON analyses(scope, qualification_status, lineage_state, status);
+ 
+ CREATE TABLE IF NOT EXISTS approvals (
+     approval_id TEXT PRIMARY KEY,
+@@ -288,7 +304,9 @@
+     last_error TEXT,
+     payload_hash TEXT NOT NULL,
+     payload_json TEXT NOT NULL DEFAULT '{}',
+-    receipt_json TEXT NOT NULL DEFAULT '{}'
++    receipt_json TEXT NOT NULL DEFAULT '{}',
++    scope TEXT NOT NULL DEFAULT 'UNCLASSIFIED',
++    qualification_status TEXT NOT NULL DEFAULT 'UNCLASSIFIED'
+ );
+ 
+ CREATE TABLE IF NOT EXISTS delivery_receipts (
+@@ -302,8 +320,12 @@
+     sent_at TEXT NOT NULL,
+     verified_at TEXT,
+     receipt_json TEXT NOT NULL DEFAULT '{}',
++    scope TEXT NOT NULL DEFAULT 'UNCLASSIFIED',
++    qualification_status TEXT NOT NULL DEFAULT 'UNCLASSIFIED',
+     UNIQUE(outbox_id)
+ );
++
++CREATE INDEX IF NOT EXISTS idx_outbox_qualification ON outbox(scope, qualification_status, status);
+ 
+ CREATE TABLE IF NOT EXISTS dead_letters (
+     dead_letter_id TEXT PRIMARY KEY,
+@@ -338,6 +360,8 @@
+     manifest_path TEXT,
+     manifest_hash TEXT,
+     verified_at TEXT,
++    scope TEXT NOT NULL DEFAULT 'UNCLASSIFIED',
++    qualification_status TEXT NOT NULL DEFAULT 'UNCLASSIFIED',
+     metadata_json TEXT NOT NULL DEFAULT '{}',
+     UNIQUE(object_type, object_id)
+ );
+--- /Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/test_v3_segment_lifecycle.py	2026-08-30 21:53:49
++++ /Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-30-sample-analysis-qualification/staging/runtime/v3/test_v3_segment_lifecycle.py	2026-08-30 22:55:07
+@@ -80,7 +80,7 @@
+             conn.executescript("""
+                 CREATE TABLE live_sessions(session_id TEXT PRIMARY KEY,status TEXT,ended_at TEXT,completeness TEXT,metadata_json TEXT);
+                 CREATE TABLE recording_segments(segment_id TEXT PRIMARY KEY,session_id TEXT,path TEXT,checksum TEXT,status TEXT,lifecycle_status TEXT);
+-                CREATE TABLE transcripts(transcript_id TEXT PRIMARY KEY,session_id TEXT,source_digest TEXT,engine TEXT,model TEXT,status TEXT,language TEXT,source_path TEXT,output_path TEXT,low_confidence_count INTEGER DEFAULT 0,created_at TEXT,metadata_json TEXT,UNIQUE(session_id,source_digest));
++                CREATE TABLE transcripts(transcript_id TEXT PRIMARY KEY,session_id TEXT,source_digest TEXT,engine TEXT,model TEXT,status TEXT,language TEXT,source_path TEXT,output_path TEXT,low_confidence_count INTEGER DEFAULT 0,created_at TEXT,scope TEXT NOT NULL DEFAULT 'UNCLASSIFIED',qualification_status TEXT NOT NULL DEFAULT 'UNCLASSIFIED',metadata_json TEXT,UNIQUE(session_id,source_digest));
+             """)
+             conn.execute("INSERT INTO live_sessions VALUES(?,?,?,?,?)", ("s", "MEDIA_COMPLETE", "2026-08-30T00:10:00Z", "COMPLETE", json.dumps({"media_coverage": {"continuous_capture": True}})))
+             conn.executemany("INSERT INTO recording_segments VALUES(?,?,?,?,?,?)", [
+--- /dev/null	2026-08-30 23:07:04
++++ /Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-30-sample-analysis-qualification/staging/runtime/v3/v3_analysis_contract.py	2026-08-30 22:28:40
+@@ -0,0 +1,34 @@
++"""Immutable qualification contract shared by transcript, analysis and delivery."""
++from __future__ import annotations
++
++import hashlib
++import json
++from pathlib import Path
++
++TRANSCRIPT_SCOPE_FULL = "FULL_SESSION"
++TRANSCRIPT_SCOPE_SAMPLE = "SAMPLE"
++ANALYSIS_SCOPE_FORMAL = "FORMAL_SINGLE_SESSION"
++ANALYSIS_SCOPE_SAMPLE = "SAMPLE_AUXILIARY"
++QUALIFIED = "FULL_SESSION_QUALIFIED"
++SAMPLE_NONQUALIFYING = "SAMPLE_NONQUALIFYING"
++SOURCE_NONQUALIFYING = "SOURCE_NONQUALIFYING"
++ANALYSIS_SPEC_VERSION = "single-session-evidence-v2"
++PROMPT_VERSION = "deepseek-evidence-chunks-v3"
++MODEL_VERSION = "deepseek-chat"
++MIN_TIMESTAMP_COVERAGE_RATE = 0.90
++
++
++def json_object(value) -> dict:
++    try:
++        parsed = json.loads(value or "{}") if isinstance(value, str) else value
++    except (TypeError, json.JSONDecodeError):
++        return {}
++    return parsed if isinstance(parsed, dict) else {}
++
++
++def file_sha256(path: Path) -> str:
++    h = hashlib.sha256()
++    with path.open("rb") as handle:
++        for block in iter(lambda: handle.read(1024 * 1024), b""):
++            h.update(block)
++    return h.hexdigest()
+--- /dev/null	2026-08-30 23:07:04
++++ /Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-30-sample-analysis-qualification/staging/runtime/v3/v3_sample_analysis_migration.py	2026-08-30 23:05:20
+@@ -0,0 +1,464 @@
++#!/usr/bin/env python3
++"""Atomic qualification migration for transcript -> analysis -> delivery lineage.
++
++Default mode uses an explicit READ ONLY PostgreSQL transaction.  ``--apply``
++requires the exact dry-run plan hash and writes a mode-0600 row backup before
++running DDL and backfill in one advisory-locked transaction.  It never deletes
++historical artifacts, analyses, outbox rows, or delivery receipts.
++"""
++from __future__ import annotations
++
++import argparse
++import hashlib
++import json
++import os
++from datetime import datetime, timezone
++from pathlib import Path
++
++import psycopg
++from psycopg import IsolationLevel
++from psycopg.rows import dict_row
++
++import v3_runtime
++from v3_analysis_contract import (
++    ANALYSIS_SCOPE_FORMAL,
++    ANALYSIS_SCOPE_SAMPLE,
++    ANALYSIS_SPEC_VERSION,
++    MODEL_VERSION,
++    PROMPT_VERSION,
++    QUALIFIED,
++    SAMPLE_NONQUALIFYING,
++    TRANSCRIPT_SCOPE_FULL,
++    TRANSCRIPT_SCOPE_SAMPLE,
++    file_sha256,
++    json_object,
++)
++
++MIGRATION_KEY = "sample_analysis_qualification_revision"
++MIGRATION_VERSION = "2"
++PROFILE_ID = "edu_live_competitor_intel"
++ROOT = Path(__file__).resolve().parent
++DDL_PATH = ROOT / "migrations" / "002_analysis_qualification.sql"
++EXPECTED_COLUMNS = {
++    "transcripts": {"scope", "qualification_status"},
++    "analyses": {"transcript_id", "scope", "qualification_status", "transcript_content_digest", "analysis_spec_version", "model_version", "prompt_version", "artifact_digest"},
++    "evidence_bundles": {"scope", "qualification_status"},
++    "outbox": {"scope", "qualification_status"},
++    "delivery_receipts": {"scope", "qualification_status"},
++}
++
++
++def now() -> str:
++    return datetime.now(timezone.utc).isoformat(timespec="milliseconds").replace("+00:00", "Z")
++
++
++def canonical_json(value) -> str:
++    return json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
++
++
++def digest(value) -> str:
++    return hashlib.sha256(canonical_json(value).encode()).hexdigest()
++
++
++def transcript_kind(row: dict, current_segments) -> str:
++    metadata = json_object(row.get("metadata_json"))
++    path = str(row.get("output_path") or row.get("source_path") or "").lower()
++    if metadata.get("sample_only") is True or metadata.get("coverage_scope") == "SAMPLE" or "sample300s" in path:
++        return "SAMPLE"
++    quality = metadata.get("timestamp_coverage") or {}
++    try:
++        rate = float(quality.get("coverage_rate"))
++    except (TypeError, ValueError):
++        rate = -1
++    source_segment_id = str(metadata.get("source_segment_id") or "")
++    expected_source_digest = current_segments.get(source_segment_id) if isinstance(current_segments, dict) else None
++    current_match = (
++        str(row.get("source_digest") or "") == expected_source_digest
++        if isinstance(current_segments, dict)
++        else source_segment_id in current_segments
++    )
++    qualified = (
++        row.get("status") == "COMPLETE"
++        and metadata.get("coverage_scope") == "FULL_SESSION"
++        and metadata.get("sample_only") is False
++        and metadata.get("quality_gate_status") == QUALIFIED
++        and quality.get("is_qualified") is True
++        and quality.get("timestamps_valid") is True
++        and rate >= 0.90
++        and current_match
++        and row.get("session_status") == "MEDIA_COMPLETE"
++        and row.get("completeness") == "COMPLETE"
++        and (json_object(row.get("session_metadata")).get("media_coverage") or {}).get("continuous_capture") is True
++    )
++    return QUALIFIED if qualified else "OTHER"
++
++
++def artifact_identity(path_text: str | None) -> tuple[dict | None, str | None]:
++    path = Path(str(path_text or ""))
++    if not path.is_file():
++        return None, "analysis artifact missing"
++    try:
++        artifact = json.loads(path.read_text(encoding="utf-8"))
++    except (OSError, json.JSONDecodeError) as exc:
++        return None, f"analysis artifact invalid JSON: {exc.__class__.__name__}"
++    if not isinstance(artifact, dict) or not artifact.get("transcript_id"):
++        return None, "analysis artifact lacks transcript_id"
++    return {
++        "analysis_id": str(artifact.get("analysis_id") or ""),
++        "session_id": str(artifact.get("session_id") or ""),
++        "transcript_id": str(artifact["transcript_id"]),
++        "artifact_digest": file_sha256(path),
++    }, None
++
++
++def artifact_matches(identity: dict | None, analysis: dict, candidate_ids: list[str]) -> bool:
++    return bool(
++        identity
++        and identity.get("analysis_id") == str(analysis.get("analysis_id") or "")
++        and identity.get("session_id") == str(analysis.get("session_id") or "")
++        and identity.get("transcript_id") in candidate_ids
++    )
++
++
++def schema_missing(cur) -> dict[str, list[str]]:
++    missing = {}
++    for table, expected in EXPECTED_COLUMNS.items():
++        cur.execute("SELECT column_name FROM information_schema.columns WHERE table_schema='public' AND table_name=%s", (table,))
++        present = {str(row["column_name"]) for row in cur.fetchall()}
++        absent = sorted(expected - present)
++        if absent:
++            missing[table] = absent
++    return missing
++
++
++def schema_signature(cur) -> str:
++    tables = sorted(EXPECTED_COLUMNS)
++    cur.execute("SELECT table_name,column_name,data_type,is_nullable,column_default FROM information_schema.columns WHERE table_schema='public' AND table_name=ANY(%s) ORDER BY table_name,ordinal_position", (tables,))
++    columns = [dict(row) for row in cur.fetchall()]
++    cur.execute("SELECT tablename,indexname,indexdef FROM pg_indexes WHERE schemaname='public' AND tablename=ANY(%s) ORDER BY tablename,indexname", (tables,))
++    indexes = [dict(row) for row in cur.fetchall()]
++    cur.execute("SELECT c.relname AS table_name,t.tgname AS trigger_name,pg_get_triggerdef(t.oid) AS trigger_def FROM pg_trigger t JOIN pg_class c ON c.oid=t.tgrelid JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname='public' AND NOT t.tgisinternal AND c.relname=ANY(%s) ORDER BY c.relname,t.tgname", (tables,))
++    triggers = [dict(row) for row in cur.fetchall()]
++    return digest({"columns": columns, "indexes": indexes, "triggers": triggers})
++
++
++def migration_health(cur) -> dict:
++    missing = schema_missing(cur)
++    cur.execute("SELECT indexname FROM pg_indexes WHERE schemaname='public' AND indexname IN ('uq_analyses_transcript_spec','idx_analyses_transcript_id','idx_analyses_qualification','idx_outbox_qualification')")
++    indexes = {str(row["indexname"]) for row in cur.fetchall()}
++    cur.execute("SELECT count(*) AS n FROM pg_trigger t JOIN pg_class c ON c.oid=t.tgrelid WHERE c.relname='analyses' AND t.tgname='trg_v3_guard_analysis_immutable_identity' AND NOT t.tgisinternal")
++    trigger = cur.fetchone()["n"] == 1
++    unclassified = {}
++    if not missing:
++        for table in ("transcripts", "analyses", "evidence_bundles", "outbox", "delivery_receipts"):
++            cur.execute(f"SELECT count(*) AS n FROM {table} WHERE scope='UNCLASSIFIED' OR qualification_status='UNCLASSIFIED'")
++            unclassified[table] = cur.fetchone()["n"]
++        cur.execute("SELECT analysis_id,transcript_id,transcript_content_digest FROM analyses WHERE scope=%s AND qualification_status=%s", (ANALYSIS_SCOPE_FORMAL, QUALIFIED))
++        lineage_errors = []
++        for analysis in cur.fetchall():
++            cur.execute("SELECT upstream_id,upstream_version FROM lineage_edges WHERE downstream_type='analysis' AND downstream_id=%s AND upstream_type='transcript' AND state='CURRENT'", (analysis["analysis_id"],))
++            edges = [dict(row) for row in cur.fetchall()]
++            if edges != [{"upstream_id": analysis["transcript_id"], "upstream_version": analysis["transcript_content_digest"]}]:
++                lineage_errors.append({"analysis_id": analysis["analysis_id"], "edges": edges})
++        cur.execute("SELECT count(*) AS n FROM analyses WHERE analysis_type='single_session' AND status='COMPLETE' AND (transcript_id IS NULL OR scope<>%s OR qualification_status<>%s OR transcript_content_digest IS NULL OR artifact_digest IS NULL)", (ANALYSIS_SCOPE_FORMAL, QUALIFIED))
++        bad_formal = cur.fetchone()["n"]
++        cur.execute("SELECT count(*) AS n FROM analyses WHERE qualification_status=%s AND (status<>'SAMPLE_NONQUALIFYING' OR lineage_state<>'INVALIDATED')", (SAMPLE_NONQUALIFYING,))
++        bad_sample = cur.fetchone()["n"]
++        cur.execute("SELECT analysis_id FROM analyses WHERE qualification_status=%s", (SAMPLE_NONQUALIFYING,))
++        sample_ids = [str(row["analysis_id"]) for row in cur.fetchall()]
++        sample_lineage_errors, correction_errors = [], []
++        for analysis_id in sample_ids:
++            cur.execute("SELECT edge_id FROM lineage_edges WHERE downstream_type='analysis' AND downstream_id=%s AND upstream_type='transcript' AND state='CURRENT'", (analysis_id,))
++            current_sample_edges = [row["edge_id"] for row in cur.fetchall()]
++            if current_sample_edges:
++                sample_lineage_errors.append({"analysis_id": analysis_id, "current_edge_ids": current_sample_edges})
++            cur.execute("SELECT outbox_id,status,scope,qualification_status FROM outbox WHERE object_type='semantic_projection' AND object_id=%s AND payload_json::jsonb->>'correction_version'='1'", (analysis_id,))
++            corrections = [dict(row) for row in cur.fetchall()]
++            if len(corrections) != 1 or corrections[0]["scope"] != ANALYSIS_SCOPE_SAMPLE or corrections[0]["qualification_status"] != SAMPLE_NONQUALIFYING or corrections[0]["status"] not in {"PENDING", "RETRY", "SENT"}:
++                correction_errors.append({"analysis_id": analysis_id, "corrections": corrections})
++                continue
++            if corrections[0]["status"] == "SENT":
++                cur.execute("SELECT status,scope,qualification_status FROM delivery_receipts WHERE outbox_id=%s", (corrections[0]["outbox_id"],))
++                receipt = cur.fetchone()
++                if not receipt or receipt["status"] != "VERIFIED" or receipt["scope"] != ANALYSIS_SCOPE_SAMPLE or receipt["qualification_status"] != SAMPLE_NONQUALIFYING:
++                    correction_errors.append({"analysis_id": analysis_id, "sent_correction_receipt": dict(receipt) if receipt else None})
++        cur.execute("SELECT count(*) AS n FROM evidence_bundles e JOIN analyses a ON a.analysis_id=e.object_id WHERE e.object_type='analysis' AND a.qualification_status=%s AND (e.scope<>%s OR e.qualification_status<>%s OR e.status NOT IN ('REQUIRED','VERIFIED'))", (QUALIFIED, ANALYSIS_SCOPE_FORMAL, QUALIFIED))
++        bad_formal_evidence = cur.fetchone()["n"]
++        cur.execute("SELECT count(*) AS n FROM evidence_bundles e JOIN analyses a ON a.analysis_id=e.object_id WHERE e.object_type='analysis' AND a.qualification_status=%s AND (e.scope<>%s OR e.qualification_status<>%s OR e.status<>'INVALIDATED_SAMPLE')", (SAMPLE_NONQUALIFYING, ANALYSIS_SCOPE_SAMPLE, SAMPLE_NONQUALIFYING))
++        bad_sample_evidence = cur.fetchone()["n"]
++    else:
++        lineage_errors, sample_lineage_errors, correction_errors, bad_formal, bad_sample, bad_formal_evidence, bad_sample_evidence = [], [], [], None, None, None, None
++    required_indexes = {'uq_analyses_transcript_spec','idx_analyses_transcript_id','idx_analyses_qualification','idx_outbox_qualification'}
++    healthy = not missing and indexes == required_indexes and trigger and not any(unclassified.values()) and not lineage_errors and not sample_lineage_errors and not correction_errors and bad_formal == 0 and bad_sample == 0 and bad_formal_evidence == 0 and bad_sample_evidence == 0
++    return {"healthy": healthy, "schema_missing": missing, "indexes": sorted(indexes), "trigger": trigger, "unclassified": unclassified, "lineage_errors": lineage_errors, "sample_lineage_errors": sample_lineage_errors, "correction_errors": correction_errors, "bad_formal": bad_formal, "bad_sample": bad_sample, "bad_formal_evidence": bad_formal_evidence, "bad_sample_evidence": bad_sample_evidence}
++
++
++def build_plan(cur) -> dict:
++    cur.execute("SELECT segment_id,session_id,checksum,path FROM recording_segments WHERE status='COMPLETE' AND lifecycle_status='CANONICAL_ACTIVE'")
++    current: dict[str, dict[str, str]] = {}
++    for row in cur.fetchall():
++        checksum = str(row["checksum"] or "")
++        path = Path(str(row["path"] or ""))
++        if not checksum and path.is_file():
++            checksum = file_sha256(path)
++        if checksum:
++            expected_source_digest = hashlib.sha256(("FULL_SESSION:" + checksum).encode()).hexdigest()
++            current.setdefault(str(row["session_id"]), {})[str(row["segment_id"])] = expected_source_digest
++
++    cur.execute("SELECT t.*,s.status AS session_status,s.completeness,s.metadata_json AS session_metadata FROM transcripts t JOIN live_sessions s ON s.session_id=t.session_id ORDER BY t.transcript_id")
++    transcripts = {str(row["transcript_id"]): dict(row) for row in cur.fetchall()}
++    transcript_backfills = []
++    kinds = {}
++    for transcript_id, row in transcripts.items():
++        kind = transcript_kind(row, current.get(str(row["session_id"]), set()))
++        kinds[transcript_id] = kind
++        if kind == "SAMPLE":
++            scope, qualification = TRANSCRIPT_SCOPE_SAMPLE, SAMPLE_NONQUALIFYING
++        elif kind == QUALIFIED:
++            scope, qualification = TRANSCRIPT_SCOPE_FULL, QUALIFIED
++        elif row.get("status") == "CANCELLED_SUPERSEDED_SOURCE":
++            scope, qualification = "SOURCE_SEGMENT", "CANCELLED_SUPERSEDED_SOURCE"
++        elif str(row.get("output_path") or "").lower().endswith(".md"):
++            scope, qualification = "HISTORICAL_TRANSCRIPT", "NONQUALIFYING_LEGACY"
++        else:
++            scope, qualification = "SOURCE_SEGMENT", "NOT_FORMAL_ELIGIBLE"
++        transcript_backfills.append({"transcript_id": transcript_id, "scope": scope, "qualification_status": qualification})
++
++    cur.execute("SELECT * FROM analyses ORDER BY analysis_id")
++    analyses = [dict(row) for row in cur.fetchall()]
++    sample_actions, formal_annotations, analysis_classifications, issues = [], [], [], []
++    for analysis in analyses:
++        analysis_id = str(analysis["analysis_id"])
++        cur.execute("SELECT edge_id,upstream_id,upstream_version,state FROM lineage_edges WHERE downstream_type='analysis' AND downstream_id=%s AND upstream_type='transcript' ORDER BY edge_id", (analysis_id,))
++        lineage_rows = [dict(row) for row in cur.fetchall()]
++        transcript_ids = sorted({str(row["upstream_id"]) for row in lineage_rows})
++        candidate_ids = [tid for tid in transcript_ids if kinds.get(tid) in {"SAMPLE", QUALIFIED}]
++        if analysis["analysis_type"] != "single_session":
++            analysis_classifications.append({"analysis_id": analysis_id, "scope": "HISTORICAL_FORMAL", "qualification_status": "HISTORICAL_IMPORTED"})
++            continue
++        if not candidate_ids:
++            analysis_classifications.append({"analysis_id": analysis_id, "scope": "HISTORICAL_SINGLE_SESSION", "qualification_status": "NONQUALIFYING_LEGACY"})
++            continue
++        identity, error = artifact_identity(analysis.get("output_path"))
++        if error or not artifact_matches(identity, analysis, candidate_ids):
++            issues.append({"analysis_id": analysis_id, "reason": error or "artifact root analysis/session/transcript identity does not match database lineage", "artifact_identity": identity, "database_session_id": analysis["session_id"], "lineage_transcript_ids": transcript_ids})
++            continue
++        transcript_id = identity["transcript_id"]
++        transcript_path = Path(str(transcripts[transcript_id].get("output_path") or ""))
++        if not transcript_path.is_file():
++            issues.append({"analysis_id": analysis_id, "reason": "transcript artifact missing", "transcript_id": transcript_id})
++            continue
++        immutable = {
++            "transcript_content_digest": file_sha256(transcript_path),
++            "artifact_digest": identity["artifact_digest"],
++            "model_version": str(json_object(analysis.get("metadata_json")).get("model") or json_object(analysis.get("metadata_json")).get("semantic_engine") or MODEL_VERSION),
++        }
++        if kinds[transcript_id] == "SAMPLE":
++            sample_edges = [row for row in lineage_rows if str(row["upstream_id"]) == transcript_id]
++            item = {"analysis_id": analysis_id, "session_id": analysis["session_id"], "transcript_id": transcript_id, "analysis_status": analysis["status"], "analysis_lineage_state": analysis["lineage_state"], "analysis_spec_version": "legacy-sample-analysis-v1", "prompt_version": "legacy-unversioned", "lineage_edges": sample_edges, **immutable}
++            sample_actions.append(item)
++            analysis_classifications.append({"analysis_id": analysis_id, "scope": ANALYSIS_SCOPE_SAMPLE, "qualification_status": SAMPLE_NONQUALIFYING})
++        else:
++            current_edges = [row for row in lineage_rows if row["state"] == "CURRENT"]
++            selected_current = [row for row in current_edges if str(row["upstream_id"]) == transcript_id]
++            if len(current_edges) != 1 or len(selected_current) != 1:
++                issues.append({"analysis_id": analysis_id, "reason": "formal analysis must have exactly one CURRENT transcript edge", "current_edges": current_edges})
++                continue
++            item = {"analysis_id": analysis_id, "session_id": analysis["session_id"], "transcript_id": transcript_id, "analysis_spec_version": ANALYSIS_SPEC_VERSION, "prompt_version": PROMPT_VERSION, "lineage_edge": selected_current[0], **immutable}
++            formal_annotations.append(item)
++            analysis_classifications.append({"analysis_id": analysis_id, "scope": ANALYSIS_SCOPE_FORMAL, "qualification_status": QUALIFIED})
++
++    projected = {}
++    action_by_id = {row["analysis_id"]: row for row in sample_actions + formal_annotations}
++    for analysis in analyses:
++        action = action_by_id.get(str(analysis["analysis_id"]))
++        transcript_id = action.get("transcript_id") if action else analysis.get("transcript_id")
++        spec = action.get("analysis_spec_version") if action else analysis.get("analysis_spec_version")
++        content = action.get("transcript_content_digest") if action else analysis.get("transcript_content_digest")
++        model = action.get("model_version") if action else analysis.get("model_version")
++        prompt = action.get("prompt_version") if action else analysis.get("prompt_version")
++        if not transcript_id or not spec or not content or not model or not prompt:
++            continue
++        key = (str(transcript_id), str(analysis["analysis_type"]), str(content), str(spec), str(model), str(prompt))
++        if key in projected:
++            issues.append({"reason": "projected unique transcript/spec conflict", "key": key, "analysis_ids": [projected[key], analysis["analysis_id"]]})
++        else:
++            projected[key] = analysis["analysis_id"]
++
++    sample_ids = {row["analysis_id"] for row in sample_actions}
++    formal_ids = {row["analysis_id"] for row in formal_annotations}
++    cur.execute("SELECT bundle_id,object_type,object_id FROM evidence_bundles ORDER BY bundle_id")
++    evidence_classifications = []
++    for row in cur.fetchall():
++        aid = str(row["object_id"])
++        if row["object_type"] == "analysis" and aid in sample_ids:
++            scope, qualification = ANALYSIS_SCOPE_SAMPLE, SAMPLE_NONQUALIFYING
++        elif row["object_type"] == "analysis" and aid in formal_ids:
++            scope, qualification = ANALYSIS_SCOPE_FORMAL, QUALIFIED
++        else:
++            scope, qualification = "OTHER_EVIDENCE", "NOT_APPLICABLE"
++        evidence_classifications.append({"bundle_id": row["bundle_id"], "scope": scope, "qualification_status": qualification})
++
++    cur.execute("SELECT outbox_id,object_type,object_id FROM outbox ORDER BY outbox_id")
++    outbox_classifications = []
++    outbox_map = {}
++    for row in cur.fetchall():
++        aid = str(row["object_id"])
++        if row["object_type"] == "semantic_projection" and aid in sample_ids:
++            scope, qualification = ANALYSIS_SCOPE_SAMPLE, SAMPLE_NONQUALIFYING
++        elif row["object_type"] == "semantic_projection" and aid in formal_ids:
++            scope, qualification = ANALYSIS_SCOPE_FORMAL, QUALIFIED
++        else:
++            scope, qualification = "CONTROL_PLANE", "NOT_APPLICABLE"
++        outbox_map[str(row["outbox_id"])] = (scope, qualification)
++        outbox_classifications.append({"outbox_id": row["outbox_id"], "scope": scope, "qualification_status": qualification})
++    cur.execute("SELECT receipt_id,outbox_id FROM delivery_receipts ORDER BY receipt_id")
++    receipt_classifications = [{"receipt_id": row["receipt_id"], "scope": outbox_map.get(str(row["outbox_id"]), ("CONTROL_PLANE", "NOT_APPLICABLE"))[0], "qualification_status": outbox_map.get(str(row["outbox_id"]), ("CONTROL_PLANE", "NOT_APPLICABLE"))[1]} for row in cur.fetchall()]
++
++    core = {
++        "migration_key": MIGRATION_KEY,
++        "migration_version": MIGRATION_VERSION,
++        "source_schema_signature": schema_signature(cur),
++        "ddl_sha256": hashlib.sha256(DDL_PATH.read_bytes()).hexdigest(),
++        "transcript_backfills": transcript_backfills,
++        "analysis_classifications": analysis_classifications,
++        "sample_actions": sample_actions,
++        "formal_annotations": formal_annotations,
++        "evidence_classifications": evidence_classifications,
++        "outbox_classifications": outbox_classifications,
++        "receipt_classifications": receipt_classifications,
++        "issues": issues,
++    }
++    return {**core, "plan_sha256": digest(core)}
++
++
++def readonly_plan(dsn: str | None = None) -> dict:
++    conn = psycopg.connect(dsn or v3_runtime._postgres_dsn(), autocommit=False, row_factory=dict_row)
++    conn.read_only = True
++    conn.isolation_level = IsolationLevel.SERIALIZABLE
++    with conn, conn.cursor() as cur:
++        cur.execute("SHOW transaction_read_only")
++        read_only = cur.fetchone()["transaction_read_only"]
++        if read_only != "on":
++            raise RuntimeError("audit connection is not READ ONLY")
++        return {**build_plan(cur), "schema_missing_before_migration": schema_missing(cur), "transaction_read_only": read_only}
++
++
++def rows_for_backup(cur) -> dict:
++    result = {}
++    for table in ("transcripts", "analyses", "lineage_edges", "evidence_bundles", "outbox", "delivery_receipts"):
++        cur.execute(f"SELECT * FROM {table}")
++        result[table] = [dict(row) for row in cur.fetchall()]
++    cur.execute("SELECT * FROM schema_meta WHERE key=%s", (MIGRATION_KEY,))
++    result["schema_meta"] = [dict(row) for row in cur.fetchall()]
++    return result
++
++
++def database_identity(cur) -> dict:
++    cur.execute("SELECT current_database() AS database_name,current_user AS database_user,COALESCE(inet_server_addr()::text,'local-socket') AS server_address,inet_server_port() AS server_port,current_setting('server_version_num') AS server_version_num,(SELECT system_identifier::text FROM pg_control_system()) AS system_identifier")
++    return dict(cur.fetchone())
++
++
++def merge_metadata(cur, table: str, id_column: str, row_id: str, additions: dict) -> None:
++    cur.execute(f"SELECT metadata_json FROM {table} WHERE {id_column}=%s", (row_id,))
++    row = cur.fetchone()
++    metadata = {**json_object(row["metadata_json"] if row else None), **additions}
++    cur.execute(f"UPDATE {table} SET metadata_json=%s WHERE {id_column}=%s", (json.dumps(metadata, ensure_ascii=False, sort_keys=True), row_id))
++
++
++def apply(expected_plan_sha256: str, backup_dir: Path, dsn: str | None = None) -> dict:
++    conn = psycopg.connect(dsn or v3_runtime._postgres_dsn(), autocommit=False, row_factory=dict_row)
++    conn.isolation_level = IsolationLevel.SERIALIZABLE
++    with conn, conn.cursor() as cur:
++        cur.execute("SELECT pg_advisory_xact_lock(hashtext('edu_sample_analysis_qualification'))")
++        cur.execute("SELECT value FROM schema_meta WHERE key=%s", (MIGRATION_KEY,))
++        existing = cur.fetchone()
++        if existing and existing["value"] == MIGRATION_VERSION:
++            health = migration_health(cur)
++            if not health["healthy"]:
++                raise RuntimeError("migration marker exists but database drift was detected: " + canonical_json(health))
++            return {"status": "ALREADY_APPLIED", "migration_version": MIGRATION_VERSION, "health": health}
++        plan = build_plan(cur)
++        if plan["issues"]:
++            raise RuntimeError("migration plan has unresolved issues")
++        if plan["plan_sha256"] != expected_plan_sha256:
++            raise RuntimeError(f"plan changed: expected {expected_plan_sha256}, actual {plan['plan_sha256']}")
++        backup_dir.mkdir(parents=True, exist_ok=True, mode=0o700)
++        os.chmod(backup_dir, 0o700)
++        backup = {"created_at": now(), "database_identity": database_identity(cur), "plan": plan, "rows": rows_for_backup(cur)}
++        backup_path = backup_dir / f"pre-sample-analysis-qualification-{datetime.now().strftime('%Y%m%d-%H%M%S-%f')}.json"
++        backup_path.write_text(json.dumps(backup, ensure_ascii=False, indent=2, default=str) + "\n", encoding="utf-8")
++        os.chmod(backup_path, 0o600)
++        backup_sha = hashlib.sha256(backup_path.read_bytes()).hexdigest()
++
++        cur.execute(DDL_PATH.read_text(encoding="utf-8"))
++        changed_at = now()
++        for item in plan["transcript_backfills"]:
++            cur.execute("UPDATE transcripts SET scope=%s,qualification_status=%s WHERE transcript_id=%s", (item["scope"], item["qualification_status"], item["transcript_id"]))
++            if item["qualification_status"] in {QUALIFIED, SAMPLE_NONQUALIFYING}:
++                merge_metadata(cur, "transcripts", "transcript_id", item["transcript_id"], {"scope": item["scope"], "qualification_state": item["qualification_status"], "formal_analysis_eligible": item["qualification_status"] == QUALIFIED, "qualification_checked_at": changed_at})
++        identity_backfills = {item["analysis_id"] for item in plan["sample_actions"] + plan["formal_annotations"]}
++        for item in plan["analysis_classifications"]:
++            if item["analysis_id"] in identity_backfills:
++                continue
++            cur.execute("UPDATE analyses SET scope=%s,qualification_status=%s WHERE analysis_id=%s", (item["scope"], item["qualification_status"], item["analysis_id"]))
++        for action in plan["sample_actions"]:
++            merge_metadata(cur, "analyses", "analysis_id", action["analysis_id"], {"qualification_state": SAMPLE_NONQUALIFYING, "formal_analysis_eligible": False, "source_transcript_id": action["transcript_id"], "invalidated_at": changed_at, "invalidation_reason": "300-second SAMPLE cannot represent a whole live session", "pre_invalidation_status": action["analysis_status"], "pre_invalidation_lineage_state": action["analysis_lineage_state"]})
++            cur.execute("UPDATE analyses SET transcript_id=%s,status='SAMPLE_NONQUALIFYING',lineage_state='INVALIDATED',scope=%s,qualification_status=%s,transcript_content_digest=%s,source_digest=%s,analysis_spec_version=%s,model_version=%s,prompt_version=%s,artifact_digest=%s WHERE analysis_id=%s", (action["transcript_id"], ANALYSIS_SCOPE_SAMPLE, SAMPLE_NONQUALIFYING, action["transcript_content_digest"], action["transcript_content_digest"], action["analysis_spec_version"], action["model_version"], action["prompt_version"], action["artifact_digest"], action["analysis_id"]))
++            cur.execute("UPDATE lineage_edges SET state='INVALIDATED' WHERE downstream_type='analysis' AND downstream_id=%s AND upstream_type='transcript' AND upstream_id=%s", (action["analysis_id"], action["transcript_id"]))
++        for action in plan["formal_annotations"]:
++            merge_metadata(cur, "analyses", "analysis_id", action["analysis_id"], {"qualification_state": QUALIFIED, "formal_analysis_eligible": True, "source_transcript_id": action["transcript_id"], "transcript_content_digest": action["transcript_content_digest"], "artifact_digest": action["artifact_digest"], "artifact_identity_mode": "LEGACY_ROOT_IDS_PLUS_THREE_WAY_DIGEST", "qualification_checked_at": changed_at})
++            cur.execute("UPDATE analyses SET transcript_id=%s,scope=%s,qualification_status=%s,transcript_content_digest=%s,source_digest=%s,analysis_spec_version=%s,model_version=%s,prompt_version=%s,artifact_digest=%s WHERE analysis_id=%s", (action["transcript_id"], ANALYSIS_SCOPE_FORMAL, QUALIFIED, action["transcript_content_digest"], action["transcript_content_digest"], action["analysis_spec_version"], action["model_version"], action["prompt_version"], action["artifact_digest"], action["analysis_id"]))
++            cur.execute("UPDATE lineage_edges SET upstream_version=%s WHERE edge_id=%s AND state='CURRENT'", (action["transcript_content_digest"], action["lineage_edge"]["edge_id"]))
++        for item in plan["evidence_classifications"]:
++            cur.execute("UPDATE evidence_bundles SET scope=%s,qualification_status=%s WHERE bundle_id=%s", (item["scope"], item["qualification_status"], item["bundle_id"]))
++            if item["qualification_status"] == SAMPLE_NONQUALIFYING:
++                merge_metadata(cur, "evidence_bundles", "bundle_id", item["bundle_id"], {"qualification_state": SAMPLE_NONQUALIFYING, "formal_analysis_eligible": False, "invalidated_at": changed_at})
++                cur.execute("UPDATE evidence_bundles SET status='INVALIDATED_SAMPLE' WHERE bundle_id=%s", (item["bundle_id"],))
++            elif item["qualification_status"] == QUALIFIED:
++                cur.execute("SELECT object_id FROM evidence_bundles WHERE bundle_id=%s", (item["bundle_id"],))
++                bundle_row = cur.fetchone()
++                formal = next((row for row in plan["formal_annotations"] if row["analysis_id"] == bundle_row["object_id"]), None) if bundle_row else None
++                if formal:
++                    merge_metadata(cur, "evidence_bundles", "bundle_id", item["bundle_id"], {"qualification_state": QUALIFIED, "formal_analysis_eligible": True, "transcript_id": formal["transcript_id"], "transcript_content_digest": formal["transcript_content_digest"], "artifact_digest": formal["artifact_digest"], "qualification_checked_at": changed_at})
++                    cur.execute("UPDATE evidence_bundles SET status='REQUIRED' WHERE bundle_id=%s", (item["bundle_id"],))
++        for item in plan["outbox_classifications"]:
++            cur.execute("UPDATE outbox SET scope=%s,qualification_status=%s WHERE outbox_id=%s", (item["scope"], item["qualification_status"], item["outbox_id"]))
++        for item in plan["receipt_classifications"]:
++            cur.execute("UPDATE delivery_receipts SET scope=%s,qualification_status=%s WHERE receipt_id=%s", (item["scope"], item["qualification_status"], item["receipt_id"]))
++
++        for action in plan["sample_actions"]:
++            payload = {"analysis_id": action["analysis_id"], "profile_id": PROFILE_ID, "qualification_state": SAMPLE_NONQUALIFYING, "correction": True, "correction_version": 1}
++            payload_hash = digest(payload)
++            outbox_id = "out_sample_correction_" + hashlib.sha256(action["analysis_id"].encode()).hexdigest()[:20]
++            dedupe_key = f"feishu_base:semantic_projection:{action['analysis_id']}:{payload_hash}"
++            cur.execute("INSERT INTO outbox(outbox_id,dedupe_key,object_type,object_id,destination,status,attempts,max_attempts,next_attempt_at,payload_hash,payload_json,scope,qualification_status) VALUES(%s,%s,'semantic_projection',%s,'feishu_base','PENDING',0,8,%s,%s,%s,%s,%s) ON CONFLICT(dedupe_key) DO NOTHING", (outbox_id, dedupe_key, action["analysis_id"], changed_at, payload_hash, canonical_json(payload), ANALYSIS_SCOPE_SAMPLE, SAMPLE_NONQUALIFYING))
++            event_id = "evt_sample_invalidation_" + hashlib.sha256(action["analysis_id"].encode()).hexdigest()[:20]
++            cur.execute("INSERT INTO domain_events(event_id,event_type,severity,created_at,object_type,object_id,payload_json) VALUES(%s,'SAMPLE_ANALYSIS_INVALIDATED','WARNING',%s,'analysis',%s,%s) ON CONFLICT(event_id) DO NOTHING", (event_id, changed_at, action["analysis_id"], canonical_json({"transcript_id": action["transcript_id"], "correction_outbox_id": outbox_id})))
++        cur.execute("INSERT INTO schema_meta(key,value) VALUES(%s,%s) ON CONFLICT(key) DO UPDATE SET value=excluded.value,updated_at=current_timestamp", (MIGRATION_KEY, MIGRATION_VERSION))
++
++        health = migration_health(cur)
++        if not health["healthy"]:
++            raise RuntimeError("postcondition failed: " + canonical_json(health))
++        return {"status": "APPLIED", "migration_version": MIGRATION_VERSION, "plan_sha256": plan["plan_sha256"], "backup_path": str(backup_path), "backup_sha256": backup_sha, "sample_actions": len(plan["sample_actions"]), "formal_annotations": len(plan["formal_annotations"]), "postconditions": health}
++
++
++def main() -> int:
++    parser = argparse.ArgumentParser(description=__doc__)
++    parser.add_argument("--apply", action="store_true")
++    parser.add_argument("--expected-plan-sha256")
++    parser.add_argument("--backup-dir", type=Path)
++    parser.add_argument("--dsn", help=argparse.SUPPRESS)
++    args = parser.parse_args()
++    if args.apply:
++        if not args.expected_plan_sha256 or not args.backup_dir:
++            parser.error("--apply requires --expected-plan-sha256 and --backup-dir")
++        result = apply(args.expected_plan_sha256, args.backup_dir, args.dsn)
++    else:
++        result = readonly_plan(args.dsn)
++    print(json.dumps(result, ensure_ascii=False, indent=2, default=str))
++    return 0
++
++
++if __name__ == "__main__":
++    raise SystemExit(main())
+--- /dev/null	2026-08-30 23:07:04
++++ /Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-30-sample-analysis-qualification/staging/runtime/v3/v3_sample_analysis_rollback.py	2026-08-30 23:05:38
+@@ -0,0 +1,87 @@
++#!/usr/bin/env python3
++"""Restore the pre-migration row snapshot before correction delivery occurs.
++
++DDL columns and indexes are intentionally retained.  If a correction outbox may
++already have reached Feishu, physical rollback is refused: an external delivery
++fact can only be reversed by a new compensating projection.
++"""
++from __future__ import annotations
++import argparse, hashlib, json
++from pathlib import Path
++import psycopg
++from psycopg import IsolationLevel
++from psycopg.rows import dict_row
++import v3_runtime
++from v3_sample_analysis_migration import MIGRATION_KEY, MIGRATION_VERSION, DDL_PATH, canonical_json, database_identity
++
++
++def rollback(backup_path: Path, expected_backup_sha256: str, dsn: str | None = None) -> dict:
++    if not backup_path.is_file():raise RuntimeError('backup file missing')
++    if backup_path.stat().st_mode & 0o077:
++        raise RuntimeError('backup permissions are not private (expected mode 0600)')
++    actual=hashlib.sha256(backup_path.read_bytes()).hexdigest()
++    if actual!=expected_backup_sha256:raise RuntimeError(f'backup hash mismatch: {actual}')
++    backup=json.loads(backup_path.read_text(encoding='utf-8'))
++    plan=backup.get('plan') or {}
++    if plan.get('migration_key')!=MIGRATION_KEY or plan.get('migration_version')!=MIGRATION_VERSION:
++        raise RuntimeError('backup migration identity mismatch')
++    if plan.get('ddl_sha256')!=hashlib.sha256(DDL_PATH.read_bytes()).hexdigest():
++        raise RuntimeError('backup DDL hash does not match the installed rollback contract')
++    sample_ids=[row['analysis_id'] for row in backup['plan']['sample_actions']]
++    conn=psycopg.connect(dsn or v3_runtime._postgres_dsn(),autocommit=False,row_factory=dict_row)
++    conn.isolation_level=IsolationLevel.SERIALIZABLE
++    with conn,conn.cursor() as cur:
++        cur.execute("SELECT pg_advisory_xact_lock(hashtext('edu_sample_analysis_qualification'))")
++        current_identity=database_identity(cur)
++        expected_identity=backup.get('database_identity') or {}
++        identity_keys=('database_name','database_user','server_address','server_port','server_version_num','system_identifier')
++        if any(str(current_identity.get(key))!=str(expected_identity.get(key)) for key in identity_keys):
++            raise RuntimeError('backup database identity does not match the connected database')
++        if sample_ids:
++            cur.execute("SELECT outbox_id,object_id,status,attempts,last_attempt_at FROM outbox WHERE object_type='semantic_projection' AND object_id=ANY(%s) AND payload_json::jsonb->>'correction_version'='1'",(sample_ids,))
++            correction=[dict(row) for row in cur.fetchall()]
++            correction_ids=[str(row['object_id']) for row in correction]
++            if len(correction)!=len(sample_ids) or sorted(correction_ids)!=sorted(sample_ids) or len(set(correction_ids))!=len(correction_ids):
++                raise RuntimeError('correction set is missing, duplicated, or drifted; use a compensating projection instead of physical rollback')
++            unsafe=[row for row in correction if row['status']!='PENDING' or int(row.get('attempts') or 0)!=0 or row.get('last_attempt_at') is not None]
++            if correction:
++                cur.execute("SELECT outbox_id FROM delivery_receipts WHERE outbox_id=ANY(%s)",([row['outbox_id'] for row in correction],))
++                receipts=[row['outbox_id'] for row in cur.fetchall()]
++            else:receipts=[]
++            if unsafe or receipts:
++                raise RuntimeError('correction may already be externally visible; use a compensating projection instead of physical rollback')
++            if correction:
++                cur.execute("DELETE FROM outbox WHERE outbox_id=ANY(%s)",([row['outbox_id'] for row in correction],))
++            cur.execute("DELETE FROM domain_events WHERE event_type='SAMPLE_ANALYSIS_INVALIDATED' AND object_type='analysis' AND object_id=ANY(%s)",(sample_ids,))
++        cur.execute("DROP TRIGGER IF EXISTS trg_v3_guard_analysis_immutable_identity ON analyses")
++        rows=backup['rows']
++        for row in rows['transcripts']:
++            cur.execute("UPDATE transcripts SET source_digest=%s,engine=%s,model=%s,status=%s,language=%s,source_path=%s,output_path=%s,low_confidence_count=%s,created_at=%s,metadata_json=%s,scope='UNCLASSIFIED',qualification_status='UNCLASSIFIED' WHERE transcript_id=%s",(row['source_digest'],row['engine'],row['model'],row['status'],row.get('language'),row.get('source_path'),row.get('output_path'),row['low_confidence_count'],row['created_at'],row['metadata_json'],row['transcript_id']))
++        for row in rows['analyses']:
++            cur.execute("UPDATE analyses SET session_id=%s,analysis_type=%s,source_digest=%s,status=%s,output_path=%s,lineage_state=%s,metadata_json=%s,transcript_id=NULL,scope='UNCLASSIFIED',qualification_status='UNCLASSIFIED',transcript_content_digest=NULL,analysis_spec_version=NULL,model_version=NULL,prompt_version=NULL,artifact_digest=NULL WHERE analysis_id=%s",(row['session_id'],row['analysis_type'],row['source_digest'],row['status'],row.get('output_path'),row['lineage_state'],row['metadata_json'],row['analysis_id']))
++        for row in rows['lineage_edges']:
++            cur.execute("UPDATE lineage_edges SET downstream_type=%s,downstream_id=%s,upstream_type=%s,upstream_id=%s,upstream_version=%s,state=%s,created_at=%s WHERE edge_id=%s",(row['downstream_type'],row['downstream_id'],row['upstream_type'],row['upstream_id'],row['upstream_version'],row['state'],row['created_at'],row['edge_id']))
++        for row in rows['evidence_bundles']:
++            cur.execute("UPDATE evidence_bundles SET object_type=%s,object_id=%s,status=%s,manifest_path=%s,manifest_hash=%s,verified_at=%s,metadata_json=%s,scope='UNCLASSIFIED',qualification_status='UNCLASSIFIED' WHERE bundle_id=%s",(row['object_type'],row['object_id'],row['status'],row.get('manifest_path'),row.get('manifest_hash'),row.get('verified_at'),row['metadata_json'],row['bundle_id']))
++        for row in rows['outbox']:
++            cur.execute("UPDATE outbox SET scope='UNCLASSIFIED',qualification_status='UNCLASSIFIED' WHERE outbox_id=%s",(row['outbox_id'],))
++        for row in rows['delivery_receipts']:
++            cur.execute("UPDATE delivery_receipts SET scope='UNCLASSIFIED',qualification_status='UNCLASSIFIED' WHERE receipt_id=%s",(row['receipt_id'],))
++        cur.execute("SELECT session_id,analysis_type,source_digest,count(*) AS n FROM analyses GROUP BY session_id,analysis_type,source_digest HAVING count(*)>1")
++        legacy_unique_conflicts=[dict(row) for row in cur.fetchall()]
++        if legacy_unique_conflicts:
++            raise RuntimeError('cannot restore legacy analysis unique constraint: '+canonical_json(legacy_unique_conflicts))
++        cur.execute("SELECT count(*) AS n FROM pg_constraint WHERE conrelid='analyses'::regclass AND conname='analyses_session_id_analysis_type_source_digest_key'")
++        if cur.fetchone()['n']==0:
++            cur.execute("ALTER TABLE analyses ADD CONSTRAINT analyses_session_id_analysis_type_source_digest_key UNIQUE(session_id,analysis_type,source_digest)")
++        cur.execute("DELETE FROM schema_meta WHERE key=%s",(MIGRATION_KEY,))
++        prior=rows.get('schema_meta') or []
++        for row in prior:
++            cur.execute("INSERT INTO schema_meta(key,value,updated_at) VALUES(%s,%s,%s) ON CONFLICT(key) DO UPDATE SET value=excluded.value,updated_at=excluded.updated_at",(row['key'],row['value'],row.get('updated_at')))
++        return {'status':'ROLLED_BACK_ROWS','backup_sha256':actual,'correction_outboxes_removed':len(correction) if sample_ids else 0,'ddl_columns_retained':True,'legacy_unique_constraint_restored':True,'external_compensation_required':False}
++
++
++def main():
++    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--backup',type=Path,required=True);p.add_argument('--expected-backup-sha256',required=True);p.add_argument('--dsn',help=argparse.SUPPRESS);a=p.parse_args()
++    print(json.dumps(rollback(a.backup,a.expected_backup_sha256,a.dsn),ensure_ascii=False,indent=2))
++if __name__=='__main__':main()
+--- /dev/null	2026-08-30 23:07:04
++++ /Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-30-sample-analysis-qualification/staging/runtime/v3/test_v3_sample_analysis_qualification.py	2026-08-30 22:52:17
+@@ -0,0 +1,316 @@
++import hashlib
++import json
++import sqlite3
++import tempfile
++import unittest
++from pathlib import Path
++from unittest.mock import Mock, patch
++
++import v3_analysis_worker as analysis
++import v3_evidence_worker as evidence
++import v3_pipeline_worker as pipeline
++import v3_project_feishu as project
++import v3_sample_analysis_migration as migration
++import v3_analysis_contract as contract
++import v3_runtime as runtime
++
++
++def connect_factory(path: Path):
++    def connect():
++        conn = sqlite3.connect(path)
++        conn.row_factory = sqlite3.Row
++        return conn
++    return connect
++
++
++def full_meta(segment_id="seg-full"):
++    return {
++        "coverage_scope": "FULL_SESSION",
++        "sample_only": False,
++        "quality_gate_status": "FULL_SESSION_QUALIFIED",
++        "source_segment_id": segment_id,
++        "timestamp_coverage": {
++            "coverage_rate": 0.96,
++            "is_qualified": True,
++            "timestamps_valid": True,
++        },
++    }
++
++
++def session_meta():
++    return {"media_coverage": {"continuous_capture": True}}
++
++
++def canonical_source_digest(checksum="media-checksum"):
++    return hashlib.sha256(("FULL_SESSION:" + checksum).encode()).hexdigest()
++
++
++class PipelineGateTests(unittest.TestCase):
++    def setUp(self):
++        self.temp = tempfile.TemporaryDirectory()
++        self.root = Path(self.temp.name)
++        self.db = self.root / "db.sqlite"
++        with connect_factory(self.db)() as conn:
++            conn.executescript("""
++            CREATE TABLE live_sessions(session_id TEXT PRIMARY KEY,status TEXT,completeness TEXT,metadata_json TEXT);
++            CREATE TABLE recording_segments(segment_id TEXT PRIMARY KEY,session_id TEXT,status TEXT,lifecycle_status TEXT,checksum TEXT,path TEXT);
++            CREATE TABLE transcripts(transcript_id TEXT PRIMARY KEY,session_id TEXT,source_digest TEXT,status TEXT,output_path TEXT,scope TEXT,qualification_status TEXT,metadata_json TEXT);
++            CREATE TABLE analyses(analysis_id TEXT PRIMARY KEY,session_id TEXT,transcript_id TEXT,analysis_type TEXT,source_digest TEXT,status TEXT,output_path TEXT,lineage_state TEXT,scope TEXT,qualification_status TEXT,transcript_content_digest TEXT,analysis_spec_version TEXT,model_version TEXT,prompt_version TEXT,artifact_digest TEXT,metadata_json TEXT,UNIQUE(transcript_id,analysis_type,transcript_content_digest,analysis_spec_version,model_version,prompt_version));
++            CREATE TABLE lineage_edges(edge_id TEXT PRIMARY KEY,downstream_type TEXT,downstream_id TEXT,upstream_type TEXT,upstream_id TEXT,upstream_version TEXT,state TEXT DEFAULT 'CURRENT',created_at TEXT,UNIQUE(downstream_type,downstream_id,upstream_type,upstream_id,upstream_version));
++            """)
++
++    def tearDown(self):
++        self.temp.cleanup()
++
++    def test_sample_is_ignored_and_invalidated_history_does_not_block_full(self):
++        sample = self.root / "sample.transcript.json"
++        full = self.root / "full.transcript.json"
++        sample.write_text("{}")
++        full.write_text("{}")
++        with connect_factory(self.db)() as conn:
++            conn.execute("INSERT INTO live_sessions VALUES('s','MEDIA_COMPLETE','COMPLETE',?)", (json.dumps(session_meta()),))
++            conn.execute("INSERT INTO recording_segments VALUES('seg-full','s','COMPLETE','CANONICAL_ACTIVE','media-checksum','media.ts')")
++            conn.execute("INSERT INTO transcripts VALUES('sample','s','sample-digest','COMPLETE',?,'SAMPLE','SAMPLE_NONQUALIFYING',?)", (str(sample), json.dumps({"coverage_scope":"SAMPLE","sample_only":True,"sample_seconds":300,"source_segment_id":"seg-sample"})))
++            conn.execute("INSERT INTO transcripts VALUES('full','s',?,'COMPLETE',?,'FULL_SESSION','FULL_SESSION_QUALIFIED',?)", (canonical_source_digest(), str(full), json.dumps(full_meta())))
++            conn.execute("INSERT INTO analyses(analysis_id,session_id,transcript_id,analysis_type,source_digest,status,output_path,lineage_state,scope,qualification_status,analysis_spec_version,metadata_json) VALUES('old-sample','s','sample','single_session','old','SAMPLE_NONQUALIFYING',NULL,'INVALIDATED','SAMPLE_AUXILIARY','SAMPLE_NONQUALIFYING','legacy',?)", (json.dumps({"qualification_state":"SAMPLE_NONQUALIFYING"}),))
++        with patch.object(pipeline, "connect", connect_factory(self.db)), patch.object(
++            pipeline, "load_pipeline_config", return_value={"transcript_quality":{"full_session_min_timestamp_coverage_rate":0.9}}
++        ):
++            self.assertEqual(pipeline.create_analysis_tasks(), 1)
++            self.assertEqual(pipeline.create_analysis_tasks(), 0)
++        with connect_factory(self.db)() as conn:
++            rows = conn.execute("SELECT * FROM analyses ORDER BY analysis_id").fetchall()
++            self.assertEqual(len(rows), 2)
++            formal = next(row for row in rows if row["analysis_id"] != "old-sample")
++            metadata = json.loads(formal["metadata_json"])
++            self.assertEqual(metadata["source_transcript_id"], "full")
++            self.assertEqual(metadata["qualification_state"], "FULL_SESSION_QUALIFIED")
++            edge = conn.execute("SELECT * FROM lineage_edges WHERE downstream_id=?", (formal["analysis_id"],)).fetchone()
++            self.assertEqual(edge["upstream_id"], "full")
++
++    def test_noncanonical_full_transcript_is_ignored(self):
++        artifact = self.root / "full.transcript.json"; artifact.write_text("{}")
++        with connect_factory(self.db)() as conn:
++            conn.execute("INSERT INTO live_sessions VALUES('s','MEDIA_COMPLETE','COMPLETE',?)", (json.dumps(session_meta()),))
++            conn.execute("INSERT INTO recording_segments VALUES('different','s','COMPLETE','CANONICAL_ACTIVE','media-checksum','media.ts')")
++            conn.execute("INSERT INTO transcripts VALUES('full','s',?,'COMPLETE',?,'FULL_SESSION','FULL_SESSION_QUALIFIED',?)", (canonical_source_digest(), str(artifact), json.dumps(full_meta("stale"))))
++        with patch.object(pipeline, "connect", connect_factory(self.db)), patch.object(pipeline, "load_pipeline_config", return_value={}):
++            self.assertEqual(pipeline.create_analysis_tasks(), 0)
++
++    def test_same_canonical_segment_with_stale_source_digest_is_ignored(self):
++        artifact = self.root / "stale.transcript.json"; artifact.write_text("{}")
++        with connect_factory(self.db)() as conn:
++            conn.execute("INSERT INTO live_sessions VALUES('s','MEDIA_COMPLETE','COMPLETE',?)", (json.dumps(session_meta()),))
++            conn.execute("INSERT INTO recording_segments VALUES('seg-full','s','COMPLETE','CANONICAL_ACTIVE','media-checksum','media.ts')")
++            conn.execute("INSERT INTO transcripts VALUES('stale','s','old-source-digest','COMPLETE',?,'FULL_SESSION','FULL_SESSION_QUALIFIED',?)", (str(artifact), json.dumps(full_meta())))
++        with patch.object(pipeline, "connect", connect_factory(self.db)), patch.object(pipeline, "load_pipeline_config", return_value={}):
++            self.assertEqual(pipeline.create_analysis_tasks(), 0)
++
++    def test_old_spec_does_not_block_new_full_identity_and_same_spec_is_idempotent(self):
++        artifact = self.root / "full.transcript.json"; artifact.write_text("{}")
++        content = contract.file_sha256(artifact)
++        with connect_factory(self.db)() as conn:
++            conn.execute("INSERT INTO live_sessions VALUES('s','MEDIA_COMPLETE','COMPLETE',?)", (json.dumps(session_meta()),))
++            conn.execute("INSERT INTO recording_segments VALUES('seg-full','s','COMPLETE','CANONICAL_ACTIVE','media-checksum','media.ts')")
++            conn.execute("INSERT INTO transcripts VALUES('full','s',?,'COMPLETE',?,'FULL_SESSION','FULL_SESSION_QUALIFIED',?)", (canonical_source_digest(),str(artifact),json.dumps(full_meta())))
++            conn.execute("INSERT INTO analyses(analysis_id,session_id,transcript_id,analysis_type,source_digest,status,lineage_state,scope,qualification_status,transcript_content_digest,analysis_spec_version,model_version,prompt_version,metadata_json) VALUES('old','s','full','single_session',?,'COMPLETE','CURRENT','FORMAL_SINGLE_SESSION','FULL_SESSION_QUALIFIED',?,'old-spec','old-model','old-prompt','{}')",(content,content))
++        with patch.object(pipeline,"connect",connect_factory(self.db)),patch.object(pipeline,"load_pipeline_config",return_value={}):
++            self.assertEqual(pipeline.create_analysis_tasks(),1)
++            self.assertEqual(pipeline.create_analysis_tasks(),0)
++        with connect_factory(self.db)() as conn:
++            rows=conn.execute("SELECT transcript_id,transcript_content_digest,analysis_spec_version,model_version,prompt_version FROM analyses ORDER BY analysis_id").fetchall()
++        self.assertEqual(len(rows),2)
++        self.assertTrue(any(row["analysis_spec_version"]==contract.ANALYSIS_SPEC_VERSION and row["model_version"]==contract.MODEL_VERSION and row["prompt_version"]==contract.PROMPT_VERSION for row in rows))
++
++
++class AnalysisConsumerGateTests(unittest.TestCase):
++    def setUp(self):
++        self.temp = tempfile.TemporaryDirectory(); self.root = Path(self.temp.name); self.db = self.root / "db.sqlite"
++        with connect_factory(self.db)() as conn:
++            conn.executescript("""
++            CREATE TABLE live_sessions(session_id TEXT PRIMARY KEY,status TEXT,completeness TEXT,metadata_json TEXT);
++            CREATE TABLE recording_segments(segment_id TEXT PRIMARY KEY,session_id TEXT,status TEXT,lifecycle_status TEXT,checksum TEXT,path TEXT);
++            CREATE TABLE transcripts(transcript_id TEXT PRIMARY KEY,session_id TEXT,source_digest TEXT,status TEXT,output_path TEXT,scope TEXT,qualification_status TEXT,metadata_json TEXT);
++            CREATE TABLE analyses(analysis_id TEXT PRIMARY KEY,session_id TEXT,transcript_id TEXT,analysis_type TEXT,source_digest TEXT,status TEXT,output_path TEXT,lineage_state TEXT,scope TEXT,qualification_status TEXT,transcript_content_digest TEXT,analysis_spec_version TEXT,model_version TEXT,prompt_version TEXT,artifact_digest TEXT,metadata_json TEXT);
++            CREATE TABLE lineage_edges(edge_id TEXT PRIMARY KEY,downstream_type TEXT,downstream_id TEXT,upstream_type TEXT,upstream_id TEXT,upstream_version TEXT,state TEXT,created_at TEXT);
++            CREATE TABLE evidence_bundles(bundle_id TEXT PRIMARY KEY,object_type TEXT,object_id TEXT,status TEXT,manifest_path TEXT,manifest_hash TEXT,verified_at TEXT,scope TEXT,qualification_status TEXT,metadata_json TEXT,UNIQUE(object_type,object_id));
++            """)
++
++    def tearDown(self): self.temp.cleanup()
++
++    def run_once(self):
++        heartbeat = Mock()
++        with patch.object(analysis, "connect", connect_factory(self.db)), patch.object(analysis, "init_db"), patch.object(analysis, "upsert_heartbeat", heartbeat), patch.object(analysis, "request_analysis") as request:
++            result = analysis.once()
++        return result, request, heartbeat
++
++    def test_manual_sample_analysis_is_invalidated_before_model_call(self):
++        artifact = self.root / "sample.json"; artifact.write_text(json.dumps({"segments":[{"start":0,"end":1,"text":"sample"}]}))
++        with connect_factory(self.db)() as conn:
++            conn.execute("INSERT INTO live_sessions VALUES('s','MEDIA_COMPLETE','COMPLETE',?)", (json.dumps(session_meta()),))
++            conn.execute("INSERT INTO recording_segments VALUES('seg','s','COMPLETE','CANONICAL_ACTIVE','media-checksum','media.ts')")
++            content_digest=contract.file_sha256(artifact)
++            conn.execute("INSERT INTO transcripts VALUES('sample','s','sample-digest','COMPLETE',?,'SAMPLE','SAMPLE_NONQUALIFYING',?)", (str(artifact), json.dumps({"coverage_scope":"SAMPLE","sample_only":True,"source_segment_id":"seg"})))
++            conn.execute("INSERT INTO analyses(analysis_id,session_id,transcript_id,analysis_type,source_digest,status,lineage_state,scope,qualification_status,transcript_content_digest,analysis_spec_version,model_version,prompt_version,metadata_json) VALUES('a','s','sample','single_session',?,'PENDING','CURRENT',?,?,?,?,?,?,?)", (content_digest,'FORMAL_SINGLE_SESSION','FULL_SESSION_QUALIFIED',content_digest,contract.ANALYSIS_SPEC_VERSION,contract.MODEL_VERSION,contract.PROMPT_VERSION,json.dumps({"source_transcript_id":"sample"})))
++            conn.execute("INSERT INTO lineage_edges VALUES('e','analysis','a','transcript','sample',?,'CURRENT','now')",(content_digest,))
++        result, request, _ = self.run_once()
++        request.assert_not_called()
++        self.assertEqual(result["source_qualification_blocked"], 1)
++        with connect_factory(self.db)() as conn:
++            row = conn.execute("SELECT status,lineage_state,metadata_json FROM analyses WHERE analysis_id='a'").fetchone()
++            self.assertEqual((row["status"], row["lineage_state"]), ("SAMPLE_NONQUALIFYING", "INVALIDATED"))
++            self.assertEqual(json.loads(row["metadata_json"])["qualification_state"], "SAMPLE_NONQUALIFYING")
++
++    def test_lineage_mismatch_is_blocked_before_model_call(self):
++        artifact = self.root / "full.json"; artifact.write_text(json.dumps({"segments":[{"start":0,"end":1,"text":"full"}]}))
++        with connect_factory(self.db)() as conn:
++            conn.execute("INSERT INTO live_sessions VALUES('s','MEDIA_COMPLETE','COMPLETE',?)", (json.dumps(session_meta()),))
++            conn.execute("INSERT INTO recording_segments VALUES('seg-full','s','COMPLETE','CANONICAL_ACTIVE','media-checksum','media.ts')")
++            content_digest=contract.file_sha256(artifact)
++            conn.execute("INSERT INTO transcripts VALUES('full','s',?,'COMPLETE',?,'FULL_SESSION','FULL_SESSION_QUALIFIED',?)", (canonical_source_digest(), str(artifact), json.dumps(full_meta())))
++            conn.execute("INSERT INTO analyses(analysis_id,session_id,transcript_id,analysis_type,source_digest,status,lineage_state,scope,qualification_status,transcript_content_digest,analysis_spec_version,model_version,prompt_version,metadata_json) VALUES('a','s','full','single_session',?,'PENDING','CURRENT',?,?,?,?,?,?,?)", (content_digest,'FORMAL_SINGLE_SESSION','FULL_SESSION_QUALIFIED',content_digest,contract.ANALYSIS_SPEC_VERSION,contract.MODEL_VERSION,contract.PROMPT_VERSION,json.dumps({"source_transcript_id":"full"})))
++            conn.execute("INSERT INTO lineage_edges VALUES('e','analysis','a','transcript','other',?,'CURRENT','now')",(content_digest,))
++        result, request, _ = self.run_once()
++        request.assert_not_called(); self.assertEqual(result["source_qualification_blocked"], 1)
++        with connect_factory(self.db)() as conn:
++            self.assertEqual(conn.execute("SELECT status FROM analyses WHERE analysis_id='a'").fetchone()[0], "BLOCKED_SOURCE_QUALIFICATION")
++
++    def test_exact_qualified_full_transcript_can_complete(self):
++        transcript = self.root / "full.json"
++        transcript.write_text(json.dumps({"duration":10,"segments":[{"start":0,"end":10,"text":"full"}]}))
++        analysis_root = self.root / "analysis"
++        with connect_factory(self.db)() as conn:
++            conn.execute("INSERT INTO live_sessions VALUES('s','MEDIA_COMPLETE','COMPLETE',?)", (json.dumps(session_meta()),))
++            conn.execute("INSERT INTO recording_segments VALUES('seg-full','s','COMPLETE','CANONICAL_ACTIVE','media-checksum','media.ts')")
++            content_digest=contract.file_sha256(transcript)
++            conn.execute("INSERT INTO transcripts VALUES('full','s',?,'COMPLETE',?,'FULL_SESSION','FULL_SESSION_QUALIFIED',?)", (canonical_source_digest(), str(transcript), json.dumps(full_meta())))
++            conn.execute("INSERT INTO analyses(analysis_id,session_id,transcript_id,analysis_type,source_digest,status,lineage_state,scope,qualification_status,transcript_content_digest,analysis_spec_version,model_version,prompt_version,metadata_json) VALUES('a','s','full','single_session',?,'PENDING','CURRENT',?,?,?,?,?,?,?)", (content_digest,'FORMAL_SINGLE_SESSION','FULL_SESSION_QUALIFIED',content_digest,contract.ANALYSIS_SPEC_VERSION,contract.MODEL_VERSION,contract.PROMPT_VERSION,json.dumps({"source_transcript_id":"full","qualification_state":"FULL_SESSION_QUALIFIED","formal_analysis_eligible":True})))
++            conn.execute("INSERT INTO lineage_edges VALUES('e','analysis','a','transcript','full',?,'CURRENT','now')",(content_digest,))
++        heartbeat = Mock(); enqueue = Mock()
++        with patch.object(analysis, "connect", connect_factory(self.db)), patch.object(analysis, "init_db"), patch.object(analysis, "upsert_heartbeat", heartbeat), patch.object(analysis, "ANALYSIS_ROOT", analysis_root), patch.object(analysis, "request_analysis", return_value=({"schema_version":"test"},{"provider":"test"})), patch.object(analysis, "enqueue_outbox_conn", enqueue):
++            result = analysis.once()
++        self.assertEqual(result["completed"], 1); enqueue.assert_called_once()
++        with connect_factory(self.db)() as conn:
++            row = conn.execute("SELECT status,lineage_state,metadata_json FROM analyses WHERE analysis_id='a'").fetchone()
++            self.assertEqual((row["status"],row["lineage_state"]),("COMPLETE","CURRENT"))
++            self.assertTrue(json.loads(row["metadata_json"])["formal_analysis_eligible"])
++            bundle = conn.execute("SELECT status,metadata_json FROM evidence_bundles WHERE object_id='a'").fetchone()
++            self.assertEqual(bundle["status"], "REQUIRED")
++            self.assertEqual(json.loads(bundle["metadata_json"])["qualification_state"], "FULL_SESSION_QUALIFIED")
++
++    def test_same_segment_id_with_stale_source_digest_is_blocked(self):
++        artifact=self.root/"stale.json";artifact.write_text(json.dumps({"segments":[{"start":0,"end":1,"text":"stale"}]}))
++        content_digest=contract.file_sha256(artifact)
++        with connect_factory(self.db)() as conn:
++            conn.execute("INSERT INTO live_sessions VALUES('s','MEDIA_COMPLETE','COMPLETE',?)",(json.dumps(session_meta()),))
++            conn.execute("INSERT INTO recording_segments VALUES('seg-full','s','COMPLETE','CANONICAL_ACTIVE','media-checksum','media.ts')")
++            conn.execute("INSERT INTO transcripts VALUES('full','s','old-source-digest','COMPLETE',?,'FULL_SESSION','FULL_SESSION_QUALIFIED',?)",(str(artifact),json.dumps(full_meta())))
++            conn.execute("INSERT INTO analyses(analysis_id,session_id,transcript_id,analysis_type,source_digest,status,lineage_state,scope,qualification_status,transcript_content_digest,analysis_spec_version,model_version,prompt_version,metadata_json) VALUES('a','s','full','single_session',?,'PENDING','CURRENT','FORMAL_SINGLE_SESSION','FULL_SESSION_QUALIFIED',?,?,?,?,?)",(content_digest,content_digest,contract.ANALYSIS_SPEC_VERSION,contract.MODEL_VERSION,contract.PROMPT_VERSION,json.dumps({"source_transcript_id":"full"})))
++            conn.execute("INSERT INTO lineage_edges VALUES('e','analysis','a','transcript','full',?,'CURRENT','now')",(content_digest,))
++        result,request,_=self.run_once();request.assert_not_called();self.assertEqual(result["source_qualification_blocked"],1)
++        with connect_factory(self.db)() as conn:self.assertEqual(conn.execute("SELECT status FROM analyses WHERE analysis_id='a'").fetchone()[0],"BLOCKED_SOURCE_QUALIFICATION")
++
++
++class EvidenceAndProjectionTests(unittest.TestCase):
++    def test_sample_projection_is_explicitly_nonformal(self):
++        fields, state = project.analysis_projection_fields({"analysis_id":"a","session_id":"s","analysis_type":"single_session","status":"SAMPLE_NONQUALIFYING","lineage_state":"INVALIDATED","scope":"SAMPLE_AUXILIARY","qualification_status":"SAMPLE_NONQUALIFYING","output_path":"kept.json","metadata_json":json.dumps({"qualification_state":"SAMPLE_NONQUALIFYING","formal_analysis_eligible":False})})
++        self.assertEqual(state, "SAMPLE_NONQUALIFYING")
++        self.assertEqual(fields["分析类型"], "部分场辅助")
++        self.assertEqual(fields["状态"], "证据不足")
++        self.assertIn("SAMPLE_NONQUALIFYING", fields["证据说明"])
++        self.assertEqual(fields["分析文档"], "kept.json")
++
++    def test_qualified_projection_remains_formal(self):
++        fields, state = project.analysis_projection_fields({"analysis_id":"a","session_id":"s","analysis_type":"single_session","status":"COMPLETE","lineage_state":"CURRENT","scope":"FORMAL_SINGLE_SESSION","qualification_status":"FULL_SESSION_QUALIFIED","output_path":"full.json","metadata_json":json.dumps({"qualification_state":"FULL_SESSION_QUALIFIED","formal_analysis_eligible":True})})
++        self.assertEqual(state, "FULL_SESSION_QUALIFIED")
++        self.assertEqual(fields["分析类型"], "单场分析")
++        self.assertEqual(fields["状态"], "完成")
++
++    def test_evidence_worker_invalidates_sample_bundle_without_deleting_artifact(self):
++        with tempfile.TemporaryDirectory() as directory:
++            root=Path(directory); db=root/"db.sqlite"; artifact=root/"sample-analysis.json";artifact.write_text("{}")
++            with connect_factory(db)() as conn:
++                conn.executescript("""
++                CREATE TABLE analyses(analysis_id TEXT PRIMARY KEY,session_id TEXT,transcript_id TEXT,analysis_type TEXT,status TEXT,output_path TEXT,lineage_state TEXT,scope TEXT,qualification_status TEXT,transcript_content_digest TEXT,analysis_spec_version TEXT,model_version TEXT,prompt_version TEXT,artifact_digest TEXT,metadata_json TEXT);
++                CREATE TABLE evidence_bundles(bundle_id TEXT PRIMARY KEY,object_type TEXT,object_id TEXT,status TEXT,manifest_path TEXT,manifest_hash TEXT,verified_at TEXT,scope TEXT,qualification_status TEXT,metadata_json TEXT);
++                """)
++                conn.execute("INSERT INTO analyses(analysis_id,status,lineage_state,scope,qualification_status,metadata_json) VALUES('a','SAMPLE_NONQUALIFYING','INVALIDATED','SAMPLE_AUXILIARY','SAMPLE_NONQUALIFYING',?)",(json.dumps({"qualification_state":"SAMPLE_NONQUALIFYING","formal_analysis_eligible":False}),))
++                conn.execute("INSERT INTO evidence_bundles VALUES('b','analysis','a','REQUIRED',?,?,NULL,'SAMPLE_AUXILIARY','SAMPLE_NONQUALIFYING','{}')",(str(artifact),hashlib.sha256(artifact.read_bytes()).hexdigest()))
++            with patch.object(evidence,"connect",connect_factory(db)),patch.object(evidence,"init_db"),patch.object(evidence,"upsert_heartbeat"):
++                result=evidence.once()
++            self.assertEqual(result["blocked"],1);self.assertTrue(artifact.is_file())
++            with connect_factory(db)() as conn:
++                self.assertEqual(conn.execute("SELECT status FROM evidence_bundles WHERE bundle_id='b'").fetchone()[0],"INVALIDATED_SAMPLE")
++
++    def formal_evidence_case(self, directory, *, analysis_digest=None, bundle_digest=None, lineage_digest=None):
++        root=Path(directory);db=root/"db.sqlite";transcript=root/"full.transcript.json";analysis_path=root/"analysis.json"
++        transcript.write_text(json.dumps({"segments":[{"start":0,"end":1,"text":"x"}]}))
++        transcript_digest=contract.file_sha256(transcript)
++        analysis_path.write_text(json.dumps({"analysis_id":"a","session_id":"s","transcript_id":"t","result":{}},sort_keys=True))
++        actual=contract.file_sha256(analysis_path)
++        with connect_factory(db)() as conn:
++            conn.executescript("""
++            CREATE TABLE analyses(analysis_id TEXT PRIMARY KEY,session_id TEXT,transcript_id TEXT,analysis_type TEXT,status TEXT,output_path TEXT,lineage_state TEXT,scope TEXT,qualification_status TEXT,transcript_content_digest TEXT,analysis_spec_version TEXT,model_version TEXT,prompt_version TEXT,artifact_digest TEXT,metadata_json TEXT);
++            CREATE TABLE transcripts(transcript_id TEXT PRIMARY KEY,output_path TEXT,scope TEXT,qualification_status TEXT);
++            CREATE TABLE lineage_edges(edge_id TEXT PRIMARY KEY,downstream_type TEXT,downstream_id TEXT,upstream_type TEXT,upstream_id TEXT,upstream_version TEXT,state TEXT);
++            CREATE TABLE evidence_bundles(bundle_id TEXT PRIMARY KEY,object_type TEXT,object_id TEXT,status TEXT,manifest_path TEXT,manifest_hash TEXT,verified_at TEXT,scope TEXT,qualification_status TEXT,metadata_json TEXT);
++            """)
++            meta={"qualification_state":"FULL_SESSION_QUALIFIED","formal_analysis_eligible":True,"artifact_identity_mode":"LEGACY_ROOT_IDS_PLUS_THREE_WAY_DIGEST"}
++            conn.execute("INSERT INTO analyses VALUES('a','s','t','single_session','COMPLETE',?,'CURRENT','FORMAL_SINGLE_SESSION','FULL_SESSION_QUALIFIED',?,?,?,?,?,?)",(str(analysis_path),transcript_digest,contract.ANALYSIS_SPEC_VERSION,contract.MODEL_VERSION,contract.PROMPT_VERSION,analysis_digest or actual,json.dumps(meta)))
++            conn.execute("INSERT INTO transcripts VALUES('t',?,'FULL_SESSION','FULL_SESSION_QUALIFIED')",(str(transcript),))
++            conn.execute("INSERT INTO lineage_edges VALUES('e','analysis','a','transcript','t',?,'CURRENT')",(lineage_digest or transcript_digest,))
++            conn.execute("INSERT INTO evidence_bundles VALUES('b','analysis','a','REQUIRED',?,?,NULL,'FORMAL_SINGLE_SESSION','FULL_SESSION_QUALIFIED',?)",(str(analysis_path),bundle_digest or actual,json.dumps({"audit_marker":"preserve-me"})))
++        with patch.object(evidence,"connect",connect_factory(db)),patch.object(evidence,"init_db"),patch.object(evidence,"upsert_heartbeat"):
++            result=evidence.once()
++        with connect_factory(db)() as conn:row=conn.execute("SELECT status,metadata_json FROM evidence_bundles WHERE bundle_id='b'").fetchone()
++        return result,row
++
++    def test_formal_evidence_requires_three_way_artifact_digest_and_exact_lineage(self):
++        cases=[("analysis","1"*64,None,None,"artifact_digest_three_way_mismatch"),("bundle",None,"2"*64,None,"artifact_digest_three_way_mismatch"),("lineage",None,None,"3"*64,"analysis_lineage_identity_mismatch")]
++        for name,analysis_digest,bundle_digest,lineage_digest,reason in cases:
++            with self.subTest(name=name),tempfile.TemporaryDirectory() as directory:
++                result,row=self.formal_evidence_case(directory,analysis_digest=analysis_digest,bundle_digest=bundle_digest,lineage_digest=lineage_digest)
++                self.assertEqual(result["blocked"],1);self.assertEqual(row["status"],"BLOCKED_EVIDENCE")
++                metadata=json.loads(row["metadata_json"]);self.assertEqual(metadata["reason"],reason);self.assertEqual(metadata["audit_marker"],"preserve-me")
++
++    def test_legacy_formal_artifact_reverifies_without_losing_metadata(self):
++        with tempfile.TemporaryDirectory() as directory:
++            result,row=self.formal_evidence_case(directory)
++        self.assertEqual(result["verified"],1);self.assertEqual(row["status"],"VERIFIED")
++        metadata=json.loads(row["metadata_json"]);self.assertEqual(metadata["audit_marker"],"preserve-me");self.assertEqual(metadata["identity_mode"],"LEGACY_ROOT_IDS_PLUS_THREE_WAY_DIGEST")
++
++
++class MigrationHelperTests(unittest.TestCase):
++    def test_sample_path_is_fail_closed_even_for_legacy_null_scope(self):
++        row={"status":"COMPLETE","output_path":"x.sample300s.transcript.json","source_path":"x.sample300s.wav","metadata_json":"{}"}
++        self.assertEqual(migration.transcript_kind(row,set()),"SAMPLE")
++
++    def test_plan_hash_is_deterministic(self):
++        value={"a":[2,1],"b":"中文"}
++        self.assertEqual(migration.digest(value),migration.digest(value))
++
++    def test_migration_rejects_wrong_artifact_root_even_when_transcript_matches(self):
++        identity={"analysis_id":"copied","session_id":"s","transcript_id":"t"}
++        self.assertFalse(migration.artifact_matches(identity,{"analysis_id":"a","session_id":"s"},["t"]))
++        identity["analysis_id"]="a";identity["session_id"]="other"
++        self.assertFalse(migration.artifact_matches(identity,{"analysis_id":"a","session_id":"s"},["t"]))
++
++
++class OutboxQualificationTests(unittest.TestCase):
++    def test_correction_receipt_preserves_sample_nonqualification(self):
++        with tempfile.TemporaryDirectory() as directory:
++            db=Path(directory)/"runtime.sqlite"
++            runtime.init_db(db)
++            original=runtime.connect
++            def local_connect(*_args,**_kwargs):return original(db)
++            with local_connect() as conn:
++                outbox_id=runtime.enqueue_outbox_conn(conn,object_type="semantic_projection",object_id="a",destination="feishu_base",payload={"analysis_id":"a","correction":True,"correction_version":1},scope="SAMPLE_AUXILIARY",qualification_status="SAMPLE_NONQUALIFYING")
++            with patch.object(runtime,"connect",side_effect=local_connect):
++                runtime.complete_outbox(outbox_id,{"status":"VERIFIED"})
++            with local_connect() as conn:
++                receipt=conn.execute("SELECT scope,qualification_status,status FROM delivery_receipts WHERE outbox_id=?",(outbox_id,)).fetchone()
++            self.assertEqual(tuple(receipt),("SAMPLE_AUXILIARY","SAMPLE_NONQUALIFYING","VERIFIED"))
++
++
++if __name__ == "__main__":
++    unittest.main(verbosity=2)
+--- /dev/null	2026-08-30 23:07:04
++++ /Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-30-sample-analysis-qualification/staging/runtime/v3/verify_sample_analysis_migration_pg.py	2026-08-30 23:05:52
+@@ -0,0 +1,140 @@
++#!/usr/bin/env python3
++"""Destructive integration test against a disposable PostgreSQL database only."""
++from __future__ import annotations
++import json, os, uuid
++from pathlib import Path
++import psycopg
++from psycopg import conninfo, sql
++from psycopg.rows import dict_row
++import v3_runtime
++import v3_sample_analysis_migration as migration
++import v3_sample_analysis_rollback as rollback_module
++from v3_db import PostgresConnection
++import v3_evidence_worker as evidence_worker
++from unittest.mock import patch
++
++OLD_SCHEMA=Path('/Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/v3_schema.sql')
++SAMPLE_ANALYSES=['analysis_8801cb766ceca4ab6327511a','analysis_f261f8101b4ea725a954c23f']
++FORMAL_ANALYSIS='analysis_16bdca57a497943fd6eb0c05'
++ANALYSES=SAMPLE_ANALYSES+[FORMAL_ANALYSIS]
++
++def dsn_for(base,name):
++    params=conninfo.conninfo_to_dict(base);params['dbname']=name
++    return conninfo.make_conninfo(**params)
++
++def rows(cur,query,params=()):
++    cur.execute(query,params);return [dict(r) for r in cur.fetchall()]
++
++def main():
++    base=v3_runtime._postgres_dsn(); params=conninfo.conninfo_to_dict(base)
++    dbname='edu_sample_qual_test_'+uuid.uuid4().hex[:10]
++    admin=psycopg.connect(dsn_for(base,'postgres'),autocommit=True)
++    source=psycopg.connect(base,row_factory=dict_row);source.read_only=True
++    report={'temporary_database':dbname,'production_writes':0}
++    try:
++        with admin.cursor() as c:c.execute(sql.SQL('CREATE DATABASE {}').format(sql.Identifier(dbname)))
++        test_dsn=dsn_for(base,dbname)
++        pg=PostgresConnection(test_dsn)
++        try:pg.executescript(OLD_SCHEMA.read_text());pg.commit()
++        finally:pg.close()
++        with source,source.cursor() as c:
++            c.execute('SHOW transaction_read_only');assert c.fetchone()['transaction_read_only']=='on'
++            analyses=rows(c,'SELECT * FROM analyses WHERE analysis_id=ANY(%s)',(ANALYSES,))
++            transcript_ids=[]
++            for a in analyses:
++                p=Path(str(a.get('output_path') or ''))
++                if p.is_file():transcript_ids.append(json.loads(p.read_text())['transcript_id'])
++            transcripts=rows(c,'SELECT * FROM transcripts WHERE transcript_id=ANY(%s)',(transcript_ids,))
++            sessions=rows(c,'SELECT * FROM live_sessions WHERE session_id=ANY(%s)',([t['session_id'] for t in transcripts],))
++            lineages=rows(c,"SELECT * FROM lineage_edges WHERE downstream_type='analysis' AND downstream_id=ANY(%s) AND upstream_type='transcript'",(ANALYSES,))
++            bundles=rows(c,"SELECT * FROM evidence_bundles WHERE object_type='analysis' AND object_id=ANY(%s)",(ANALYSES,))
++            segments=rows(c,"SELECT * FROM recording_segments WHERE segment_id=ANY(%s)",([json.loads(t['metadata_json'] or '{}').get('source_segment_id') for t in transcripts],))
++        target_ids={s['monitor_target_id'] for s in sessions}
++        with psycopg.connect(test_dsn,row_factory=dict_row) as tc,tc.cursor() as c:
++            for i,target_id in enumerate(target_ids):
++                competitor_id=f'c{i}'
++                c.execute("INSERT INTO competitors(competitor_id,platform,platform_account_id,account_name,first_seen_at,last_seen_at) VALUES(%s,'test',%s,'test','2026-01-01','2026-01-01')",(competitor_id,competitor_id))
++                c.execute("INSERT INTO monitor_targets(monitor_target_id,competitor_id,status,live_url,live_status,metadata_json) VALUES(%s,%s,'ACTIVE',%s,'OFFLINE_CONFIRMED','{}')",(target_id,competitor_id,f'https://example.invalid/{i}'))
++            for s in sessions:
++                c.execute("INSERT INTO live_sessions(session_id,monitor_target_id,platform_session_id,status,started_at,ended_at,completeness,source_url,metadata_json) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)",(s['session_id'],s['monitor_target_id'],s['platform_session_id'],s['status'],s['started_at'],s['ended_at'],s['completeness'],'https://example.invalid/live',s['metadata_json']))
++            for seg in segments:
++                c.execute("INSERT INTO recording_segments(segment_id,session_id,path,checksum,captured_from,captured_to,status,bytes,lifecycle_status,superseded_by_segment_id,lifecycle_updated_at) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",tuple(seg[k] for k in ('segment_id','session_id','path','checksum','captured_from','captured_to','status','bytes','lifecycle_status','superseded_by_segment_id','lifecycle_updated_at')))
++            for t in transcripts:
++                c.execute("INSERT INTO transcripts(transcript_id,session_id,source_digest,engine,model,status,language,source_path,output_path,low_confidence_count,created_at,metadata_json) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",tuple(t.get(k) for k in ('transcript_id','session_id','source_digest','engine','model','status','language','source_path','output_path','low_confidence_count','created_at','metadata_json')))
++            for a in analyses:
++                c.execute("INSERT INTO analyses(analysis_id,session_id,analysis_type,source_digest,status,output_path,lineage_state,metadata_json) VALUES(%s,%s,%s,%s,%s,%s,%s,%s)",tuple(a[k] for k in ('analysis_id','session_id','analysis_type','source_digest','status','output_path','lineage_state','metadata_json')))
++            for e in lineages:
++                c.execute("INSERT INTO lineage_edges(edge_id,downstream_type,downstream_id,upstream_type,upstream_id,upstream_version,state,created_at) VALUES(%s,%s,%s,%s,%s,%s,%s,%s)",tuple(e[k] for k in ('edge_id','downstream_type','downstream_id','upstream_type','upstream_id','upstream_version','state','created_at')))
++            for b in bundles:
++                c.execute("INSERT INTO evidence_bundles(bundle_id,object_type,object_id,status,manifest_path,manifest_hash,verified_at,metadata_json) VALUES(%s,%s,%s,%s,%s,%s,%s,%s)",tuple(b[k] for k in ('bundle_id','object_type','object_id','status','manifest_path','manifest_hash','verified_at','metadata_json')))
++            for i,aid in enumerate(ANALYSES):
++                oid=f'old-out-{i}';payload=json.dumps({'analysis_id':aid})
++                ph=migration.digest({'analysis_id':aid})
++                c.execute("INSERT INTO outbox(outbox_id,dedupe_key,object_type,object_id,destination,status,attempts,max_attempts,next_attempt_at,payload_hash,payload_json,receipt_json) VALUES(%s,%s,'semantic_projection',%s,'feishu_base','SENT',1,8,'2026-08-30T00:00:00Z',%s,%s,'{}')",(oid,'old:'+aid,aid,ph,payload))
++                c.execute("INSERT INTO delivery_receipts(receipt_id,outbox_id,destination,object_type,object_id,status,payload_hash,sent_at,verified_at,receipt_json) VALUES(%s,%s,'feishu_base','semantic_projection',%s,'VERIFIED',%s,'2026-08-30T00:00:00Z','2026-08-30T00:00:00Z','{}')",('receipt:'+oid,oid,aid,ph))
++        plan=migration.readonly_plan(test_dsn)
++        report['dry_run']={'read_only':plan['transaction_read_only'],'sample_actions':len(plan['sample_actions']),'formal_annotations':len(plan['formal_annotations']),'issues':plan['issues'],'plan_sha256':plan['plan_sha256']}
++        try:migration.apply('0'*64,Path('/tmp/never-created'),test_dsn)
++        except RuntimeError as exc:report['wrong_hash_rollback']=str(exc).startswith('plan changed:')
++        backup=Path('/Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-30-sample-analysis-qualification/pg-integration-backup')
++        applied=migration.apply(plan['plan_sha256'],backup,test_dsn);report['first_apply']=applied
++        report['backup_mode']=oct(Path(applied['backup_path']).stat().st_mode & 0o777)
++        report['first_idempotent']=migration.apply(plan['plan_sha256'],backup,test_dsn)['status']
++        report['rollback']=rollback_module.rollback(Path(applied['backup_path']),applied['backup_sha256'],test_dsn)
++        with psycopg.connect(test_dsn,row_factory=dict_row) as tc,tc.cursor() as c:
++            c.execute("SELECT analysis_id,status,lineage_state FROM analyses WHERE analysis_id=ANY(%s) ORDER BY analysis_id",(ANALYSES,));report['rollback_rows']=[dict(r) for r in c.fetchall()]
++            c.execute("SELECT count(*) AS n FROM pg_constraint WHERE conrelid='analyses'::regclass AND conname='analyses_session_id_analysis_type_source_digest_key'");report['rollback_legacy_unique_restored']=c.fetchone()['n']==1
++        plan_after_rollback=migration.readonly_plan(test_dsn)
++        reapplied=migration.apply(plan_after_rollback['plan_sha256'],backup,test_dsn);report['reapply_after_rollback']=reapplied
++        with psycopg.connect(test_dsn,row_factory=dict_row) as tc,tc.cursor() as c:
++            c.execute("SELECT count(*) AS n FROM pg_constraint WHERE conrelid='analyses'::regclass AND conname='analyses_session_id_analysis_type_source_digest_key'");report['reapply_legacy_unique_removed']=c.fetchone()['n']==0
++        report['idempotent_after_reapply']=migration.apply(plan_after_rollback['plan_sha256'],backup,test_dsn)['status']
++        with patch.object(evidence_worker,'connect',side_effect=lambda:PostgresConnection(test_dsn)),patch.object(evidence_worker,'init_db'),patch.object(evidence_worker,'upsert_heartbeat'):
++            report['evidence_reverification']=evidence_worker.once()
++        with psycopg.connect(test_dsn,row_factory=dict_row) as tc,tc.cursor() as c:
++            c.execute("SELECT analysis_id,status,lineage_state,scope,qualification_status,transcript_id,transcript_content_digest,artifact_digest FROM analyses ORDER BY analysis_id")
++            report['analyses']=[dict(r) for r in c.fetchall()]
++            c.execute("SELECT object_id,status,scope,qualification_status FROM outbox WHERE object_type='semantic_projection' ORDER BY object_id,status")
++            report['outbox']=[dict(r) for r in c.fetchall()]
++            c.execute("SELECT object_id,status,scope,qualification_status FROM delivery_receipts ORDER BY object_id")
++            report['receipts']=[dict(r) for r in c.fetchall()]
++            try:
++                c.execute("UPDATE analyses SET transcript_content_digest='tampered' WHERE analysis_id=%s",(FORMAL_ANALYSIS,))
++            except psycopg.Error:
++                tc.rollback();report['immutable_trigger']=True
++            else:report['immutable_trigger']=False
++        with psycopg.connect(test_dsn,row_factory=dict_row) as tc,tc.cursor() as c:
++            c.execute("SELECT * FROM analyses WHERE analysis_id=%s",(FORMAL_ANALYSIS,));a=dict(c.fetchone());a['analysis_id']='duplicate'
++            try:
++                c.execute("INSERT INTO analyses(analysis_id,session_id,transcript_id,analysis_type,source_digest,status,lineage_state,scope,qualification_status,transcript_content_digest,analysis_spec_version,model_version,prompt_version,artifact_digest,metadata_json) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",tuple(a[k] for k in ('analysis_id','session_id','transcript_id','analysis_type','source_digest','status','lineage_state','scope','qualification_status','transcript_content_digest','analysis_spec_version','model_version','prompt_version','artifact_digest','metadata_json')))
++            except psycopg.errors.UniqueViolation:
++                tc.rollback();report['unique_transcript_spec']=True
++            else:report['unique_transcript_spec']=False
++        with psycopg.connect(test_dsn,row_factory=dict_row) as tc,tc.cursor() as c:
++            c.execute("SELECT outbox_id,object_id FROM outbox WHERE payload_json::jsonb->>'correction_version'='1' ORDER BY outbox_id LIMIT 1");drift=dict(c.fetchone())
++            c.execute("UPDATE outbox SET object_id='drifted-missing-analysis' WHERE outbox_id=%s",(drift['outbox_id'],))
++        try:
++            rollback_module.rollback(Path(reapplied['backup_path']),reapplied['backup_sha256'],test_dsn)
++        except RuntimeError as exc:
++            report['rollback_missing_correction_refused']='missing, duplicated, or drifted' in str(exc)
++        else:
++            report['rollback_missing_correction_refused']=False
++        with psycopg.connect(test_dsn) as tc,tc.cursor() as c:
++            c.execute("UPDATE outbox SET object_id=%s WHERE outbox_id=%s",(drift['object_id'],drift['outbox_id']))
++        with psycopg.connect(test_dsn) as tc,tc.cursor() as c:
++            c.execute("UPDATE outbox SET status='RETRY',attempts=1,last_attempt_at='2026-08-30T00:00:00Z' WHERE payload_json::jsonb->>'correction_version'='1'")
++        try:
++            rollback_module.rollback(Path(reapplied['backup_path']),reapplied['backup_sha256'],test_dsn)
++        except RuntimeError as exc:
++            report['rollback_after_attempt_refused']='compensating projection' in str(exc)
++        else:
++            report['rollback_after_attempt_refused']=False
++        print(json.dumps(report,ensure_ascii=False,indent=2,default=str))
++    finally:
++        source.close()
++        with admin.cursor() as c:
++            c.execute("SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname=%s AND pid<>pg_backend_pid()",(dbname,))
++            c.execute(sql.SQL('DROP DATABASE IF EXISTS {}').format(sql.Identifier(dbname)))
++        admin.close()
++
++if __name__=='__main__':main()
+--- /dev/null	2026-08-30 23:07:04
++++ /Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-30-sample-analysis-qualification/staging/runtime/v3/migrations/002_analysis_qualification.sql	2026-08-30 22:48:21
+@@ -0,0 +1,52 @@
++ALTER TABLE transcripts ADD COLUMN IF NOT EXISTS scope TEXT NOT NULL DEFAULT 'UNCLASSIFIED';
++ALTER TABLE transcripts ADD COLUMN IF NOT EXISTS qualification_status TEXT NOT NULL DEFAULT 'UNCLASSIFIED';
++
++ALTER TABLE analyses ADD COLUMN IF NOT EXISTS transcript_id TEXT REFERENCES transcripts(transcript_id);
++ALTER TABLE analyses ADD COLUMN IF NOT EXISTS scope TEXT NOT NULL DEFAULT 'UNCLASSIFIED';
++ALTER TABLE analyses ADD COLUMN IF NOT EXISTS qualification_status TEXT NOT NULL DEFAULT 'UNCLASSIFIED';
++ALTER TABLE analyses ADD COLUMN IF NOT EXISTS transcript_content_digest TEXT;
++ALTER TABLE analyses ADD COLUMN IF NOT EXISTS analysis_spec_version TEXT;
++ALTER TABLE analyses ADD COLUMN IF NOT EXISTS model_version TEXT;
++ALTER TABLE analyses ADD COLUMN IF NOT EXISTS prompt_version TEXT;
++ALTER TABLE analyses ADD COLUMN IF NOT EXISTS artifact_digest TEXT;
++ALTER TABLE analyses DROP CONSTRAINT IF EXISTS analyses_session_id_analysis_type_source_digest_key;
++CREATE INDEX IF NOT EXISTS idx_analyses_transcript_id ON analyses(transcript_id);
++CREATE INDEX IF NOT EXISTS idx_analyses_qualification ON analyses(scope, qualification_status, lineage_state, status);
++CREATE UNIQUE INDEX IF NOT EXISTS uq_analyses_transcript_spec
++ON analyses(transcript_id, analysis_type, transcript_content_digest, analysis_spec_version, model_version, prompt_version)
++WHERE transcript_id IS NOT NULL AND transcript_content_digest IS NOT NULL
++  AND analysis_spec_version IS NOT NULL AND model_version IS NOT NULL AND prompt_version IS NOT NULL;
++
++ALTER TABLE evidence_bundles ADD COLUMN IF NOT EXISTS scope TEXT NOT NULL DEFAULT 'UNCLASSIFIED';
++ALTER TABLE evidence_bundles ADD COLUMN IF NOT EXISTS qualification_status TEXT NOT NULL DEFAULT 'UNCLASSIFIED';
++ALTER TABLE outbox ADD COLUMN IF NOT EXISTS scope TEXT NOT NULL DEFAULT 'UNCLASSIFIED';
++ALTER TABLE outbox ADD COLUMN IF NOT EXISTS qualification_status TEXT NOT NULL DEFAULT 'UNCLASSIFIED';
++CREATE INDEX IF NOT EXISTS idx_outbox_qualification ON outbox(scope, qualification_status, status);
++ALTER TABLE delivery_receipts ADD COLUMN IF NOT EXISTS scope TEXT NOT NULL DEFAULT 'UNCLASSIFIED';
++ALTER TABLE delivery_receipts ADD COLUMN IF NOT EXISTS qualification_status TEXT NOT NULL DEFAULT 'UNCLASSIFIED';
++
++CREATE OR REPLACE FUNCTION v3_guard_analysis_immutable_identity() RETURNS trigger
++LANGUAGE plpgsql AS $$
++BEGIN
++    IF OLD.scope IN ('FORMAL_SINGLE_SESSION', 'SAMPLE_AUXILIARY') AND (
++       NEW.session_id IS DISTINCT FROM OLD.session_id
++       OR NEW.transcript_id IS DISTINCT FROM OLD.transcript_id
++       OR NEW.analysis_type IS DISTINCT FROM OLD.analysis_type
++       OR NEW.source_digest IS DISTINCT FROM OLD.source_digest
++       OR NEW.transcript_content_digest IS DISTINCT FROM OLD.transcript_content_digest
++       OR NEW.analysis_spec_version IS DISTINCT FROM OLD.analysis_spec_version
++       OR NEW.model_version IS DISTINCT FROM OLD.model_version
++       OR NEW.prompt_version IS DISTINCT FROM OLD.prompt_version
++       OR (OLD.output_path IS NOT NULL AND NEW.output_path IS DISTINCT FROM OLD.output_path)
++       OR (OLD.artifact_digest IS NOT NULL AND NEW.artifact_digest IS DISTINCT FROM OLD.artifact_digest)
++       OR (OLD.output_path IS NULL AND NEW.output_path IS NOT NULL AND NEW.status <> 'COMPLETE')
++       OR (OLD.artifact_digest IS NULL AND NEW.artifact_digest IS NOT NULL AND NEW.status <> 'COMPLETE')) THEN
++        RAISE EXCEPTION 'analysis immutable identity cannot change: %', OLD.analysis_id;
++    END IF;
++    RETURN NEW;
++END;
++$$;
++DROP TRIGGER IF EXISTS trg_v3_guard_analysis_immutable_identity ON analyses;
++CREATE TRIGGER trg_v3_guard_analysis_immutable_identity
++BEFORE UPDATE ON analyses
++FOR EACH ROW EXECUTE FUNCTION v3_guard_analysis_immutable_identity();

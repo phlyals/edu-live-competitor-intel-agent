@@ -1,0 +1,13 @@
+{
+  "installed_at": "2026-08-30T16:09:42.845475+00:00",
+  "reason": "accept up to 8 exact IDs and include precise validation error in retry prompt",
+  "backup_dir": "/Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/backups/source-binding-retry-shape-20260831-0008",
+  "before": {
+    "v3_analysis_worker.py": "4ecd70429f3c28f01ebb7a4b0585299d744380d5de212956019b23e1818d0a20",
+    "test_v3_analysis_worker.py": "16e350cbf8d46323cb821998c4676129690ece1f3dd6cedd07d02fc6c06f3115"
+  },
+  "after": {
+    "v3_analysis_worker.py": "fc855b5591a7541ab72e65e3bfc92fce158de1548a1ba7cf259837fb9721c707",
+    "test_v3_analysis_worker.py": "b2dac1463e48502f1576b04d739bd21750cc1981b6ed13f493670a544196172e"
+  }
+}

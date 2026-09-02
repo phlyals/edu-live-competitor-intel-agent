@@ -1,0 +1,6 @@
+{
+  "mode": "APPLY",
+  "database": "edu_live_competitor_intel_v3",
+  "status": "ALREADY_APPLIED",
+  "migration_key": "recording_segment_lifecycle_v1"
+}

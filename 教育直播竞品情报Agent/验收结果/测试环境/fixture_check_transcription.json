@@ -1,0 +1,24 @@
+{
+  "audio_duration_seconds": 10.0,
+  "transcript_total_chars": 12,
+  "covered_segments": [
+    {
+      "start_time": 0.0,
+      "end_time": 10.0
+    }
+  ],
+  "gaps": [],
+  "coverage_rate": 1.0,
+  "status": "PASS",
+  "message": "覆盖率已计算；空白/静音也计入未覆盖时段，非识别准确率",
+  "session_id": "fixture",
+  "script": "check_transcription",
+  "checked_at": "2026-08-28T15:47:46.432507+00:00",
+  "transcript_id": "t",
+  "audio_path": "/private/tmp/edu-acceptance-_c0b64j_/known-complete-10s.wav",
+  "covered_duration_seconds": 10.0,
+  "coverage_scope": "UNSPECIFIED",
+  "sample_only": false,
+  "test_fixture": true,
+  "test_note": "合成的 10 秒 WAV、转录和七模块报告；不是实播验收；临时源文件测试后删除"
+}

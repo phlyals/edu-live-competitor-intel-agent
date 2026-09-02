@@ -1,0 +1,24 @@
+{"at": "2026-08-29T11:27:06.851+00:00", "event": "STREAM_URL_RESOLVED", "source_index": 0, "url_sha256": "741d3a5d0301354c6d9b8412ec49c084cc1c0b949ce7abd41d554f95483a3d6d"}
+{"at": "2026-08-29T11:27:06.926+00:00", "event": "HTTP_STREAM_OPENED", "source_index": 0, "bytes": 88522231}
+{"at": "2026-08-29T11:27:10.626+00:00", "event": "SOURCE_SEGMENT_FINISHED", "source_index": 0, "source_duration_seconds": 600.034}
+{"at": "2026-08-29T11:27:10.694+00:00", "event": "VIRTUAL_STREAM_INTERRUPTION", "after_source_index": 0, "virtual_gap_seconds": 300, "accelerated_wall_seconds": 3.0}
+{"at": "2026-08-29T11:27:13.696+00:00", "event": "VIRTUAL_STREAM_RECOVERED", "next_source_index": 1, "virtual_gap_seconds": 300}
+{"at": "2026-08-29T11:27:13.815+00:00", "event": "STREAM_URL_RESOLVED", "source_index": 1, "url_sha256": "5f015646fe2e898c18fbbaeb83e3c8c5d3f32480253ec4df3f05c0dbe19e0cfa"}
+{"at": "2026-08-29T11:27:18.827+00:00", "event": "STREAM_URL_RESOLVED", "source_index": 1, "url_sha256": "5f015646fe2e898c18fbbaeb83e3c8c5d3f32480253ec4df3f05c0dbe19e0cfa"}
+{"at": "2026-08-29T11:27:19.008+00:00", "event": "HTTP_STREAM_OPENED", "source_index": 1, "bytes": 88944991}
+{"at": "2026-08-29T11:27:21.791+00:00", "event": "SOURCE_SEGMENT_FINISHED", "source_index": 1, "source_duration_seconds": 600.034}
+{"at": "2026-08-29T11:27:21.957+00:00", "event": "VIRTUAL_STREAM_INTERRUPTION", "after_source_index": 1, "virtual_gap_seconds": 180, "accelerated_wall_seconds": 1.8}
+{"at": "2026-08-29T11:27:23.759+00:00", "event": "VIRTUAL_STREAM_RECOVERED", "next_source_index": 2, "virtual_gap_seconds": 180}
+{"at": "2026-08-29T11:27:23.760+00:00", "event": "STREAM_URL_RESOLVED", "source_index": 2, "url_sha256": "457a87fa99d86cd511324ad2cfd807f3f0ec9cdde69a83c61f8a0f3c9a0cfb50"}
+{"at": "2026-08-29T11:27:38.774+00:00", "event": "STREAM_URL_RESOLVED", "source_index": 2, "url_sha256": "457a87fa99d86cd511324ad2cfd807f3f0ec9cdde69a83c61f8a0f3c9a0cfb50"}
+{"at": "2026-08-29T11:27:38.896+00:00", "event": "HTTP_STREAM_OPENED", "source_index": 2, "bytes": 132772486}
+{"at": "2026-08-29T11:27:44.559+00:00", "event": "SOURCE_SEGMENT_FINISHED", "source_index": 2, "source_duration_seconds": 900.034}
+{"at": "2026-08-29T11:27:44.800+00:00", "event": "STREAM_URL_RESOLVED", "source_index": 3, "url_sha256": "f2c462c175f7dde25ec2aacb28bd55ab1947b9b810091e7feb2b584475748074"}
+{"at": "2026-08-29T11:27:44.881+00:00", "event": "HTTP_STREAM_OPENED", "source_index": 3, "bytes": 133988930}
+{"at": "2026-08-29T11:27:49.519+00:00", "event": "SOURCE_SEGMENT_FINISHED", "source_index": 3, "source_duration_seconds": 900.034}
+{"at": "2026-08-29T11:27:49.646+00:00", "event": "STREAM_URL_RESOLVED", "source_index": 4, "url_sha256": "30b4660bfc2f05cab2811973c6806ef6cbfc9839356981baa7c3e260b9100bbc"}
+{"at": "2026-08-29T11:27:49.710+00:00", "event": "HTTP_STREAM_OPENED", "source_index": 4, "bytes": 255241103}
+{"at": "2026-08-29T11:27:58.225+00:00", "event": "SOURCE_SEGMENT_FINISHED", "source_index": 4, "source_duration_seconds": 787.334}
+{"at": "2026-08-29T11:27:58.426+00:00", "event": "RESOLVER_OFFLINE", "room_url": "https://live.douyin.com/simulation"}
+{"at": "2026-08-29T11:28:03.521+00:00", "event": "RESOLVER_OFFLINE", "room_url": "https://live.douyin.com/simulation"}
+{"at": "2026-08-29T11:28:18.667+00:00", "event": "RESOLVER_OFFLINE", "room_url": "https://live.douyin.com/simulation"}

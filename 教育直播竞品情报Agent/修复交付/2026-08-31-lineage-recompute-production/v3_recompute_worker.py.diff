@@ -1,0 +1,368 @@
+--- /Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/v3_recompute_worker.py	2026-08-25 16:34:14
++++ staging/runtime/v3/v3_recompute_worker.py	2026-08-31 01:18:27
+@@ -1,28 +1,338 @@
+ #!/usr/bin/env python3
+-"""Propagate STALE lineage and create deterministic recompute work items."""
++"""Create version-bound analysis candidates from durable recompute requests."""
+ from __future__ import annotations
+-import argparse, json, signal, time
++
++import argparse
++import hashlib
++import json
++import os
++import signal
++import socket
++import time
++from pathlib import Path
++
++from v3_analysis_contract import (
++    ANALYSIS_SCOPE_FORMAL,
++    ANALYSIS_SPEC_VERSION,
++    MODEL_VERSION,
++    PROMPT_VERSION,
++    QUALIFIED,
++)
++from v3_long_jobs import (
++    RECOMPUTE,
++    LeaseLostError,
++    claim_next,
++    fail_or_retry,
++    finish,
++    parse_checkpoint,
++    reconcile_exhausted,
++)
++from v3_recompute import (
++    analysis_id_for,
++    finalize_verified_recompute_conn,
++    insert_verified_lineage_conn,
++    json_object,
++)
+ from v3_runtime import connect, init_db, upsert_heartbeat, utc_now
+ 
++
+ RUNNING = True
++RECOMPUTE_LEASE_SECONDS = 120
+ 
++
+ def stop(*_args):
+     global RUNNING
+     RUNNING = False
+ 
+-def once():
++
++def worker_id() -> str:
++    return f"recompute-v3:{socket.gethostname()}:{os.getpid()}"
++
++
++def file_sha256(path: Path) -> str:
++    h = hashlib.sha256()
++    with path.open("rb") as handle:
++        for block in iter(lambda: handle.read(1024 * 1024), b""):
++            h.update(block)
++    return h.hexdigest()
++
++
++def _obsolete(conn, job: dict, reason: str) -> str:
++    checkpoint = {
++        **parse_checkpoint(job.get("checkpoint_json")),
++        "phase": "OBSOLETE",
++        "reason": reason,
++        "checked_at": utc_now(),
++    }
++    finish(
++        conn, RECOMPUTE, job, "OBSOLETE",
++        {
++            "completed_at": utc_now(),
++            "checkpoint_json": json.dumps(
++                checkpoint, ensure_ascii=False, sort_keys=True
++            ),
++        },
++    )
++    return "OBSOLETE"
++
++
++def process_request(job: dict) -> str:
++    """Create one deterministic CANDIDATE analysis under a fenced request."""
++    try:
++        if (
++            job["target_analysis_spec_version"] != ANALYSIS_SPEC_VERSION
++            or job["target_model_version"] != MODEL_VERSION
++            or job["target_prompt_version"] != PROMPT_VERSION
++        ):
++            with connect() as conn:
++                return _obsolete(conn, job, "TARGET_ENGINE_VERSION_CHANGED")
++        with connect() as conn:
++            transcript = conn.execute(
++                "SELECT * FROM transcripts WHERE transcript_id=?",
++                (job["upstream_id"],),
++            ).fetchone()
++            old = conn.execute(
++                "SELECT * FROM analyses WHERE analysis_id=?",
++                (job["downstream_id"],),
++            ).fetchone()
++        if not transcript or not old:
++            with connect() as conn:
++                return _obsolete(conn, job, "UPSTREAM_OR_DOWNSTREAM_MISSING")
++        transcript = dict(transcript)
++        old = dict(old)
++        path = Path(str(transcript.get("output_path") or ""))
++        if (
++            transcript.get("status") != "COMPLETE"
++            or transcript.get("scope") != "FULL_SESSION"
++            or transcript.get("qualification_status") != QUALIFIED
++            or not path.is_file()
++        ):
++            raise ValueError("qualified full-session transcript is unavailable")
++        actual_digest = file_sha256(path)
++        if actual_digest != job["new_upstream_digest"]:
++            with connect() as conn:
++                return _obsolete(conn, job, "UPSTREAM_DIGEST_CHANGED_AGAIN")
++        if (
++            old.get("status") != "COMPLETE"
++            or old.get("lineage_state") != "STALE"
++            or old.get("transcript_id") != transcript["transcript_id"]
++            or old.get("transcript_content_digest") != job["old_upstream_digest"]
++        ):
++            with connect() as conn:
++                return _obsolete(conn, job, "STALE_PREDECESSOR_IDENTITY_CHANGED")
++
++        candidate_id = analysis_id_for(
++            transcript["transcript_id"], actual_digest,
++            ANALYSIS_SPEC_VERSION, MODEL_VERSION, PROMPT_VERSION,
++        )
++        transcript_metadata = json_object(transcript.get("metadata_json"))
++        coverage = transcript_metadata.get("timestamp_coverage") or {}
++        now = utc_now()
++        candidate_metadata = {
++            "requires_model_analysis": True,
++            "qualification_state": QUALIFIED,
++            "formal_analysis_eligible": True,
++            "source_transcript_id": transcript["transcript_id"],
++            "source_transcript_digest": transcript["source_digest"],
++            "source_coverage_scope": "FULL_SESSION",
++            "source_timestamp_coverage_rate": coverage.get("coverage_rate"),
++            "source_segment_id": transcript_metadata.get("source_segment_id"),
++            "transcript_content_digest": actual_digest,
++            "analysis_spec_version": ANALYSIS_SPEC_VERSION,
++            "model_version": MODEL_VERSION,
++            "prompt_version": PROMPT_VERSION,
++            "recompute_request_id": job["request_id"],
++            "recompute_from_analysis_id": job["downstream_id"],
++            "old_upstream_digest": job["old_upstream_digest"],
++            "new_upstream_digest": actual_digest,
++        }
++        checkpoint = {
++            **parse_checkpoint(job.get("checkpoint_json")),
++            "schema_version": 1,
++            "phase": "CANDIDATE_CREATED",
++            "candidate_analysis_id": candidate_id,
++            "new_upstream_digest": actual_digest,
++        }
++        with connect() as conn:
++            inserted = conn.execute(
++                "INSERT OR IGNORE INTO analyses("
++                "analysis_id,session_id,transcript_id,analysis_type,source_digest,"
++                "status,output_path,lineage_state,scope,qualification_status,"
++                "transcript_content_digest,analysis_spec_version,model_version,"
++                "prompt_version,metadata_json,updated_at,next_attempt_at,checkpoint_json) "
++                "VALUES(?,?,?,?,?,'PENDING_RECOMPUTE',NULL,'CANDIDATE',?,?,?,?,?,?,?,?,?,?)",
++                (
++                    candidate_id, transcript["session_id"], transcript["transcript_id"],
++                    "single_session", actual_digest, ANALYSIS_SCOPE_FORMAL, QUALIFIED,
++                    actual_digest, ANALYSIS_SPEC_VERSION, MODEL_VERSION,
++                    PROMPT_VERSION,
++                    json.dumps(candidate_metadata, ensure_ascii=False, sort_keys=True),
++                    now, now, "{}",
++                ),
++            )
++            candidate = conn.execute(
++                "SELECT transcript_id,transcript_content_digest,analysis_spec_version,"
++                "model_version,prompt_version,lineage_state,status FROM analyses "
++                "WHERE analysis_id=?",
++                (candidate_id,),
++            ).fetchone()
++            expected = (
++                transcript["transcript_id"], actual_digest,
++                ANALYSIS_SPEC_VERSION, MODEL_VERSION, PROMPT_VERSION,
++            )
++            actual = (
++                candidate["transcript_id"], candidate["transcript_content_digest"],
++                candidate["analysis_spec_version"], candidate["model_version"],
++                candidate["prompt_version"],
++            ) if candidate else None
++            if actual != expected:
++                raise ValueError("candidate analysis identity conflict")
++            if candidate["lineage_state"] not in {"CANDIDATE", "CURRENT"}:
++                raise ValueError("candidate analysis has incompatible lineage state")
++            insert_verified_lineage_conn(
++                conn,
++                analysis_id=candidate_id,
++                transcript_id=transcript["transcript_id"],
++                transcript_content_digest=actual_digest,
++                state="CANDIDATE" if candidate["lineage_state"] == "CANDIDATE" else "CURRENT",
++                analysis_spec_version=ANALYSIS_SPEC_VERSION,
++                model_version=MODEL_VERSION,
++                prompt_version=PROMPT_VERSION,
++                metadata={
++                    "creation_mode": "RECOMPUTE",
++                    "recompute_request_id": job["request_id"],
++                },
++            )
++            finish(
++                conn, RECOMPUTE, job, "CANDIDATE_CREATED",
++                {
++                    "candidate_analysis_id": candidate_id,
++                    "checkpoint_json": json.dumps(
++                        checkpoint, ensure_ascii=False, sort_keys=True
++                    ),
++                    "metadata_json": json.dumps(
++                        {
++                            **json_object(job.get("metadata_json")),
++                            "candidate_analysis_id": candidate_id,
++                            "candidate_inserted": int(inserted.rowcount or 0) == 1,
++                        },
++                        ensure_ascii=False, sort_keys=True,
++                    ),
++                },
++                commit_transaction=False,
++            )
++            conn.commit()
++        return "CANDIDATE_CREATED"
++    except LeaseLostError:
++        return "LEASE_LOST"
++    except (OSError, ValueError, TypeError, KeyError) as exc:
++        try:
++            with connect() as conn:
++                return fail_or_retry(
++                    conn, RECOMPUTE, job,
++                    error_type="RECOMPUTE_INPUT_INVALID",
++                    error_message=str(exc), retryable=False,
++                    checkpoint=parse_checkpoint(job.get("checkpoint_json")),
++                )
++        except LeaseLostError:
++            return "LEASE_LOST"
++    except Exception as exc:
++        try:
++            with connect() as conn:
++                return fail_or_retry(
++                    conn, RECOMPUTE, job,
++                    error_type="RECOMPUTE_INTERNAL_ERROR",
++                    error_message=f"{exc.__class__.__name__}: {exc}",
++                    retryable=True,
++                    checkpoint=parse_checkpoint(job.get("checkpoint_json")),
++                )
++        except LeaseLostError:
++            return "LEASE_LOST"
++
++
++def reconcile_candidates() -> dict:
++    promoted = failed = waiting = 0
+     with connect() as conn:
+-        stale = conn.execute("SELECT downstream_type,downstream_id FROM lineage_edges WHERE state='STALE'").fetchall()
+-        for row in stale:
+-            if row["downstream_type"] == "analysis":
+-                conn.execute("UPDATE analyses SET status='STALE',lineage_state='STALE' WHERE analysis_id=?", (row["downstream_id"],))
+-            conn.execute("INSERT OR IGNORE INTO review_items(review_id,object_type,object_id,review_type,status,requested_at,metadata_json) VALUES(?,?,?,?,?,?,?)", ("review_stale_" + row["downstream_type"] + row["downstream_id"], row["downstream_type"], row["downstream_id"], "STALE_RECOMPUTE", "PENDING", utc_now(), json.dumps({"reason":"upstream lineage changed"}, ensure_ascii=False)))
++        requests = conn.execute(
++            "SELECT r.*,a.status AS candidate_status,a.lineage_state AS candidate_lineage,"
++            "e.status AS evidence_status FROM recompute_requests r "
++            "LEFT JOIN analyses a ON a.analysis_id=r.candidate_analysis_id "
++            "LEFT JOIN evidence_bundles e ON e.object_type='analysis' "
++            "AND e.object_id=r.candidate_analysis_id "
++            "WHERE r.status='CANDIDATE_CREATED' ORDER BY r.created_at"
++        ).fetchall()
++        for row in requests:
++            if (
++                row["candidate_status"] == "COMPLETE"
++                and row["candidate_lineage"] == "CANDIDATE"
++                and row["evidence_status"] == "VERIFIED"
++            ):
++                result = finalize_verified_recompute_conn(
++                    conn,
++                    request_id=row["request_id"],
++                    candidate_analysis_id=row["candidate_analysis_id"],
++                )
++                promoted += int(result["changed"])
++            elif row["candidate_status"] in {
++                "FAILED_FINAL", "QUALITY_BLOCKED", "BLOCKED_SOURCE_QUALIFICATION"
++            } or row["evidence_status"] in {"BLOCKED", "INVALIDATED_SAMPLE"}:
++                conn.execute(
++                    "UPDATE recompute_requests SET status='FAILED_FINAL',completed_at=?,"
++                    "updated_at=?,last_error_type='CANDIDATE_FAILED',last_error=? "
++                    "WHERE request_id=? AND status='CANDIDATE_CREATED'",
++                    (
++                        utc_now(), utc_now(),
++                        f"candidate={row['candidate_status']} evidence={row['evidence_status']}",
++                        row["request_id"],
++                    ),
++                )
++                failed += 1
++            else:
++                waiting += 1
+         conn.commit()
+-    result = {"stale_items": len(stale), "checked_at": utc_now()}
+-    upsert_heartbeat("recompute-v3", "READY", result)
++    return {"promoted": promoted, "failed": failed, "waiting": waiting}
++
++
++def once(*, max_jobs: int = 1) -> dict:
++    init_db()
++    with connect() as conn:
++        exhausted = reconcile_exhausted(conn, RECOMPUTE)
++    outcomes = {
++        "claimed": 0, "candidate_created": 0, "obsolete": 0,
++        "retry_wait": 0, "failed_final": 0, "lease_lost": 0,
++    }
++    for _ in range(max(1, int(max_jobs))):
++        with connect() as conn:
++            job = claim_next(
++                conn, RECOMPUTE, worker_id(),
++                lease_seconds=RECOMPUTE_LEASE_SECONDS,
++            )
++        if not job:
++            break
++        outcomes["claimed"] += 1
++        result = process_request(job)
++        outcomes["candidate_created"] += int(result == "CANDIDATE_CREATED")
++        outcomes["obsolete"] += int(result == "OBSOLETE")
++        outcomes["retry_wait"] += int(result == "RETRY_WAIT")
++        outcomes["failed_final"] += int(result == "FAILED_FINAL")
++        outcomes["lease_lost"] += int(result == "LEASE_LOST")
++    candidates = reconcile_candidates()
++    result = {
++        **outcomes, **{f"candidate_{k}": v for k, v in candidates.items()},
++        "expired_exhausted": exhausted, "checked_at": utc_now(),
++    }
++    healthy = not any((
++        outcomes["retry_wait"], outcomes["failed_final"],
++        outcomes["lease_lost"], candidates["failed"], exhausted,
++    ))
++    upsert_heartbeat(
++        "recompute-v3", "READY" if healthy else "DEGRADED",
++        result, success=healthy,
++    )
+     return result
+ 
+-def main():
++
++def main() -> int:
+     parser = argparse.ArgumentParser()
+     parser.add_argument("command", choices=("once", "daemon"))
+     parser.add_argument("--interval", type=int, default=60)
+@@ -31,10 +341,13 @@
+     if args.command == "once":
+         print(json.dumps(once(), ensure_ascii=False, indent=2))
+         return 0
+-    signal.signal(signal.SIGTERM, stop); signal.signal(signal.SIGINT, stop)
++    signal.signal(signal.SIGTERM, stop)
++    signal.signal(signal.SIGINT, stop)
+     while RUNNING:
+-        once(); time.sleep(max(15, args.interval))
++        once()
++        time.sleep(max(15, args.interval))
+     return 0
+ 
++
+ if __name__ == "__main__":
+     raise SystemExit(main())

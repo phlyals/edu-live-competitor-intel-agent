@@ -1,0 +1,9 @@
+{
+  "recreated_outbox": 0,
+  "blocked_outbox": 0,
+  "missing_receipts": 0,
+  "receipt_mismatches": 0,
+  "tasks_completed": 0,
+  "legacy_held_cancelled": 0,
+  "checked_at": "2026-08-30T18:33:01.714Z"
+}

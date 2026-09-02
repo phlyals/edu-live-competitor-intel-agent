@@ -1,0 +1,86 @@
+{
+  "status": "PASS",
+  "checked_at": "2026-08-29T14:54:56.403018+00:00",
+  "artifact_path": "/Volumes/ExternalStorage/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-29-分析模块修复/验证/simulation_3787s.analysis.v3.json",
+  "artifact_bytes": 68636,
+  "artifact_sha256": "14a3d5a0fc246df069867cba777048d9a0e3f4a21aa20863fba3538b9a5ec34d",
+  "json_parseable": true,
+  "analysis_runtime_seconds": 54.29,
+  "input_chars": 42789,
+  "input_segment_count": 1060,
+  "chunk_count": 9,
+  "all_chunks_complete": true,
+  "all_finish_reason_stop": true,
+  "chunk_attempts": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+  ],
+  "timeline_coverage_rate": 0.9987946793597072,
+  "segment_coverage_rate": 1.0,
+  "first_timestamp_seconds": 0.0,
+  "last_timestamp_seconds": 3782.55,
+  "required_coverage_pass": true,
+  "key_fields": {
+    "instructor": {
+      "present": true,
+      "status": "CONFLICT",
+      "names": [
+        "陈老师",
+        "胡老师"
+      ]
+    },
+    "course_content": {
+      "present": true,
+      "count": 15
+    },
+    "interaction": {
+      "present": true,
+      "count": 18
+    },
+    "product_handoff": {
+      "present": true,
+      "count": 8,
+      "tail_count_after_3000s": 5
+    }
+  },
+  "modules": [
+    {
+      "name": "开场",
+      "timestamp_count": 16
+    },
+    {
+      "name": "干货",
+      "timestamp_count": 15
+    },
+    {
+      "name": "需求",
+      "timestamp_count": 16
+    },
+    {
+      "name": "信任",
+      "timestamp_count": 18
+    },
+    {
+      "name": "商品承接",
+      "timestamp_count": 8
+    },
+    {
+      "name": "成交",
+      "timestamp_count": 17
+    },
+    {
+      "name": "答疑",
+      "timestamp_count": 18
+    }
+  ],
+  "unchanged_check_analysis_pass": true,
+  "check_analysis_result_path": "/Volumes/ExternalStorage/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-29-分析模块修复/验收结果/simulation_3787s_analysis_fixed_check_analysis.json",
+  "regression_tests": 104
+}

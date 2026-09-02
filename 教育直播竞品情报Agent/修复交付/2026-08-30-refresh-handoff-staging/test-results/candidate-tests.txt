@@ -1,0 +1,8 @@
+test_next_url_resolution_begins_before_current_ffmpeg_returns (test_refresh_preresolve.RefreshPreresolutionTests)
+The old sequential implementation fails this ordering assertion. ... ok
+test_prefetched_url_is_never_written_to_attempt_metadata (test_refresh_preresolve.RefreshPreresolutionTests) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.237s
+
+OK

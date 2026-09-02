@@ -1,0 +1,12 @@
+{
+  "checked_at": "2026-08-28T15:47:14.782078+00:00",
+  "deployment_files_checked": 53,
+  "implementation_files_checked": 49,
+  "implementation_files_unchanged": true,
+  "changed_existing_files": [
+    "/Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/test_v3_recording_transcription.py"
+  ],
+  "scope": "实际部署 runtime/bin 与 runtime/v3 下已有 .py/.sql/.json 文件，SHA-256 前后对比",
+  "note": "本任务仅在项目的验收脚本和验收结果目录新增文件。对比期间有一份部署目录的既有测试文件变化，本任务未编辑或覆盖该文件；不宣称整个部署目录完全静止。",
+  "database_write_protection": "临时 PostgreSQL 集成测试已验证只读事务拒绝 UPDATE；生产连接仅 SELECT，无业务初始化"
+}

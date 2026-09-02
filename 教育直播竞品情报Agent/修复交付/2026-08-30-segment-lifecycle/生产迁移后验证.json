@@ -1,0 +1,260 @@
+{
+  "checked_at": "2026-08-30T13:55:51.434730+00:00",
+  "sample_1": {
+    "read_only": "on",
+    "lifecycle_counts": {
+      "CANONICAL_ACTIVE": 99,
+      "SOURCE_RETAINED": 2,
+      "SOURCE_SUPERSEDED": 274
+    },
+    "transcript_counts": {
+      "CANCELLED_SUPERSEDED_SOURCE": 245,
+      "COMPLETE": 6
+    },
+    "canonical_paths_existing": 99,
+    "superseded_paths_missing": 274,
+    "retained_paths_existing": 2,
+    "active_rows": [
+      {
+        "session_id": "session_301089a174e24811a1a3e0376ac4e40d",
+        "pid": 72241,
+        "pid_alive": true,
+        "job_status": "RUNNING",
+        "session_status": "RECORDING",
+        "bytes": 663817980
+      },
+      {
+        "session_id": "session_a11008384fa574090555c6e1389a4686",
+        "pid": 50442,
+        "pid_alive": true,
+        "job_status": "RUNNING",
+        "session_status": "RECORDING",
+        "bytes": 596900136
+      },
+      {
+        "session_id": "session_ac696981e0ee2a67689fd11f621f6847",
+        "pid": 7290,
+        "pid_alive": true,
+        "job_status": "RUNNING",
+        "session_status": "RECORDING",
+        "bytes": 85196800
+      },
+      {
+        "session_id": "session_c21d1f47b1546038aca956d96dca5e9a",
+        "pid": null,
+        "pid_alive": false,
+        "job_status": "WAITING_STREAM",
+        "session_status": "WAITING_STREAM",
+        "bytes": 403971392
+      },
+      {
+        "session_id": "session_f941587f590eb58681a00688b1dfb5d1",
+        "pid": 89484,
+        "pid_alive": true,
+        "job_status": "RUNNING",
+        "session_status": "RECORDING",
+        "bytes": 578182476
+      },
+      {
+        "session_id": "session_ff57b5a50cbe69850e8ade07ebf3671d",
+        "pid": 7267,
+        "pid_alive": true,
+        "job_status": "RUNNING",
+        "session_status": "RECORDING",
+        "bytes": 166985728
+      }
+    ],
+    "heartbeats": {
+      "pipeline-v3": {
+        "pid": 15999,
+        "status": "READY",
+        "last_heartbeat_at": "2026-08-30T13:55:24.368Z",
+        "details": {
+          "analysis_tasks": 0,
+          "checked_at": "2026-08-30T13:55:24.368Z",
+          "segments": 101,
+          "transcripts": 0
+        }
+      },
+      "retention-v3": {
+        "pid": 34907,
+        "status": "READY",
+        "last_heartbeat_at": "2026-08-30T13:55:28.912Z",
+        "details": {
+          "delete_enabled": false,
+          "idle": true,
+          "mode": "DELETE_DISABLED",
+          "next_scan_in_seconds": 3359
+        }
+      },
+      "runtime-v3": {
+        "pid": 16001,
+        "status": "READY",
+        "last_heartbeat_at": "2026-08-30T13:55:16.415Z",
+        "details": {
+          "audio_retention_hours": 168,
+          "capacity_test_concurrency": 65,
+          "due_target_count": 41,
+          "expected_max_recording_concurrency": 50,
+          "final_ready": false,
+          "full_fleet": true,
+          "live_count": 5,
+          "normal_recording_concurrency": 30,
+          "production_gate": "BLOCKED",
+          "recording_duration_seconds": 0,
+          "recording_health": {
+            "finalized": 110,
+            "restarted": 0,
+            "running": 5
+          },
+          "recording_mode": "LOWEST_VIDEO_WITH_AUDIO",
+          "recording_quality": "LD",
+          "recording_segment_seconds": 0,
+          "result_count": 41,
+          "speech_audio_bitrate_kbps": 48,
+          "speech_audio_format": "opus",
+          "target_count": 41,
+          "unknown_count": 0,
+          "video_retention_hours": 72
+        }
+      }
+    },
+    "migration_version": "1"
+  },
+  "sample_2": {
+    "read_only": "on",
+    "lifecycle_counts": {
+      "CANONICAL_ACTIVE": 99,
+      "SOURCE_RETAINED": 2,
+      "SOURCE_SUPERSEDED": 274
+    },
+    "transcript_counts": {
+      "CANCELLED_SUPERSEDED_SOURCE": 245,
+      "COMPLETE": 6
+    },
+    "canonical_paths_existing": 99,
+    "superseded_paths_missing": 274,
+    "retained_paths_existing": 2,
+    "active_rows": [
+      {
+        "session_id": "session_301089a174e24811a1a3e0376ac4e40d",
+        "pid": 72241,
+        "pid_alive": true,
+        "job_status": "RUNNING",
+        "session_status": "RECORDING",
+        "bytes": 668274428
+      },
+      {
+        "session_id": "session_a11008384fa574090555c6e1389a4686",
+        "pid": 50442,
+        "pid_alive": true,
+        "job_status": "RUNNING",
+        "session_status": "RECORDING",
+        "bytes": 599783720
+      },
+      {
+        "session_id": "session_ac696981e0ee2a67689fd11f621f6847",
+        "pid": 7290,
+        "pid_alive": true,
+        "job_status": "RUNNING",
+        "session_status": "RECORDING",
+        "bytes": 87818240
+      },
+      {
+        "session_id": "session_c21d1f47b1546038aca956d96dca5e9a",
+        "pid": null,
+        "pid_alive": false,
+        "job_status": "WAITING_STREAM",
+        "session_status": "WAITING_STREAM",
+        "bytes": 403971392
+      },
+      {
+        "session_id": "session_f941587f590eb58681a00688b1dfb5d1",
+        "pid": 89484,
+        "pid_alive": true,
+        "job_status": "RUNNING",
+        "session_status": "RECORDING",
+        "bytes": 583949644
+      },
+      {
+        "session_id": "session_ff57b5a50cbe69850e8ade07ebf3671d",
+        "pid": 7267,
+        "pid_alive": true,
+        "job_status": "RUNNING",
+        "session_status": "RECORDING",
+        "bytes": 172752896
+      }
+    ],
+    "heartbeats": {
+      "pipeline-v3": {
+        "pid": 15999,
+        "status": "READY",
+        "last_heartbeat_at": "2026-08-30T13:55:24.368Z",
+        "details": {
+          "analysis_tasks": 0,
+          "checked_at": "2026-08-30T13:55:24.368Z",
+          "segments": 101,
+          "transcripts": 0
+        }
+      },
+      "retention-v3": {
+        "pid": 34907,
+        "status": "READY",
+        "last_heartbeat_at": "2026-08-30T13:55:28.912Z",
+        "details": {
+          "delete_enabled": false,
+          "idle": true,
+          "mode": "DELETE_DISABLED",
+          "next_scan_in_seconds": 3359
+        }
+      },
+      "runtime-v3": {
+        "pid": 16001,
+        "status": "READY",
+        "last_heartbeat_at": "2026-08-30T13:55:16.415Z",
+        "details": {
+          "audio_retention_hours": 168,
+          "capacity_test_concurrency": 65,
+          "due_target_count": 41,
+          "expected_max_recording_concurrency": 50,
+          "final_ready": false,
+          "full_fleet": true,
+          "live_count": 5,
+          "normal_recording_concurrency": 30,
+          "production_gate": "BLOCKED",
+          "recording_duration_seconds": 0,
+          "recording_health": {
+            "finalized": 110,
+            "restarted": 0,
+            "running": 5
+          },
+          "recording_mode": "LOWEST_VIDEO_WITH_AUDIO",
+          "recording_quality": "LD",
+          "recording_segment_seconds": 0,
+          "result_count": 41,
+          "speech_audio_bitrate_kbps": 48,
+          "speech_audio_format": "opus",
+          "target_count": 41,
+          "unknown_count": 0,
+          "video_retention_hours": 72
+        }
+      }
+    },
+    "migration_version": "1"
+  },
+  "growth_bytes": {
+    "session_301089a174e24811a1a3e0376ac4e40d": 4456448,
+    "session_a11008384fa574090555c6e1389a4686": 2883584,
+    "session_ac696981e0ee2a67689fd11f621f6847": 2621440,
+    "session_c21d1f47b1546038aca956d96dca5e9a": 0,
+    "session_f941587f590eb58681a00688b1dfb5d1": 5767168,
+    "session_ff57b5a50cbe69850e8ade07ebf3671d": 5767168
+  },
+  "row_backup_files": [
+    "/Volumes/ExternalStorage/AgentInfrastructure/backups/edu-segment-lifecycle-20260830/segment-lifecycle-before-2026-08-30T135239.614Z.json"
+  ],
+  "row_backup_modes": [
+    "0o600"
+  ],
+  "pass": true
+}

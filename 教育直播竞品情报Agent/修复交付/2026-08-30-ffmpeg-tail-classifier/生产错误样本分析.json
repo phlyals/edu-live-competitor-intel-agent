@@ -1,0 +1,170 @@
+{
+  "observed_at": "2026-08-30T12:55:48.702033+00:00",
+  "scope": "/Volumes/ExternalStorage/同行直播录制/media",
+  "sidecars_total": 356,
+  "sidecars_bad_json": 0,
+  "return_code_zero_total": 338,
+  "classification_precedence": [
+    "INTEGRITY_ERROR",
+    "NETWORK_WARNING",
+    "BENIGN"
+  ],
+  "category_counts": {
+    "BENIGN": 253,
+    "INTEGRITY_ERROR": 80,
+    "NETWORK_WARNING": 5
+  },
+  "subtype_counts_overlap": {
+    "HTTP_404": 59,
+    "RECONNECT_ATTEMPT": 75,
+    "PREMATURE_END": 51,
+    "DEMUX_IO": 38,
+    "NETWORK_TIMEOUT": 30,
+    "INVALID_DATA": 15,
+    "UNABLE_SEEK_PACKET": 15,
+    "NON_MONOTONIC_DTS": 6,
+    "TIMESTAMP_DISCONTINUITY": 18,
+    "SEGMENT_SKIPPED": 18,
+    "PACKET_CORRUPT": 3,
+    "INVALID_TIMESTAMP_DROP": 1,
+    "EMPTY_SEGMENT": 3,
+    "CODEC_PARAMETERS_MISSING": 3,
+    "INPUT_OPEN_FAILED": 5,
+    "DNS_FAILURE": 1,
+    "PACKET_MISMATCH": 5
+  },
+  "patterns": {
+    "HTTP_404": "(?i)(?:\\bHTTP error 404\\b|\\bServer returned 404 Not Found\\b)",
+    "RECONNECT_ATTEMPT": "(?i)(?:\\bWill reconnect\\b|\\bretrying with new connection\\b)",
+    "NETWORK_TIMEOUT": "(?i)(?:\\bOperation timed out\\b|\\bConnection timed out\\b|\\btimeout\\b)",
+    "DNS_FAILURE": "(?i)(?:\\bFailed to resolve hostname\\b|\\bName or service not known\\b|\\bnodename nor servname provided\\b)",
+    "PREMATURE_END": "(?i)(?:\\bStream ends? prematurely\\b|\\bpremature end\\b)",
+    "DEMUX_IO": "(?i)\\bError during demuxing:\\s*(?:Input/output error|I/O error)\\b",
+    "INVALID_DATA": "(?i)\\bInvalid data found when processing input\\b",
+    "PACKET_MISMATCH": "(?i)\\bPacket mismatch\\b",
+    "PACKET_CORRUPT": "(?i)(?:\\bPacket corrupt\\b|\\bcorrupt input packet\\b)",
+    "NON_MONOTONIC_DTS": "(?i)\\bNon-(?:monotonic|monotonous) DTS\\b",
+    "INVALID_TIMESTAMP_DROP": "(?i)\\b(?:DTS|PTS)\\b.*\\binvalid dropping\\b",
+    "TIMESTAMP_DISCONTINUITY": "(?i)\\btimestamp discontinuity\\b",
+    "EMPTY_SEGMENT": "(?i)\\bEmpty segment\\b",
+    "SEGMENT_SKIPPED": "(?i)(?:\\bfailed too many times, skipping\\b|\\bskipping \\d+ segments ahead, expired from playlists\\b)",
+    "CODEC_PARAMETERS_MISSING": "(?i)\\bcould not find codec parameters\\b",
+    "UNABLE_SEEK_PACKET": "(?i)\\bUnable to seek to the next packet\\b",
+    "INPUT_OPEN_FAILED": "(?i)(?:\\bError opening input\\b|\\bError when loading first segment\\b)"
+  },
+  "representative_samples_redacted": {
+    "HTTP_404": {
+      "category": "INTEGRITY_ERROR",
+      "relative_path": "completed/acct_00a2da5e9c4d90e8/sess_0d5011a2d8af132ce1b497c4/整场直播.refresh0005.ts.partial.recording-state.json",
+      "line": "[http @ 0xADDR] HTTP error 404 Not Found"
+    },
+    "RECONNECT_ATTEMPT": {
+      "category": "INTEGRITY_ERROR",
+      "relative_path": "completed/acct_00a2da5e9c4d90e8/sess_0d5011a2d8af132ce1b497c4/整场直播.refresh0005.ts.partial.recording-state.json",
+      "line": "[http @ 0xADDR] Will reconnect at 188685402 in 0 second(s), error=Input/output error."
+    },
+    "NETWORK_TIMEOUT": {
+      "category": "INTEGRITY_ERROR",
+      "relative_path": "completed/acct_08513b0271791c3c/sess_26f68c9d79d9438551799d66/整场直播.part03.refresh0001.ts.partial.recording-state.json",
+      "line": "[http @ 0xADDR] Will reconnect at 191187590 in 0 second(s), error=Operation timed out."
+    },
+    "DNS_FAILURE": {
+      "category": "INTEGRITY_ERROR",
+      "relative_path": "completed/acct_91c1f0dca03af0c0/sess_c758b04d2d71236122d9081a/整场直播.refresh0001.ts.partial.recording-state.json",
+      "line": "[tcp @ 0xADDR] Failed to resolve hostname pull-flv-h95.douyincdn.com: nodename nor servname provided, or not known"
+    },
+    "PREMATURE_END": {
+      "category": "INTEGRITY_ERROR",
+      "relative_path": "completed/acct_00a2da5e9c4d90e8/sess_0d5011a2d8af132ce1b497c4/整场直播.refresh0005.ts.partial.recording-state.json",
+      "line": "[http @ 0xADDR] Stream ends prematurely at 188685402, should be 18446744073709551615"
+    },
+    "DEMUX_IO": {
+      "category": "INTEGRITY_ERROR",
+      "relative_path": "completed/acct_00a2da5e9c4d90e8/sess_0d5011a2d8af132ce1b497c4/整场直播.refresh0005.ts.partial.recording-state.json",
+      "line": "[in#0/flv @ 0xADDR] Error during demuxing: Input/output error"
+    },
+    "INVALID_DATA": {
+      "category": "INTEGRITY_ERROR",
+      "relative_path": "completed/acct_08513b0271791c3c/sess_26f68c9d79d9438551799d66/整场直播.part03.refresh0001.ts.partial.recording-state.json",
+      "line": "[in#0/flv @ 0xADDR] Error during demuxing: Invalid data found when processing input"
+    },
+    "PACKET_MISMATCH": {
+      "category": "INTEGRITY_ERROR",
+      "relative_path": "completed/acct_91c1f0dca03af0c0/sess_c758b04d2d71236122d9081a/整场直播.refresh0001.ts.partial.recording-state.json",
+      "line": "[in#0/flv @ 0xADDR] Packet mismatch 444409027 5002764 125906883"
+    },
+    "PACKET_CORRUPT": {
+      "category": "INTEGRITY_ERROR",
+      "relative_path": "completed/acct_3e8022c5df7ea4c8/sess_2b6b0ca2f28a161860a877a0/整场直播.ts.partial.recording-state.json",
+      "line": "[mpegts @ 0xADDR] Packet corrupt (stream = 0, dts = 20727090)."
+    },
+    "NON_MONOTONIC_DTS": {
+      "category": "INTEGRITY_ERROR",
+      "relative_path": "completed/acct_145bdcf5bfa08759/sess_1bed3436373e33445bb86a19/整场直播.refresh0002.ts.partial.recording-state.json",
+      "line": "[vost#0:0/copy @ 0xADDR] Non-monotonic DTS; previous: 813510, current: 793710; changing to 813511. This may result in incorrect timestamps in the output file."
+    },
+    "INVALID_TIMESTAMP_DROP": {
+      "category": "INTEGRITY_ERROR",
+      "relative_path": "completed/acct_86bb728a51564fb6/sess_e31d5c5f2c8ced5e9d28f1df/整场直播.refresh0003.ts.partial.recording-state.json",
+      "line": "[aist#0:0/aac @ 0xADDR] DTS 4292269698, next:899934938 st:0 invalid dropping"
+    },
+    "TIMESTAMP_DISCONTINUITY": {
+      "category": "INTEGRITY_ERROR",
+      "relative_path": "completed/acct_2830f009c4673f6f/sess_d8001e1a26912b9beaedc79e/整场直播.part01.ts.partial.recording-state.json",
+      "line": "[aist#0:1/aac @ 0xADDR] timestamp discontinuity (stream id=0): 30000614, new offset= -30000614"
+    },
+    "EMPTY_SEGMENT": {
+      "category": "INTEGRITY_ERROR",
+      "relative_path": "completed/acct_91c1f0dca03af0c0/sess_01773108761b95704ff63f02/整场直播.part01.ts.partial.recording-state.json",
+      "line": "[in#0 @ 0xADDR] Empty segment [<stream-url>"
+    },
+    "SEGMENT_SKIPPED": {
+      "category": "INTEGRITY_ERROR",
+      "relative_path": "completed/acct_2830f009c4673f6f/sess_d8001e1a26912b9beaedc79e/整场直播.part01.ts.partial.recording-state.json",
+      "line": "[in#0/hls @ 0xADDR] skipping 15 segments ahead, expired from playlists"
+    },
+    "CODEC_PARAMETERS_MISSING": {
+      "category": "INTEGRITY_ERROR",
+      "relative_path": "completed/acct_91c1f0dca03af0c0/sess_01773108761b95704ff63f02/整场直播.part01.ts.partial.recording-state.json",
+      "line": "[in#0/hls @ 0xADDR] could not find codec parameters"
+    },
+    "UNABLE_SEEK_PACKET": {
+      "category": "INTEGRITY_ERROR",
+      "relative_path": "completed/acct_08513b0271791c3c/sess_26f68c9d79d9438551799d66/整场直播.part03.refresh0001.ts.partial.recording-state.json",
+      "line": "[in#0/flv @ 0xADDR] Unable to seek to the next packet"
+    },
+    "INPUT_OPEN_FAILED": {
+      "category": "INTEGRITY_ERROR",
+      "relative_path": "completed/acct_91c1f0dca03af0c0/sess_01773108761b95704ff63f02/整场直播.part01.ts.partial.recording-state.json",
+      "line": "Error opening input file <stream-url>"
+    }
+  },
+  "reconnect_success_assessment": {
+    "explicit_success_marker_available": false,
+    "finding": "Sidecar tails record retry attempts and terminal warnings but no timestamped reconnect-success event. return_code=0 or nonzero output alone does not prove the same FFmpeg process recovered.",
+    "safe_rule": "404/reconnect-only evidence is NETWORK_WARNING; any coverage/data/timestamp signature escalates to INTEGRITY_ERROR."
+  },
+  "related_log_scan": [
+    {
+      "path": "/Users/mac/.local/state/agent-bootstrap-logs/runtime-v3.log",
+      "matched_target_signatures": 0
+    },
+    {
+      "path": "/Users/mac/.local/state/agent-bootstrap-logs/runtime-v3.error.log",
+      "matched_target_signatures": 0
+    },
+    {
+      "path": "/Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/bin/logs/PlayURL.log",
+      "matched_target_signatures": 0
+    },
+    {
+      "path": "/Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/bin/logs/streamget.log",
+      "matched_target_signatures": 0
+    }
+  ],
+  "notes": [
+    "Subtype counts overlap; category counts are mutually exclusive.",
+    "No raw stream URL, query string, signature, or token is included.",
+    "Classification is evidence triage, not proof that media is corrupt; INTEGRITY_ERROR requires ffprobe/packet/timeline validation before destructive action."
+  ]
+}

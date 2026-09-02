@@ -1,0 +1,14 @@
+{
+  "transaction_read_only": "on",
+  "durable_columns_present": [],
+  "transcript_status_counts": {
+    "CANCELLED_SUPERSEDED_SOURCE": 245,
+    "COMPLETE": 6
+  },
+  "analysis_status_counts": {
+    "COMPLETE": 5,
+    "SKIPPED_HISTORICAL": 1
+  },
+  "current_actionable_transcript_rows": 0,
+  "current_actionable_analysis_rows": 0
+}

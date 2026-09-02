@@ -1,0 +1,2 @@
+f9b0e51e3082fbaaa0b74dc3afd95396011711639c584b24b7cea1db9fcf6c71  v3_evidence_worker.py
+b3dc825f32af1d1df6aa2656434dd0a0c7f75f02dc0153dc6c379918f5a318e2  v3_projection_reconciler.py

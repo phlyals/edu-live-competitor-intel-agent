@@ -1,0 +1,22 @@
+{
+  "timed_out": true,
+  "partial_output": true,
+  "line_count": 257,
+  "tail": [
+    "2026-08-28 20:04:08.335 Df kernel[0:642] [com.apple.xnu:memorystatus] memorystatus: killing_idle_process pid 27843 [com.apple.geod] jetsam_reason->osr_code: 9",
+    "2026-08-28 20:04:09.339 Df kernel[0:642] [com.apple.xnu:memorystatus] memorystatus: killing_idle_process pid 27862 [contactsd] jetsam_reason->osr_code: 9",
+    "2026-08-28 20:04:10.342 Df kernel[0:642] [com.apple.xnu:memorystatus] memorystatus: killing_idle_process pid 28234 [routined] jetsam_reason->osr_code: 9",
+    "2026-08-28 20:04:11.347 Df kernel[0:642] [com.apple.xnu:memorystatus] memorystatus: killing_idle_process pid 27342 [callservicesd] jetsam_reason->osr_code: 9",
+    "2026-08-28 20:04:12.359 Df kernel[0:642] [com.apple.xnu:memorystatus] memorystatus: killing_idle_process pid 28010 [mobileactivationd] jetsam_reason->osr_code: 9",
+    "2026-08-28 20:04:13.363 Df kernel[0:642] [com.apple.xnu:memorystatus] memorystatus: killing_idle_process pid 26886 [ctkd] jetsam_reason->osr_code: 9",
+    "2026-08-28 20:04:14.366 Df kernel[0:642] [com.apple.xnu:memorystatus] memorystatus: killing_idle_process pid 28009 [devicecheckd] jetsam_reason->osr_code: 9",
+    "2026-08-28 20:04:15.368 Df kernel[0:642] [com.apple.xnu:memorystatus] memorystatus: killing_idle_process pid 28435 [coreduetd] jetsam_reason->osr_code: 9",
+    "2026-08-28 20:04:16.372 Df kernel[0:642] [com.apple.xnu:memorystatus] memorystatus: killing_idle_process pid 28265 [contentlinkingd] jetsam_reason->osr_code: 9",
+    "2026-08-28 20:04:17.376 Df kernel[0:642] [com.apple.xnu:memorystatus] memorystatus: killing_idle_process pid 27323 [com.apple.CodeSigningHelper] jetsam_reason->osr_code: 9",
+    "2026-08-28 20:04:18.379 Df kernel[0:642] [com.apple.xnu:memorystatus] memorystatus: killing_idle_process pid 28743 [Keychain Circle Notification] jetsam_reason->osr_code: 9",
+    "2026-08-28 20:04:19.382 Df kernel[0:642] [com.apple.xnu:memorystatus] memorystatus: killing_idle_process pid 28779 [ospredictiond] jetsam_reason->osr_code: 9",
+    "2026-08-28 20:04:20.383 Df kernel[0:642] [com.apple.xnu:memorystatus] memorystatus: killing_idle_process pid 26877 [CommCenter] jetsam_reason->osr_code: 9",
+    "2026-08-28 20:04:21.388 Df kernel[0:642] [com.apple.xnu:memorystatus] memorystatus: killing_idle_process pid 28781 [osanalyticshelper] jetsam_reason->osr_code: 9",
+    "2026-08-28 20:04:22.391 Df kernel[0:642] [com.apple.xnu:memorystatus] memorystatus: killing_idle_process pid 28783 [businessservicesd] jetsam_reason->osr_code: 9"
+  ]
+}

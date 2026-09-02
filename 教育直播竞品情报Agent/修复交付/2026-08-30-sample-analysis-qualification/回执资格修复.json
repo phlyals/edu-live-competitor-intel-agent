@@ -1,0 +1,14 @@
+{
+  "status": "REPAIRED",
+  "outbox_id": "out_sample_correction_ce51768f07ad3f9bf2aa",
+  "receipt": {
+    "receipt_id": "receipt:out_sample_correction_ce51768f07ad3f9bf2aa",
+    "scope": "SAMPLE_AUXILIARY",
+    "qualification_status": "SAMPLE_NONQUALIFYING",
+    "status": "VERIFIED",
+    "verified_at": "2026-08-30T15:13:25.874Z"
+  },
+  "backup_path": "/Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/backups/sample-receipt-repair-20260830-2316/pre-repair.json",
+  "backup_sha256": "988afccb484c8623c4a1ebb22ef3ef1d5e75e6420ab6d12de8335089b7684878",
+  "event_id": "evt_sample_receipt_repair_8f6d22d5ffa23a9e08a0"
+}

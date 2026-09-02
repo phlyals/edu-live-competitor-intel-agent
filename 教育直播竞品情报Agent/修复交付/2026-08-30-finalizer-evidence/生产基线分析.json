@@ -1,0 +1,1710 @@
+{
+  "snapshot_at": "2026-08-30T13:09:03.005588+00:00",
+  "scope": "READ_ONLY_PRODUCTION_AUDIT",
+  "postgres_transaction_read_only": "on",
+  "filesystem": {
+    "root": "/Volumes/ExternalStorage/同行直播录制/media",
+    "free_bytes": 557513990144,
+    "free_gib": 519.225
+  },
+  "database": {
+    "live_session_count": 118,
+    "manifest_row_count": 97,
+    "recording_segment_row_count": 373,
+    "segment_path_missing_count": 274,
+    "segment_missing_bytes_declared": 10200093136
+  },
+  "directories": {
+    "partial_session_dirs": 16,
+    "completed_session_dirs": 99,
+    "completed_with_final": 97,
+    "completed_with_manifest": 97,
+    "completed_with_multi_source_sidecars": 65,
+    "completed_multi_source_with_any_source_media_remaining": 0
+  },
+  "sidecars": {
+    "total": 359,
+    "completed": 336,
+    "partial": 23,
+    "parse_errors": 0,
+    "output_path_missing_total": 341,
+    "output_path_missing_completed": 336,
+    "output_path_missing_partial": 5,
+    "output_path_exact_or_relocated_exists": 18,
+    "declared_source_bytes_all": 76891775152,
+    "declared_source_bytes_completed": 73500349332
+  },
+  "ordering": {
+    "existing_source_multifile_sessions": 4,
+    "existing_source_mtime_generation_conflict_sessions": 0,
+    "existing_source_inversion_pairs": 0,
+    "existing_source_details": [
+      {
+        "dir": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_d84cba350eb545bf/sess_1089b9ba5fa1fb9b6cc7f13b",
+        "count": 6,
+        "generation_order": [
+          "整场直播.ts.partial",
+          "整场直播.refresh0001.ts.partial",
+          "整场直播.refresh0002.ts.partial",
+          "整场直播.refresh0003.ts.partial",
+          "整场直播.refresh0004.ts.partial",
+          "整场直播.refresh0005.ts.partial"
+        ],
+        "mtime_order": [
+          "整场直播.ts.partial",
+          "整场直播.refresh0001.ts.partial",
+          "整场直播.refresh0002.ts.partial",
+          "整场直播.refresh0003.ts.partial",
+          "整场直播.refresh0004.ts.partial",
+          "整场直播.refresh0005.ts.partial"
+        ],
+        "conflict": false,
+        "inversions": 0
+      },
+      {
+        "dir": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_0d701166362f3482/sess_d8a4d4628b76596244287bd3",
+        "count": 7,
+        "generation_order": [
+          "整场直播.ts.partial",
+          "整场直播.refresh0001.ts.partial",
+          "整场直播.refresh0002.ts.partial",
+          "整场直播.refresh0003.ts.partial",
+          "整场直播.refresh0004.ts.partial",
+          "整场直播.refresh0005.ts.partial",
+          "整场直播.refresh0006.ts.partial"
+        ],
+        "mtime_order": [
+          "整场直播.ts.partial",
+          "整场直播.refresh0001.ts.partial",
+          "整场直播.refresh0002.ts.partial",
+          "整场直播.refresh0003.ts.partial",
+          "整场直播.refresh0004.ts.partial",
+          "整场直播.refresh0005.ts.partial",
+          "整场直播.refresh0006.ts.partial"
+        ],
+        "conflict": false,
+        "inversions": 0
+      },
+      {
+        "dir": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_08513b0271791c3c/sess_6097a2e5cd5a7f46efd0801e",
+        "count": 2,
+        "generation_order": [
+          "整场直播.ts.partial",
+          "整场直播.refresh0001.ts.partial"
+        ],
+        "mtime_order": [
+          "整场直播.ts.partial",
+          "整场直播.refresh0001.ts.partial"
+        ],
+        "conflict": false,
+        "inversions": 0
+      },
+      {
+        "dir": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_91c8c4a8ea998e6e/sess_45d04a07827993aaee08df3d",
+        "count": 2,
+        "generation_order": [
+          "整场直播.ts.partial",
+          "整场直播.refresh0001.ts.partial"
+        ],
+        "mtime_order": [
+          "整场直播.ts.partial",
+          "整场直播.refresh0001.ts.partial"
+        ],
+        "conflict": false,
+        "inversions": 0
+      }
+    ],
+    "sidecar_multigeneration_sessions": 57,
+    "sidecar_mtime_generation_conflict_sessions": 0,
+    "sidecar_started_at_generation_conflict_sessions": 0,
+    "sidecar_conflict_details": []
+  },
+  "source_bytes": {
+    "actual_existing_source_media_bytes": 3399027996,
+    "completed_source_bytes_reconstructable_only_from_sidecars": 73500349332,
+    "recent_24h_finalized_session_count": 58,
+    "recent_24h_multisource_session_count": 54,
+    "estimated_extra_bytes_for_24h_multisource_quarantine": 46984788664,
+    "estimated_extra_gib_for_24h_multisource_quarantine": 43.758,
+    "conservative_upper_extra_bytes_if_all_sources_duplicated": 50734253708,
+    "conservative_upper_extra_gib": 47.25,
+    "estimated_extra_pct_of_current_free": 8.4276
+  },
+  "final_vs_sources_samples": [
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d0fa112503e2aabc/sess_10f5e8e313b4fdb26cd58cc4",
+      "source_count_from_sidecars": 4,
+      "source_declared_bytes": 521349756,
+      "source_active_wall_seconds": 3458.126,
+      "source_media_paths_still_available": 0,
+      "source_av_probe": "UNAVAILABLE_SOURCE_DELETED",
+      "final_probe": {
+        "return_code": 0,
+        "duration_seconds": 3295.060778,
+        "stream_types": [
+          "video",
+          "audio"
+        ],
+        "codecs": [
+          {
+            "type": "video",
+            "codec": "h264"
+          },
+          {
+            "type": "audio",
+            "codec": "aac"
+          }
+        ],
+        "stderr": ""
+      },
+      "duration_minus_source_wall_seconds": -163.065
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_4d6e4d144f6b4cbd085f5d66",
+      "source_count_from_sidecars": 5,
+      "source_declared_bytes": 590337668,
+      "source_active_wall_seconds": 4038.844,
+      "source_media_paths_still_available": 0,
+      "source_av_probe": "UNAVAILABLE_SOURCE_DELETED",
+      "final_probe": {
+        "return_code": 0,
+        "duration_seconds": 4048.766222,
+        "stream_types": [
+          "video",
+          "audio"
+        ],
+        "codecs": [
+          {
+            "type": "video",
+            "codec": "h264"
+          },
+          {
+            "type": "audio",
+            "codec": "aac"
+          }
+        ],
+        "stderr": ""
+      },
+      "duration_minus_source_wall_seconds": 9.922
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_da976e262ebf85ce/sess_1c9f10427989050422ac4821",
+      "source_count_from_sidecars": 6,
+      "source_declared_bytes": 484197460,
+      "source_active_wall_seconds": 4802.038,
+      "source_media_paths_still_available": 0,
+      "source_av_probe": "UNAVAILABLE_SOURCE_DELETED",
+      "final_probe": {
+        "return_code": 0,
+        "duration_seconds": 4807.646,
+        "stream_types": [
+          "video",
+          "audio"
+        ],
+        "codecs": [
+          {
+            "type": "video",
+            "codec": "h264"
+          },
+          {
+            "type": "audio",
+            "codec": "aac"
+          }
+        ],
+        "stderr": ""
+      },
+      "duration_minus_source_wall_seconds": 5.608
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_836db3961058b668/sess_463919ded03fa079d5f9cff3",
+      "source_count_from_sidecars": 8,
+      "source_declared_bytes": 1359388144,
+      "source_active_wall_seconds": 7095.968,
+      "source_media_paths_still_available": 0,
+      "source_av_probe": "UNAVAILABLE_SOURCE_DELETED",
+      "final_probe": {
+        "return_code": 0,
+        "duration_seconds": 7102.172733,
+        "stream_types": [
+          "video",
+          "audio"
+        ],
+        "codecs": [
+          {
+            "type": "video",
+            "codec": "h264"
+          },
+          {
+            "type": "audio",
+            "codec": "aac"
+          }
+        ],
+        "stderr": ""
+      },
+      "duration_minus_source_wall_seconds": 6.205
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_986a90186541e9b0/sess_39a6663f563375010b00729b",
+      "source_count_from_sidecars": 6,
+      "source_declared_bytes": 611935488,
+      "source_active_wall_seconds": 4931.304,
+      "source_media_paths_still_available": 0,
+      "source_av_probe": "UNAVAILABLE_SOURCE_DELETED",
+      "final_probe": {
+        "return_code": 0,
+        "duration_seconds": 4924.971,
+        "stream_types": [
+          "video",
+          "audio"
+        ],
+        "codecs": [
+          {
+            "type": "video",
+            "codec": "h264"
+          },
+          {
+            "type": "audio",
+            "codec": "aac"
+          }
+        ],
+        "stderr": ""
+      },
+      "duration_minus_source_wall_seconds": -6.333
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_83f47f2ba13de9df/sess_0c04c2b5ba18964e5619dfe9",
+      "source_count_from_sidecars": 7,
+      "source_declared_bytes": 900024808,
+      "source_active_wall_seconds": 6085.219,
+      "source_media_paths_still_available": 0,
+      "source_av_probe": "UNAVAILABLE_SOURCE_DELETED",
+      "final_probe": {
+        "return_code": 0,
+        "duration_seconds": 5942.201667,
+        "stream_types": [
+          "video",
+          "audio"
+        ],
+        "codecs": [
+          {
+            "type": "video",
+            "codec": "h264"
+          },
+          {
+            "type": "audio",
+            "codec": "aac"
+          }
+        ],
+        "stderr": ""
+      },
+      "duration_minus_source_wall_seconds": -143.017
+    }
+  ],
+  "stable_source_only_probe_sample": {
+    "session_id": "session_3ea4d56fbdf35de2bba7681a0b8e348e",
+    "dir": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_0d701166362f3482/sess_d8a4d4628b76596244287bd3",
+    "job_status": "WAITING_STREAM",
+    "pid": null,
+    "source_count": 7,
+    "source_bytes": 1650523656,
+    "generation_order": [
+      "整场直播.ts.partial",
+      "整场直播.refresh0001.ts.partial",
+      "整场直播.refresh0002.ts.partial",
+      "整场直播.refresh0003.ts.partial",
+      "整场直播.refresh0004.ts.partial",
+      "整场直播.refresh0005.ts.partial",
+      "整场直播.refresh0006.ts.partial"
+    ],
+    "mtime_order": [
+      "整场直播.ts.partial",
+      "整场直播.refresh0001.ts.partial",
+      "整场直播.refresh0002.ts.partial",
+      "整场直播.refresh0003.ts.partial",
+      "整场直播.refresh0004.ts.partial",
+      "整场直播.refresh0005.ts.partial",
+      "整场直播.refresh0006.ts.partial"
+    ],
+    "sources": [
+      {
+        "name": "整场直播.ts.partial",
+        "generation": 0,
+        "bytes": 248306828,
+        "mtime_ns": 1788089814445194277,
+        "probe": {
+          "return_code": 0,
+          "duration_seconds": 900.087333,
+          "stream_types": [
+            "video",
+            "audio"
+          ],
+          "codecs": [
+            {
+              "type": "video",
+              "codec": "h264"
+            },
+            {
+              "type": "audio",
+              "codec": "aac"
+            }
+          ],
+          "stderr": ""
+        }
+      },
+      {
+        "name": "整场直播.refresh0001.ts.partial",
+        "generation": 1,
+        "bytes": 248224672,
+        "mtime_ns": 1788090712432570349,
+        "probe": {
+          "return_code": 0,
+          "duration_seconds": 900.082333,
+          "stream_types": [
+            "video",
+            "audio"
+          ],
+          "codecs": [
+            {
+              "type": "video",
+              "codec": "h264"
+            },
+            {
+              "type": "audio",
+              "codec": "aac"
+            }
+          ],
+          "stderr": ""
+        }
+      },
+      {
+        "name": "整场直播.refresh0002.ts.partial",
+        "generation": 2,
+        "bytes": 248988892,
+        "mtime_ns": 1788091610287600662,
+        "probe": {
+          "return_code": 0,
+          "duration_seconds": 900.098333,
+          "stream_types": [
+            "video",
+            "audio"
+          ],
+          "codecs": [
+            {
+              "type": "video",
+              "codec": "h264"
+            },
+            {
+              "type": "audio",
+              "codec": "aac"
+            }
+          ],
+          "stderr": ""
+        }
+      },
+      {
+        "name": "整场直播.refresh0003.ts.partial",
+        "generation": 3,
+        "bytes": 247436764,
+        "mtime_ns": 1788092508235069362,
+        "probe": {
+          "return_code": 0,
+          "duration_seconds": 900.093333,
+          "stream_types": [
+            "video",
+            "audio"
+          ],
+          "codecs": [
+            {
+              "type": "video",
+              "codec": "h264"
+            },
+            {
+              "type": "audio",
+              "codec": "aac"
+            }
+          ],
+          "stderr": ""
+        }
+      },
+      {
+        "name": "整场直播.refresh0004.ts.partial",
+        "generation": 4,
+        "bytes": 248928920,
+        "mtime_ns": 1788093406257369346,
+        "probe": {
+          "return_code": 0,
+          "duration_seconds": 900.087333,
+          "stream_types": [
+            "video",
+            "audio"
+          ],
+          "codecs": [
+            {
+              "type": "video",
+              "codec": "h264"
+            },
+            {
+              "type": "audio",
+              "codec": "aac"
+            }
+          ],
+          "stderr": ""
+        }
+      },
+      {
+        "name": "整场直播.refresh0005.ts.partial",
+        "generation": 5,
+        "bytes": 247681164,
+        "mtime_ns": 1788094304397716162,
+        "probe": {
+          "return_code": 0,
+          "duration_seconds": 900.082333,
+          "stream_types": [
+            "video",
+            "audio"
+          ],
+          "codecs": [
+            {
+              "type": "video",
+              "codec": "h264"
+            },
+            {
+              "type": "audio",
+              "codec": "aac"
+            }
+          ],
+          "stderr": ""
+        }
+      },
+      {
+        "name": "整场直播.refresh0006.ts.partial",
+        "generation": 6,
+        "bytes": 160956416,
+        "mtime_ns": 1788094893888256311,
+        "probe": {
+          "return_code": 0,
+          "duration_seconds": 587.820333,
+          "stream_types": [
+            "video",
+            "audio"
+          ],
+          "codecs": [
+            {
+              "type": "video",
+              "codec": "h264"
+            },
+            {
+              "type": "audio",
+              "codec": "aac"
+            }
+          ],
+          "stderr": ""
+        }
+      }
+    ],
+    "sum_source_duration_seconds": 5988.351,
+    "all_sources_have_audio_and_video": true,
+    "production_final_exists": false
+  },
+  "completed_summary": [
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c1f0dca03af0c0/sess_01773108761b95704ff63f02",
+      "final_exists": true,
+      "final_bytes": 759603472,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-29T00:37:57.053Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 2,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 759603472,
+      "invalid_exact_sidecars": 2
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c1f0dca03af0c0/sess_c5fd1505d97a5611d9783a07",
+      "final_exists": true,
+      "final_bytes": 933094760,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-30T01:12:05.398Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 4,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 933086744,
+      "invalid_exact_sidecars": 4
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c1f0dca03af0c0/sess_e4c5207a17b4976853f1cfc8",
+      "final_exists": true,
+      "final_bytes": 1930547372,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-28T16:08:43.789Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 0,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 0,
+      "invalid_exact_sidecars": 0
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c1f0dca03af0c0/sess_c758b04d2d71236122d9081a",
+      "final_exists": true,
+      "final_bytes": 787163708,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-30T02:43:55.477Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 4,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 787157692,
+      "invalid_exact_sidecars": 4
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c1f0dca03af0c0/sess_c4eb30075fc01d648a9c37a0",
+      "final_exists": true,
+      "final_bytes": 660650800,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-29T23:44:52.497Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 4,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 660649484,
+      "invalid_exact_sidecars": 4
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_d3cda3017305e71255f1cd90",
+      "final_exists": true,
+      "final_bytes": 1795026820,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-29T10:26:42.716Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 10,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 1795020428,
+      "invalid_exact_sidecars": 10
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_1777ad859093703aca27c0c6",
+      "final_exists": true,
+      "final_bytes": 913036664,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-29T12:01:05.942Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 5,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 913043996,
+      "invalid_exact_sidecars": 5
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_418aa147c8356bcf0dfddccc",
+      "final_exists": true,
+      "final_bytes": 3827398940,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-28T16:18:54.470Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 0,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 0,
+      "invalid_exact_sidecars": 0
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_d8001e1a26912b9beaedc79e",
+      "final_exists": true,
+      "final_bytes": 2002462448,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-29T07:20:14.614Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 2,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 2002462448,
+      "invalid_exact_sidecars": 2
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_4d6e4d144f6b4cbd085f5d66",
+      "final_exists": true,
+      "final_bytes": 590337296,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-30T12:32:48.185Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 5,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 590337668,
+      "invalid_exact_sidecars": 5
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_3eff83953b41ae849ebe85f1",
+      "final_exists": true,
+      "final_bytes": 619714364,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-30T10:33:52.290Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 5,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 619714176,
+      "invalid_exact_sidecars": 5
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_52685aee09f31906/sess_97a657f9375934e87128fca7",
+      "final_exists": true,
+      "final_bytes": 1340586264,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-29T06:19:06.021Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 1,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 1340586264,
+      "invalid_exact_sidecars": 1
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_52685aee09f31906/sess_8c6baa05c0e9bff1a8409547",
+      "final_exists": true,
+      "final_bytes": 368183900,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-29T23:02:21.364Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 2,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 368184116,
+      "invalid_exact_sidecars": 2
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_4096b05b78a4d383/sess_6cd4fef3544eebcd912ff79e",
+      "final_exists": true,
+      "final_bytes": 349488052,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-30T02:21:28.266Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 4,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 349514372,
+      "invalid_exact_sidecars": 4
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_4096b05b78a4d383/sess_b33e6a9878b5bedda64f7b2d",
+      "final_exists": true,
+      "final_bytes": 531830568,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-29T06:19:13.216Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 1,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 531830568,
+      "invalid_exact_sidecars": 1
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d84cba350eb545bf/sess_21e40a6a8757b142c3d92061",
+      "final_exists": true,
+      "final_bytes": 1382229768,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-30T05:53:30.093Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 6,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 1382230708,
+      "invalid_exact_sidecars": 6
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d84cba350eb545bf/sess_14d0e105c19223fd4676816d",
+      "final_exists": true,
+      "final_bytes": 1365830152,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-29T06:20:48.404Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 1,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 1365830152,
+      "invalid_exact_sidecars": 1
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d84cba350eb545bf/sess_f7406cbd9736dce7e2df5829",
+      "final_exists": true,
+      "final_bytes": 8481732988,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-28T15:25:05.471Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 0,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 0,
+      "invalid_exact_sidecars": 0
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d84cba350eb545bf/sess_44dab34f0fb72b130df5123a",
+      "final_exists": true,
+      "final_bytes": 1459019872,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-29T13:54:13.584Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 6,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 1459002764,
+      "invalid_exact_sidecars": 6
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_83f47f2ba13de9df/sess_0c04c2b5ba18964e5619dfe9",
+      "final_exists": true,
+      "final_bytes": 900025748,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-30T11:31:30.408Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 7,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 900024808,
+      "invalid_exact_sidecars": 7
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_83f47f2ba13de9df/sess_42a5baebe22fbb202aba92a0",
+      "final_exists": true,
+      "final_bytes": 1059847180,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-28T16:03:22.865Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 0,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 0,
+      "invalid_exact_sidecars": 0
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_83f47f2ba13de9df/sess_41b78e190197ecee6bd5fef4",
+      "final_exists": true,
+      "final_bytes": 3722681436,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-29T11:24:43.591Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 9,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 3722738004,
+      "invalid_exact_sidecars": 9
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_83f47f2ba13de9df/sess_89148c08501af6775a50da25",
+      "final_exists": true,
+      "final_bytes": 633720176,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-29T23:18:23.948Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 3,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 633710964,
+      "invalid_exact_sidecars": 3
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d0fa112503e2aabc/sess_0ac713a45f309587953c3911",
+      "final_exists": true,
+      "final_bytes": 3129180664,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-28T15:51:38.950Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 0,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 0,
+      "invalid_exact_sidecars": 0
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d0fa112503e2aabc/sess_10f5e8e313b4fdb26cd58cc4",
+      "final_exists": true,
+      "final_bytes": 521349380,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-30T13:06:54.952Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 4,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 521349756,
+      "invalid_exact_sidecars": 4
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d0fa112503e2aabc/sess_48a4eb557ab1e47ea86559d0",
+      "final_exists": true,
+      "final_bytes": 709118140,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-30T08:04:00.028Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 4,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 709118516,
+      "invalid_exact_sidecars": 4
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d0fa112503e2aabc/sess_60f18d5e98205cfb7d43d824",
+      "final_exists": true,
+      "final_bytes": 708146932,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-29T16:56:40.350Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 4,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 708144864,
+      "invalid_exact_sidecars": 4
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d0fa112503e2aabc/sess_ed7fe2e71b1dc23a3bab896c",
+      "final_exists": true,
+      "final_bytes": 626140204,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-29T13:53:01.741Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 4,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 626146032,
+      "invalid_exact_sidecars": 4
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d0fa112503e2aabc/sess_be4218e564d2694de5f804b7",
+      "final_exists": true,
+      "final_bytes": 814146972,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-29T12:31:03.592Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 6,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 814148512,
+      "invalid_exact_sidecars": 6
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_1ae8502cb7f2968a/sess_2d1c680a41c4505cda9706bc",
+      "final_exists": true,
+      "final_bytes": 330300396,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-30T01:33:02.361Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 2,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 330301244,
+      "invalid_exact_sidecars": 2
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_1ae8502cb7f2968a/sess_ea72146339142d4a04a473de",
+      "final_exists": true,
+      "final_bytes": 1466039604,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-29T13:51:02.935Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 1,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 1466039604,
+      "invalid_exact_sidecars": 1
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_986a90186541e9b0/sess_39a6663f563375010b00729b",
+      "final_exists": true,
+      "final_bytes": 611857092,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-30T11:38:22.470Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 6,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 611935488,
+      "invalid_exact_sidecars": 6
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_986a90186541e9b0/sess_a2c03bcdfde51bb9abb8a13e",
+      "final_exists": true,
+      "final_bytes": 420253320,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-29T15:03:21.044Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 6,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 420279264,
+      "invalid_exact_sidecars": 6
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_986a90186541e9b0/sess_69e2804021654aab37ecb518",
+      "final_exists": true,
+      "final_bytes": 1233715784,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-28T16:06:32.304Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 0,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 0,
+      "invalid_exact_sidecars": 0
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_565c3ca37ff7c78d/sess_fa45b280aa74e86625d5e7f3",
+      "final_exists": false,
+      "final_bytes": 0,
+      "manifest_exists": false,
+      "manifest_created_at": null,
+      "manifest_completeness": null,
+      "sidecar_count": 0,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 0,
+      "invalid_exact_sidecars": 0
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_565c3ca37ff7c78d/sess_2fb3614d5ec1e620f3f78a84",
+      "final_exists": true,
+      "final_bytes": 3493061056,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-28T15:48:47.217Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 0,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 0,
+      "invalid_exact_sidecars": 0
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_c053e231c459ecda/sess_f13aadcc0383ab05fdb9d9f6",
+      "final_exists": true,
+      "final_bytes": 835679740,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-28T15:55:37.111Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 0,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 0,
+      "invalid_exact_sidecars": 0
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_3e8022c5df7ea4c8/sess_37da3f58bb3f21619211be32",
+      "final_exists": true,
+      "final_bytes": 861522972,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-28T16:09:17.215Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 0,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 0,
+      "invalid_exact_sidecars": 0
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_3e8022c5df7ea4c8/sess_2b6b0ca2f28a161860a877a0",
+      "final_exists": true,
+      "final_bytes": 705181796,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-28T18:24:03.869Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 1,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 705181796,
+      "invalid_exact_sidecars": 1
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_53fe49068cf4e0ba/sess_7160969aed7fa634464c9092",
+      "final_exists": true,
+      "final_bytes": 1042542156,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-30T05:01:13.630Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 5,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 1042543472,
+      "invalid_exact_sidecars": 5
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_53fe49068cf4e0ba/sess_2e55ffd121132fe3dded197d",
+      "final_exists": true,
+      "final_bytes": 792799008,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-30T03:20:18.097Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 4,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 792794284,
+      "invalid_exact_sidecars": 4
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_53fe49068cf4e0ba/sess_2c86ef1ac85eac2083d7e914",
+      "final_exists": true,
+      "final_bytes": 1846261520,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-29T13:52:29.710Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 2,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 1846233696,
+      "invalid_exact_sidecars": 2
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_085261530d5b7db7/sess_4a52ae516fd9e5a2393e0fdb",
+      "final_exists": true,
+      "final_bytes": 618002248,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-28T15:54:43.902Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 0,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 0,
+      "invalid_exact_sidecars": 0
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_6e6a8a489e97fdc4/sess_c603181e47701150f42bb828",
+      "final_exists": true,
+      "final_bytes": 531621136,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-30T02:31:45.216Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 4,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 531621512,
+      "invalid_exact_sidecars": 4
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_6e6a8a489e97fdc4/sess_368870d2bb605e9c381c9115",
+      "final_exists": true,
+      "final_bytes": 559522968,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-29T23:58:19.225Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 4,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 559513652,
+      "invalid_exact_sidecars": 4
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_6e6a8a489e97fdc4/sess_e4847f6b45a7784a983f4ef4",
+      "final_exists": true,
+      "final_bytes": 1195210940,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-30T04:43:10.487Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 5,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 1195211472,
+      "invalid_exact_sidecars": 5
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_6e6a8a489e97fdc4/sess_b4772ef50cbeb834d401db88",
+      "final_exists": true,
+      "final_bytes": 106293508,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-29T15:01:13.918Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 1,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 106293508,
+      "invalid_exact_sidecars": 1
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_af34eac1ff917a9a/sess_4a7abcb76406713276a54e03",
+      "final_exists": true,
+      "final_bytes": 647983548,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-30T02:13:55.456Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 3,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 647984300,
+      "invalid_exact_sidecars": 3
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_af34eac1ff917a9a/sess_dbdab255139a6d0502fcf1a4",
+      "final_exists": true,
+      "final_bytes": 1277331220,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-29T06:20:30.031Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 1,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 1277331220,
+      "invalid_exact_sidecars": 1
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_af34eac1ff917a9a/sess_f27bc46a277e3f815bdb08e1",
+      "final_exists": true,
+      "final_bytes": 1294366276,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-29T15:00:58.668Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 1,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 1294366276,
+      "invalid_exact_sidecars": 1
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_0d701166362f3482/sess_a9f0284f9116c98577370c23",
+      "final_exists": true,
+      "final_bytes": 1715608852,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-28T16:03:09.253Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 0,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 0,
+      "invalid_exact_sidecars": 0
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_0d701166362f3482/sess_3ae2425e3cdac61d08fd7336",
+      "final_exists": true,
+      "final_bytes": 1572192112,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-29T13:50:44.306Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 7,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 1572176320,
+      "invalid_exact_sidecars": 7
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_3209ade1e6024113/sess_be0618a6c518741ab9d9df75",
+      "final_exists": true,
+      "final_bytes": 1053287296,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-29T15:57:04.629Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 5,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 1053288424,
+      "invalid_exact_sidecars": 5
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_3209ade1e6024113/sess_fe1fceb6536f9090c4723255",
+      "final_exists": false,
+      "final_bytes": 0,
+      "manifest_exists": false,
+      "manifest_created_at": null,
+      "manifest_completeness": null,
+      "sidecar_count": 0,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 0,
+      "invalid_exact_sidecars": 0
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_3209ade1e6024113/sess_abc393a6f5ad29c2141f3fba",
+      "final_exists": true,
+      "final_bytes": 5911233052,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-28T16:02:32.576Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 0,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 0,
+      "invalid_exact_sidecars": 0
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_3209ade1e6024113/sess_2db15dd1142c361ff36474d9",
+      "final_exists": true,
+      "final_bytes": 1234781932,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-30T06:11:15.711Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 6,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 1234784564,
+      "invalid_exact_sidecars": 6
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_8fa98f187cbe460f/sess_80a0bd19e36d7f1a7f8a51f5",
+      "final_exists": true,
+      "final_bytes": 753808184,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-29T10:20:27.300Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 5,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 753809312,
+      "invalid_exact_sidecars": 5
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_8fa98f187cbe460f/sess_8252e1ba27a75661d495b376",
+      "final_exists": true,
+      "final_bytes": 759695028,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-30T00:53:45.563Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 3,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 759694840,
+      "invalid_exact_sidecars": 3
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_8fa98f187cbe460f/sess_bdb1861867b9dfe7745a8928",
+      "final_exists": true,
+      "final_bytes": 1045379640,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-30T06:44:35.957Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 5,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 1045381332,
+      "invalid_exact_sidecars": 5
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_08513b0271791c3c/sess_2c2efc8ede8948dcf258a697",
+      "final_exists": true,
+      "final_bytes": 165472336,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-29T15:10:16.784Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 2,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 165471960,
+      "invalid_exact_sidecars": 2
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_08513b0271791c3c/sess_26f68c9d79d9438551799d66",
+      "final_exists": true,
+      "final_bytes": 1214231088,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-30T02:12:30.157Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 5,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 1214226388,
+      "invalid_exact_sidecars": 5
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_9664f575b6878d0d/sess_a5c9b612fa352fd645e105b8",
+      "final_exists": true,
+      "final_bytes": 836360488,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-29T01:44:53.248Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 2,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 836424972,
+      "invalid_exact_sidecars": 2
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_9664f575b6878d0d/sess_ae9578b83647a5cfc984eb94",
+      "final_exists": true,
+      "final_bytes": 1181687536,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-30T02:13:25.111Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 5,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 1181689228,
+      "invalid_exact_sidecars": 5
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c8c4a8ea998e6e/sess_cf4d4239b737104047a71294",
+      "final_exists": true,
+      "final_bytes": 992544684,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-28T15:55:26.540Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 0,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 0,
+      "invalid_exact_sidecars": 0
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c8c4a8ea998e6e/sess_3f33dd38cdc004f62bbf1d34",
+      "final_exists": true,
+      "final_bytes": 571999588,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-30T09:59:27.923Z",
+      "manifest_completeness": "COMPLETE",
+      "sidecar_count": 5,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 571963116,
+      "invalid_exact_sidecars": 5
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c8c4a8ea998e6e/sess_fe6d1b5bfa0da364fae5242b",
+      "final_exists": true,
+      "final_bytes": 944469324,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-29T14:06:34.854Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 10,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 944471016,
+      "invalid_exact_sidecars": 10
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_8e61cc2464a297e6/sess_850d613b397229af6f437c06",
+      "final_exists": true,
+      "final_bytes": 1451219940,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-30T02:11:33.437Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 6,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 1451210540,
+      "invalid_exact_sidecars": 6
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_8e61cc2464a297e6/sess_423ec7caccac42f052d7a1c4",
+      "final_exists": true,
+      "final_bytes": 2561216872,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-28T16:05:39.601Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 0,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 0,
+      "invalid_exact_sidecars": 0
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_c718a1ed89414166/sess_221f0ba0239cd654cfc83fe8",
+      "final_exists": true,
+      "final_bytes": 1270928316,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-28T15:52:31.594Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 0,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 0,
+      "invalid_exact_sidecars": 0
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_00a2da5e9c4d90e8/sess_42ce038d99c17e0487aad3a5",
+      "final_exists": true,
+      "final_bytes": 376637884,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-29T14:33:32.860Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 3,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 376638448,
+      "invalid_exact_sidecars": 3
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_00a2da5e9c4d90e8/sess_00765a791edf03e320c77eb0",
+      "final_exists": true,
+      "final_bytes": 1102792208,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-28T16:07:18.811Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 0,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 0,
+      "invalid_exact_sidecars": 0
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_00a2da5e9c4d90e8/sess_0d5011a2d8af132ce1b497c4",
+      "final_exists": true,
+      "final_bytes": 1014673224,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-29T11:40:06.081Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 6,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 1014743348,
+      "invalid_exact_sidecars": 6
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_650c33d1973a5825/sess_276e38684a5294c8342e733c",
+      "final_exists": true,
+      "final_bytes": 1180525320,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-30T08:07:08.836Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 7,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 1180462528,
+      "invalid_exact_sidecars": 7
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_650c33d1973a5825/sess_28becd1dc2dc71de8a2f6c81",
+      "final_exists": true,
+      "final_bytes": 3005870336,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-29T03:49:28.596Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 2,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 3005871088,
+      "invalid_exact_sidecars": 2
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_650c33d1973a5825/sess_a44279c4f3247e47de2fe9d1",
+      "final_exists": true,
+      "final_bytes": 882765656,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-29T15:01:12.316Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 1,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 882765656,
+      "invalid_exact_sidecars": 1
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_650c33d1973a5825/sess_75b7f205b3c4031bdd645413",
+      "final_exists": true,
+      "final_bytes": 1767364312,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-30T03:45:30.829Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 13,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 1767331240,
+      "invalid_exact_sidecars": 13
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_650c33d1973a5825/sess_38cab02b604fecf173b2dae1",
+      "final_exists": true,
+      "final_bytes": 9975623288,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-28T15:45:20.844Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 0,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 0,
+      "invalid_exact_sidecars": 0
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_836db3961058b668/sess_9084eb54bfbf924386718758",
+      "final_exists": true,
+      "final_bytes": 904433972,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-30T04:05:23.694Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 8,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 904428896,
+      "invalid_exact_sidecars": 8
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_836db3961058b668/sess_535ed07d323422437670b25b",
+      "final_exists": true,
+      "final_bytes": 1422973316,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-29T14:53:29.375Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 8,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 1422982152,
+      "invalid_exact_sidecars": 8
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_836db3961058b668/sess_463919ded03fa079d5f9cff3",
+      "final_exists": true,
+      "final_bytes": 1359393972,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-30T11:44:23.375Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 8,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 1359388144,
+      "invalid_exact_sidecars": 8
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_145bdcf5bfa08759/sess_1bed3436373e33445bb86a19",
+      "final_exists": true,
+      "final_bytes": 804602400,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-29T15:23:36.277Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 6,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 804606912,
+      "invalid_exact_sidecars": 6
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_199f0706146a1c75/sess_4825f16a51fe30fa2b64e11d",
+      "final_exists": true,
+      "final_bytes": 349430336,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-30T00:35:10.523Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 2,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 349445564,
+      "invalid_exact_sidecars": 2
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_3fda32b6a5c38fa3/sess_76789051113ef9bc844fd9ae",
+      "final_exists": true,
+      "final_bytes": 1952134284,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-28T15:36:28.984Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 0,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 0,
+      "invalid_exact_sidecars": 0
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_3fda32b6a5c38fa3/sess_0b74d9454078d72919a2aa0f",
+      "final_exists": true,
+      "final_bytes": 758575300,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-29T14:00:55.394Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 5,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 758628692,
+      "invalid_exact_sidecars": 5
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_e8f8785e8b29630c/sess_29260f13d8c175b8a9d055a9",
+      "final_exists": true,
+      "final_bytes": 974887912,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-29T15:02:57.215Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 5,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 974862156,
+      "invalid_exact_sidecars": 5
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_87b3bb4c9e29eb3b/sess_0f220133d7ba4344129ce3e0",
+      "final_exists": true,
+      "final_bytes": 413270624,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-30T10:59:58.394Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 5,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 413252576,
+      "invalid_exact_sidecars": 5
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_87b3bb4c9e29eb3b/sess_8d3a3471c97bd51e101e6e90",
+      "final_exists": true,
+      "final_bytes": 2274207800,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-28T15:54:35.144Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 0,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 0,
+      "invalid_exact_sidecars": 0
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_87b3bb4c9e29eb3b/sess_9364647b9a4a7dbaee8eca2a",
+      "final_exists": true,
+      "final_bytes": 602608432,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-29T14:53:59.871Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 5,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 602609560,
+      "invalid_exact_sidecars": 5
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_86bb728a51564fb6/sess_073506ff856ed27304d97df1",
+      "final_exists": true,
+      "final_bytes": 1201959576,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-28T16:02:48.562Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 0,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 0,
+      "invalid_exact_sidecars": 0
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_86bb728a51564fb6/sess_e31d5c5f2c8ced5e9d28f1df",
+      "final_exists": true,
+      "final_bytes": 1254675716,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-29T15:02:13.432Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 5,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 1254691320,
+      "invalid_exact_sidecars": 5
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_86bb728a51564fb6/sess_a91af2d3a6196f6b58cbeeca",
+      "final_exists": true,
+      "final_bytes": 560625212,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-30T10:18:29.948Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 5,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 560610172,
+      "invalid_exact_sidecars": 5
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_77ae4f4bebcaca48/sess_619f6c790caf4a07adb37a45",
+      "final_exists": true,
+      "final_bytes": 717043844,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-30T02:21:12.266Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 3,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 717043468,
+      "invalid_exact_sidecars": 3
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_77ae4f4bebcaca48/sess_41aeb32ecec07c7b42be25b7",
+      "final_exists": true,
+      "final_bytes": 997370456,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-30T05:09:16.958Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 4,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 997369704,
+      "invalid_exact_sidecars": 4
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_77ae4f4bebcaca48/sess_64b42136edb536d7cf7f26a9",
+      "final_exists": true,
+      "final_bytes": 1471162040,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-29T06:19:30.652Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 1,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 1471162040,
+      "invalid_exact_sidecars": 1
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_da976e262ebf85ce/sess_1c9f10427989050422ac4821",
+      "final_exists": true,
+      "final_bytes": 484200580,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-30T11:55:40.602Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 6,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 484197460,
+      "invalid_exact_sidecars": 6
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_da976e262ebf85ce/sess_0dec1a5fc934413d46b028e2",
+      "final_exists": true,
+      "final_bytes": 2017167620,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-28T16:09:07.462Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 0,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 0,
+      "invalid_exact_sidecars": 0
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_da976e262ebf85ce/sess_923bb35c0c7a3e24ad48d9d4",
+      "final_exists": true,
+      "final_bytes": 456306832,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-29T11:56:33.469Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 6,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 456308004,
+      "invalid_exact_sidecars": 6
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_c59658a52d6ad5a7/sess_3d1ec8edebc87316dc880d8e",
+      "final_exists": true,
+      "final_bytes": 5551417972,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-28T18:29:00.561Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 0,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 0,
+      "invalid_exact_sidecars": 0
+    },
+    {
+      "dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_c59658a52d6ad5a7/sess_e513de065c13d06c303f8f74",
+      "final_exists": true,
+      "final_bytes": 1635101048,
+      "manifest_exists": true,
+      "manifest_created_at": "2026-08-29T18:25:10.470Z",
+      "manifest_completeness": "PARTIAL",
+      "sidecar_count": 7,
+      "source_media_remaining_count": 0,
+      "sidecar_source_bytes": 1635090896,
+      "invalid_exact_sidecars": 7
+    }
+  ],
+  "notes": [
+    "24h estimate uses sidecar output_size_bytes for sessions whose manifest created_at is within 24h; it is an observed snapshot, not a capacity guarantee.",
+    "Single-source sessions can be promoted by rename without duplicating bytes; the primary estimate therefore counts only multi-source finalizations.",
+    "Historical multi-source media has been unlinked, so source A/V streams cannot be independently re-probed; this is itself the auditability gap."
+  ],
+  "conclusion": {
+    "primary_risk": "多分段合并完成后立即 unlink 源分段，使合并结果无法与源文件独立复核，也失去失败后的恢复材料。",
+    "ordering_observation": "当前可见样本中未发现 mtime 与 generation 顺序冲突；这是脆弱性而非本轮已证实的生产错序根因。",
+    "capacity_observation": "按最近24小时实际完成量估算，多分段源文件额外保留24小时约43.758 GiB，占快照可用空间约8.43%。",
+    "minimal_fix": "按文件名 generation 决定新格式分段顺序；合并前保存精简 source manifest；只做 ffprobe 元数据校验；合并后保留多分段源文件至少24小时，不做全包转码或并行第二路FFmpeg。"
+  }
+}

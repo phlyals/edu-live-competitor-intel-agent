@@ -1,0 +1,1 @@
+{"status":"PASS","dry_run_read_only":true,"plan_digest_gate":true,"apply_idempotent":true,"ddl_idempotent":true,"backup_mode":"0600"}

@@ -1,0 +1,184 @@
+{
+  "observed_at": "2026-08-30T16:04:14.480074+00:00",
+  "transaction_read_only": "on",
+  "analyses": [
+    {
+      "analysis_id": "analysis_16bdca57a497943fd6eb0c05",
+      "status": "COMPLETE",
+      "lineage_state": "SUPERSEDED",
+      "analysis_spec_version": "single-session-evidence-v2",
+      "artifact_digest": "45b576f6e35c6db85135f544abf879792180a81c682c91df82f6d7b1e5f5222e",
+      "output_path": "/Volumes/ExternalStorage/同行直播录制/analysis/drafts/runtime-v3/analysis/analysis_16bdca57a497943fd6eb0c05.json"
+    },
+    {
+      "analysis_id": "analysis_8801cb766ceca4ab6327511a",
+      "status": "SAMPLE_NONQUALIFYING",
+      "lineage_state": "INVALIDATED",
+      "analysis_spec_version": "legacy-sample-analysis-v1",
+      "artifact_digest": "d64d1ede9ee97628cf74d0b5ed4dcfce82a6f872edf51cbef9749feff1bee817",
+      "output_path": "/Volumes/ExternalStorage/同行直播录制/analysis/drafts/runtime-v3/analysis/analysis_8801cb766ceca4ab6327511a.json"
+    },
+    {
+      "analysis_id": "analysis_bb3f658b48a46b764b835fab",
+      "status": "SKIPPED_HISTORICAL",
+      "lineage_state": "CURRENT",
+      "analysis_spec_version": null,
+      "artifact_digest": null,
+      "output_path": null
+    },
+    {
+      "analysis_id": "analysis_d52f07f183321d1b75620e21",
+      "status": "COMPLETE",
+      "lineage_state": "CURRENT",
+      "analysis_spec_version": "single-session-evidence-v3-coverage",
+      "artifact_digest": "d37b7363bb5a01ccc9c7c69665887f26bea534bd16aeba49ce4e88a08a48343d",
+      "output_path": "/Volumes/ExternalStorage/同行直播录制/analysis/drafts/runtime-v3/analysis/analysis_d52f07f183321d1b75620e21.json"
+    },
+    {
+      "analysis_id": "analysis_f261f8101b4ea725a954c23f",
+      "status": "SAMPLE_NONQUALIFYING",
+      "lineage_state": "INVALIDATED",
+      "analysis_spec_version": "legacy-sample-analysis-v1",
+      "artifact_digest": "14147e0d1536df6e157f3c8acd3a2c700926de9f1b45d192e7b106d692fa5c10",
+      "output_path": "/Volumes/ExternalStorage/同行直播录制/analysis/drafts/runtime-v3/analysis/analysis_f261f8101b4ea725a954c23f.json"
+    }
+  ],
+  "heartbeats": [
+    {
+      "service_name": "analysis-v3",
+      "pid": 75216,
+      "status": "READY",
+      "last_heartbeat_at": "2026-08-30T16:04:05.433Z",
+      "pid_alive": true,
+      "details": {
+        "analysis_spec_version": "single-session-evidence-v3-coverage",
+        "checked_at": "2026-08-30T16:04:05.433Z",
+        "completed": 0,
+        "current_spec_blocked": 0,
+        "current_spec_evidence_pending": 0,
+        "current_spec_meets_target": 1,
+        "current_spec_qualified": 1,
+        "current_spec_total": 1,
+        "current_spec_waiting": 0,
+        "health_reasons": [],
+        "minimum_coverage_rate": 0.9,
+        "quality_blocked": 0,
+        "revalidated": 0,
+        "source_qualification_blocked": 0,
+        "target_coverage_rate": 0.95,
+        "waiting_model": 0
+      }
+    },
+    {
+      "service_name": "evidence-v3",
+      "pid": 75263,
+      "status": "READY",
+      "last_heartbeat_at": "2026-08-30T16:04:05.469Z",
+      "pid_alive": true,
+      "details": {
+        "blocked": 0,
+        "checked_at": "2026-08-30T16:04:05.469Z",
+        "verified": 0
+      }
+    },
+    {
+      "service_name": "pipeline-v3",
+      "pid": 75161,
+      "status": "READY",
+      "last_heartbeat_at": "2026-08-30T16:03:56.087Z",
+      "pid_alive": true,
+      "details": {
+        "analysis_tasks": 0,
+        "checked_at": "2026-08-30T16:03:56.087Z",
+        "eligible_canonical_pending": 0,
+        "eligible_canonical_total": 1,
+        "full_session_meets_target": 1,
+        "full_session_qualified": 1,
+        "health_reasons": [],
+        "quality_blocked": 0,
+        "segments": 109,
+        "stale_backlog": {
+          "missing_output": 0,
+          "missing_source": 0,
+          "unrecoverable": 0
+        },
+        "transcripts": 0
+      }
+    },
+    {
+      "service_name": "recompute-v3",
+      "pid": 708,
+      "status": "READY",
+      "last_heartbeat_at": "2026-08-30T16:03:29.351Z",
+      "pid_alive": true,
+      "details": {
+        "checked_at": "2026-08-30T16:03:29.350Z",
+        "stale_items": 0
+      }
+    },
+    {
+      "service_name": "runtime-v3",
+      "pid": 59961,
+      "status": "READY",
+      "last_heartbeat_at": "2026-08-30T16:03:48.401Z",
+      "pid_alive": true,
+      "details": {
+        "audio_retention_hours": 168,
+        "capacity_test_concurrency": 65,
+        "due_target_count": 41,
+        "expected_max_recording_concurrency": 50,
+        "final_ready": false,
+        "full_fleet": true,
+        "live_count": 1,
+        "normal_recording_concurrency": 30,
+        "production_gate": "BLOCKED",
+        "recording_duration_seconds": 0,
+        "recording_health": {
+          "finalized": 118,
+          "restarted": 0,
+          "running": 1
+        },
+        "recording_mode": "LOWEST_VIDEO_WITH_AUDIO",
+        "recording_quality": "LD",
+        "recording_segment_seconds": 0,
+        "result_count": 41,
+        "speech_audio_bitrate_kbps": 48,
+        "speech_audio_format": "opus",
+        "target_count": 41,
+        "unknown_count": 4,
+        "video_retention_hours": 72
+      }
+    }
+  ],
+  "active_recording_jobs": [
+    {
+      "job_id": "recjob_90409f2eb76bb8754dbf56d7",
+      "session_id": "session_808c5516d0916b2ecfe7aac883959418",
+      "status": "RUNNING",
+      "pid": 35736,
+      "partial_dir": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_c59658a52d6ad5a7/sess_90409f2eb76bb8754dbf56d7",
+      "restart_count": 0,
+      "pid_alive": true,
+      "media_bytes": 1609176312
+    }
+  ],
+  "outbox_counts": [
+    {
+      "status": "DEAD_LETTER",
+      "count": 1
+    },
+    {
+      "status": "SENT",
+      "count": 370
+    }
+  ],
+  "production_hashes": {
+    "v3_analysis_contract.py": "8fcbd147e10caec40699c992a512b0639e7d1e7ffc0a6ce4927583de27a3f64f",
+    "v3_analysis_worker.py": "1fce88f930efbd4c6b334fb78f4578b3909f76b0890b45196f48211a8b08469f",
+    "v3_evidence_worker.py": "f67d5623c9f9af566de2c3895297f10594d9ef89c52282371581383e9dbd4c95",
+    "test_v3_analysis_worker.py": "621aecf66d9108c21b362ab33d3f212727ec7d588badb39c5f163a1a86a8b00b",
+    "test_v3_analysis_coverage_gate.py": "5b8a96e912eae498b4d935b0b194d0cd92b85fc1b7d014bc957abcbb98d25abb",
+    "test_v3_sample_analysis_qualification.py": "c64d57e1aaf3e3e652bc3390c24453ee3485180d2ae5ce229ed8cdadcdcb95f9",
+    "test_v3_analysis_source_binding.py": null
+  }
+}

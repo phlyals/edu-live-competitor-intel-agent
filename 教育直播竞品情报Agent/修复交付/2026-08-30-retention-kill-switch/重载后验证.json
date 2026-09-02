@@ -1,0 +1,84 @@
+{
+  "checked_at": "2026-08-30T04:50:05.802961+00:00",
+  "transaction_read_only": "on",
+  "config": {
+    "delete_enabled": false,
+    "automatic_delete": false
+  },
+  "heartbeat": {
+    "pid": 34907,
+    "status": "READY",
+    "started_at": "2026-08-25T08:40:14.218Z",
+    "last_heartbeat_at": "2026-08-30T04:49:19.388Z",
+    "details": {
+      "blocked_dependencies": 0,
+      "checked_at": "2026-08-30T04:49:19.388Z",
+      "delete_enabled": false,
+      "deleted": 0,
+      "failed": 0,
+      "mode": "DELETE_DISABLED",
+      "policies": {
+        "audio_hours": 168,
+        "video_hours": 72
+      }
+    }
+  },
+  "retention_counts": {
+    "DELETED": 2,
+    "PENDING": 80
+  },
+  "existing_job_field_changes": [],
+  "baseline_retention_target_files_missing": [],
+  "baseline_media_files_missing": [],
+  "session_counts": {
+    "DUPLICATE_SUPERSEDED": 2,
+    "ENDED": 9,
+    "MEDIA_COMPLETE": 85,
+    "RECORDING": 4
+  },
+  "services": {
+    "runtime-v3": {
+      "state": "running",
+      "pid": "87059",
+      "runs": "60",
+      "last_exit_code": "1"
+    },
+    "pipeline-v3": {
+      "state": "running",
+      "pid": "91389",
+      "runs": "34",
+      "last_exit_code": "1"
+    },
+    "analysis-v3": {
+      "state": "running",
+      "pid": "85928",
+      "runs": "2",
+      "last_exit_code": "0"
+    },
+    "evidence-v3": {
+      "state": "running",
+      "pid": "705",
+      "runs": "1",
+      "last_exit_code": "(never exited)"
+    },
+    "recompute-v3": {
+      "state": "running",
+      "pid": "708",
+      "runs": "1",
+      "last_exit_code": "(never exited)"
+    },
+    "retention-v3": {
+      "state": "running",
+      "pid": "34907",
+      "runs": "2",
+      "last_exit_code": null
+    }
+  },
+  "post_hashes": {
+    "/Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/v3_retention_worker.py": "a78bc16522b1b4b858153d8c5a00abfbf5761ec58594d97ec8d3d2326e42951e",
+    "/Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/v3_config.json": "751a0837ad6644a08db9e953c6e28af088cd4b6f91f2553df58a36485606a7c5",
+    "/Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/config.json": "773ac88162c38c884f7ef8af76985028d90ba4c9d2da071423a9e1c014b12ee8",
+    "/Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/test_v3_workflow.py": "6c1b048ce88da628d3ce5dbeb084de205f6d979255abeadc727e9a1261bfbeb1"
+  },
+  "pass": true
+}

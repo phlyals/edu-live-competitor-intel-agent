@@ -1,0 +1,518 @@
+{
+  "observed_at": "2026-08-30T16:19:58.415118+00:00",
+  "transaction_read_only": "on",
+  "current_analysis": {
+    "analysis_id": "analysis_c0d5fe33a0180f99e66fbca2",
+    "status": "COMPLETE",
+    "lineage_state": "CURRENT",
+    "spec": "single-session-evidence-v4-source-ids",
+    "artifact_digest": "ca32b42663e8909773f3cc5e6b37bc1ae1a9fcec7aea702a45f316d168a6a0af",
+    "actual_artifact_digest": "ca32b42663e8909773f3cc5e6b37bc1ae1a9fcec7aea702a45f316d168a6a0af",
+    "digest_matches": true,
+    "metadata_has_stale_error": false
+  },
+  "coverage": {
+    "schema_version": 2,
+    "coverage_scope": "FULL_SESSION",
+    "source_duration_seconds": 4387.491625,
+    "source_timestamp_covered_seconds": 4335.199999999997,
+    "source_transcript_coverage_rate": 0.9880816581615691,
+    "analyzed_timestamp_covered_seconds": 4335.199999999997,
+    "analysis_coverage_rate": 0.9880816581615691,
+    "timeline_coverage_rate": 0.9880816581615691,
+    "source_segment_count": 1454,
+    "analyzed_unique_segment_count": 1454,
+    "segment_coverage_rate": 1.0,
+    "source_segment_ids_sha256": "bde4ab08f8f2a8634c0a78e8ddfdeeda227900166388c82f466ff0af62c7ebb5",
+    "successful_source_segment_ids_sha256": "bde4ab08f8f2a8634c0a78e8ddfdeeda227900166388c82f466ff0af62c7ebb5",
+    "minimum_coverage_rate": 0.9,
+    "target_coverage_rate": 0.95,
+    "timestamps_valid": true,
+    "source_segment_ids_valid": true,
+    "all_chunks_complete": true,
+    "is_qualified": true,
+    "meets_target": true,
+    "validation_errors": [],
+    "first_timestamp_seconds": 0.0,
+    "last_timestamp_seconds": 4385.42,
+    "chunk_count": 16,
+    "input_row_count": 1454
+  },
+  "gap_count": 123,
+  "binding": {
+    "artifact_binding_status": "BOUND_V1",
+    "reference_count": 484,
+    "source_binding_digest_matches": true,
+    "nearest_segment_fallback": false,
+    "model_generated_timestamps": false,
+    "item_count": 184,
+    "reference_errors": [],
+    "module_reference_errors": [],
+    "source_segment_count": 1454,
+    "source_segment_set_digest": "fe4e619995f379e599853ce6fcc5c21978e81197899037717a2d29da97d22991"
+  },
+  "content": {
+    "instructor": {
+      "status": "CONFLICT",
+      "names": [
+        "田老师",
+        "韩老师"
+      ],
+      "evidence_refs": [
+        {
+          "summary": "田老师",
+          "source_segment_ids": [
+            "srcseg_000143_2421f0c4d87c2055de8c",
+            "srcseg_000144_a52e05780020a4edba17"
+          ],
+          "source_segments": [
+            {
+              "source_segment_id": "srcseg_000143_2421f0c4d87c2055de8c",
+              "start": 377.3,
+              "end": 380.82,
+              "source_text": "但是田老师一定是讲的最详细的 刚进来的家长啊",
+              "content_digest": "d8b024bd0c3d041110f4a2f8f97794e689f11e66fd85897c428eebba0508a7d2"
+            },
+            {
+              "source_segment_id": "srcseg_000144_a52e05780020a4edba17",
+              "start": 380.82,
+              "end": 384.82,
+              "source_text": "咱们跟上节奏,你听个三五分钟,你看看田老师到底讲的怎么样",
+              "content_digest": "bafef78cce490015d342b82e1c737aca0a11847bc7ad007de196fd1d1e641b88"
+            }
+          ],
+          "start": 377.3,
+          "end": 384.82,
+          "source_binding_digest": "dda5114ba7dc4286912e9e1637f53ededea54ade86474eb972837e4aef4e0dce"
+        },
+        {
+          "summary": "田老师",
+          "source_segment_ids": [
+            "srcseg_000240_9fc619d225db99dcc29f"
+          ],
+          "source_segments": [
+            {
+              "source_segment_id": "srcseg_000240_9fc619d225db99dcc29f",
+              "start": 687.47,
+              "end": 690.67,
+              "source_text": "好吧 家长 记下来 田老师今天跟你讲的都是干货",
+              "content_digest": "071b0163c80eb14a76599404411180511a677a21403e285224a8cec5f4ceb478"
+            }
+          ],
+          "start": 687.47,
+          "end": 690.67,
+          "source_binding_digest": "9e71eac35091bbe47ac29a859047c80d081bf7fa7a67b362f5d395d34379ba88"
+        },
+        {
+          "summary": "韩老师",
+          "source_segment_ids": [
+            "srcseg_000457_7cbde43e62741f9e5262"
+          ],
+          "source_segments": [
+            {
+              "source_segment_id": "srcseg_000457_7cbde43e62741f9e5262",
+              "start": 1318.46,
+              "end": 1319.58,
+              "source_text": "好吧 我是韩翰",
+              "content_digest": "6a52bbe2ca478db958cbfc86e0ab3ffa6418cdd1420e4334dc99f57de3656fb0"
+            }
+          ],
+          "start": 1318.46,
+          "end": 1319.58,
+          "source_binding_digest": "efb056fc87173d823dbbecfd79bd4b664d107058d3593796f91a76897f0cb16a"
+        },
+        {
+          "summary": "田老师",
+          "source_segment_ids": [
+            "srcseg_000671_736e17d65e3f073bd5d8"
+          ],
+          "source_segments": [
+            {
+              "source_segment_id": "srcseg_000671_736e17d65e3f073bd5d8",
+              "start": 1902.53,
+              "end": 1905.33,
+              "source_text": "所以你看你在田老师的直播间肯定没问题的",
+              "content_digest": "5b0dd4d0120ed03ad873d8ca7b51adb35b602393e703f2db1412ef4b4be0dfc3"
+            }
+          ],
+          "start": 1902.53,
+          "end": 1905.33,
+          "source_binding_digest": "302d9203a7381f9f6a2f29e6d3b26e4014658fa17a1287690a9efb928ccc1dbd"
+        },
+        {
+          "summary": "田老师",
+          "source_segment_ids": [
+            "srcseg_000780_9fc2f4ff6413ee0df359"
+          ],
+          "source_segments": [
+            {
+              "source_segment_id": "srcseg_000780_9fc2f4ff6413ee0df359",
+              "start": 2298.52,
+              "end": 2304.28,
+              "source_text": "好 今天来到田老师的直播间 我就给大家讲干货 我接下来从这六十篇里面 家长",
+              "content_digest": "5c7223e25bf8d809c0894808b28c65bb14835ed0fc77f0504052fbc5ea84f18d"
+            }
+          ],
+          "start": 2298.52,
+          "end": 2304.28,
+          "source_binding_digest": "d660f98aafc8745bd5c4236aaa8a61f300acb313dbc21b53975d48ee37633286"
+        },
+        {
+          "summary": "田老师",
+          "source_segment_ids": [
+            "srcseg_000921_d308bba207c31c7fdb6c",
+            "srcseg_000979_1e7fdde13ef15cc5aa77"
+          ],
+          "source_segments": [
+            {
+              "source_segment_id": "srcseg_000921_d308bba207c31c7fdb6c",
+              "start": 2812.2,
+              "end": 2822.51,
+              "source_text": "好 所有打了688的家长注意了 把688这个数字牢牢的记下来 我说了 田老师的直播间没废话 我让你打的东西都是考点都是知识点",
+              "content_digest": "194a33b254b14437f3f28c5a733110b45cf7afe944aa81c076d88648ee4e9de8"
+            },
+            {
+              "source_segment_id": "srcseg_000979_1e7fdde13ef15cc5aa77",
+              "start": 3016.08,
+              "end": 3023.64,
+              "source_text": "好不好 来 打在共鸣上 田老师一对一的大家看一看 我给你一些建议 通过你的数学分数 老师给你一些建议好不好",
+              "content_digest": "023e5e65a05731111a1c5c552f1b650159ab5f4a2c9c90a914ac5c3f60ff6f1c"
+            }
+          ],
+          "start": 2812.2,
+          "end": 3023.64,
+          "source_binding_digest": "47ad48400b2f79620515ff100b0dc81d103893ceaea3db75a0e247899b842709"
+        },
+        {
+          "summary": "田老师",
+          "source_segment_ids": [
+            "srcseg_001085_33296893d1f52cd16e73"
+          ],
+          "source_segments": [
+            {
+              "source_segment_id": "srcseg_001085_33296893d1f52cd16e73",
+              "start": 3321.04,
+              "end": 3327.64,
+              "source_text": "接下来 田老师教大家的是去改变数学学习惯的方法呢 来 家长把计算打在公平上",
+              "content_digest": "a0242cd3eb254543102ebc265f781f3fd183d41291348e0eb2bd4364a8a82db5"
+            }
+          ],
+          "start": 3321.04,
+          "end": 3327.64,
+          "source_binding_digest": "8365c283d3387963bd5ced42f5ca0afa3840d2bc743a9baa5765d892a4e326ad"
+        }
+      ]
+    },
+    "course_content_count": 25,
+    "interaction_count": 26,
+    "product_handoff_count": 10,
+    "module_names": [
+      "开场",
+      "干货",
+      "需求",
+      "信任",
+      "商品承接",
+      "成交",
+      "答疑"
+    ],
+    "modules_with_exact_refs": {
+      "开场": 50,
+      "干货": 127,
+      "需求": 66,
+      "信任": 87,
+      "商品承接": 43,
+      "成交": 72,
+      "答疑": 99
+    }
+  },
+  "model": {
+    "chunk_count": 16,
+    "attempts": [
+      1,
+      1,
+      2,
+      1,
+      1,
+      1,
+      1,
+      1,
+      2,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "all_finish_stop": true,
+    "successful_source_segment_count": 1454
+  },
+  "bundle": {
+    "object_id": "analysis_c0d5fe33a0180f99e66fbca2",
+    "status": "VERIFIED",
+    "scope": "FORMAL_SINGLE_SESSION",
+    "qualification_status": "FULL_SESSION_QUALIFIED",
+    "manifest_path": "/Volumes/ExternalStorage/同行直播录制/analysis/drafts/runtime-v3/analysis/analysis_c0d5fe33a0180f99e66fbca2.json",
+    "manifest_hash": "ca32b42663e8909773f3cc5e6b37bc1ae1a9fcec7aea702a45f316d168a6a0af",
+    "verified_at": "2026-08-30T16:15:17.679Z",
+    "metadata_json": "{\"analysis_coverage\": {\"all_chunks_complete\": true, \"analysis_coverage_rate\": 0.9880816581615691, \"analyzed_timestamp_covered_seconds\": 4335.199999999997, \"analyzed_unique_segment_count\": 1454, \"chunk_count\": 16, \"coverage_scope\": \"FULL_SESSION\", \"first_timestamp_seconds\": 0.0, \"input_row_count\": 1454, \"is_qualified\": true, \"last_timestamp_seconds\": 4385.42, \"meets_target\": true, \"minimum_coverage_rate\": 0.9, \"schema_version\": 2, \"segment_coverage_rate\": 1.0, \"source_duration_seconds\": 4387.491625, \"source_segment_count\": 1454, \"source_segment_ids_sha256\": \"bde4ab08f8f2a8634c0a78e8ddfdeeda227900166388c82f466ff0af62c7ebb5\", \"source_segment_ids_valid\": true, \"source_timestamp_covered_seconds\": 4335.199999999997, \"source_transcript_coverage_rate\": 0.9880816581615691, \"successful_source_segment_ids_sha256\": \"bde4ab08f8f2a8634c0a78e8ddfdeeda227900166388c82f466ff0af62c7ebb5\", \"target_coverage_rate\": 0.95, \"timeline_coverage_rate\": 0.9880816581615691, \"timestamps_valid\": true, \"validation_errors\": []}, \"analysis_id\": \"analysis_c0d5fe33a0180f99e66fbca2\", \"analysis_spec_version\": \"single-session-evidence-v4-source-ids\", \"artifact_digest\": \"ca32b42663e8909773f3cc5e6b37bc1ae1a9fcec7aea702a45f316d168a6a0af\", \"checked_at\": \"2026-08-30T16:15:17.679Z\", \"evidence_binding_status\": \"BOUND_V1\", \"formal_analysis_eligible\": true, \"identity_mode\": \"VERSIONED_ROOT_IDENTITY_AND_STRICT_SOURCE_IDS\", \"model_version\": \"deepseek-chat\", \"prompt_version\": \"deepseek-source-segment-ids-v1\", \"qualification_state\": \"FULL_SESSION_QUALIFIED\", \"referenced_source_segment_count\": 484, \"referenced_source_segments\": [{\"content_digest\": \"a0c7c60886558b5dff82a63f8d42e0ce6ac34756af09d6cd68dcbcde70fa5c5e\", \"source_segment_id\": \"srcseg_000001_bec1cd74734b5fd224ae\"}, {\"content_digest\": \"ea71271ee5689e61bb1f4f65aaf75ce2aa58023648988c0abc91da40c725c746\", \"source_segment_id\": \"srcseg_000002_b944ad73920de2d44f10\"}, {\"content_digest\": \"940d38cf06b14ec0ab93b194133886c8a458861fd2cc292c69dcea180690a8d1\", \"source_segment_id\": \"srcseg_000015_fda2c299ee3307be7d2d\"}, {\"content_digest\": \"8056554f6cdcc10c4865b41f86547cf4eb25cac278b0cf85d3586d4f24f065ce\", \"source_segment_id\": \"srcseg_000019_f7adf92bde27bf4c1e0e\"}, {\"content_digest\": \"a47b3785724696628e04df98d865b6c52096a977bdbdfaf6895eff92989ac104\", \"source_segment_id\": \"srcseg_000023_8798d3587b8d70855296\"}, {\"content_digest\": \"559ced0f440e0b3014c4af4ad406361be8562429c65ed704f169d656f7e8fbe6\", \"source_segment_id\": \"srcseg_000027_d708a674490615f304a0\"}, {\"content_digest\": \"c2c615eb1d579c4cd39343af9c8df65e0da04db81ed6518cab260b8bc1fd27f7\", \"source_segment_id\": \"srcseg_000028_429d40f345c87be49ed6\"}, {\"content_digest\": \"bdd6434e59e98bdf0dc7413fb32b7d6fabff02cecea7d27d4bfe083cf1d475ca\", \"source_segment_id\": \"srcseg_000029_0e988c71aeb24b4eaea8\"}, {\"content_digest\": \"704678b4b34f0e8987525728d9f7aa9b376f237ea5a10a596847fa8a9971e5ba\", \"source_segment_id\": \"srcseg_000037_2eaf68a3d9af7c7196ff\"}, {\"content_digest\": \"763f59859ccdb7524976d96f15e3086517fa38f832afa2e765d2723587ade878\", \"source_segment_id\": \"srcseg_000043_3539d1f8031171179b15\"}, {\"content_digest\": \"2703b66d8f450668d39c1727af33c47c28cb53f60bc4af539e587c98fbcf5d73\", \"source_segment_id\": \"srcseg_000049_a84b42f0287e4510a5af\"}, {\"content_digest\": \"15314a90540ffac34a0952753d44fe4af96a5b4a4e0e80ca9c762d9269812aeb\", \"source_segment_id\": \"srcseg_000051_39478d6f34be8547007b\"}, {\"content_digest\": \"1900edcef9d362860c81f73ae092f781b8b5c912c74f654206fc22091be32955\", \"source_segment_id\": \"srcseg_000063_f72953e0ced08767733c\"}, {\"content_digest\": \"cedfecb58eeb77a0a40ffec2379f90b3c323c77a2e958cd3df67f33c7083f2a2\", \"source_segment_id\": \"srcseg_000064_ac76e1a929bb46e66e94\"}, {\"content_digest\": \"3b87b178db54cb39d0e76349ee3ae56133edf5b544098af3d144e96d4f99154c\", \"source_segment_id\": \"srcseg_000067_94efbc224cba642cdcf0\"}, {\"content_digest\": \"2d58f6f6ef4a2af06da23321e97ce7a97333da921bee5b77b4242d7a402d480f\", \"source_segment_id\": \"srcseg_000103_1cc37b26b7b544bbddca\"}, {\"content_digest\": \"1eef1f06979a119e4d76b05485ed034a171f50f9d9ec765ba708afc6e948c5f4\", \"source_segment_id\": \"srcseg_000104_a45074abe59c3d39029a\"}, {\"content_digest\": \"0500f287dc3964bd9f72963838fef1707d4e0b0fbebdbc98bc6b6a41efe166a9\", \"source_segment_id\": \"srcseg_000106_304ee779372caef95510\"}, {\"content_digest\": \"c832d9489afecf70d823cbd414272086605d0b7c7efe20ee2f365daf932da3a6\", \"source_segment_id\": \"srcseg_000107_03aa0fa59c5c288830df\"}, {\"content_digest\": \"9a0fd0d497f3ffc6e3559747558d36f0490f56b4b57fe416359790569d31aaca\", \"source_segment_id\": \"srcseg_000108_a69a1df604f862df4af6\"}, {\"content_digest\": \"dfc7000b4f0fa2535e47e3d16d97ba2da15ec2c060227295f63fc72cdb9a7672\", \"source_segment_id\": \"srcseg_000109_f8eeb3f5f760fbb5c90a\"}, {\"content_digest\": \"42f9fcfe27c866726ba8c3a85935755caec2b1f9e399a1b894d7281b71464a5e\", \"source_segment_id\": \"srcseg_000110_a600c485906b2bdc3c72\"}, {\"content_digest\": \"49b02e7801976847a654aa628bb1c8711a27cc2385eb2f55d2e357a9f02578c9\", \"source_segment_id\": \"srcseg_000111_8b7df72799fbb08477e5\"}, {\"content_digest\": \"1ccd8e50e95d5577d2699ed2c2b537d53e7468f961444ac9f8b9ae966c7c2b7b\", \"source_segment_id\": \"srcseg_000113_f9cd1ae052513193b2b9\"}, {\"content_digest\": \"247ff0adbecd88756a425f56d45ceaf5afaa8d7a50906526833e01e1cf6e818a\", \"source_segment_id\": \"srcseg_000115_b4879396a0daeccaf94e\"}, {\"content_digest\": \"916f89a578450e60ed2657392d2d3e4952a3ddb4d11f401f95e427ee94ec8f6a\", \"source_segment_id\": \"srcseg_000116_18e67400b6ff414ea5cd\"}, {\"content_digest\": \"15856309d7ef4d4dd44d37df0bf31e2c85bcd4cd933a03a915f4d9300b5cc3b2\", \"source_segment_id\": \"srcseg_000119_3224d3a082288738519f\"}, {\"content_digest\": \"0b22c868b385272f78ff74caa881f08396b6e8d5cb539ce900bca3d1a092877d\", \"source_segment_id\": \"srcseg_000120_48b12e5d2c5789273daf\"}, {\"content_digest\": \"0355e9987790ec5c087367ee3e8af5de6122e0cc09344b2af61f293a6810d220\", \"source_segment_id\": \"srcseg_000121_37b9415128d937ec0317\"}, {\"content_digest\": \"398e2b4e010817e62bf60ec7c696a7f855315115427e4e15beafd3454d378101\", \"source_segment_id\": \"srcseg_000128_0e3bf145f96c3831581a\"}, {\"content_digest\": \"a69763f591c77886ce1397b2d1dc4f4cedc0125147e7bd5ae2065626d29bccc8\", \"source_segment_id\": \"srcseg_000129_84e8897958dd7545a1f4\"}, {\"content_digest\": \"a98b39cf29ebfd3f735354cb9c097989f00acc4a0f80691006b536b12284a34a\", \"source_segment_id\": \"srcseg_000130_1393746282a3511a25f1\"}, {\"content_digest\": \"1e66aab207a6c6932b8fd50752faf8c796443fe0b2e81894368d1a2d39a5f191\", \"source_segment_id\": \"srcseg_000131_6d4c4a39bf1357d2cca2\"}, {\"content_digest\": \"5a9279ea2fee485f32a063daf616296f56dea8a0461464a50aafc1de6e18578c\", \"source_segment_id\": \"srcseg_000132_ff4cbcc769ffb82cfa28\"}, {\"content_digest\": \"6f6fd2fbf1a7e8b15027668c37292c18667bc43abce7a0ad720252236d504859\", \"source_segment_id\": \"srcseg_000133_574f0c8b48b27359ca05\"}, {\"content_digest\": \"8384427b35e17605ac60f16a3a02ccb21d5025647981724adbe21305ce02b12f\", \"source_segment_id\": \"srcseg_000135_75a80e896df2ea6f99bb\"}, {\"content_digest\": \"8ad5b100f3ef623ff40027d4c19b7469174ab92ce2c9663295c22cb9b99d3ccc\", \"source_segment_id\": \"srcseg_000136_cc1b1ed38a2382363c10\"}, {\"content_digest\": \"5f6b004773a5000e2e7abeb935890413f022b022e143f61a3b25c36aa864e2c4\", \"source_segment_id\": \"srcseg_000137_4a00faf828ce3d9cae91\"}, {\"content_digest\": \"aacddf08ba94941b9db236ce86a14d5a40017347d2381be76f283c31ea7f24ad\", \"source_segment_id\": \"srcseg_000141_307fc4410cb4ee500461\"}, {\"content_digest\": \"d8b024bd0c3d041110f4a2f8f97794e689f11e66fd85897c428eebba0508a7d2\", \"source_segment_id\": \"srcseg_000143_2421f0c4d87c2055de8c\"}, {\"content_digest\": \"bafef78cce490015d342b82e1c737aca0a11847bc7ad007de196fd1d1e641b88\", \"source_segment_id\": \"srcseg_000144_a52e05780020a4edba17\"}, {\"content_digest\": \"e4a8b3f3953d90232a85d7c6988f72873621df79ecc64c932e15c7af05407c4f\", \"source_segment_id\": \"srcseg_000146_2da6131618e6a615f028\"}, {\"content_digest\": \"ec4441767c19f7975cff9c1e5f2b89389959f33f1a5f642ee7d5ef93be0fde9c\", \"source_segment_id\": \"srcseg_000147_9216b71f588eb0d5db0b\"}, {\"content_digest\": \"9a22e3dea256fbe029e0ba75aa6474cdd978e41312510f7a938bd1ea15b769e3\", \"source_segment_id\": \"srcseg_000148_eb8d953b782dc44e50d7\"}, {\"content_digest\": \"9f71f2c83df3e930e5dcc8d179f492b90aa3c1ddce3158dea2dd364d1e9b68e5\", \"source_segment_id\": \"srcseg_000149_50e5b9b03cf30a823ac4\"}, {\"content_digest\": \"d256732478d42b53445dcf14bdd16cf26870879821f0f98376e12ac7eed6d389\", \"source_segment_id\": \"srcseg_000150_3edad8bd69b299ef4922\"}, {\"content_digest\": \"6d2e273916e6b74f708b4fbbfc1f7ceb0a1e62ac76bfe3cb01ffd047e96e6e0c\", \"source_segment_id\": \"srcseg_000151_3f32d69f72c38b7ed4ca\"}, {\"content_digest\": \"c939c75f03f14ce25cdeaca9e733ea6c75c8cc9accee220ccce85188014ffd64\", \"source_segment_id\": \"srcseg_000155_156fc6c2172225c96ba9\"}, {\"content_digest\": \"6a4078601516a72bbb047deeb9b123f7a73ee177a1734ca29926e7046c5dd2b5\", \"source_segment_id\": \"srcseg_000156_4a955ebd141bde54102a\"}, {\"content_digest\": \"0af04da71f50c28c437f59a176be9bb39fd1186617d0622959f73709457735ed\", \"source_segment_id\": \"srcseg_000157_020917262237753244dc\"}, {\"content_digest\": \"590b72459cc4ded95acc745cd883d2d153ff7d7d1e007972cb5aa93375f99542\", \"source_segment_id\": \"srcseg_000159_b90863b7ff9174c84cfc\"}, {\"content_digest\": \"0d4ba6a937abb0e4ecd4df6cc17b73c4d009ff073fcab0e5afa627128823c7bb\", \"source_segment_id\": \"srcseg_000171_2726fa18405efffd20b2\"}, {\"content_digest\": \"0282df56834969fe2ce39f343b91cf0195402804437d9930437a1ad65b7763de\", \"source_segment_id\": \"srcseg_000177_57e6a9a71bf3c0ea0c55\"}, {\"content_digest\": \"8c85757c925c87e5ebe2ab3ca7822bc15442b985e7716a4a93a853f563efea88\", \"source_segment_id\": \"srcseg_000178_85652a9f0e765cab3f20\"}, {\"content_digest\": \"dfea1ba539cfc472ab765727a8603060f4fb87bad71924f2e8bc887a7c2e3f51\", \"source_segment_id\": \"srcseg_000182_7a37e44e9ede81a4a10e\"}, {\"content_digest\": \"cf5437569adc9b0261bea8d9236a9ee511d9a5a1c3da60c1c9809a91afdccc09\", \"source_segment_id\": \"srcseg_000183_321a089fa8e9f95c7ca7\"}, {\"content_digest\": \"cc5fa9bbb01c2ef715dcd350d72a5532f03ddf1ecd454a29277c720059d6a740\", \"source_segment_id\": \"srcseg_000184_9f1ec4f46a335662ffb8\"}, {\"content_digest\": \"db826e66f2e24776bccc57369bf26205580eee8b9779b2953f15549328b0d786\", \"source_segment_id\": \"srcseg_000185_3c658ff9351f818ccefd\"}, {\"content_digest\": \"36916019d6adfe2311ef4b2693cfa10d6a60f425a3ac81183eb17d8c3bcf4cc9\", \"source_segment_id\": \"srcseg_000186_a26dff8b7796c9d53c0a\"}, {\"content_digest\": \"939443aded1d4d425146ad62986d7aed4b56c20d4e0a22efc0bfa2c91a32ef22\", \"source_segment_id\": \"srcseg_000187_17a364e1f3ff73451093\"}, {\"content_digest\": \"15f3dcdd9f01dc89fe3b72eda0b8348d7548e6520972e7219e9338776e5277bd\", \"source_segment_id\": \"srcseg_000188_d09fdab1c511596d6d89\"}, {\"content_digest\": \"62347f29741339fba7fe5a412a2a716d611f145e2868c7cd7a660f83dc524b23\", \"source_segment_id\": \"srcseg_000192_8418aa391ad86601bbba\"}, {\"content_digest\": \"838c4a9ba27d2c1fb845698741e222cbdd85767ae9c1ca52ca2a238128405561\", \"source_segment_id\": \"srcseg_000193_f1931d2625537b6decab\"}, {\"content_digest\": \"e6604d6dafc2965e2190c4fc85f24441c8b8e8ed8c82a1e564f94048305f9e79\", \"source_segment_id\": \"srcseg_000194_c6e7b4bc2ba1a47f29e4\"}, {\"content_digest\": \"e21370932971e0f5e0a20efa35de975068c6293139c81375f806b1aa5f1f0f5b\", \"source_segment_id\": \"srcseg_000197_805cc3bd3e92a80eb996\"}, {\"content_digest\": \"e76c60daae9f6fa17dd150aa038e95458253262e417ada29a0f5675af9cf1c29\", \"source_segment_id\": \"srcseg_000199_b0d2b329c0c1777c2131\"}, {\"content_digest\": \"8a93cff4e1ad0dccc6ed04e385a619286dea7f6ba77c4f949be02ac4ad5816fe\", \"source_segment_id\": \"srcseg_000200_b16d90d05151a821fff8\"}, {\"content_digest\": \"5abddbfe6e0f903c724a02df612b7ea09a93b2cf2a8c3c95033bee25b4120c2e\", \"source_segment_id\": \"srcseg_000202_6a6f358d16238cddba1e\"}, {\"content_digest\": \"2b0e3b5fcebd5fb82d1e8928b24b402ada8f4c09d6907ae7e0f8450cb9fb6c97\", \"source_segment_id\": \"srcseg_000204_53078bd55c412a8444e2\"}, {\"content_digest\": \"94f619dc828b384276f07a7ab7a86c3f63694c7d50ba18aa8cd0f7f69f639c76\", \"source_segment_id\": \"srcseg_000206_57d9af9bf833b746b321\"}, {\"content_digest\": \"2802ae4c33e45214245f4f3dff0fc074c1d772c5bae4400dc5a73b783ea2b394\", \"source_segment_id\": \"srcseg_000209_ed00b863482dee2ddb32\"}, {\"content_digest\": \"e27a422c8eac0fc10b30e240641fe763d843b4919845142d26b0404856b7a20c\", \"source_segment_id\": \"srcseg_000210_592671d48727ad16241b\"}, {\"content_digest\": \"22071c74e823c02b5f977c2ad20232efc26eb3b85babd6531dbcd0252a29c24b\", \"source_segment_id\": \"srcseg_000211_e6e131501e7d8d54993c\"}, {\"content_digest\": \"68d95ae27a43d81a5e03e9daf0a98d7f1d986d50243153451ef45974fcd019b5\", \"source_segment_id\": \"srcseg_000213_d746d1638d1f957eeac1\"}, {\"content_digest\": \"693b4c8832f8d62446404c11b57764174cefb21cec52e32ec8060a88778c80ca\", \"source_segment_id\": \"srcseg_000214_55151120e7af87ad322e\"}, {\"content_digest\": \"6fd5d9f0e4152a2a57ad1ef72cb40e39531c36afa144cf4e5d53ba817774557f\", \"source_segment_id\": \"srcseg_000215_779bdb4847747ecab3e4\"}, {\"content_digest\": \"763520cd04fc24abc05af4bc5b584605c11fa89783c4ab99e6b73d63ff372209\", \"source_segment_id\": \"srcseg_000216_1e6679fc366bec72480e\"}, {\"content_digest\": \"2c2d56f91f6793822c94add110dc0a712f58c009aade3f8953e5c6bbf2c0d72a\", \"source_segment_id\": \"srcseg_000231_9ab93827d111d298c0a2\"}, {\"content_digest\": \"1460875ef03649bf5cb2dd2de83b2ed2a0caa8713e49be744bf6a00874d246d5\", \"source_segment_id\": \"srcseg_000233_30422a95279e4f1a4023\"}, {\"content_digest\": \"73df86ef53a0c261a9747c3924150521e73a6f15c07b7a71f803482ba8a655f2\", \"source_segment_id\": \"srcseg_000234_e86dddb393082aaff5dc\"}, {\"content_digest\": \"cd629160460e0aa376f61ca79834005224fe339ccc8ee1b05f16720904fb7a84\", \"source_segment_id\": \"srcseg_000238_e4f60678de4daa4a6b48\"}, {\"content_digest\": \"071b0163c80eb14a76599404411180511a677a21403e285224a8cec5f4ceb478\", \"source_segment_id\": \"srcseg_000240_9fc619d225db99dcc29f\"}, {\"content_digest\": \"217ab4649e034eefa72f939737282db299dcc43a640aab7c2919e2761908c761\", \"source_segment_id\": \"srcseg_000242_6046e983eeb5b69c463a\"}, {\"content_digest\": \"4d9d961c672ccbe9e2fa41011a41a6b80c31b6ee804a3564f125968cf2bfba8d\", \"source_segment_id\": \"srcseg_000245_503821c7fcfd555fc71c\"}, {\"content_digest\": \"e4810b7fa503d6fe97d8c0263ffe6d060160b9f23ba894ba6d47bd493a57375f\", \"source_segment_id\": \"srcseg_000246_8e3e40f138359aa5f39e\"}, {\"content_digest\": \"73bb845b55e4df87648d2b016a744a8cdf0d022cce86660072c7548b6bc5a915\", \"source_segment_id\": \"srcseg_000247_fee2eccebac6446d51eb\"}, {\"content_digest\": \"4074b00530740f59b1305796bd4b1482d6b7eb9cfcbf7f623aa2c22930d4ebaf\", \"source_segment_id\": \"srcseg_000265_2ebeced23282e38e5574\"}, {\"content_digest\": \"f5fe5d2df6adeb7a005908834a3f5d30b7ab64e74eed1309c2e56dd510e2413e\", \"source_segment_id\": \"srcseg_000266_3c6007fbd746445e986f\"}, {\"content_digest\": \"93b8ef153b2adec6b5bba8b0f32a5804771ca64ea21d3112f225df60b26d6a65\", \"source_segment_id\": \"srcseg_000267_510e3a1a93e9e34c2eb2\"}, {\"content_digest\": \"61a642e7aa8670f874d341c03041eba688b09df8a4f03ee4d1009a21c42b380b\", \"source_segment_id\": \"srcseg_000268_eb25ed95642df4a98ee4\"}, {\"content_digest\": \"6634f0d4a92e3b38d85ed070c6095026e4e6b4a01f1ddb8659141ded9be5eac0\", \"source_segment_id\": \"srcseg_000269_73ea70f45cbe7fb01f0f\"}, {\"content_digest\": \"fc13c6249afa2e5cbc5cf30f3595a9e794d8f4171d6e03dfc3051c4d4873eee7\", \"source_segment_id\": \"srcseg_000276_e70c077cb87dd8803d96\"}, {\"content_digest\": \"e7995f83b4606512feebb190cef9d87380a442adad84ce2e507545e896f6ad2b\", \"source_segment_id\": \"srcseg_000277_4efab4d8696068907595\"}, {\"content_digest\": \"75c1823e286dc5627da80e8c333856443249e4b4a6c7d2b2af86ea80a5c9f95b\", \"source_segment_id\": \"srcseg_000279_eb9f374f7a71b3180087\"}, {\"content_digest\": \"f0732e86b72d7deac3c4624f9d185153cddc7716a1de2ebfeefa550ef3d3165d\", \"source_segment_id\": \"srcseg_000281_dbb5ba0f8810cdf17df5\"}, {\"content_digest\": \"6844fbb61859e769742c16da7868c2fab076b3ed1730e9e432b9972bcb9a7504\", \"source_segment_id\": \"srcseg_000282_9ad0ef5120c446ae04b0\"}, {\"content_digest\": \"25db628f72236ceb0c2b94e0a2ba489cbf9e5a64b993c1e73291429df1c832d0\", \"source_segment_id\": \"srcseg_000283_88081d789fd64f70e990\"}, {\"content_digest\": \"24cc9b70e3850fd60c254ee56aa34966c490a022c8f239f18da12e2b9b85c305\", \"source_segment_id\": \"srcseg_000285_4a3efbd54bb3d0edce9d\"}, {\"content_digest\": \"39f523ce466cad0be232035aefa6589b6151f0a64f8e1aaf0e588258397a250a\", \"source_segment_id\": \"srcseg_000286_cd344a7df450f2fbd7c6\"}, {\"content_digest\": \"0ee6637b40315a3c718608c0e9fea16e41e0cc885ad143aa27aab8d2af1337a6\", \"source_segment_id\": \"srcseg_000289_a8925af727b26a0696d9\"}, {\"content_digest\": \"9697658813a62d890ad25ffd2c0f03b77e608743465420fc6803d30b525ae192\", \"source_segment_id\": \"srcseg_000290_c1e9ebc690e4467482cd\"}, {\"content_digest\": \"19caa73ae9f1595034fb7c2119b9afa919bedce611bbff2100cf9bfa446d3fbe\", \"source_segment_id\": \"srcseg_000291_96867d9bfd53d4043367\"}, {\"content_digest\": \"5f6210f75b9f802df18d56edf59d5490a337ec91abb1109cc2bd570922dd3602\", \"source_segment_id\": \"srcseg_000292_15d2c7c6743bc93c22d1\"}, {\"content_digest\": \"0c97bc8d86a5a311aff990d030983887d6a44339980d76acea639f0ad48daaad\", \"source_segment_id\": \"srcseg_000295_cbe737574c660c48680e\"}, {\"content_digest\": \"26f4942ee7b811e27799df921a8598fae4ed0142ec6cd853e7509bc8b70fa7d0\", \"source_segment_id\": \"srcseg_000296_6c6cef1252176f10bffe\"}, {\"content_digest\": \"6acb5ff3f7b21ab6d930a0715689ec9b994df8802eae0b0facc5fa2a6eef45b8\", \"source_segment_id\": \"srcseg_000297_33ae871f29b9ce28d425\"}, {\"content_digest\": \"6e4f00a1131db2b5a48a8aed2ea310b7e23eb677c2857a34febfc6105d57aeb5\", \"source_segment_id\": \"srcseg_000298_a50c508d540c4ab472b9\"}, {\"content_digest\": \"4227abd4edf163583b7fe253e2baa1a358571c8191d120a0a81bbf2627094607\", \"source_segment_id\": \"srcseg_000299_297a2e1b9512888e1315\"}, {\"content_digest\": \"4f50df8dfbb35cdc1e9842ce327827fd014327f7dd484d4b578a66c9f5599ca4\", \"source_segment_id\": \"srcseg_000300_cfabcd799cd994bb77d4\"}, {\"content_digest\": \"fa6a54840e5e31322c61cc162c0ef7f41d1c91b977ee5c87faf2bccbf8275327\", \"source_segment_id\": \"srcseg_000301_25bbf046f00c0c7c30a3\"}, {\"content_digest\": \"e31006d53ebad14dfd51c1eded63424bc9b6246c5aec8da4c1593bfd24478139\", \"source_segment_id\": \"srcseg_000304_e31ec1500137adcfdaa0\"}, {\"content_digest\": \"f3839a502e04f8f701bb9c065c84f0e929e86f54b00a66e6903817a30e5f814a\", \"source_segment_id\": \"srcseg_000307_dcf910242b42703d94e3\"}, {\"content_digest\": \"9c3734e65c9845ec8e225c49fd41d844d7a9820c2682101088b14480fa5469d1\", \"source_segment_id\": \"srcseg_000308_37ab026027f2fe7c3ab6\"}, {\"content_digest\": \"20a8bec70a29c4b7e281d4861bb2846a13d94fb10ea53ce89f1e8c5910e40cb1\", \"source_segment_id\": \"srcseg_000309_650dcfaabf86b3d7ad00\"}, {\"content_digest\": \"f5dd372ed5eedf67c70cc911657260c6b5f4e801c481fefcb8058bc4ca553bd1\", \"source_segment_id\": \"srcseg_000310_c3a871ce14e203a0fb3d\"}, {\"content_digest\": \"d016809996901c6d0fdf9c751b0bd6e4bc5309521cadb21e1122887bc3b182a1\", \"source_segment_id\": \"srcseg_000311_de4acd9dbe797d0391a2\"}, {\"content_digest\": \"4a3bcdbec9eb191183197a174c585afadfff3dee5bb83238edb9cc6e5abfd264\", \"source_segment_id\": \"srcseg_000312_0f5a8b4a029997beb356\"}, {\"content_digest\": \"f398d06c8688988e15412f9f27bf4cd583a3d2e15461bb1039d330b6f26b0907\", \"source_segment_id\": \"srcseg_000313_c7af6e8f42c656441c55\"}, {\"content_digest\": \"ad6127f61aa085255cb640ebea3e29c8be3cf08a7662c10e38b99f6de1395fd3\", \"source_segment_id\": \"srcseg_000314_8e8090a05c859f767858\"}, {\"content_digest\": \"2206c72ca0fef7c6c4d4597be336bf4b02e32073f28411f1aa3f9070f41b5524\", \"source_segment_id\": \"srcseg_000317_51afc1a962598f04c27e\"}, {\"content_digest\": \"c3b45099e7f12f47285073509134d9c133c03531bd74eff3361efc8bb417f8fc\", \"source_segment_id\": \"srcseg_000318_42938daedd081e0fdd60\"}, {\"content_digest\": \"091ba733b94f4d397c2d9e7d9dd1eff93f95102bc4229e94a495f2acd72b1553\", \"source_segment_id\": \"srcseg_000325_5384ac3f4b86a8cb953e\"}, {\"content_digest\": \"b5d6f6c00bb6c1f79f42d4832f19ed1eb7fa8a403960e80bd8e554a049add3f2\", \"source_segment_id\": \"srcseg_000326_f9d9b06def5bf63940cd\"}, {\"content_digest\": \"242e9fa616e36d39222b91798cc93f033d974a80c113b0a17c8425dbf8922e1f\", \"source_segment_id\": \"srcseg_000327_66eea92808d3fececb03\"}, {\"content_digest\": \"9bd869d01017557111f98c123da136dbf1d5c1945e2eef04be42c1592bd94231\", \"source_segment_id\": \"srcseg_000331_4bed164f0482b20a2d90\"}, {\"content_digest\": \"8d11223da8e884466324658cdaa3cce879bc8270c874cab0c4d3f2586852ac6d\", \"source_segment_id\": \"srcseg_000334_edd3ffc416ebb5da9b16\"}, {\"content_digest\": \"de3438ad0d3eaa41b43890744838c8c3109c3888de22da5957716a73c07f03d7\", \"source_segment_id\": \"srcseg_000335_d5fc6cb2789f7ac38364\"}, {\"content_digest\": \"91123d77a77894c5128738fa72c743fe7ddfcbf6e98bc434f2c96d2eee05cf52\", \"source_segment_id\": \"srcseg_000337_807f9377006d6373cc48\"}, {\"content_digest\": \"938bbfc3943059ba0bdd93fa3156920c08544017aeba71ccabb1b17f74dfac7e\", \"source_segment_id\": \"srcseg_000338_995e345d1704b929c8be\"}, {\"content_digest\": \"ba7d0203cb84763cecdba351d4a13f55ec71340ad4348ed258199e152a45813b\", \"source_segment_id\": \"srcseg_000339_2ece343ae6eb209354b8\"}, {\"content_digest\": \"ce379ae1967241f4fb3de305642d743e2ffa10b74b3c398ef1eda69a86a9c396\", \"source_segment_id\": \"srcseg_000344_c0fb4132087f4ec5792b\"}, {\"content_digest\": \"98c1f838ac8475ffc8ba4877eefa093a61ef1b91e87399a043ed965215146f17\", \"source_segment_id\": \"srcseg_000345_354f39492770bb53452d\"}, {\"content_digest\": \"6f3985d866a7b4e15f8effda5fbeb4f8325d5f1ff3a62114c57ed31de8dcbb51\", \"source_segment_id\": \"srcseg_000346_daa39832cc027570a174\"}, {\"content_digest\": \"72795ebaf8277e0ecbbe611d679fcc40ed5a39b79c664eb5d0f25d2baf6ec467\", \"source_segment_id\": \"srcseg_000347_8f520fd6d5cff3443c7a\"}, {\"content_digest\": \"42d32f524e7f70cb44918d0b97d5f75f54f859cec0c278586a158656529dd992\", \"source_segment_id\": \"srcseg_000364_d05f7d35a2668c0677ee\"}, {\"content_digest\": \"dda344a488039b986319d012fa2a5a7636cbd7489429cca93e97b08c5e7c12b2\", \"source_segment_id\": \"srcseg_000365_404557aeb8a4a0545f75\"}, {\"content_digest\": \"2a530788c62ff0b1afeb801c357d7f429dbfaee4c3c6f9ff04687d9a3252a8f3\", \"source_segment_id\": \"srcseg_000366_b69f6c6e18c3b20f6f20\"}, {\"content_digest\": \"472794121e67215d52dc9e02f1802cf2056cff020132d04991dba2b2c9815e1c\", \"source_segment_id\": \"srcseg_000367_1f42f81d4693f45d7b6e\"}, {\"content_digest\": \"a654d2714975ab3a041ef450652759b43b362e1a822f840a120e3c4af7271cc3\", \"source_segment_id\": \"srcseg_000368_d59bdefd87dffbabca4a\"}, {\"content_digest\": \"270bb9fefb2b933b1187d88ca48f17d4b2d2b0fc04d3656e3177c7e51889ef58\", \"source_segment_id\": \"srcseg_000370_17a59b8e272c5241d9ef\"}, {\"content_digest\": \"bcd73d01f6a765ae18219fa16048d80f4161e58d8f76891006b1d9bffbd5e41a\", \"source_segment_id\": \"srcseg_000371_0f8f21219cc02947b418\"}, {\"content_digest\": \"e9be092494526c99a05bab5c83e325f6f969accb9c0cca2853c477a39135712c\", \"source_segment_id\": \"srcseg_000377_963aa9bc719d62f45356\"}, {\"content_digest\": \"12c446444473b77249d4c7079305fa7edde32ecd21690af45e608b67d6066276\", \"source_segment_id\": \"srcseg_000380_cb6887594d2aa1e80ff7\"}, {\"content_digest\": \"cd659d0857a6421b5aca192515b4f934e8b48473499219c6ee8a60ed980036b4\", \"source_segment_id\": \"srcseg_000383_cd075cce7cee669eb3c1\"}, {\"content_digest\": \"1ed7ab3f68b1c9edc9ec08cc97847eb8cf8020faca174fa1d4f950c30c4ff9e1\", \"source_segment_id\": \"srcseg_000390_db857cfd490d8a96c22a\"}, {\"content_digest\": \"3f9e5c45eaded5da89deb37918224a55a7d97bb0ae33b9eccddc87fd31c9fc80\", \"source_segment_id\": \"srcseg_000412_dcb39fcfd34f946c4f22\"}, {\"content_digest\": \"7097c836ee6d14e1db6a22166e57bba7c129aafa0b73233f488a6b0eb811886a\", \"source_segment_id\": \"srcseg_000413_dcd0657a2b97e8f734ae\"}, {\"content_digest\": \"54e3742b0fdd1cc182db3edb3c232756c073db1ba6f80798f359e3c9a5365be5\", \"source_segment_id\": \"srcseg_000414_7b2ec9d128b693c2031f\"}, {\"content_digest\": \"1c29d4b99ab748f4b289344ff69abb1ac3c5ad4d6ee967633fd8496e693fa5bb\", \"source_segment_id\": \"srcseg_000415_218729d7fffddc4dd19a\"}, {\"content_digest\": \"acbbd77d753db1e028eb439720b4ec1a84a09aedf071f2c6a3e9f46ae14fa92f\", \"source_segment_id\": \"srcseg_000417_73411ea36e99e2f23b36\"}, {\"content_digest\": \"f67d9b9f518cc3c05f00531c1cef1520ce8738986acf27eb5b2af6a1605e1f34\", \"source_segment_id\": \"srcseg_000427_2712fa37f9941d193d3d\"}, {\"content_digest\": \"c943283a237aeb596cc7d8bbf58beccd040db7e00cea7b36416c5d22ab230b97\", \"source_segment_id\": \"srcseg_000433_687eef6e3ef78456eec2\"}, {\"content_digest\": \"fe9271fa3683ba2ec678fc302a4e19b99814eb359a2ccc9107b216a559a02f22\", \"source_segment_id\": \"srcseg_000434_62f9ae736e637ea43fe6\"}, {\"content_digest\": \"ee478e7c7e26f8e52676155d4bbbd98be47b09a9d08b0914a4077824382312f5\", \"source_segment_id\": \"srcseg_000435_0ddbba3fde1ece599d33\"}, {\"content_digest\": \"e78607cdffe1283e6a0c24eca19a66abfe0d8104c69f6dfa48cdd300f67fff16\", \"source_segment_id\": \"srcseg_000437_a726e14fac5bf40426db\"}, {\"content_digest\": \"d234e6c5c393fd5ecbdd8d0e396230e696fc87bed43ea13eeb7fde8fe672d36c\", \"source_segment_id\": \"srcseg_000438_0be269bc5c145b746cf4\"}, {\"content_digest\": \"e9419d6cea4d5845dcfce02ec2868fc519cb8345b0c52d04073921f1ed102886\", \"source_segment_id\": \"srcseg_000442_fdd791988d99c463699b\"}, {\"content_digest\": \"7979e06c67849e649cfa7cbdb2998c7d36e2589e437d52a9c57f7f928edd2c22\", \"source_segment_id\": \"srcseg_000444_ccb43543a3faac52692b\"}, {\"content_digest\": \"9b6a5b13eb74343c20ddd3985163969ba1832e15a7c4e53e42a7961be0501811\", \"source_segment_id\": \"srcseg_000450_c52ab8f407b64bdb2f39\"}, {\"content_digest\": \"867e6b0a5b0d1033ae1b2f0ce7942d01dafd8d2147f5e7272029f099508c6443\", \"source_segment_id\": \"srcseg_000451_bec14884f19009625896\"}, {\"content_digest\": \"447ab243351097f1298d42d4c99531fd940280191674f617f258ba7a4e72b420\", \"source_segment_id\": \"srcseg_000453_d8ade043b11a15ba8ca8\"}, {\"content_digest\": \"6a52bbe2ca478db958cbfc86e0ab3ffa6418cdd1420e4334dc99f57de3656fb0\", \"source_segment_id\": \"srcseg_000457_7cbde43e62741f9e5262\"}, {\"content_digest\": \"6431f33cf6cd494f79c55220cd4226ce47808c884683bad56b67ceac73a899cf\", \"source_segment_id\": \"srcseg_000458_aaa071e52f6e603316b3\"}, {\"content_digest\": \"601e75b855cd1a66cbfcfdbd90a378a7391b68576807dbcc21d605e0fd1c2bf2\", \"source_segment_id\": \"srcseg_000459_04315e9c3c4da882af39\"}, {\"content_digest\": \"65734aa4b6e62257ad3b10bad2ad80db6b56aed5220088b0dcb5d0f1866f8416\", \"source_segment_id\": \"srcseg_000460_0cda424522d1fb271cdb\"}, {\"content_digest\": \"bf3b1586c65cbe1d1d7e2103d853d6041bc628d2c2c74f05023ceaa59b4da7d0\", \"source_segment_id\": \"srcseg_000463_2a1568db1817ae01a298\"}, {\"content_digest\": \"296b9c1de38166f191efd8418fe329ed11caddf0b28548675ba91d7dd66f88bf\", \"source_segment_id\": \"srcseg_000464_cdbae8d0ffdc73bfbd50\"}, {\"content_digest\": \"6800ae088a851ab6d2d5c3f69022b6a8d603de61c2cca88632dc0b4767b3ab71\", \"source_segment_id\": \"srcseg_000465_3e1a51957808b532924c\"}, {\"content_digest\": \"99f852035e7fa2bbfbbbc216b8aa3077ca702136d53710dd0f2c669cffde94a4\", \"source_segment_id\": \"srcseg_000466_86379f118dca70c2d1d7\"}, {\"content_digest\": \"9e92b42e8d7b6720943bb9c8926305be52bd6305b777179cd9d8a490797813c0\", \"source_segment_id\": \"srcseg_000467_45abb6291df24cda360e\"}, {\"content_digest\": \"2b4791ebeb5b7afe9d3b0f6eb5da557586dd75fe04f4bf0bb9e39061c9337bcb\", \"source_segment_id\": \"srcseg_000468_e14fa3cb8f538a37a024\"}, {\"content_digest\": \"1761934a4a16902152ce23db9e91383dcb8478c45109af46dea8b7ea8d8537f9\", \"source_segment_id\": \"srcseg_000469_a925b85a261e405d805e\"}, {\"content_digest\": \"761a4445265a1db8efb482f198eaa994d35a3abad24b46053dbaa0a646adca31\", \"source_segment_id\": \"srcseg_000470_dc22d10aac035e06924f\"}, {\"content_digest\": \"fb6b7e9803a88ed0039031f2de1e6b5396195dd906e3373ed1811325a25962c9\", \"source_segment_id\": \"srcseg_000471_4f54eda4e1535cf10a85\"}, {\"content_digest\": \"9211fc775336f096661ca0134747bcada4ebc1fbca0ce6444039e41380974d1d\", \"source_segment_id\": \"srcseg_000476_4b52e94819c26989069f\"}, {\"content_digest\": \"b2e545261dcb19143beac06534cf65c915a55dae9599c7ce8b8dc2893d61994f\", \"source_segment_id\": \"srcseg_000477_ea082cbced1ca221818c\"}, {\"content_digest\": \"c3933c1775301524d094866f548b20046c2f9be0a0cd452add854cfaaec5a78c\", \"source_segment_id\": \"srcseg_000478_d825c3e60888a113cc05\"}, {\"content_digest\": \"34803f1b7bd9cc960f5915dc7e9cbca9680e1dc6053a52dbfa440bbec638e43c\", \"source_segment_id\": \"srcseg_000480_b6d980ec26848bf6c2a5\"}, {\"content_digest\": \"70d9f6ffef7da0edd93e6c4fcc090d700a7c301ad7b3509cd7cf254669112686\", \"source_segment_id\": \"srcseg_000481_73fe40856d117dbc5a22\"}, {\"content_digest\": \"21c6d39c2fd1ec2bf1e0277abe1f3eaa7099ac02f69a399b04635c59e2d44891\", \"source_segment_id\": \"srcseg_000482_a287e11135fbfb7297a4\"}, {\"content_digest\": \"514eba812690140eaec63d2071b1b862b0a75e95874d98d3b424056d3e425344\", \"source_segment_id\": \"srcseg_000483_261338612c190a2a1fe2\"}, {\"content_digest\": \"c873d71cc7e0bc61a47bf0fb24fcce0ca1ac729dde0c29363b1c69ceb56001a1\", \"source_segment_id\": \"srcseg_000486_1dbfb143a92a3090eec6\"}, {\"content_digest\": \"92c2450bf9629637403cd3a9bae016375e0d1201b65fb2cca0f3f406def03d9c\", \"source_segment_id\": \"srcseg_000488_37b43a5529cff8087c63\"}, {\"content_digest\": \"dfd6859907f4ae051622b706fd36db327ce311fee4e5fb706183b8e77c274ddd\", \"source_segment_id\": \"srcseg_000489_c1e9319da652438ff0d6\"}, {\"content_digest\": \"69f408a1b45d2adfc2405bc84e575cfca35db9323bc5dc42d11b6ef33ac00de4\", \"source_segment_id\": \"srcseg_000490_082dc204f44dce30fcd3\"}, {\"content_digest\": \"d6af30a3e3228913cdd004127fb886d3936a2a5b87c2bc3a28781991e04a7644\", \"source_segment_id\": \"srcseg_000491_25ec2920b455d256298f\"}, {\"content_digest\": \"82d0c8bf2ff147c50e35d8a479f32356bf38f446539aaf7b11c5214722bdcd5c\", \"source_segment_id\": \"srcseg_000493_d34c38504e3617731e67\"}, {\"content_digest\": \"a878723ad67ab36c8e71d511660af1aa244cde3b2be1894998fdda4fff7417cd\", \"source_segment_id\": \"srcseg_000494_546ce2cfe44e1c6cfe54\"}, {\"content_digest\": \"da69fdb05cad4142d7575bfaa8c3a193fb7ac9e5bdedcff8d371871717614064\", \"source_segment_id\": \"srcseg_000495_6e5b37ab149b57a082a1\"}, {\"content_digest\": \"82de2f0d5c9b3f4ae79972ddaf17825c7d5aedd21d368f46d40d2e53a5bec1c0\", \"source_segment_id\": \"srcseg_000496_d01c1ae3e91369c7657c\"}, {\"content_digest\": \"7eed06f52fc1704527bb2c11741b5924ec8d5bad83c2ac591599587354a4a303\", \"source_segment_id\": \"srcseg_000497_5a498f6f8d7c1d213f62\"}, {\"content_digest\": \"98a73e607db2c78c744095f5d3e1246486a6708b29861a5418e54b57e88bc6d4\", \"source_segment_id\": \"srcseg_000498_cf11da8cb6744743176d\"}, {\"content_digest\": \"33ae85989fc18e6dbf66e977c25ddce4e000b5444fa82af70e019476f301beb4\", \"source_segment_id\": \"srcseg_000499_1d1b0641bb8ac026694f\"}, {\"content_digest\": \"5044c17dcffaa8874d2f9087ac27422f0a1ce8301f8ef4c2bec9e7f10a3d61ce\", \"source_segment_id\": \"srcseg_000500_0eb74c67359b67bd89f2\"}, {\"content_digest\": \"4d61e6be4859ae64d84a95d9b819b8d25fcbd1fe87903b86d71a1ecd13b68e0c\", \"source_segment_id\": \"srcseg_000503_546288b35bd46fcb69a5\"}, {\"content_digest\": \"3ed176456e47c57c7afefa92fd177771a98ea7c98adf3ed6134cc8ee5cf28e40\", \"source_segment_id\": \"srcseg_000508_d6a9656986c704d6385f\"}, {\"content_digest\": \"f0553ed42338f850a94313c7b8f94628cf018f1104944832f02054eda046f2bd\", \"source_segment_id\": \"srcseg_000509_96dc0fa31193188d7301\"}, {\"content_digest\": \"01d50b4677c9464ec63fce72a91d5ad2b2a7b94908dfc77ed75018b2b3f4fc04\", \"source_segment_id\": \"srcseg_000511_5585f55c3cd96f8cc25e\"}, {\"content_digest\": \"f4f1f3cc0a706d65d752ed14d020fc676b02147d36f0d558f8a02cab46a4e3f4\", \"source_segment_id\": \"srcseg_000521_8d34f84cd698a17bcd43\"}, {\"content_digest\": \"5c533c995225b67a0021f7294732332635a0ab5da792f60f124fc9d932fedf6d\", \"source_segment_id\": \"srcseg_000522_77131195b63b36293b58\"}, {\"content_digest\": \"7a0b7c001c8ceec775348dab6f16cc20c49381757df93fa44d66c0847855e7fd\", \"source_segment_id\": \"srcseg_000523_8a01ddadfe7038b3cd18\"}, {\"content_digest\": \"e23c1203405aa12d5516a69d81f8a40e00f15bc2dd3c09f24d7b0f5522285ec7\", \"source_segment_id\": \"srcseg_000524_e6043f601d53155d89e2\"}, {\"content_digest\": \"35f7e37c5b68f4cbb07e88b3931c62de9b402f9a14aaa5f5dfbfce98e87f7ca0\", \"source_segment_id\": \"srcseg_000525_89314fe5c8d605c0980f\"}, {\"content_digest\": \"c2dd9a58c0177d6988ab495b888bec783eb23fe63da407acb8356b2b8c403aaf\", \"source_segment_id\": \"srcseg_000526_688b41110e6c38e55481\"}, {\"content_digest\": \"7f066b9a6003f3f4c56d23bc447f6ed5ed0554cfa5e4ab7383e95ff40eb579f7\", \"source_segment_id\": \"srcseg_000527_2ef8d9c52c8046caf2f3\"}, {\"content_digest\": \"82192ccbcb92f10d686d9e7774b5d289fb94dabc60cd7cb3d87d446b9ed56698\", \"source_segment_id\": \"srcseg_000528_75598dcf8d5d9126a60f\"}, {\"content_digest\": \"4a3182b7ee1ee82c387183952d3783cc4cadc7ff656f83e45152b64b024fe4c4\", \"source_segment_id\": \"srcseg_000529_f577aa76e2ef17f11f99\"}, {\"content_digest\": \"e9394a236b5f602946d855a809fc01ddb1bb1162f89ca126c1d2dd18c7e39a85\", \"source_segment_id\": \"srcseg_000539_1df0d5cbca806035fb89\"}, {\"content_digest\": \"d017c1609f948357e67c57c45c3fb2d8cd1998f685c79b714df4893ca78114c5\", \"source_segment_id\": \"srcseg_000540_6469b420396a106226c3\"}, {\"content_digest\": \"c809fcca33e0c0fe1617cb8ae140f95e2de13d1b7f84a4ffc74a811e8c4b0274\", \"source_segment_id\": \"srcseg_000541_dbadf3b1642ee723d77d\"}, {\"content_digest\": \"1ecd302903b66f67c9ecaa81fe8cdfc131806bb8d8a74a9a188bcd4beafde681\", \"source_segment_id\": \"srcseg_000542_cd95597f11adc86abdb2\"}, {\"content_digest\": \"6d563e95c0aea87f2e847a463c563aa51d40f11120615f4ccc4946830c304d5f\", \"source_segment_id\": \"srcseg_000543_970f655e2264fe0e72d0\"}, {\"content_digest\": \"ddfc6f02ad8d0634d7c4d0c37b590532c5f566bea330a95cd7769c45191b5805\", \"source_segment_id\": \"srcseg_000544_79ad1967205902b57877\"}, {\"content_digest\": \"c05c512750fd9317d3cbce83a5cc35d352b1d6ba9ccfb0549b019dc731a5a830\", \"source_segment_id\": \"srcseg_000545_ae8322282f7871e96660\"}, {\"content_digest\": \"beea6d0299fd48a2099a04545151dbf6b5c1725d5d5729f33495cb0b8b4b5fc6\", \"source_segment_id\": \"srcseg_000547_b35d8692bc9d3a20bd31\"}, {\"content_digest\": \"0ee5b90b674b44c431c8eced964c60f0b7b611d102936fe37e57343a5d94d24f\", \"source_segment_id\": \"srcseg_000548_89fecb7fc203a6c1755c\"}, {\"content_digest\": \"7c2affeafc379f3a6a6dc3a61e7528393e512c84eb0b0cf504665bfd28c4b1aa\", \"source_segment_id\": \"srcseg_000549_150791c88968da8ab2e0\"}, {\"content_digest\": \"0f12f16c79c45cc75ef31db935d79f9310bbc4c011645929fd174fe785c8e7cf\", \"source_segment_id\": \"srcseg_000563_7faa9c5b4cc5819284df\"}, {\"content_digest\": \"706a3743bc50224e5078efbd61a133e7cd0bed3d299fc1f5ff56c1116cfeb6eb\", \"source_segment_id\": \"srcseg_000564_e9c231023a376d97d09d\"}, {\"content_digest\": \"c36afeab8b27f491ff408dd9d0acd8cf76bc064b6d1195cb1ee0886bc217e5a5\", \"source_segment_id\": \"srcseg_000571_2317d0d3a9389a872fb1\"}, {\"content_digest\": \"6755c53342eba829bd68a9d78a7b9fb3558d062c3bc8f5c74351a709e02f853f\", \"source_segment_id\": \"srcseg_000578_0d2bf41057c288ffa754\"}, {\"content_digest\": \"b4e98fc62625e58ed03d173e44e19701bfbd101595a87f455cd1cd7370797b70\", \"source_segment_id\": \"srcseg_000585_b73e722d83f5394987ac\"}, {\"content_digest\": \"ce1303377e39436409dd0716320a18fc120279eb3083037feda7d18f315a99bf\", \"source_segment_id\": \"srcseg_000596_9853ade55fdb935c3b61\"}, {\"content_digest\": \"ac67264e39a2428900cba84083d8477c75c09d20c15c844f3672dd128722b240\", \"source_segment_id\": \"srcseg_000597_438c2068e1f9bb35d4fb\"}, {\"content_digest\": \"09b2dc52c0f0f42cd705d5ba7a628d5ea2d63fcb297adbf7b090b277339072a0\", \"source_segment_id\": \"srcseg_000599_71e6019e8252dc5b5ad3\"}, {\"content_digest\": \"9894b7f6318aafee884d34fa6bc48cef4fe75f92d2e4b4ad7698133210d5a5b3\", \"source_segment_id\": \"srcseg_000600_68d1495c575603f4c9c7\"}, {\"content_digest\": \"f3483d9bde30c3777bed0bd9a80b8d308508206a5eb3c6fc99769b02ca89fdc3\", \"source_segment_id\": \"srcseg_000604_37695288f419d20931ab\"}, {\"content_digest\": \"cc3f41d653f0db2961bc27ac7d6eb37f8d56198f6bd927308494266a9cc97549\", \"source_segment_id\": \"srcseg_000618_6368999b0f1854e3f5b3\"}, {\"content_digest\": \"7127349cb5b65f175e8b0974907674975657284d429ac3d6bac0b0de4d2494cb\", \"source_segment_id\": \"srcseg_000619_36e523b4da5de10b3046\"}, {\"content_digest\": \"9a7edf2b512d7296456a159f32a5a410cc97982c2c36ed8aae171527a5db72ee\", \"source_segment_id\": \"srcseg_000622_1b5bb97373d4000d554f\"}, {\"content_digest\": \"50d305bcc0d5bd7081eeecca75112c52675707618c88f3c024807918fac44ed1\", \"source_segment_id\": \"srcseg_000633_41967e9f6a725d4b4605\"}, {\"content_digest\": \"2dce233249e2e8f6013e4bfe543e5fbcb94bf4d1558bd3b1e3b187e625ad1b44\", \"source_segment_id\": \"srcseg_000645_2f6a4c81d07b1d30e188\"}, {\"content_digest\": \"63f0e06381e3f72430a2de86d04cf4464139c7e31e9694cb182a54bcdecaffc1\", \"source_segment_id\": \"srcseg_000647_897d71d9a8fa5f07d01c\"}, {\"content_digest\": \"a72493840ceb4aa4e1d373265d68ea50fb3e6f42e3ed7c26d7ccdb44b4e6cf0a\", \"source_segment_id\": \"srcseg_000650_ab61eb4dc8ab44fc2e3c\"}, {\"content_digest\": \"9edacf7b991bcbb6528d5b68c4ac155ededa8ab9fb6913b8922ee6d6eada4a4b\", \"source_segment_id\": \"srcseg_000652_d2b1c802101385ef036d\"}, {\"content_digest\": \"d66b756ff74488dddb5049adb073f1e60beb4bfe3918758d94c73a0ceae8f7a1\", \"source_segment_id\": \"srcseg_000654_073c4bd8ccb120903d79\"}, {\"content_digest\": \"d5cdbb61b9f1f05ada5a9ec7e6b0b044df41e37df7576b625233deb46ce5ad40\", \"source_segment_id\": \"srcseg_000655_f6104232bfa705fb7404\"}, {\"content_digest\": \"d40053976fdb192d4b13abc7af4b90fd84e662235aa1c3893e2b1e7a6da8aba0\", \"source_segment_id\": \"srcseg_000656_391fdb948f25d12ed6ad\"}, {\"content_digest\": \"b3b0c67ead3d97f2ee972a0724ffc9b1a7c8397f613cdf40919cfb67aea87ee1\", \"source_segment_id\": \"srcseg_000657_04383c115d0081fe3d6d\"}, {\"content_digest\": \"14a5b4a1f542e187cbac116fd3b6ef9484ae3ae551aeaf7645d7dd91cdd74705\", \"source_segment_id\": \"srcseg_000658_5a04a8fd844b3c2a4d96\"}, {\"content_digest\": \"8f2558438cde194ba24c64b33489695fad1a44a01e233544edff6f63455ff6a4\", \"source_segment_id\": \"srcseg_000659_526c8bb2e4370b1bb4d8\"}, {\"content_digest\": \"97f40142d474f38e7cc23a546ba1b37ec86744f2c4ad90d3c9a2e718a13521a4\", \"source_segment_id\": \"srcseg_000660_d0c73862a3c0ce665e6f\"}, {\"content_digest\": \"9a47f3bbc33b5531500432a2d1ebed144fcd3eeaa76eee84dba5f6ee51e23fdb\", \"source_segment_id\": \"srcseg_000661_a4bdf0880b7ffb0968e2\"}, {\"content_digest\": \"412a55a7d7091d904027a057a4b58f2bb8968523017ea07f4333a21c97d00eb6\", \"source_segment_id\": \"srcseg_000663_acbbe6e11c1d819a8c58\"}, {\"content_digest\": \"1b7da8ad6feaeab225e1b90fa7c567543f91ea33d99723e30f7d5d88227d0257\", \"source_segment_id\": \"srcseg_000665_cae8cacc2f1110f45cbd\"}, {\"content_digest\": \"8538a1e114ba6a8434157b2f0501e0ff786efaf525213ae1995de9fbeccee223\", \"source_segment_id\": \"srcseg_000666_66aafde60550ecde97d2\"}, {\"content_digest\": \"fd02f6fb0e84f0dfb5b5f7c4033eabade17f0ec8d00de8bffa73c3fbe4e5d82f\", \"source_segment_id\": \"srcseg_000667_f67f62b8be5fd41b9fb2\"}, {\"content_digest\": \"892b8960bd5c5aff83fe248ca7f0a9999ba49e157d828908c58552689805de34\", \"source_segment_id\": \"srcseg_000668_7aa04aee1c59e6b01949\"}, {\"content_digest\": \"5b0dd4d0120ed03ad873d8ca7b51adb35b602393e703f2db1412ef4b4be0dfc3\", \"source_segment_id\": \"srcseg_000671_736e17d65e3f073bd5d8\"}, {\"content_digest\": \"5d8e3f8001cc97cd17e03fae4ef0306db310f74dc8e9c3993e39047482b7648d\", \"source_segment_id\": \"srcseg_000675_02d67c3d132e508295fd\"}, {\"content_digest\": \"f26eb1963b1267a2166ce81d47f1fca87e7d60a00d12094fb68a0db24e67286f\", \"source_segment_id\": \"srcseg_000679_f4d2dd204d67ede9ccba\"}, {\"content_digest\": \"86414477f7494b3bd2035951683245dfb81d5f5ad4cc889bd126c0f539999ff6\", \"source_segment_id\": \"srcseg_000683_509d5c036c6a8d91c79a\"}, {\"content_digest\": \"5558ab3b9778cfacc2a52d61c801bcb6ff70c0f02bace92270deb6467ecdba0e\", \"source_segment_id\": \"srcseg_000686_74393dd8e77b306dc1a8\"}, {\"content_digest\": \"c84599392056c8b06dc634ad4ab95f1c08483b83727fc9c4d726aaf45f21acf0\", \"source_segment_id\": \"srcseg_000689_214894124c79f255de08\"}, {\"content_digest\": \"e92bfc33c37bdb07927257f380d2f05e1fc0b6cc4016609cf3477cd091ea98b7\", \"source_segment_id\": \"srcseg_000690_150ee4d85bfe8bde6b73\"}, {\"content_digest\": \"3206c373ae593fb5d3c50932eb85cc741c4ea7c027d104ee617a5afad0803ab7\", \"source_segment_id\": \"srcseg_000691_1e7754ed4707f0c07f0f\"}, {\"content_digest\": \"5ee01abca7392bff11dc3488f253d9a13d1ba170af1c26b044a4de0a3ccc7c98\", \"source_segment_id\": \"srcseg_000692_2f9c956fa1c1f5b32b2d\"}, {\"content_digest\": \"cc0ca2e352435ab919043304b40b5ee6c1dac17488a675f9dce93e076dc639f0\", \"source_segment_id\": \"srcseg_000712_f30b47ee70fc61f78173\"}, {\"content_digest\": \"405885eeedb281b0c9b798addb0ce77e95f5885aa9dcc2f739ecb542d01c2736\", \"source_segment_id\": \"srcseg_000714_4e3a7f2c9c096874c725\"}, {\"content_digest\": \"c37fe6c4838fd74a102f31fda6b12bec42e2cdcac49edfdc4c7960d4ce4d9c44\", \"source_segment_id\": \"srcseg_000715_c97adf43384e0f42363b\"}, {\"content_digest\": \"3a3d4e3137ca18969ca60933a71ff632b855480db29b94a4cc1a5851cbd34b28\", \"source_segment_id\": \"srcseg_000716_96ef9d8019055bc205c8\"}, {\"content_digest\": \"146756a4cb281d1ce701b2b3402caedb0850c728ca0ffd690cb970f015a42c66\", \"source_segment_id\": \"srcseg_000717_12bb42e31533401f0d20\"}, {\"content_digest\": \"d15fa63c12ee8da5b7efeb9831ee3cf2c4a2a7efa74365d962a78d90f795c7d2\", \"source_segment_id\": \"srcseg_000722_fddda15d597250eaf19b\"}, {\"content_digest\": \"8f8432ca2fbdf3bdd142fc165019923b2118120e27d1d77400f362421339ebd4\", \"source_segment_id\": \"srcseg_000723_478299aa24f5119da30d\"}, {\"content_digest\": \"f1dd0a9c33ba5c7b337e64214ff1464cae6a6b080f409cc9e594a59d5084dcd3\", \"source_segment_id\": \"srcseg_000724_9f461d72675f6a8721b0\"}, {\"content_digest\": \"6b376f6fe9578ed1c0f7fe46f826f9eb813f13ec9854e2e1e6567a6c6760ad97\", \"source_segment_id\": \"srcseg_000725_e81b75dd62e97b9fa539\"}, {\"content_digest\": \"b725f1bedc7d89e29944ce41aa473ff8a561206b8f21c2644efd854c1faf5236\", \"source_segment_id\": \"srcseg_000734_6c86793c2c90ee94c041\"}, {\"content_digest\": \"aa1b60c585d0cdf1c3cbeca6bb90728c0a6eaee64c43394b8a9b0b8b04368b39\", \"source_segment_id\": \"srcseg_000735_2cf720ca3521d0640631\"}, {\"content_digest\": \"3b5721a36c37a8613292a2940ca0a79a159b525cb4f6e6f3b2901200ea2f5983\", \"source_segment_id\": \"srcseg_000736_bb3b82be9914d04cf5cb\"}, {\"content_digest\": \"805a9c7ab99f7909346fbb3e3944dd227015d808f16af8bc64a193a226ebddb2\", \"source_segment_id\": \"srcseg_000737_154c0f79546a90dc8dc8\"}, {\"content_digest\": \"8d622f879625a91f60bf84c312efdfc9fa3ce01fce222a8a427b077e8079cc68\", \"source_segment_id\": \"srcseg_000740_ae9935c5948463dd3c02\"}, {\"content_digest\": \"49e6cf1aa34e2f7674cb2b859bcf1809ebcfd75a88a526c1007142c8433c0e4d\", \"source_segment_id\": \"srcseg_000741_0f5270ece5394271f1a3\"}, {\"content_digest\": \"85601e505399975a5002e0f07f01933d7d5aefd3ca274968bdcb833cb55eb29a\", \"source_segment_id\": \"srcseg_000742_989aa9d5f8984ff0f4fd\"}, {\"content_digest\": \"a342d6193c1f7d85fea3dc832d31f1957aa6671c45331eea2879ecc09edf519b\", \"source_segment_id\": \"srcseg_000744_f2d1acebcb5596bcff08\"}, {\"content_digest\": \"ddfaf4b96ab5a510cf6659693a352a1f12a551b655f5eefa3fc855158e4ea9d4\", \"source_segment_id\": \"srcseg_000745_adb643590df7fa7d3716\"}, {\"content_digest\": \"acc310aca8dc6ce84f5aad42f24bc36d3ba5d672a42468266168f45f3e53d335\", \"source_segment_id\": \"srcseg_000746_4cd1d3ebdaf675230370\"}, {\"content_digest\": \"8ac25c805335f36346fd8db73393cc9cc38eec115dc1b853d9b721d4ce783a67\", \"source_segment_id\": \"srcseg_000747_0ebce85b3f5d604a6727\"}, {\"content_digest\": \"d9fd8b2007982642a001d5df28cdcd08235c3df53705d582f4778fc12fd8f027\", \"source_segment_id\": \"srcseg_000748_451528d3f6bbe3b028fe\"}, {\"content_digest\": \"cd93e77dfef96dc1c04f39b77efbff24f2908aba1a854f4d71aecd2a6932fe00\", \"source_segment_id\": \"srcseg_000753_46ec061cc845305a6163\"}, {\"content_digest\": \"79ad1b21b83323096bce35b5f7e0dc8ed34e8db7a5464605d1d4fbd04a04d2e3\", \"source_segment_id\": \"srcseg_000754_b15eab53ecebe345c95e\"}, {\"content_digest\": \"d6065ce367ffe0f0b10678e3e48021f342bfdad66598aec2f0cc9ad6a05406e0\", \"source_segment_id\": \"srcseg_000757_78b23e2cce99ef11b626\"}, {\"content_digest\": \"6a865e0262d6b7aeab55293a5c4518c8ca1147830cd80ebee0f39b68b66054d8\", \"source_segment_id\": \"srcseg_000758_b7dd944c52d8c5c17450\"}, {\"content_digest\": \"3b53529f1600a149f2c3b6572a661306a5bded57bbb3b9ade744abb8b4cf84a4\", \"source_segment_id\": \"srcseg_000759_f7b48a3970df4dd7010f\"}, {\"content_digest\": \"29d59c97de94c9ff5284f7ddfa04f6c56c302cb7ddd1c3e4cf2d6107408dd0ee\", \"source_segment_id\": \"srcseg_000762_900f38adbfddf1ffc26b\"}, {\"content_digest\": \"3b577c0e00261435bbbe5f2d48bab1533ea3c12a5fccea2ca24971069c2f5003\", \"source_segment_id\": \"srcseg_000765_7af34ab299e232f845f7\"}, {\"content_digest\": \"a1d4ad94cc8d69d0276b64b394acc21a05b07d4036085961b9356a4f6b40d22e\", \"source_segment_id\": \"srcseg_000766_b6e526600e1464d08040\"}, {\"content_digest\": \"2b0793c58861ff108b4eaec66943777a1c03255d8a581938578587f61ece5a0f\", \"source_segment_id\": \"srcseg_000767_cac4da0d210af0c3907c\"}, {\"content_digest\": \"a050aa2253d42d74c9f052c1dbf494ac617d26c00c3bed5e3522de31d587a9ac\", \"source_segment_id\": \"srcseg_000775_be50f30b36fb7dc9b681\"}, {\"content_digest\": \"e00f0fbe627161367ad52794eff5e832313c4d8701241a2ddfde7d6a46a42112\", \"source_segment_id\": \"srcseg_000776_e86f836d8bed01376d22\"}, {\"content_digest\": \"bc870e0cbf752ecd57d4b69da7bc8b8e746e4e918c994ed70ab0ec825b3c22e2\", \"source_segment_id\": \"srcseg_000778_fe6b249d757bbf98590e\"}, {\"content_digest\": \"329b424de59fdef79541dfe585bb179b64da7e8c99add9e1b5e01c6b8dfdccbe\", \"source_segment_id\": \"srcseg_000779_7d1286df4e6d02fc2d03\"}, {\"content_digest\": \"5c7223e25bf8d809c0894808b28c65bb14835ed0fc77f0504052fbc5ea84f18d\", \"source_segment_id\": \"srcseg_000780_9fc2f4ff6413ee0df359\"}, {\"content_digest\": \"00bb5b37371eec918079398749cc8d4eb32b38ed028fcd36e14794595e83ffac\", \"source_segment_id\": \"srcseg_000785_688dda4a4fdfb9459344\"}, {\"content_digest\": \"1dc6490b7cafcb2a6eab73bbe128b8b072104f6f4bf3969a8ab4fc5c86979043\", \"source_segment_id\": \"srcseg_000810_53be0581c00ee6af83d5\"}, {\"content_digest\": \"83463de65cd2c53fdd5ec5c5ba9dc0b48886e55309747eabae0ca0d2ce4224fc\", \"source_segment_id\": \"srcseg_000821_7fa866e81e7924c65ac6\"}, {\"content_digest\": \"96ac594a54f3f37d52699e114266443faa0093bb18a35973af779852b0b1f3e6\", \"source_segment_id\": \"srcseg_000822_e7b9f01bffe703048378\"}, {\"content_digest\": \"443bf79ad75cef479e84a943caf38ffe4bf6312a8c232dd2e91edeaba52ae05f\", \"source_segment_id\": \"srcseg_000823_83eea93f39f901168129\"}, {\"content_digest\": \"450684ba3db8c1688b35f93d95d726db217a6e8e6b511e727ceafa1173194fec\", \"source_segment_id\": \"srcseg_000824_c4161b423e70974e13d6\"}, {\"content_digest\": \"6b2b8f072620f625c62b4bfb84009c475513a519afea39160c3faefbdee48678\", \"source_segment_id\": \"srcseg_000825_d96f3b0426c76fd98b03\"}, {\"content_digest\": \"d7a89f17d56cde0198d69182bc7941d8aca490fad680bdd9e58e556a830a21f6\", \"source_segment_id\": \"srcseg_000828_df942d19c453f597a6d7\"}, {\"content_digest\": \"c437dfa3d9b4f3f1392dba1619529ae17971d102b3ce76a3cabd07792972cd55\", \"source_segment_id\": \"srcseg_000833_cc60e5d7eae403e3049a\"}, {\"content_digest\": \"39bbb5d17a04fb391b6d0a5b24473eae3638fd6b82a037964e39ff406adb7e60\", \"source_segment_id\": \"srcseg_000835_70251e84e71848831704\"}, {\"content_digest\": \"2b7abdd49d82e1d018778ec02dfdefa3785ac28100eadb95e5a90f1f8f530f61\", \"source_segment_id\": \"srcseg_000836_6169797dba0031ea4600\"}, {\"content_digest\": \"eeaec7f07ffe2da1c0adcf488830b300075c6f1165fd324b441106ceb2a0dee6\", \"source_segment_id\": \"srcseg_000841_c5b1de4e5c8db27cf5c9\"}, {\"content_digest\": \"ef3b5f9d47af4daabdf8dbb36a552ae15308d0138824d17ae2c2eb32027e1d38\", \"source_segment_id\": \"srcseg_000842_0eb61b41b2b448ec7c5f\"}, {\"content_digest\": \"365bf40d163be745c8004e7093c4fb779099cc0b2b26ba68ba6b202bc9587ca8\", \"source_segment_id\": \"srcseg_000843_7a76fc9d3ca99291f775\"}, {\"content_digest\": \"a2ef53673f7216493ec311eca24e8e4b6ef6af9071db7fdf17ff3cb05349beec\", \"source_segment_id\": \"srcseg_000846_dcff0a5d3c374eaf809d\"}, {\"content_digest\": \"0f9894205acf1e66fafbe038fee9ea9a23f4c6e1051be2ecee8394c1da785ded\", \"source_segment_id\": \"srcseg_000853_2effeadf920dfa10bb12\"}, {\"content_digest\": \"69b0af2edfe88ae3c48e23255b5afd554d5b90482c5918d28819f4d6ef321c12\", \"source_segment_id\": \"srcseg_000870_918d8d835d61c42666fe\"}, {\"content_digest\": \"5fa26703549e1045a0fa1c56584baca67af08c55ee2a4e10df2af597592adfa1\", \"source_segment_id\": \"srcseg_000881_99c8bfbfd3fe450ac961\"}, {\"content_digest\": \"5e41c062c5b07a3fbc3148e0b96937b2ac08ecf2245d9ed168c8da909d03a4d2\", \"source_segment_id\": \"srcseg_000887_a8d8b5ee4da429d3b184\"}, {\"content_digest\": \"bb45eee225bbc84d7368862ccaf4d13af9c614a5e37acb7fbb3aa92da50d0d37\", \"source_segment_id\": \"srcseg_000917_9e4ca450f68224c25157\"}, {\"content_digest\": \"487f28a9a3a30cd7688e6e37ae843198b30042c3127e92498c3db589bbe2b854\", \"source_segment_id\": \"srcseg_000918_bd06966f3ac604248fac\"}, {\"content_digest\": \"194a33b254b14437f3f28c5a733110b45cf7afe944aa81c076d88648ee4e9de8\", \"source_segment_id\": \"srcseg_000921_d308bba207c31c7fdb6c\"}, {\"content_digest\": \"11f80655de6ba55a47ee8f8c673e03379795ad748fdb715cba28dace58e29048\", \"source_segment_id\": \"srcseg_000922_7f940774fc5824862bee\"}, {\"content_digest\": \"b06a90cbef7f0b2e9b05b8ece14d4106b06b6464b2cfa491ceab9e8a637fa567\", \"source_segment_id\": \"srcseg_000923_6543b83c16a974eecbb4\"}, {\"content_digest\": \"70aed6fd8ebc5f1b071c2da95e426326568c79d97f507cac592f29575d3f0e7c\", \"source_segment_id\": \"srcseg_000927_834d477a6001e16a2431\"}, {\"content_digest\": \"350df45a52a621cb7a4d50e97797b1f41f46a1527504ed6e9da7a51c998f2a5b\", \"source_segment_id\": \"srcseg_000928_b1fd4e78f5b8fca52135\"}, {\"content_digest\": \"e13a16ba156a29b5922dc4389e8675318c36a07e42bf64841850d687b07abe47\", \"source_segment_id\": \"srcseg_000963_0ec29feffab337139f62\"}, {\"content_digest\": \"af75af4c34c740c4e843ef0fb0544467af521f7f921d398d62a6345411add213\", \"source_segment_id\": \"srcseg_000968_6eac4efa236be9668c6d\"}, {\"content_digest\": \"8f7b61efc79a5ca0a6fa47a8718bf82f85a95511b95104048cde764d344a1cdf\", \"source_segment_id\": \"srcseg_000970_5bbfef96ebc832c5fa10\"}, {\"content_digest\": \"95677fb0c94d5848ee4458206ee1d359f987a6da2b2ddbd9140b2e4c6fd83d82\", \"source_segment_id\": \"srcseg_000972_24d9b0f464ece500f8b4\"}, {\"content_digest\": \"e2ea4edf8536b7b37de4dd9e1eb40a6e933ab2237758180dbf5f124cf524939f\", \"source_segment_id\": \"srcseg_000976_b82cf808d4a71939652a\"}, {\"content_digest\": \"617a004b142686cbc3e0ee000c59f24e7c1bebe36996cee09785e1e79e9a2e7c\", \"source_segment_id\": \"srcseg_000977_37810110a772e38c9589\"}, {\"content_digest\": \"3c357d0e7bc52a5f19f043fc8cb0486d3c6577bac32b74e0ce7d318dc69dc620\", \"source_segment_id\": \"srcseg_000978_8145aeaf07cfb55bc3a9\"}, {\"content_digest\": \"023e5e65a05731111a1c5c552f1b650159ab5f4a2c9c90a914ac5c3f60ff6f1c\", \"source_segment_id\": \"srcseg_000979_1e7fdde13ef15cc5aa77\"}, {\"content_digest\": \"8a3856d000105bf59f96bad3956b67ce4dee0b63edf658d07a91bb7f33e9e68b\", \"source_segment_id\": \"srcseg_000981_67853b74454d08523378\"}, {\"content_digest\": \"1ed9b17bb3f61acc90fcd1ded63d71211a444ee1181a2f305cc393936f973cd3\", \"source_segment_id\": \"srcseg_000984_2bb27d85f764b89f62a7\"}, {\"content_digest\": \"8cf4b65d311c048244bfc4aaf585340d1839b2c64515d485842fd84e376d51ca\", \"source_segment_id\": \"srcseg_000986_10f0165ae9cc9356b476\"}, {\"content_digest\": \"cb4f860d8f40967112025969a77a2f610d9b8f87afa6f85a5c28ddb01ebc77d7\", \"source_segment_id\": \"srcseg_000991_5e33b03a00768d57aaca\"}, {\"content_digest\": \"b382b196e71328cde974207e3fbf7dbdc92115455173288363e3b82b941f50f2\", \"source_segment_id\": \"srcseg_000994_6d153bd0a8e279ebe7b1\"}, {\"content_digest\": \"c0c25f4ade7ad93a116b660f5ddcdc5f447da9593d7582c29ebb87d5e1879a09\", \"source_segment_id\": \"srcseg_000996_7e47ab9ab2c0f5dd9eae\"}, {\"content_digest\": \"a523a14e098ded0d81f4dbaff770848e1a3d81417d82a6e69d853ac839e6744f\", \"source_segment_id\": \"srcseg_000999_757b98deb8098b2657c2\"}, {\"content_digest\": \"402755e2df9012e95e8f8a154e9904d7f66eff09edd68df64e12bc249d3f1793\", \"source_segment_id\": \"srcseg_001010_200884d4c5bcf67064f2\"}, {\"content_digest\": \"07d0e807fedce0afcdd74da244daf79c86bfa936e22b3bb78c0130e6fb86514e\", \"source_segment_id\": \"srcseg_001014_69829f8c7f9cb0095926\"}, {\"content_digest\": \"fe445982d76cca5add4fab6d47989eeb84db5be3f3177d67d567d6bcca7d3b38\", \"source_segment_id\": \"srcseg_001015_db16f5c44847375859e1\"}, {\"content_digest\": \"1e1d03922800dde22480aa15efcd5b98312d04aaff050274f6f3221589ea0689\", \"source_segment_id\": \"srcseg_001023_253ec3c40fed0d312c8c\"}, {\"content_digest\": \"495fffd29e9358115bce2203b00244e526fde0fc16e175e2e0b6f3b8a3bd0413\", \"source_segment_id\": \"srcseg_001041_ffd82b2d6cd80ce5bebe\"}, {\"content_digest\": \"d469d96926c7c13ad3d32877811452c6d59e871cdccd417391945c1cfc55d564\", \"source_segment_id\": \"srcseg_001048_66401cdcd6b9c8d8ec78\"}, {\"content_digest\": \"7336e41259bb9bd253281cf1f173b9ab8a18cefdfd159a7823607f4180990780\", \"source_segment_id\": \"srcseg_001057_a4a073f1f97681250945\"}, {\"content_digest\": \"13fc8d865c5f983c44b619cfd29f75f26ad750ece7416a17977c9bfb65e3bd5a\", \"source_segment_id\": \"srcseg_001058_f7346ca2a199fa8c2e08\"}, {\"content_digest\": \"0424ef3f09e6ab6c7fb81457fe03763982e9e66c5ac42031e2c6d1c88ce1ba48\", \"source_segment_id\": \"srcseg_001066_1691e85ca023636a16d7\"}, {\"content_digest\": \"fae052b94303d856e2a0a201b924275dbcfce69d078c86df3978a3dc8b14ec25\", \"source_segment_id\": \"srcseg_001080_e5d0f6644db06ec4a45c\"}, {\"content_digest\": \"17116b1747802fa16434b3105e5543a1076f581ad7578f59576da58e9948a6ff\", \"source_segment_id\": \"srcseg_001083_4ec36d2ba1106862e521\"}, {\"content_digest\": \"2adf68371d7547eda55fbc16c21601db46260a5f18a558db9b7b08263de7e90a\", \"source_segment_id\": \"srcseg_001084_f4d0df1eaf5b92f58b73\"}, {\"content_digest\": \"a0242cd3eb254543102ebc265f781f3fd183d41291348e0eb2bd4364a8a82db5\", \"source_segment_id\": \"srcseg_001085_33296893d1f52cd16e73\"}, {\"content_digest\": \"a875add07fe9a4b77ad413ed4b2d41958962741c54b4bd4a18f05a3886cece6c\", \"source_segment_id\": \"srcseg_001097_0c8a0297c45122207cf1\"}, {\"content_digest\": \"44e7fa368d393b5f75422fe436181f67504c48e8ae020ed422c4a550a07011c5\", \"source_segment_id\": \"srcseg_001098_9dfd6db9103ecb8fd271\"}, {\"content_digest\": \"6dadd9218eef696adb620ac12827b72eddfa6c713387e5306bcbec063fbb3f70\", \"source_segment_id\": \"srcseg_001099_5aaf9546aced3350d043\"}, {\"content_digest\": \"e0c92246c4a22d86d814c34297cbe5ad2f297cc3eedfb03a352f45f7e155ae6b\", \"source_segment_id\": \"srcseg_001101_267c99c7245b255ec9ee\"}, {\"content_digest\": \"e82133b32578af72cd6d573ff41738d5bec0022aa3f25d83c004b0466d5114cd\", \"source_segment_id\": \"srcseg_001103_2801f1809988f7e5c0e6\"}, {\"content_digest\": \"6202f0fdaafcb38fdc0e2ff794a3c9e66de608e8e539ec9b2cfc422ab97dcc00\", \"source_segment_id\": \"srcseg_001104_855d47dea3c4548e5588\"}, {\"content_digest\": \"757e212113d4d9a73a1763e77fe1eaef5d2c39df630512dcc2f74cb99f4f4d64\", \"source_segment_id\": \"srcseg_001106_3e13cc444d63da0a645d\"}, {\"content_digest\": \"c8f23d15e29040e133da514da6e77ff06e7c7240d6ba50ecbb29a3c97764f236\", \"source_segment_id\": \"srcseg_001108_4277b31d53b4d30863c4\"}, {\"content_digest\": \"308ae2943ffb361232302963647dd9faaf87d39e282b4624aa8be52067961f85\", \"source_segment_id\": \"srcseg_001113_922db4d85e4262fd61e1\"}, {\"content_digest\": \"83dd9eac3e49973d8da52d14b3685ad2420ae2940ec9c2661ec776c4716fdbe3\", \"source_segment_id\": \"srcseg_001114_20fadc5684d7b4e3d9d5\"}, {\"content_digest\": \"37c0483a8809d39a06cb54b326be12165d3b286a98b18a925d96ff517a3e0ddf\", \"source_segment_id\": \"srcseg_001118_fd1ac70dc1bee7b00987\"}, {\"content_digest\": \"5c46504e89f06f3fbc6da5a7f3bdbb5ab648dab7bcd7e4415d18658599f07075\", \"source_segment_id\": \"srcseg_001119_35d8c27246e9b212967b\"}, {\"content_digest\": \"a89f6db5fb538561d8a448092ef9d1042a7c15411f5acbe0084570c8e8122e8c\", \"source_segment_id\": \"srcseg_001120_6101dca444a03668b4f1\"}, {\"content_digest\": \"d323e7718711b88c57f67dae2ffa94aa7270865d528786e3aa3c12a01de72623\", \"source_segment_id\": \"srcseg_001129_75b6d9e2cad8669b2f5f\"}, {\"content_digest\": \"b41f1fdfb803844b46ce3e02ed287bf20f835bdbb61c6dcfbd0966f9a4cbcce3\", \"source_segment_id\": \"srcseg_001133_d526ec85db30fd434943\"}, {\"content_digest\": \"0768429565f839f4ee856a16c4667694e2f5dd082aaa5d94445529f06140fdcf\", \"source_segment_id\": \"srcseg_001134_59e18d477d3d2ce6d9ee\"}, {\"content_digest\": \"cc2b74c84ab282e984997d4af2fdb9450dc1acaf00533df06145d6664e8c5efa\", \"source_segment_id\": \"srcseg_001135_17afc09232bfcd97c054\"}, {\"content_digest\": \"7ad6e06ba8beb46f5ea318f50ab4a048e11a846024cdf6949cfbcb7359234f0c\", \"source_segment_id\": \"srcseg_001137_38c8dce746f8ea380239\"}, {\"content_digest\": \"ef32bc3556f5fb0d2a79c6ca1f41f805158300d2df80f87902b77614dce1cdb0\", \"source_segment_id\": \"srcseg_001138_9a25ddf992a8f70e7e5c\"}, {\"content_digest\": \"e7221a67cc3c585594d0631d049d2c83fb3e5ec9f3e2753195a185b581fd7fd8\", \"source_segment_id\": \"srcseg_001140_beffeaa8cfdc5c7a989f\"}, {\"content_digest\": \"3765268a47e23913181b25f83f17a1607dfe56530b9f21d47ac3980d03e3ddbc\", \"source_segment_id\": \"srcseg_001141_72f78a685e937f151daa\"}, {\"content_digest\": \"a1faa0d6b60e4fbefbce97696ef75eac56494b702ac28920c901f40d64ab1cba\", \"source_segment_id\": \"srcseg_001145_1a943f08cbb0bffc46b7\"}, {\"content_digest\": \"279d0a22248fe6477b429edd729ce64e89f85dabb6004bbcd601e22a81b40ebe\", \"source_segment_id\": \"srcseg_001146_cc0f3b9b77f3b1fb0609\"}, {\"content_digest\": \"80de12b6609fe6635f9e55ad548af8be7bcba072e50aedfa8a270afbab4ba016\", \"source_segment_id\": \"srcseg_001149_f6fcd09adcf788d1c1e6\"}, {\"content_digest\": \"ccbda4d856c42fe77a200cad936c0b44f1f3a8aba8d5f929a4a3fb2df62d7c48\", \"source_segment_id\": \"srcseg_001150_ae60d2b97045ae6ed626\"}, {\"content_digest\": \"2370e6cd76972821582d00c7f246d1850fb50de696499ba8bed28b716533440f\", \"source_segment_id\": \"srcseg_001151_72bcecd4d1a08ed32ee1\"}, {\"content_digest\": \"e0dc4eef9bc2a1ea3500049f5bec395eca81afd19d9d050244581ae02d1c00f7\", \"source_segment_id\": \"srcseg_001157_511f507202f147792834\"}, {\"content_digest\": \"db89761166224ec8ac71675909890623891370786bb68a5dace8d69913627c36\", \"source_segment_id\": \"srcseg_001158_e9aebbfa1b7470d0c94c\"}, {\"content_digest\": \"58f03804ad0e56304f23013dd44513d964715cece968cb4d4e0d9b314a118d23\", \"source_segment_id\": \"srcseg_001159_a71dc922941a48a89e36\"}, {\"content_digest\": \"4643cde78a7555f964a9a29a16c2e113d5e847eb9670c28d44debf1867ae5d6a\", \"source_segment_id\": \"srcseg_001161_87eefe19a5776eb82410\"}, {\"content_digest\": \"28fe82ff75a25eab82ddc4d28174e8ca86cc658b63d1cd85b49e10442a10d3e5\", \"source_segment_id\": \"srcseg_001162_69c55d72f3419e526964\"}, {\"content_digest\": \"2262fac96625e79d10420d4eb423545cd1aee27c7e316427a520cea1bd408678\", \"source_segment_id\": \"srcseg_001163_6c42c91d88c61ef4c577\"}, {\"content_digest\": \"081e42b881cd33b4da36fe0bc2d12e84ffcd1d163d048aeddcaa1909e57567a6\", \"source_segment_id\": \"srcseg_001166_7e88b0411b9294e9f01c\"}, {\"content_digest\": \"b39eb538985b9dc617a1310827992a68abf74baf5e82da5eed897a0b60a4783c\", \"source_segment_id\": \"srcseg_001169_0fe1646de01801d38582\"}, {\"content_digest\": \"6a171c2fd40b972e995fc0bfadbfe1036213ef6124244bbb64dd8ad41339b238\", \"source_segment_id\": \"srcseg_001171_e3a553d9cc3ee4f37b3c\"}, {\"content_digest\": \"043ea9399e2a122ddc1d8bfdadce9125cbe826fa9fc18bf117c4e7c257b59199\", \"source_segment_id\": \"srcseg_001175_ef553026419830839118\"}, {\"content_digest\": \"806299297403b8c13a8e926e8b411027ee21bbce64d4341b7c98b4ddd880ea8a\", \"source_segment_id\": \"srcseg_001176_df615f036a90b725318c\"}, {\"content_digest\": \"c9379da72986d83a201f98b06effb69ce32e1391278dd1b5f9675c32411bde30\", \"source_segment_id\": \"srcseg_001178_f012b631037ec5abadf4\"}, {\"content_digest\": \"dcf398d00b3accba8ecacce432cf783f3ff579bb67d5ea43cacc176e709368b2\", \"source_segment_id\": \"srcseg_001183_004ab477edcda36d7cc1\"}, {\"content_digest\": \"77f58be69581ee4bbdf556d21e4327ae5eced098e27ec679e5bec1b827a2c086\", \"source_segment_id\": \"srcseg_001184_97e147ccc2c3ddcf0c88\"}, {\"content_digest\": \"f80792611f59ec7fe948b7f78b35f0d97d406a9b400f29d76bec3f1eab334d20\", \"source_segment_id\": \"srcseg_001190_2ac453568b42f66f334f\"}, {\"content_digest\": \"306760a2f67c625b89336086fcf2efdfbaeb0195acca4b7631f896a766288f7b\", \"source_segment_id\": \"srcseg_001191_7f69262b4c02d449bc1b\"}, {\"content_digest\": \"3b3286741f683e65ce4256d3a6bd89015b2c158c42078d997f1655d14e112e1e\", \"source_segment_id\": \"srcseg_001194_08c3ec114959ad537fa7\"}, {\"content_digest\": \"321a20dab3c70b0da8fa4db940fefe5a031f79d1f7390686498254b21da74c1c\", \"source_segment_id\": \"srcseg_001195_94ce5165c0a674c536a3\"}, {\"content_digest\": \"9de164556a7bf229eea5755532e551b5026ea654ea2d4332019b3bd01318a371\", \"source_segment_id\": \"srcseg_001196_308a2a0f95184ab66fa0\"}, {\"content_digest\": \"600c78e84d69a8d635b70443778e1a9aa5a2582e0ebd7be2e41b5933839927cc\", \"source_segment_id\": \"srcseg_001198_3b5269a7b2b5161b0aef\"}, {\"content_digest\": \"010ae65bb91d4579b35a4740fc6e4e2e745ee88c93a81fbc33eb072942ca089b\", \"source_segment_id\": \"srcseg_001199_8271f8a6d2a20c5cdfc8\"}, {\"content_digest\": \"ce5a54c5bb3658f3ef60ad442c2d083b20725b22cd2ef8d44dd82104e7f44f94\", \"source_segment_id\": \"srcseg_001200_17c0c561a69aff509dc0\"}, {\"content_digest\": \"4caf3fff368b8967d43213d8902cdcdbabb6c25fa3cca6120c29a03e8cbf9e6d\", \"source_segment_id\": \"srcseg_001201_aaddc9455d1555751933\"}, {\"content_digest\": \"790eed2c1c53c58b4996457865a22356245623f2461cbe4355fa387d778c4245\", \"source_segment_id\": \"srcseg_001206_8072737fea406beabc6a\"}, {\"content_digest\": \"3e59775d785f586c5e6fb21a76540e353447b3babfb79421c1a1637e56b857df\", \"source_segment_id\": \"srcseg_001207_66a49d8907276b7d6c43\"}, {\"content_digest\": \"6c0e1d4d1a6eec274b60a349ad2626b71d35c478d94e8899096015e2874d1dc6\", \"source_segment_id\": \"srcseg_001209_18e8da6258d4050e6f6a\"}, {\"content_digest\": \"25728f77fe20b78a313ec81e9e5cfd6bb98467854b33513f740c986bd199abfa\", \"source_segment_id\": \"srcseg_001210_10629b31648b5b9df9b9\"}, {\"content_digest\": \"cf7a81d39a402f9f791a653edb970edfdacf9e34a0fdd3ca5f3e792e864f50ca\", \"source_segment_id\": \"srcseg_001213_da243cf703b3bace546c\"}, {\"content_digest\": \"68019ddc04e6bef3547383ed7693d7ca232258357588810a0a3cd54610068d45\", \"source_segment_id\": \"srcseg_001214_d50586e86643b7a3d4fb\"}, {\"content_digest\": \"3c1c067c439dc7fb41e640a20f40d4a6625c2a4632eb699acf13836a9be97890\", \"source_segment_id\": \"srcseg_001215_1b27458a54f07d1dc27d\"}, {\"content_digest\": \"209431f3f449eb0cd3cf849705cec1a174b08fbc6fef7a0b908a92ec3a758510\", \"source_segment_id\": \"srcseg_001216_880d90a51cfe0c9cf934\"}, {\"content_digest\": \"3867a56e196f83a199bd367900498b9ed1d3eb171f1e37870c251affdfbe6b77\", \"source_segment_id\": \"srcseg_001217_e51490c1e2b68eba7aea\"}, {\"content_digest\": \"ce27a86a505341d244f64c2a28a3907878227af4be980b0b3bc50efab7cce2c1\", \"source_segment_id\": \"srcseg_001235_877b09acf38a293a5705\"}, {\"content_digest\": \"d60b5d4c477a49c0f92b837e516f9cff0142f7e84c804c6b7634cb59037be7b4\", \"source_segment_id\": \"srcseg_001240_5aa1ea5ddf012230c0ff\"}, {\"content_digest\": \"830db78aad8331c7c99f9b18ec1f72c2294ecda5400ba0f53eff2d898317d680\", \"source_segment_id\": \"srcseg_001243_c211ff08a5030093ffbb\"}, {\"content_digest\": \"279270d4364701dd08385a8ace6c4252abe907a3ac3ae9d03408586e86a9dcd2\", \"source_segment_id\": \"srcseg_001244_c72997146f093f856d07\"}, {\"content_digest\": \"afcef21c6bca31476184ea477955367d0219d48e9727f83f817ec7a68d1b0d03\", \"source_segment_id\": \"srcseg_001245_0527133c197e4b1f10f8\"}, {\"content_digest\": \"f0cfa72fe0df95b0be3b813ed1174ba1d9a49b53d47d783a54723aef14946c09\", \"source_segment_id\": \"srcseg_001246_de5854bee29b4c9c2227\"}, {\"content_digest\": \"3b521124ba296618fe677611855fa5db9205432e8337e7d0b8046d5ccac26502\", \"source_segment_id\": \"srcseg_001247_de5fbc2b64a7d2b9d895\"}, {\"content_digest\": \"26c89b8a146b2b5b69c571fe21548f82a05e9e3c6aa2b15c56e1bea323837363\", \"source_segment_id\": \"srcseg_001248_e3cd09ba7caff468575b\"}, {\"content_digest\": \"bcefcb43e184e9cab5e8af21f2dc792196cb2f87a3a985937714a6bdd0b152c9\", \"source_segment_id\": \"srcseg_001249_c74726886484d4b1a0a0\"}, {\"content_digest\": \"0054a12c58f8bf58dbf626e77ec1990fed43bd1191aac09e5ee4a2783c28b3a0\", \"source_segment_id\": \"srcseg_001250_f59f0645d1f531d2a92a\"}, {\"content_digest\": \"5193517c60a890f26e9cea6df34e49f7d80ca4a49ac9a62d79bdc33260d43f57\", \"source_segment_id\": \"srcseg_001257_a63fec461a7706b05d2c\"}, {\"content_digest\": \"bed09c4d54d7585b2e5ef3e2f60eb3537682a9758debd7dbbd35ff9eaee6fbdd\", \"source_segment_id\": \"srcseg_001258_d116a633a0436271af53\"}, {\"content_digest\": \"28e0d57a4aa00af9f5abbfb1631a57559698e239e33501d489fd2ef183c0462f\", \"source_segment_id\": \"srcseg_001259_44731e5221e51e40b589\"}, {\"content_digest\": \"320d28f4d0868ac35346b33b1640cc03148d199ed5733b4629fb9009ce235e58\", \"source_segment_id\": \"srcseg_001260_137bfd753f292efd5aff\"}, {\"content_digest\": \"a4680fd2daa0feb15325763ea7298273651e3d1f008064a433b3f4570e211b8a\", \"source_segment_id\": \"srcseg_001263_6f91c19f28cc5153f850\"}, {\"content_digest\": \"ccefb60d863d5ba34462afc501966b8919b8ddf3cd899a0b0cc3a635c47c3f9b\", \"source_segment_id\": \"srcseg_001264_71d5bb87aaf6b39fd696\"}, {\"content_digest\": \"b02a523045a3a45688fd6853bfcb2e99342d392535eafdb06b6f4ec6a772a040\", \"source_segment_id\": \"srcseg_001267_de0177cba0ca8758cf27\"}, {\"content_digest\": \"ee14a507e559cf0c4ce4874e465e229e04cb877a1c979d9ea0d594d6788da310\", \"source_segment_id\": \"srcseg_001268_0854091a8c4b6ff639b3\"}, {\"content_digest\": \"8abcd84dcfd58de5126f23e74f009c6c90813196bc32ac867b5ba9c9710690b3\", \"source_segment_id\": \"srcseg_001274_a9a0654a5d6217bce1b5\"}, {\"content_digest\": \"c4e0593bff609cb2273d8c476afc664f1a7c1073c0dae4f282b81b56313934e3\", \"source_segment_id\": \"srcseg_001275_b46d1058877520c8b0ca\"}, {\"content_digest\": \"08aad83fd8c80efc2b67571eefdf95c9716e2af1dc9aa7b696eb585cb0a3f0aa\", \"source_segment_id\": \"srcseg_001276_7c9eb47628b741d67cda\"}, {\"content_digest\": \"aaf5c9647a73ffc092bb7f1d0ccc4259414a4daadf5a772dffa5b5d6b6056c97\", \"source_segment_id\": \"srcseg_001281_a634c9ee0123ee9f8db0\"}, {\"content_digest\": \"7bc712a73c8455e62cee25c31b14b60300a74a4cf75775505d774b08ddf391fe\", \"source_segment_id\": \"srcseg_001282_faba380409d4d7a81b56\"}, {\"content_digest\": \"fba23d25ff908092c2e997dc392ba4564bb8e0ce7e9a0f15d63523973988589e\", \"source_segment_id\": \"srcseg_001283_aa7e1e00aa7591c20ad6\"}, {\"content_digest\": \"8c85964f4f08a3d9975f7dd56b6f8d694d9726c7cc725e675d759e5283a4b70e\", \"source_segment_id\": \"srcseg_001284_323a69049dd38faced97\"}, {\"content_digest\": \"fbd634dc021b03b9184f8d9f6bd427e4332acd4fde279971356c36d23d934a81\", \"source_segment_id\": \"srcseg_001285_f3f37295fc34b9dca9d8\"}, {\"content_digest\": \"f54b7534f9966f6c536e1d39c112d8a12e966e41a48c5eb249db18b7b8f4c36f\", \"source_segment_id\": \"srcseg_001286_8f278d7ea13854399b1d\"}, {\"content_digest\": \"b598f4c85decd3851b4d578c9d4e8566f4cb1ac0b66f719dc65cd7c3ff9d5bb6\", \"source_segment_id\": \"srcseg_001287_4a7b4e8ba58e25565b74\"}, {\"content_digest\": \"ce09627b817ea4a022a027a282463cfb447d3cf35c9fdb5c79dd87cf98f88a2a\", \"source_segment_id\": \"srcseg_001288_ddde0042d7c7ee127e14\"}, {\"content_digest\": \"0ef3c40926f4d59c16bc0d447ca03a7ddf7310d90680682270e5b86f485a37b9\", \"source_segment_id\": \"srcseg_001289_6a388ab79fbf6fa1f901\"}, {\"content_digest\": \"0b460786deb4d27ab8c616a162011351bd7655391518bd89c13bf2927a482767\", \"source_segment_id\": \"srcseg_001290_4fe39d47183d412b9990\"}, {\"content_digest\": \"2dd95a2c49ac37d3ee66fc702f1a553d989cc544593c741eed1bad2553ccf60e\", \"source_segment_id\": \"srcseg_001291_3d0eae7432b020c525a3\"}, {\"content_digest\": \"a45d94147f9d1a5330e498910dfa1337cd2308fd96cd517820b2eae1426d4e5e\", \"source_segment_id\": \"srcseg_001292_bc7cb22f891a89688873\"}, {\"content_digest\": \"e27d83b2084d1ba35c9c14fba26ea95142172b2dd9ba44d76b20973c0fcc0ba3\", \"source_segment_id\": \"srcseg_001293_3e821a8c1cd1cc2e45e4\"}, {\"content_digest\": \"3146d9d22c0b699318f2741746dfc3747d7549e28536aa14cbe2b003c448d793\", \"source_segment_id\": \"srcseg_001294_d5a0f4d775bfedd85237\"}, {\"content_digest\": \"8c8835823ac4d4ca8ca261918c48944ad3c3e144f1179d6c94e7a00f14ac2ea6\", \"source_segment_id\": \"srcseg_001295_c4cc19b2442c81e9b7a7\"}, {\"content_digest\": \"072d8b2f89f0be11226d5b41415c2692f7fac2be7637769394121e2a2bceb3e5\", \"source_segment_id\": \"srcseg_001296_d8748ad05607851cbcc5\"}, {\"content_digest\": \"db98e333db99247f7da9e546c52fc782744849b4a488ec1560ed6996d490f7a0\", \"source_segment_id\": \"srcseg_001297_c0db74e4e0f026761ede\"}, {\"content_digest\": \"0c6c496d509cd174de0b0ad7c98f00339e85f1fb3d515f83a37d3bbc566922b8\", \"source_segment_id\": \"srcseg_001298_240926908f4e45ad64ee\"}, {\"content_digest\": \"69427dd260a0cc3eb709dd8a10692be55c939a9a426fae8deaf018af7eab7902\", \"source_segment_id\": \"srcseg_001299_f497dab2ba6428925364\"}, {\"content_digest\": \"cac988e696c4d07da6ea7a168b138adc8512aad8f261436f63afa03242fe2ad4\", \"source_segment_id\": \"srcseg_001300_0e4cbe5cf027823747c9\"}, {\"content_digest\": \"b4dd6f24b55c8ec2e2d3c2a4cea98f493a60af82716f28dc43ddb16ac7234e27\", \"source_segment_id\": \"srcseg_001312_e6bf9ae2e1f7499d8bf4\"}, {\"content_digest\": \"df76facb9cd22640e618b127659b6a8c3204e01917c1b3ee7f6f1e95b99d2629\", \"source_segment_id\": \"srcseg_001313_74f28a38062e0eae14f0\"}, {\"content_digest\": \"0d7c7fcfd6c1c12efa3d646e64732238047901e0f233ac42909d57ecc7cfdd0e\", \"source_segment_id\": \"srcseg_001317_cde8e65e69f95a6ad61f\"}, {\"content_digest\": \"cde0a75cb9b0366171cceb50439880fb33e0085e6eb90b1dd1b1fdc319e473ee\", \"source_segment_id\": \"srcseg_001318_fe1b46e76ca8cb035354\"}, {\"content_digest\": \"cf76afece406eef5a0029852c9aba090903211f365c49d80f85a3ea6248aedb4\", \"source_segment_id\": \"srcseg_001319_86eda62da31128e760b9\"}, {\"content_digest\": \"dbca8aed33f2ed4fa7a6f8f028d74faf12f584b050b2c960c5b55f6ef1e0d1fb\", \"source_segment_id\": \"srcseg_001320_75b518dbc66742450dab\"}, {\"content_digest\": \"72a825a8eab9aedafa1dc2230e15dc91caf1a3ce9e33a90e73133992ae750235\", \"source_segment_id\": \"srcseg_001321_ba689fa052a51c8c4139\"}, {\"content_digest\": \"0098f6e214faa7b3d242a595fca864278aa1a49b01a38d0d0afd71fb6bbb95e8\", \"source_segment_id\": \"srcseg_001322_f9e2ae97639f0643e64f\"}, {\"content_digest\": \"bb753f9260e5d71f2b883bbd1fa5e52aedf645ea79dc35848653504e7e84b6a3\", \"source_segment_id\": \"srcseg_001323_b063fd151dd46bab5fae\"}, {\"content_digest\": \"f1b852c8edef220bc59180ea4710074012a6080185f93eb44a6edcc3440e9436\", \"source_segment_id\": \"srcseg_001324_88f241193929f168a98d\"}, {\"content_digest\": \"6e5d754c2121619ce5281b5ac32c5b62084236ffd1af80b4bb0a9bf213b24180\", \"source_segment_id\": \"srcseg_001343_f4fc9320541be6ac2099\"}, {\"content_digest\": \"1584db6cdf0f4a0c6ef698c5859552c990109819ef7815c640aadece5203600b\", \"source_segment_id\": \"srcseg_001344_4a51588dbaf099a39f3f\"}, {\"content_digest\": \"cfcc6d1d6e1de8b29f5558e99144b66bcb3af6cf13ca9883cbfe904ab5af8bf4\", \"source_segment_id\": \"srcseg_001345_7eb99f4aa26db5c74d41\"}, {\"content_digest\": \"08e439900757700bba53cb08933d311168bba9058943aa0bc09c01fbe43eed53\", \"source_segment_id\": \"srcseg_001346_3722341927a12ffe17c3\"}, {\"content_digest\": \"2fe40ca83f645e211ffeb829d109a3121bb578146e6adb4185b44be5c341b772\", \"source_segment_id\": \"srcseg_001347_d360e7c79ec70774593a\"}, {\"content_digest\": \"2a6753aae57b1c223c39cd34548e12cade33c16a67cf2dab8f13ef091f4ea2fd\", \"source_segment_id\": \"srcseg_001353_4d3f3a778c13584f9973\"}, {\"content_digest\": \"e9ab38800e146ff847cc6a0132aea9e63e44b5da3a9c007c4693441e9c630ec5\", \"source_segment_id\": \"srcseg_001354_b1bcaf08b685dcbcc0ba\"}, {\"content_digest\": \"05c236f3db3e8222cd88d1759b59dda058449cfc472a39c23d8f6ce3977e3928\", \"source_segment_id\": \"srcseg_001355_7764415d11c059f62943\"}, {\"content_digest\": \"8d0d253643c31f7e8cf027077ed4b18ecae317dcdbb0f141ec19eef41bd8518d\", \"source_segment_id\": \"srcseg_001370_2f66517b4859836975d7\"}, {\"content_digest\": \"b6b65b7ef37330c5f3f63c0406c5e142ad41cd127a686246d0d94af44fa3c904\", \"source_segment_id\": \"srcseg_001371_25d984a1c457a64b8f27\"}, {\"content_digest\": \"275eefaa91ddac966c2967e4f734c81bb70cade185728ab02ba7b912d7381061\", \"source_segment_id\": \"srcseg_001376_08c5df80acfcc08f0b08\"}, {\"content_digest\": \"e224893a21cd1776aaa0f6499e6f2f1d9266d36901fa47900d4d1965f7793d1b\", \"source_segment_id\": \"srcseg_001377_a5f9ac1c2664f733228f\"}, {\"content_digest\": \"c52e87de52fbdf65c74e7dd46b1c6155d416cfca8b469dbdc24adfa92b98808b\", \"source_segment_id\": \"srcseg_001378_1ff722281733e67abd7c\"}, {\"content_digest\": \"6ed22e0af834fa92f6a9dd4135ecd5091cb8189e083e106150b277fe41013472\", \"source_segment_id\": \"srcseg_001379_6e650fe7f337d800f0e0\"}, {\"content_digest\": \"83cdac899927ffee01731b5ba21d84950b3c3ceafb477c823a78f85b1c5cfeb4\", \"source_segment_id\": \"srcseg_001380_1d58607b820ccbc6f67d\"}, {\"content_digest\": \"733ebe3b18d8914c877d2b66775a403e95a14b72c8aea72a45fcaa2013729296\", \"source_segment_id\": \"srcseg_001381_fc87dc6eea6094974ddd\"}, {\"content_digest\": \"d03c81e9a2200576223ed2ff48d9409690f9eed7a7f2c059333ed040d9e9df33\", \"source_segment_id\": \"srcseg_001382_c3fbfdbf4aee2f4788db\"}, {\"content_digest\": \"649306d434d7343eb5348bdf28e355221f713531d8c779a1da63b53913a57a46\", \"source_segment_id\": \"srcseg_001383_1aa46bb577218734d4a1\"}, {\"content_digest\": \"caad921b8d6edf4c7aead4737b21a5f9e47b49106040eaca4b3445f4fc36d738\", \"source_segment_id\": \"srcseg_001384_9c7d98979d5d0d33062c\"}, {\"content_digest\": \"4ebdcd796360eff9b8088a031bf9a4275a36e9725d3d09f06e547a5b94b324be\", \"source_segment_id\": \"srcseg_001386_584797099ad6f538e0f0\"}, {\"content_digest\": \"8139b33952401b3ee0e2ca84651cb9a1d7f66d442bf908f9cf1f53ea746e5801\", \"source_segment_id\": \"srcseg_001387_d32c73cb567299a9d5fc\"}, {\"content_digest\": \"f205b97eb02cc6a928ed2b84fc2d9182778ae42d8bdd5a060c8e9ab9607591fe\", \"source_segment_id\": \"srcseg_001388_5a789fa1766963a6e1e9\"}, {\"content_digest\": \"73a456a72d54c7b99fe0aada011db439f6f766f0ce646c0e7cf89a43665c2ba4\", \"source_segment_id\": \"srcseg_001389_17495d5b7a66cfcbf5be\"}, {\"content_digest\": \"14f8ea420492e50adfee9156b50d1911db0bbf71246f81ee1fcfad7ea5caa772\", \"source_segment_id\": \"srcseg_001390_3f7ff772c8ed7e77082d\"}, {\"content_digest\": \"2e127e976c4330410fd69b933fb912e51911063544d350b768546e443dda592e\", \"source_segment_id\": \"srcseg_001393_5cecb955a6ccb633cbc1\"}, {\"content_digest\": \"a612bb61454bafbe8605b4564f7c6ebe4169e187d98921aefc82c0de8c376382\", \"source_segment_id\": \"srcseg_001394_85e9e0389a2845ffb9f1\"}, {\"content_digest\": \"70a092ed0ee9c77219ac475330f2b9713f7373bb01ee9e7077f03467a546d03e\", \"source_segment_id\": \"srcseg_001396_e9056a191fa055a8d6ce\"}, {\"content_digest\": \"f394a2d4983485533c26dc4ab75d1771c2e3c5d676f38dced50249da0c7f1ced\", \"source_segment_id\": \"srcseg_001449_190582a0f2764705eaa0\"}, {\"content_digest\": \"f113256bba374a72e8ce981e9fa1652aeb4037e138444bb9d4d333efc3f83a5f\", \"source_segment_id\": \"srcseg_001450_d7ddfdcb42f8c8caac14\"}], \"release_projection_after_evidence\": true, \"sample\": false, \"source_binding_digest\": \"6b6e470b33e2650d29605879bd9625a93a67a1e04b75815fd6d3226d59d4a93c\", \"source_segment_set_digest\": \"fe4e619995f379e599853ce6fcc5c21978e81197899037717a2d29da97d22991\", \"transcript_content_digest\": \"f9cf878d81b2721631046fba9d9f5610b7115c583bc26d77cc41a5ba908cd9a0\", \"transcript_id\": \"transcript_875ba0bd045001857d6cd2dc\", \"verified\": true}",
+    "actual_hash": "ca32b42663e8909773f3cc5e6b37bc1ae1a9fcec7aea702a45f316d168a6a0af",
+    "hash_matches": true
+  },
+  "analysis_versions": [
+    {
+      "analysis_id": "analysis_16bdca57a497943fd6eb0c05",
+      "status": "COMPLETE",
+      "lineage_state": "SUPERSEDED",
+      "analysis_spec_version": "single-session-evidence-v2",
+      "artifact_digest": "45b576f6e35c6db85135f544abf879792180a81c682c91df82f6d7b1e5f5222e",
+      "output_path": "/Volumes/ExternalStorage/同行直播录制/analysis/drafts/runtime-v3/analysis/analysis_16bdca57a497943fd6eb0c05.json"
+    },
+    {
+      "analysis_id": "analysis_8801cb766ceca4ab6327511a",
+      "status": "SAMPLE_NONQUALIFYING",
+      "lineage_state": "INVALIDATED",
+      "analysis_spec_version": "legacy-sample-analysis-v1",
+      "artifact_digest": "d64d1ede9ee97628cf74d0b5ed4dcfce82a6f872edf51cbef9749feff1bee817",
+      "output_path": "/Volumes/ExternalStorage/同行直播录制/analysis/drafts/runtime-v3/analysis/analysis_8801cb766ceca4ab6327511a.json"
+    },
+    {
+      "analysis_id": "analysis_bb3f658b48a46b764b835fab",
+      "status": "SKIPPED_HISTORICAL",
+      "lineage_state": "CURRENT",
+      "analysis_spec_version": null,
+      "artifact_digest": null,
+      "output_path": null
+    },
+    {
+      "analysis_id": "analysis_c0d5fe33a0180f99e66fbca2",
+      "status": "COMPLETE",
+      "lineage_state": "CURRENT",
+      "analysis_spec_version": "single-session-evidence-v4-source-ids",
+      "artifact_digest": "ca32b42663e8909773f3cc5e6b37bc1ae1a9fcec7aea702a45f316d168a6a0af",
+      "output_path": "/Volumes/ExternalStorage/同行直播录制/analysis/drafts/runtime-v3/analysis/analysis_c0d5fe33a0180f99e66fbca2.json"
+    },
+    {
+      "analysis_id": "analysis_d52f07f183321d1b75620e21",
+      "status": "COMPLETE",
+      "lineage_state": "SUPERSEDED",
+      "analysis_spec_version": "single-session-evidence-v3-coverage",
+      "artifact_digest": "d37b7363bb5a01ccc9c7c69665887f26bea534bd16aeba49ce4e88a08a48343d",
+      "output_path": "/Volumes/ExternalStorage/同行直播录制/analysis/drafts/runtime-v3/analysis/analysis_d52f07f183321d1b75620e21.json"
+    },
+    {
+      "analysis_id": "analysis_f261f8101b4ea725a954c23f",
+      "status": "SAMPLE_NONQUALIFYING",
+      "lineage_state": "INVALIDATED",
+      "analysis_spec_version": "legacy-sample-analysis-v1",
+      "artifact_digest": "14147e0d1536df6e157f3c8acd3a2c700926de9f1b45d192e7b106d692fa5c10",
+      "output_path": "/Volumes/ExternalStorage/同行直播录制/analysis/drafts/runtime-v3/analysis/analysis_f261f8101b4ea725a954c23f.json"
+    }
+  ],
+  "projections": [
+    {
+      "outbox_id": "out_bb32de2fc8f440a492ca4b6357e7b454",
+      "object_id": "analysis_c0d5fe33a0180f99e66fbca2",
+      "status": "SENT",
+      "attempts": 1,
+      "scope": "FORMAL_SINGLE_SESSION",
+      "qualification_status": "FULL_SESSION_QUALIFIED",
+      "payload_json": "{\"analysis_id\":\"analysis_c0d5fe33a0180f99e66fbca2\",\"analysis_spec_version\":\"single-session-evidence-v4-source-ids\",\"artifact_digest\":\"ca32b42663e8909773f3cc5e6b37bc1ae1a9fcec7aea702a45f316d168a6a0af\",\"profile_id\":\"edu_live_competitor_intel\",\"qualification_state\":\"FULL_SESSION_QUALIFIED\",\"release_after_evidence_analysis_id\":\"analysis_c0d5fe33a0180f99e66fbca2\"}",
+      "receipt_status": "VERIFIED",
+      "receipt_scope": "FORMAL_SINGLE_SESSION",
+      "receipt_qualification": "FULL_SESSION_QUALIFIED"
+    },
+    {
+      "outbox_id": "out_8cb6314fa26e427db5269a2afa4e0b4c",
+      "object_id": "analysis_d52f07f183321d1b75620e21",
+      "status": "SENT",
+      "attempts": 1,
+      "scope": "FORMAL_SINGLE_SESSION",
+      "qualification_status": "FULL_SESSION_QUALIFIED",
+      "payload_json": "{\"analysis_id\":\"analysis_d52f07f183321d1b75620e21\",\"correction_version\":1,\"lineage_state\":\"SUPERSEDED\",\"profile_id\":\"edu_live_competitor_intel\",\"release_after_evidence_analysis_id\":\"analysis_c0d5fe33a0180f99e66fbca2\",\"superseded_by_analysis_id\":\"analysis_c0d5fe33a0180f99e66fbca2\"}",
+      "receipt_status": "VERIFIED",
+      "receipt_scope": "FORMAL_SINGLE_SESSION",
+      "receipt_qualification": "FULL_SESSION_QUALIFIED"
+    }
+  ],
+  "held_outbox_count": 0,
+  "heartbeats": [
+    {
+      "service_name": "analysis-v3",
+      "pid": 92221,
+      "status": "READY",
+      "last_heartbeat_at": "2026-08-30T16:19:27.867Z",
+      "pid_alive": true,
+      "details": {
+        "analysis_spec_version": "single-session-evidence-v4-source-ids",
+        "checked_at": "2026-08-30T16:19:27.867Z",
+        "completed": 0,
+        "current_spec_blocked": 0,
+        "current_spec_evidence_pending": 0,
+        "current_spec_meets_target": 1,
+        "current_spec_qualified": 1,
+        "current_spec_total": 1,
+        "current_spec_waiting": 0,
+        "health_reasons": [],
+        "minimum_coverage_rate": 0.9,
+        "quality_blocked": 0,
+        "revalidated": 0,
+        "source_qualification_blocked": 0,
+        "target_coverage_rate": 0.95,
+        "waiting_model": 0
+      }
+    },
+    {
+      "service_name": "evidence-v3",
+      "pid": 92491,
+      "status": "READY",
+      "last_heartbeat_at": "2026-08-30T16:19:27.934Z",
+      "pid_alive": true,
+      "details": {
+        "blocked": 0,
+        "checked_at": "2026-08-30T16:19:27.934Z",
+        "released_projections": 0,
+        "verified": 0
+      }
+    },
+    {
+      "service_name": "pipeline-v3",
+      "pid": 87505,
+      "status": "READY",
+      "last_heartbeat_at": "2026-08-30T16:19:40.838Z",
+      "pid_alive": true,
+      "details": {
+        "analysis_tasks": 0,
+        "checked_at": "2026-08-30T16:19:40.838Z",
+        "eligible_canonical_pending": 0,
+        "eligible_canonical_total": 1,
+        "full_session_meets_target": 1,
+        "full_session_qualified": 1,
+        "health_reasons": [],
+        "quality_blocked": 0,
+        "segments": 109,
+        "stale_backlog": {
+          "missing_output": 0,
+          "missing_source": 0,
+          "unrecoverable": 0
+        },
+        "transcripts": 0
+      }
+    },
+    {
+      "service_name": "recompute-v3",
+      "pid": 708,
+      "status": "READY",
+      "last_heartbeat_at": "2026-08-30T16:19:31.719Z",
+      "pid_alive": true,
+      "details": {
+        "checked_at": "2026-08-30T16:19:31.719Z",
+        "stale_items": 0
+      }
+    },
+    {
+      "service_name": "retention-v3",
+      "pid": 34907,
+      "status": "READY",
+      "last_heartbeat_at": "2026-08-30T16:19:49.212Z",
+      "pid_alive": true,
+      "details": {
+        "delete_enabled": false,
+        "idle": true,
+        "mode": "DELETE_DISABLED",
+        "next_scan_in_seconds": 1916
+      }
+    },
+    {
+      "service_name": "runtime-v3",
+      "pid": 59961,
+      "status": "READY",
+      "last_heartbeat_at": "2026-08-30T16:19:16.999Z",
+      "pid_alive": true,
+      "details": {
+        "audio_retention_hours": 168,
+        "capacity_test_concurrency": 65,
+        "due_target_count": 24,
+        "expected_max_recording_concurrency": 50,
+        "final_ready": false,
+        "full_fleet": true,
+        "live_count": 0,
+        "normal_recording_concurrency": 30,
+        "production_gate": "BLOCKED",
+        "recording_duration_seconds": 0,
+        "recording_health": {
+          "finalized": 118,
+          "restarted": 0,
+          "running": 1
+        },
+        "recording_mode": "LOWEST_VIDEO_WITH_AUDIO",
+        "recording_quality": "LD",
+        "recording_segment_seconds": 0,
+        "result_count": 24,
+        "speech_audio_bitrate_kbps": 48,
+        "speech_audio_format": "opus",
+        "target_count": 41,
+        "unknown_count": 0,
+        "video_retention_hours": 72
+      }
+    }
+  ],
+  "recorders": [
+    {
+      "job_id": "recjob_90409f2eb76bb8754dbf56d7",
+      "pid": 35736,
+      "alive": true,
+      "restart_count": 0,
+      "before": 1876508452,
+      "after": 1877819172,
+      "grew": true
+    }
+  ],
+  "retention_delete_enabled": false,
+  "code_hashes": [
+    {
+      "path": "v3_analysis_contract.py",
+      "matches": true,
+      "sha256": "f3b106183da57e74ccf994228a5a43a7e7022b54576ed845acfd424497ead5ef"
+    },
+    {
+      "path": "v3_analysis_worker.py",
+      "matches": true,
+      "sha256": "295d57afec67c992fc76438fc6d6c2137fc389ac29f3a5b09186f18095f29aa0"
+    },
+    {
+      "path": "v3_evidence_worker.py",
+      "matches": true,
+      "sha256": "7196f0ba53105ead2844ff8d6a6008a87dab20e394530fa08cb815eb2142ff58"
+    },
+    {
+      "path": "test_v3_analysis_worker.py",
+      "matches": true,
+      "sha256": "b2dac1463e48502f1576b04d739bd21750cc1981b6ed13f493670a544196172e"
+    },
+    {
+      "path": "test_v3_analysis_coverage_gate.py",
+      "matches": true,
+      "sha256": "b8520a0eef7fcc0c54062c9a37a01bc30bc9f73ce2be3d204daa745ccf473adb"
+    },
+    {
+      "path": "test_v3_sample_analysis_qualification.py",
+      "matches": true,
+      "sha256": "9117a02c1618cc182d0d390d2e2b337d8795266a4749d6fe9d4b4d36399dad5e"
+    },
+    {
+      "path": "test_v3_analysis_source_binding.py",
+      "matches": true,
+      "sha256": "75fcbfdee931e2bb340d66b74461391eb4cec6c9aae12929faace0a2d1b8043b"
+    }
+  ],
+  "cleanup_events": [
+    {
+      "event_type": "ANALYSIS_SUCCESS_METADATA_CLEANED",
+      "created_at": "2026-08-30T16:14:43.598794+00:00",
+      "object_id": "analysis_c0d5fe33a0180f99e66fbca2",
+      "payload_json": "{\"backup_path\": \"/Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/backups/source-binding-metadata-cleanup-20260831-0014/pre-cleanup.json\", \"backup_sha256\": \"faa435b17ad03a0d7005c61f1239383405a295dcf61da62773d2ff12f42cdbca\", \"cause\": \"successful retry inherited previous WAITING_MODEL diagnostics\", \"removed\": [\"error_type\", \"error_message\", \"checked_at\"]}"
+    }
+  ]
+}

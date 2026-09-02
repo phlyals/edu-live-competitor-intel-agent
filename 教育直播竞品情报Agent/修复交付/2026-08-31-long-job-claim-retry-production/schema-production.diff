@@ -1,0 +1,47 @@
+--- /Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/v3_schema.sql	2026-08-30 23:11:45
++++ staging/runtime/v3/v3_schema.sql	2026-08-31 00:25:39
+@@ -241,6 +241,17 @@
+     output_path TEXT,
+     low_confidence_count INTEGER NOT NULL DEFAULT 0,
+     created_at TEXT NOT NULL,
++    updated_at TEXT,
++    attempts INTEGER NOT NULL DEFAULT 0,
++    max_attempts INTEGER NOT NULL DEFAULT 5,
++    next_attempt_at TEXT,
++    last_attempt_at TEXT,
++    lease_owner TEXT,
++    lease_until TEXT,
++    lease_epoch INTEGER NOT NULL DEFAULT 0,
++    last_error_type TEXT,
++    last_error TEXT,
++    checkpoint_json TEXT NOT NULL DEFAULT '{}',
+     scope TEXT NOT NULL DEFAULT 'UNCLASSIFIED',
+     qualification_status TEXT NOT NULL DEFAULT 'UNCLASSIFIED',
+     metadata_json TEXT NOT NULL DEFAULT '{}',
+@@ -263,9 +274,26 @@
+     model_version TEXT,
+     prompt_version TEXT,
+     artifact_digest TEXT,
++    updated_at TEXT,
++    attempts INTEGER NOT NULL DEFAULT 0,
++    max_attempts INTEGER NOT NULL DEFAULT 5,
++    next_attempt_at TEXT,
++    last_attempt_at TEXT,
++    lease_owner TEXT,
++    lease_until TEXT,
++    lease_epoch INTEGER NOT NULL DEFAULT 0,
++    last_error_type TEXT,
++    last_error TEXT,
++    checkpoint_json TEXT NOT NULL DEFAULT '{}',
+     metadata_json TEXT NOT NULL DEFAULT '{}'
+ );
+ 
++CREATE INDEX IF NOT EXISTS idx_transcripts_long_job_due
++ON transcripts(status,next_attempt_at,lease_until);
++
++CREATE INDEX IF NOT EXISTS idx_analyses_long_job_due
++ON analyses(status,next_attempt_at,lease_until);
++
+ CREATE UNIQUE INDEX IF NOT EXISTS uq_analyses_transcript_spec
+ ON analyses(transcript_id, analysis_type, transcript_content_digest, analysis_spec_version, model_version, prompt_version)
+ WHERE transcript_id IS NOT NULL AND transcript_content_digest IS NOT NULL

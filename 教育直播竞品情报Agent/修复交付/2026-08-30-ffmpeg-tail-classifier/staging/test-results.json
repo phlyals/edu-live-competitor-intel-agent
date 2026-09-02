@@ -1,0 +1,18 @@
+{
+  "production_modified": false,
+  "production_sha256": "59c52f017a3f99840051a5b2b575b041d38702f9d2e76ad47a1093ce714c2322",
+  "candidate_sha256": "f863548d7156e68750d7d791128a31dbeb102412470cab7cd012986bec221e48",
+  "candidate_tests": {
+    "run": 7,
+    "passed": 7,
+    "failed": 0
+  },
+  "existing_shared_recorder_tests_against_candidate": {
+    "run": 12,
+    "passed": 12,
+    "failed": 0
+  },
+  "network_access": false,
+  "database_access": false,
+  "service_reload": false
+}

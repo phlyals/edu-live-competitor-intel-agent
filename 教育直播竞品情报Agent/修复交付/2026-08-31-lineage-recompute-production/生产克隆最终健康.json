@@ -1,0 +1,19 @@
+{
+  "status": "ALREADY_APPLIED",
+  "health": {
+    "healthy": true,
+    "schema": {
+      "missing_lineage_columns": [],
+      "recompute_requests_exists": true
+    },
+    "indexes": [
+      "idx_lineage_upstream_version",
+      "idx_recompute_requests_candidate",
+      "idx_recompute_requests_due"
+    ],
+    "marker": "1",
+    "edge_errors": [],
+    "request_errors": [],
+    "legacy_request_errors": []
+  }
+}

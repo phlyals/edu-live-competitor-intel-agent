@@ -1,0 +1,51 @@
+{
+  "migration_key": "long_job_claim_retry_revision",
+  "migration_version": "1",
+  "source_schema_signature": "954c569b28c352646fcde5e2f0186c99de3116d2e99482f31909d0400bca288b",
+  "ddl_sha256": "9cdfec57008a6cbc50fd1875337bf7b015012eb670e1863dd221da94ba03d3ac",
+  "row_statuses": {
+    "transcripts": [
+      {
+        "transcript_id": "t",
+        "status": "PENDING"
+      }
+    ],
+    "analyses": [
+      {
+        "analysis_id": "a",
+        "status": "WAITING_MODEL"
+      }
+    ]
+  },
+  "issues": [],
+  "plan_sha256": "998c7d0cbf31b659457fd93fb057df95ba68ca910df0e0e84e8d11e6e45b7eb0",
+  "schema_missing_before_migration": {
+    "transcripts": [
+      "attempts",
+      "checkpoint_json",
+      "last_attempt_at",
+      "last_error",
+      "last_error_type",
+      "lease_epoch",
+      "lease_owner",
+      "lease_until",
+      "max_attempts",
+      "next_attempt_at",
+      "updated_at"
+    ],
+    "analyses": [
+      "attempts",
+      "checkpoint_json",
+      "last_attempt_at",
+      "last_error",
+      "last_error_type",
+      "lease_epoch",
+      "lease_owner",
+      "lease_until",
+      "max_attempts",
+      "next_attempt_at",
+      "updated_at"
+    ]
+  },
+  "transaction_read_only": "on"
+}

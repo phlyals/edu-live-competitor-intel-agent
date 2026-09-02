@@ -1,0 +1,179 @@
+{
+  "status": "PASS",
+  "simulation_mode": "accelerated_wall_clock_with_complete_buffered_replay",
+  "source_path": "/Volumes/ExternalStorage/同行直播录制/continuous-monitor-recordings/抖音直播/陈兴笃学/陈兴笃学_2026-08-25_07-58-17.mp4",
+  "source_duration_seconds": 3787.299122,
+  "final_path": "/Volumes/ExternalStorage/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-29-流刷新模拟验证/run-002/整场直播.ts",
+  "final_duration_seconds": 3787.423333,
+  "duration_difference_seconds": 0.12421100000028673,
+  "duration_relative_error": 3.2796722941359144e-05,
+  "virtual_interruptions_seconds": [
+    300,
+    180
+  ],
+  "wall_elapsed_seconds": 71.95735833399522,
+  "internal_chunk_count": 5,
+  "process_restart_count": 0,
+  "business_session_count": 1,
+  "recording_gap_seen": false,
+  "refresh_seconds": 900,
+  "url_sha256_values": [
+    "741d3a5d0301354c6d9b8412ec49c084cc1c0b949ce7abd41d554f95483a3d6d",
+    "5f015646fe2e898c18fbbaeb83e3c8c5d3f32480253ec4df3f05c0dbe19e0cfa",
+    "457a87fa99d86cd511324ad2cfd807f3f0ec9cdde69a83c61f8a0f3c9a0cfb50",
+    "f2c462c175f7dde25ec2aacb28bd55ab1947b9b810091e7feb2b584475748074",
+    "30b4660bfc2f05cab2811973c6806ef6cbfc9839356981baa7c3e260b9100bbc"
+  ],
+  "url_sha256_changed_every_chunk": true,
+  "all_protocols": [
+    "FLV"
+  ],
+  "raw_tokens_absent_from_sidecars": true,
+  "attempts": [
+    {
+      "chunk_index": 0,
+      "output_path": "/Volumes/ExternalStorage/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-29-流刷新模拟验证/run-002/capture/whole.ts.partial",
+      "return_code": 0,
+      "duration_seconds": 599.999667,
+      "stream": {
+        "scheme": "http",
+        "hostname": "127.0.0.1",
+        "path_sha256": "a84aba0f784ad2aac503a39d2944657e66e241a8a4fa800c71b2c400cf29ac4f",
+        "query_keys": [
+          "expire",
+          "token"
+        ],
+        "query_sha256": "9fb266c685605a5582ddca8b94e2e15be4749e36fc229d5d9229d197915a0fc1",
+        "url_sha256": "741d3a5d0301354c6d9b8412ec49c084cc1c0b949ce7abd41d554f95483a3d6d"
+      },
+      "stderr_tail": []
+    },
+    {
+      "chunk_index": 1,
+      "output_path": "/Volumes/ExternalStorage/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-29-流刷新模拟验证/run-002/capture/whole.refresh0001.ts.partial",
+      "return_code": 0,
+      "duration_seconds": 600.033667,
+      "stream": {
+        "scheme": "http",
+        "hostname": "127.0.0.1",
+        "path_sha256": "3aa865902d6c1c2fd3cfd6584ab61883509f0fa4625e1604a507367681c85339",
+        "query_keys": [
+          "expire",
+          "token"
+        ],
+        "query_sha256": "eede348911aafffe55f5105cfbfb9eaedf93dac569115cfc467bbc80710ae604",
+        "url_sha256": "5f015646fe2e898c18fbbaeb83e3c8c5d3f32480253ec4df3f05c0dbe19e0cfa"
+      },
+      "stderr_tail": []
+    },
+    {
+      "chunk_index": 2,
+      "output_path": "/Volumes/ExternalStorage/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-29-流刷新模拟验证/run-002/capture/whole.refresh0002.ts.partial",
+      "return_code": 0,
+      "duration_seconds": 900.033667,
+      "stream": {
+        "scheme": "http",
+        "hostname": "127.0.0.1",
+        "path_sha256": "dde1d380c702643ca682e4386fe9878ffbc81733999344c9e49ed75df27a97a7",
+        "query_keys": [
+          "expire",
+          "token"
+        ],
+        "query_sha256": "5cfdc66d1459eff96b3040f6d9776b6181a94bd4d929735e287170169ce6e0d0",
+        "url_sha256": "457a87fa99d86cd511324ad2cfd807f3f0ec9cdde69a83c61f8a0f3c9a0cfb50"
+      },
+      "stderr_tail": []
+    },
+    {
+      "chunk_index": 3,
+      "output_path": "/Volumes/ExternalStorage/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-29-流刷新模拟验证/run-002/capture/whole.refresh0003.ts.partial",
+      "return_code": 0,
+      "duration_seconds": 900.022667,
+      "stream": {
+        "scheme": "http",
+        "hostname": "127.0.0.1",
+        "path_sha256": "d0afa1149be8a944390a13473d1894fdf9d86819eb719ec307cd1425fc1b3041",
+        "query_keys": [
+          "expire",
+          "token"
+        ],
+        "query_sha256": "c21fcc1cbf97282904d900a47dd0e12a9b551571699efb268e26640c7ba958e5",
+        "url_sha256": "f2c462c175f7dde25ec2aacb28bd55ab1947b9b810091e7feb2b584475748074"
+      },
+      "stderr_tail": []
+    },
+    {
+      "chunk_index": 4,
+      "output_path": "/Volumes/ExternalStorage/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-29-流刷新模拟验证/run-002/capture/whole.refresh0004.ts.partial",
+      "return_code": 0,
+      "duration_seconds": 787.333667,
+      "stream": {
+        "scheme": "http",
+        "hostname": "127.0.0.1",
+        "path_sha256": "43c93680ed21a63ee7f968a762cfbf57fe88f39a307e5b763d608e2b3e8c0407",
+        "query_keys": [
+          "expire",
+          "token"
+        ],
+        "query_sha256": "98fbe3f6c94008c269aa6adccd01ef5fc67355d9364cff0a3be42cbf8b83165f",
+        "url_sha256": "30b4660bfc2f05cab2811973c6806ef6cbfc9839356981baa7c3e260b9100bbc"
+      },
+      "stderr_tail": []
+    }
+  ],
+  "source_segments": [
+    {
+      "path": "/Volumes/ExternalStorage/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-29-流刷新模拟验证/run-002/source-segments/source-00.flv",
+      "duration": "600.034000",
+      "size": "88522231"
+    },
+    {
+      "path": "/Volumes/ExternalStorage/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-29-流刷新模拟验证/run-002/source-segments/source-01.flv",
+      "duration": "600.034000",
+      "size": "88944991"
+    },
+    {
+      "path": "/Volumes/ExternalStorage/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-29-流刷新模拟验证/run-002/source-segments/source-02.flv",
+      "duration": "900.034000",
+      "size": "132772486"
+    },
+    {
+      "path": "/Volumes/ExternalStorage/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-29-流刷新模拟验证/run-002/source-segments/source-03.flv",
+      "duration": "900.034000",
+      "size": "133988930"
+    },
+    {
+      "path": "/Volumes/ExternalStorage/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-29-流刷新模拟验证/run-002/source-segments/source-04.flv",
+      "duration": "787.334000",
+      "size": "255241103"
+    }
+  ],
+  "capture_outputs": [
+    {
+      "path": "/Volumes/ExternalStorage/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-29-流刷新模拟验证/run-002/capture/whole.ts.partial",
+      "duration": "599.999667",
+      "size": "96180424"
+    },
+    {
+      "path": "/Volumes/ExternalStorage/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-29-流刷新模拟验证/run-002/capture/whole.refresh0001.ts.partial",
+      "duration": "600.033667",
+      "size": "96611132"
+    },
+    {
+      "path": "/Volumes/ExternalStorage/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-29-流刷新模拟验证/run-002/capture/whole.refresh0002.ts.partial",
+      "duration": "900.033667",
+      "size": "144275712"
+    },
+    {
+      "path": "/Volumes/ExternalStorage/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-29-流刷新模拟验证/run-002/capture/whole.refresh0003.ts.partial",
+      "duration": "900.022667",
+      "size": "145518580"
+    },
+    {
+      "path": "/Volumes/ExternalStorage/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-29-流刷新模拟验证/run-002/capture/whole.refresh0004.ts.partial",
+      "duration": "787.333667",
+      "size": "268354208"
+    }
+  ],
+  "checked_at": "2026-08-29T11:28:41.736+00:00"
+}

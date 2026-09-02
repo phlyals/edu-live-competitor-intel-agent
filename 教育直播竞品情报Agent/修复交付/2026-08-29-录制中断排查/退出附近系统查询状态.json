@@ -1,0 +1,10 @@
+{
+  "returncode": 0,
+  "stderr": "",
+  "line_count": 3,
+  "tail": [
+    "Timestamp               Ty Process[PID:TID]",
+    "2026-08-28 18:08:40.891 Df kernel[0:4f6f2] (CoreAnalyticsFamily) void CoreAnalyticsEventRatePolicy::zeroOutPerEventCounts()::136:event com.apple.xnu.memorystatus_pressure_interval count 8",
+    "2026-08-28 18:08:40.891 Df kernel[0:4f6f2] (CoreAnalyticsFamily) void CoreAnalyticsEventRatePolicy::zeroOutPerEventCounts()::136:event com.apple.xnu.memorystatus_proc_notification count 4"
+  ]
+}

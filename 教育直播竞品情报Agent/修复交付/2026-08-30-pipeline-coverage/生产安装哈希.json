@@ -1,0 +1,13 @@
+{
+  "installed_at": "2026-08-30T14:20:20.570734+00:00",
+  "backup_dir": "/Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/backups/pipeline-coverage-20260830-2220",
+  "before": {
+    "v3_pipeline_worker.py": "aedaa9245b85b08e9e73994214eed916957c5eb4c1349b3c7bb584b8f938678c",
+    "v3_config.json": "751a0837ad6644a08db9e953c6e28af088cd4b6f91f2553df58a36485606a7c5"
+  },
+  "after": {
+    "v3_pipeline_worker.py": "6ea4316a18ad08dfa0712bbbb7636b71c33cecd707c2a745e1505fc6609be1e4",
+    "v3_config.json": "d9e0325230f8009745e2e46837957b694beb81898d86b72b50a35a54d308a691",
+    "test_v3_pipeline_coverage.py": "51825e79854cb421df84cf2c29a178e5175ae563cc6c63d18ecad4f3393c9db1"
+  }
+}

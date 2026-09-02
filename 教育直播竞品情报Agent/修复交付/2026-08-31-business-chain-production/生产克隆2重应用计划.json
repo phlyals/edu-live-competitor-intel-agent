@@ -1,0 +1,94 @@
+{
+  "key": "business_chain_revision",
+  "version": "1",
+  "ddl_sha256": "b61e39498fed6e5c4bddfbe43e60f29de44069ba9d092013e794132289c9e721",
+  "schema": {
+    "missing_tables": [
+      "comparisons",
+      "comparison_evidence",
+      "strategy_versions",
+      "version_observations",
+      "strategy_evidence",
+      "knowledge_publish_receipts"
+    ],
+    "missing_columns": {}
+  },
+  "rows": {
+    "strategy_candidates": [
+      {
+        "candidate_id": "strat-cmp-4b66f69594dd-vs-4c6ce3010823-01-906ae625",
+        "session_id": "douyin-71883486974-20260824-205156",
+        "analysis_id": "cmp-4b66f69594dd-vs-4c6ce3010823",
+        "strategy_type": "商品承接",
+        "status": "PENDING_REVIEW",
+        "source_digest": "afbd1aa1edab97382b97dad09fad9b4307e4c7d3b99bc9918e5cf9c66d2b596b",
+        "content_path": "",
+        "lineage_state": "CURRENT",
+        "created_at": "2026-08-24T23:32:00.000+08:00",
+        "metadata_json": "{\"candidate\": \"压缩干货后前移低价商品承接｜基线预对照：继续观察；等待后续完整场验证。｜原证据：明确5元商品节点由N-1的01:03:29提前到N的00:50:23。\", \"decision\": \"继续观察\", \"record_id\": \"recvteeFpdzben\", \"source\": \"feishu_history\"}",
+        "competitor_id": null,
+        "version_id": null,
+        "comparison_id": null,
+        "candidate_digest": null,
+        "evidence_json": "{}",
+        "updated_at": null
+      },
+      {
+        "candidate_id": "strat-cmp-4b66f69594dd-vs-4c6ce3010823-02-aeabb698",
+        "session_id": "douyin-71883486974-20260824-205156",
+        "analysis_id": "cmp-4b66f69594dd-vs-4c6ce3010823",
+        "strategy_type": "商品承接",
+        "status": "PENDING_REVIEW",
+        "source_digest": "4d5e46f33578ee7784d141b20a4c4640e3fc1c374a08e76e0a52c1ddaf77cf9d",
+        "content_path": "",
+        "lineage_state": "CURRENT",
+        "created_at": "2026-08-24T23:32:06.000+08:00",
+        "metadata_json": "{\"candidate\": \"U盘成本对比正当化5元平台费｜基线预对照：部分覆盖；继续观察；等待第3个完整场验证。｜原证据：连续两场稳定出现U盘/邮费/终端限制到平台技术费的承接。\", \"decision\": \"继续观察\", \"record_id\": \"recvteeH1U4AKc\", \"source\": \"feishu_history\"}",
+        "competitor_id": null,
+        "version_id": null,
+        "comparison_id": null,
+        "candidate_digest": null,
+        "evidence_json": "{}",
+        "updated_at": null
+      },
+      {
+        "candidate_id": "strat-cmp-4b66f69594dd-vs-4c6ce3010823-03-9a0d1e4c",
+        "session_id": "douyin-71883486974-20260824-205156",
+        "analysis_id": "cmp-4b66f69594dd-vs-4c6ce3010823",
+        "strategy_type": "成交推动",
+        "status": "PENDING_REVIEW",
+        "source_digest": "49a1970446bd78d684d4095aef11dc36409e9efb5a2827a7f9864f6d74ba61f8",
+        "content_path": "",
+        "lineage_state": "CURRENT",
+        "created_at": "2026-08-24T23:32:10.000+08:00",
+        "metadata_json": "{\"candidate\": \"限时链接＋名额递减＋实时支付反馈｜基线预对照：高度覆盖；属于外部验证；无需生成修改Diff。｜原证据：连续两场出现限时开放、名额递减和支付反馈。\", \"decision\": \"继续观察\", \"record_id\": \"recvteeHZXyYue\", \"source\": \"feishu_history\"}",
+        "competitor_id": null,
+        "version_id": null,
+        "comparison_id": null,
+        "candidate_digest": null,
+        "evidence_json": "{}",
+        "updated_at": null
+      }
+    ],
+    "knowledge_versions": [
+      {
+        "version_id": "ver-douyin-71883486974-baseline-v0.1",
+        "object_key": "douyin:71883486974",
+        "version_no": 1,
+        "status": "DRAFT",
+        "content_path": "https://j10akfek917.feishu.cn/docx/KPVrd8QvdowyIPxWNb5cbvxSnxe](https://j10akfek917.feishu.cn/docx/KPVrd8QvdowyIPxWNb5cbvxSnxe",
+        "content_hash": "40e6fcd347eb6f9557e345dc182dfcc2499c29aa3f7a9632ca60518f3ef48c9a",
+        "supersedes_version_id": null,
+        "approved_by": null,
+        "approved_at": null,
+        "created_at": "2026-08-24T23:31:54.000+08:00",
+        "metadata_json": "{\"raw_fields\": {\"关联同行\": null, \"创建时间\": \"2026-08-24T23:31:54.000+08:00\", \"变更原因（推断）\": \"当前判断：None。仅有2场完整证据，不正式确认新版本；等待连续3场验证。\", \"同行ID\": \"douyin:71883486974\", \"当前状态\": [\"候选\"], \"支持场次数\": 2, \"更新时间\": \"2026-08-25T09:20:26.000+08:00\", \"最后可见时间\": \"2026-08-25T09:01:24.000+08:00\", \"核心结构\": null, \"版本ID\": \"ver-douyin-71883486974-baseline-v0.1\", \"版本号\": \"基线v0.1\", \"稳定打法\": null, \"证据文档\": \"[https://j10akfek917.feishu.cn/docx/KPVrd8QvdowyIPxWNb5cbvxSnxe](https://j10akfek917.feishu.cn/docx/KPVrd8QvdowyIPxWNb5cbvxSnxe)\", \"起始场次\": [{\"id\": \"recvteezzjkGJr\"}, {\"id\": \"recvtgCIcsSTUR\"}], \"起始场次ID\": \"douyin-71883486974-20260824-205156\", \"首次发现时间\": \"2026-08-24T20:51:56.000+08:00\"}, \"record_id\": \"recvteeDMHSkam\", \"source\": \"feishu_history\"}"
+      }
+    ],
+    "knowledge_diffs": [],
+    "approvals": []
+  },
+  "issues": [],
+  "plan_sha256": "c84e69f2cce502fa92d21b1e702ea9c90d4fe042b21a7c3d0088790713a77f14",
+  "transaction_read_only": "on"
+}

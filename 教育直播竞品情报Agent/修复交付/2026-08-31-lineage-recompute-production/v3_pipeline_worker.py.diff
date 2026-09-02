@@ -1,0 +1,87 @@
+--- /Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/v3_pipeline_worker.py	2026-08-31 01:03:25
++++ staging/runtime/v3/v3_pipeline_worker.py	2026-08-31 01:15:44
+@@ -44,6 +44,11 @@
+     renew,
+     save_checkpoint,
+     versioned_output_path,
++)
++from v3_recompute import (
++    analysis_id_for,
++    enqueue_recompute_request_conn,
++    insert_verified_lineage_conn,
+ )
+ 
+ 
+@@ -802,10 +807,46 @@
+             ).fetchone()
+             if existing:
+                 continue
+-            aid = "analysis_" + hashlib.sha256(
+-                f"{row['transcript_id']}:{transcript_content_digest}:{ANALYSIS_SPEC_VERSION}:"
+-                f"{ANALYSIS_MODEL_VERSION}:{ANALYSIS_PROMPT_VERSION}".encode()
+-            ).hexdigest()[:24]
++            old = conn.execute(
++                "SELECT * FROM analyses WHERE transcript_id=? "
++                "AND analysis_type='single_session' AND status='COMPLETE' "
++                "AND scope=? AND qualification_status=? "
++                "AND lineage_state IN ('CURRENT','STALE') "
++                "ORDER BY CASE WHEN lineage_state='CURRENT' THEN 0 ELSE 1 END,"
++                "updated_at DESC,analysis_id LIMIT 1",
++                (row["transcript_id"], ANALYSIS_SCOPE_FORMAL, QUALIFIED),
++            ).fetchone()
++            if old:
++                old_dict = dict(old)
++                reasons = []
++                if old_dict.get("transcript_content_digest") != transcript_content_digest:
++                    reasons.append("TRANSCRIPT_CONTENT_DIGEST_CHANGED")
++                if old_dict.get("analysis_spec_version") != ANALYSIS_SPEC_VERSION:
++                    reasons.append("ANALYSIS_SPEC_VERSION_CHANGED")
++                if old_dict.get("model_version") != ANALYSIS_MODEL_VERSION:
++                    reasons.append("MODEL_VERSION_CHANGED")
++                if old_dict.get("prompt_version") != ANALYSIS_PROMPT_VERSION:
++                    reasons.append("PROMPT_VERSION_CHANGED")
++                request = enqueue_recompute_request_conn(
++                    conn,
++                    old_analysis=old_dict,
++                    transcript=dict(row),
++                    new_transcript_content_digest=transcript_content_digest,
++                    target_analysis_spec_version=ANALYSIS_SPEC_VERSION,
++                    target_model_version=ANALYSIS_MODEL_VERSION,
++                    target_prompt_version=ANALYSIS_PROMPT_VERSION,
++                    reasons=reasons or ["TARGET_ANALYSIS_IDENTITY_MISSING"],
++                )
++                created += int(request.get("created") is True)
++                # A legacy/path-derived edge cannot authorize automatic model
++                # recomputation.  It stays readable and requires explicit
++                # human repair of its lineage identity.
++                continue
++            aid = analysis_id_for(
++                row["transcript_id"], transcript_content_digest,
++                ANALYSIS_SPEC_VERSION, ANALYSIS_MODEL_VERSION,
++                ANALYSIS_PROMPT_VERSION,
++            )
+             upstream_version = transcript_content_digest
+             analysis_metadata = {
+                 "requires_model_analysis": True,
+@@ -831,11 +872,16 @@
+                  ANALYSIS_PROMPT_VERSION, json.dumps(analysis_metadata, ensure_ascii=False, sort_keys=True),
+                  due_at, due_at, "{}"),
+             )
+-            conn.execute(
+-                "INSERT OR IGNORE INTO lineage_edges(edge_id,downstream_type,downstream_id,upstream_type,upstream_id,upstream_version,state,created_at) "
+-                "VALUES(?,?,?,?,?,?,?,?)",
+-                ("lineage_" + hashlib.sha256(f"{aid}:{row['transcript_id']}:{upstream_version}".encode()).hexdigest()[:24],
+-                 "analysis", aid, "transcript", row["transcript_id"], upstream_version, "CURRENT", utc_now()),
++            insert_verified_lineage_conn(
++                conn,
++                analysis_id=aid,
++                transcript_id=row["transcript_id"],
++                transcript_content_digest=upstream_version,
++                state="CURRENT",
++                analysis_spec_version=ANALYSIS_SPEC_VERSION,
++                model_version=ANALYSIS_MODEL_VERSION,
++                prompt_version=ANALYSIS_PROMPT_VERSION,
++                metadata={"creation_mode": "INITIAL_ANALYSIS"},
+             )
+             if inserted.rowcount == 1:
+                 created += 1

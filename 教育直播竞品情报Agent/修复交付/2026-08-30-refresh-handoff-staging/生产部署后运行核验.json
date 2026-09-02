@@ -1,0 +1,88 @@
+{
+  "checked_at": "2026-08-30T07:51:49.275005+00:00",
+  "transaction_read_only": "on",
+  "sample_1": [
+    {
+      "session_id": "session_31b4f2bc78e5459a96660d15a8c01199",
+      "pid": 55036,
+      "pid_alive": true,
+      "job_status": "RUNNING",
+      "session_status": "RECORDING",
+      "bytes": 1158031308
+    },
+    {
+      "session_id": "session_a1b2face8810ffbc83f36038b2e488f7",
+      "pid": 55980,
+      "pid_alive": true,
+      "job_status": "RUNNING",
+      "session_status": "RECORDING",
+      "bytes": 646558948
+    }
+  ],
+  "sample_2": [
+    {
+      "session_id": "session_31b4f2bc78e5459a96660d15a8c01199",
+      "pid": 55036,
+      "pid_alive": false,
+      "job_status": "RUNNING",
+      "session_status": "RECORDING",
+      "bytes": 1158031308
+    },
+    {
+      "session_id": "session_a1b2face8810ffbc83f36038b2e488f7",
+      "pid": 55980,
+      "pid_alive": true,
+      "job_status": "RUNNING",
+      "session_status": "RECORDING",
+      "bytes": 651015396
+    }
+  ],
+  "growth_bytes": {
+    "session_31b4f2bc78e5459a96660d15a8c01199": 0,
+    "session_a1b2face8810ffbc83f36038b2e488f7": 4456448
+  },
+  "services": {
+    "runtime-v3": {
+      "state": "running",
+      "pid": "71442",
+      "runs": "61"
+    },
+    "pipeline-v3": {
+      "state": "running",
+      "pid": "91389",
+      "runs": "34"
+    },
+    "analysis-v3": {
+      "state": "running",
+      "pid": "85928",
+      "runs": "2"
+    },
+    "evidence-v3": {
+      "state": "running",
+      "pid": "705",
+      "runs": "1"
+    },
+    "recompute-v3": {
+      "state": "running",
+      "pid": "708",
+      "runs": "1"
+    },
+    "retention-v3": {
+      "state": "running",
+      "pid": "34907",
+      "runs": "2"
+    }
+  },
+  "service_pids_unchanged": true,
+  "retention": {
+    "delete_enabled": false,
+    "idle": true,
+    "mode": "DELETE_DISABLED",
+    "next_scan_in_seconds": 3539
+  },
+  "hashes": {
+    "shared": "59c52f017a3f99840051a5b2b575b041d38702f9d2e76ad47a1093ce714c2322",
+    "test": "096df2804d3b95f6e33dd40cf41dbe7e8cf9085c2f3ae34795ec4cd1175584d9"
+  },
+  "pass": false
+}

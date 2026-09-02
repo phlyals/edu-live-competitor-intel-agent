@@ -1,0 +1,10 @@
+{
+  "checked_at": "2026-08-30T04:47:14.680386+00:00",
+  "backup_directory": "/Volumes/ExternalStorage/AgentInfrastructure/backups/edu-retention-kill-switch-20260830",
+  "files": {
+    "/Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/v3_retention_worker.py": "18e88c57a948c074fcc34ee6c0eb0e402b4076da28debeb91f51f1b406ae00d5",
+    "/Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/v3_config.json": "8420e2917f223d9263d6f6ac17da1f9cf55a4e32bbe6274286864034e5914a52",
+    "/Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/config.json": "64c33e3e39059c3ab71a4db2c25c84e8a5d05250d198ee92dcd457ef463fa9be",
+    "/Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/test_v3_workflow.py": "191adb99761a18c340f0f74a0d3acd2968f18aeb9f02aac36029993707a3e129"
+  }
+}

@@ -1,0 +1,93 @@
+--- /Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/v3_evidence_worker.py	2026-08-31 00:05:31
++++ staging/runtime/v3/v3_evidence_worker.py	2026-08-31 01:20:58
+@@ -17,6 +17,10 @@
+     bind_transcript_segments,
+     source_reference_manifest,
+ )
++from v3_recompute import (
++    finalize_verified_recompute_conn,
++    recompute_candidate_request,
++)
+ 
+ RUNNING = True
+ 
+@@ -142,9 +146,22 @@
+     )
+     if sample:
+         return False, "sample_analysis_is_nonqualifying", {"sample": True}
++    recompute_request = (
++        recompute_candidate_request(conn, analysis["analysis_id"])
++        if analysis["lineage_state"] == "CANDIDATE"
++        else None
++    )
++    is_recompute_candidate = bool(
++        recompute_request
++        and analysis_meta.get("recompute_request_id")
++        == recompute_request["request_id"]
++    )
+     required = (
+         analysis["status"] == "COMPLETE"
+-        and analysis["lineage_state"] == "CURRENT"
++        and (
++            analysis["lineage_state"] == "CURRENT"
++            or is_recompute_candidate
++        )
+         and analysis["scope"] == "FORMAL_SINGLE_SESSION"
+         and analysis["qualification_status"] == "FULL_SESSION_QUALIFIED"
+         and row["scope"] == "FORMAL_SINGLE_SESSION"
+@@ -160,10 +177,11 @@
+         return False, "artifact_digest_three_way_mismatch", {"sample": False, "actual_digest": actual_digest, "analysis_artifact_digest": expected_artifact or None, "bundle_manifest_hash": bundle_digest or None}
+     if str(path) != str(analysis["output_path"] or ""):
+         return False, "analysis_bundle_path_mismatch", {"sample": False, "analysis_output_path": analysis["output_path"]}
++    expected_edge_state = "CANDIDATE" if is_recompute_candidate else "CURRENT"
+     edges = conn.execute(
+         "SELECT upstream_id,upstream_version FROM lineage_edges WHERE downstream_type='analysis' AND downstream_id=? "
+-        "AND upstream_type='transcript' AND state='CURRENT' ORDER BY edge_id",
+-        (analysis["analysis_id"],),
++        "AND upstream_type='transcript' AND state=? ORDER BY edge_id",
++        (analysis["analysis_id"], expected_edge_state),
+     ).fetchall()
+     edge_values = [(str(edge["upstream_id"]), str(edge["upstream_version"])) for edge in edges]
+     expected_edge = [(str(analysis["transcript_id"] or ""), str(analysis["transcript_content_digest"] or ""))]
+@@ -210,7 +228,7 @@
+         if not strict_ok:
+             return False, strict_reason, {"sample": False, **strict_details}
+         identity_mode = "VERSIONED_ROOT_IDENTITY_AND_STRICT_SOURCE_IDS"
+-    return True, "verified", {"sample": False, "identity_mode": identity_mode, "analysis_id": analysis["analysis_id"], "transcript_id": analysis["transcript_id"], "transcript_content_digest": analysis["transcript_content_digest"], "artifact_digest": actual_digest, "analysis_spec_version": analysis["analysis_spec_version"], "model_version": analysis["model_version"], "prompt_version": analysis["prompt_version"], **strict_details}
++    return True, "verified", {"sample": False, "identity_mode": identity_mode, "analysis_id": analysis["analysis_id"], "transcript_id": analysis["transcript_id"], "transcript_content_digest": analysis["transcript_content_digest"], "artifact_digest": actual_digest, "analysis_spec_version": analysis["analysis_spec_version"], "model_version": analysis["model_version"], "prompt_version": analysis["prompt_version"], "is_recompute_candidate": is_recompute_candidate, "recompute_request_id": recompute_request["request_id"] if is_recompute_candidate else None, **strict_details}
+ 
+ 
+ def release_held_projections(conn, analysis_id: str) -> int:
+@@ -255,13 +273,30 @@
+                 blocked += 1
+                 continue
+             original_metadata = json_object(row["metadata_json"])
++            metadata = {**original_metadata, "verified": True, "checked_at": utc_now(), **(details if row["object_type"] == "analysis" else {})}
++            conn.execute("UPDATE evidence_bundles SET status='VERIFIED',verified_at=?,manifest_hash=?,metadata_json=? WHERE bundle_id=?", (utc_now(), digest, json.dumps(metadata, ensure_ascii=False, sort_keys=True), row["bundle_id"]))
+             if (
+                 row["object_type"] == "analysis"
++                and details.get("is_recompute_candidate") is True
++            ):
++                try:
++                    finalize_verified_recompute_conn(
++                        conn,
++                        request_id=details["recompute_request_id"],
++                        candidate_analysis_id=row["object_id"],
++                    )
++                except (KeyError, TypeError, ValueError) as exc:
++                    block_bundle(
++                        conn, row, "recompute_promotion_failed",
++                        {"error": str(exc)},
++                    )
++                    blocked += 1
++                    continue
++            if (
++                row["object_type"] == "analysis"
+                 and original_metadata.get("release_projection_after_evidence") is True
+             ):
+                 released += release_held_projections(conn, row["object_id"])
+-            metadata = {**original_metadata, "verified": True, "checked_at": utc_now(), **(details if row["object_type"] == "analysis" else {})}
+-            conn.execute("UPDATE evidence_bundles SET status='VERIFIED',verified_at=?,manifest_hash=?,metadata_json=? WHERE bundle_id=?", (utc_now(), digest, json.dumps(metadata, ensure_ascii=False, sort_keys=True), row["bundle_id"]))
+             verified += 1
+         conn.commit()
+     result = {"verified": verified, "blocked": blocked, "released_projections": released, "checked_at": utc_now()}

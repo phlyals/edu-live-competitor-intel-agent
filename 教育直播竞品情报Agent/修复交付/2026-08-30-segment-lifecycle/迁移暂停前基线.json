@@ -1,0 +1,62 @@
+{
+  "checked_at": "2026-08-30T13:52:12.393932+00:00",
+  "transaction_read_only": "on",
+  "runtime_pid": 90013,
+  "pipeline_pid": 91389,
+  "active_recorders": [
+    {
+      "session_id": "session_301089a174e24811a1a3e0376ac4e40d",
+      "pid": 72241,
+      "pid_alive": true,
+      "job_status": "RUNNING",
+      "session_status": "RECORDING",
+      "partial_dir": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_2830f009c4673f6f/sess_b02574aa870775054f6777a4",
+      "bytes": 618467068
+    },
+    {
+      "session_id": "session_a11008384fa574090555c6e1389a4686",
+      "pid": 50442,
+      "pid_alive": true,
+      "job_status": "RUNNING",
+      "session_status": "RECORDING",
+      "partial_dir": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_08513b0271791c3c/sess_6097a2e5cd5a7f46efd0801e",
+      "bytes": 567015720
+    },
+    {
+      "session_id": "session_ac696981e0ee2a67689fd11f621f6847",
+      "pid": 7290,
+      "pid_alive": true,
+      "job_status": "RUNNING",
+      "session_status": "RECORDING",
+      "partial_dir": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_085261530d5b7db7/sess_ff720851fb6d26bf1c875322",
+      "bytes": 57933824
+    },
+    {
+      "session_id": "session_c21d1f47b1546038aca956d96dca5e9a",
+      "pid": 36906,
+      "pid_alive": true,
+      "job_status": "RUNNING",
+      "session_status": "RECORDING",
+      "partial_dir": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_91c8c4a8ea998e6e/sess_45d04a07827993aaee08df3d",
+      "bytes": 395402528
+    },
+    {
+      "session_id": "session_f941587f590eb58681a00688b1dfb5d1",
+      "pid": 89484,
+      "pid_alive": true,
+      "job_status": "RUNNING",
+      "session_status": "RECORDING",
+      "partial_dir": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_e8f8785e8b29630c/sess_180bfa12dacf647106fc324e",
+      "bytes": 522345804
+    },
+    {
+      "session_id": "session_ff57b5a50cbe69850e8ade07ebf3671d",
+      "pid": 7267,
+      "pid_alive": true,
+      "job_status": "RUNNING",
+      "session_status": "RECORDING",
+      "partial_dir": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_3209ade1e6024113/sess_866923f0e08c195f90161f8a",
+      "bytes": 111149056
+    }
+  ]
+}

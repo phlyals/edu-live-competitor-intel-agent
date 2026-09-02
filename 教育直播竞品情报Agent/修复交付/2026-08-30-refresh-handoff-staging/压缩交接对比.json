@@ -1,0 +1,22 @@
+{
+  "clock": "compressed deterministic timing; no external network or real 900-second wait",
+  "resolver_delay_seconds": 0.08,
+  "baseline_gaps_seconds": [
+    0.0891785410058219,
+    0.0908855419838801,
+    0.08363820798695087,
+    0.08982399999513291,
+    0.09200433400110342
+  ],
+  "candidate_gaps_seconds": [
+    0.0009268340072594583,
+    0.0008822910021990538,
+    0.000786542019341141,
+    0.0010202080011367798,
+    0.001357375003863126
+  ],
+  "baseline_median_seconds": 0.08982399999513291,
+  "candidate_median_seconds": 0.0009268340072594583,
+  "reduction_rate": 0.989681666288412,
+  "status": "PASS"
+}

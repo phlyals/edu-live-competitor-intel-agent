@@ -1,0 +1,12 @@
+{
+  "status": "ROLLED_BACK_ROWS",
+  "activity": {
+    "comparisons": 0,
+    "comparison_evidence": 0,
+    "strategy_versions": 0,
+    "version_observations": 0,
+    "strategy_evidence": 0,
+    "knowledge_publish_receipts": 0
+  },
+  "columns_retained": true
+}

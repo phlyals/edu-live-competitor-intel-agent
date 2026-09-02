@@ -1,0 +1,686 @@
+{
+  "evidence_type": "LIVE_RECORDING_INTERMEDIATE_STATE_READ_ONLY",
+  "generated_at": "2026-08-29T11:28:50.451Z",
+  "collection_started_at": "2026-08-29T11:28:43.829Z",
+  "database": {
+    "engine": "PostgreSQL",
+    "schema": "public",
+    "session_table": "live_sessions",
+    "recording_job_table": "recording_jobs",
+    "application_name": "codex_live_state_readonly",
+    "transaction_read_only": "on",
+    "transaction_isolation": "repeatable read",
+    "rollback_on_close": true,
+    "production_init_db_called": false,
+    "query_parameters": {
+      "started_at_gte": "2026-08-29T06:45:23Z",
+      "status": "RECORDING"
+    },
+    "query_sql": "SELECT\n  s.session_id,\n  s.started_at,\n  s.status AS session_status,\n  s.metadata_json,\n  j.status AS recording_job_status,\n  j.restart_count,\n  j.partial_dir,\n  j.completed_dir,\n  j.updated_at AS recording_job_updated_at\nFROM public.live_sessions AS s\nLEFT JOIN public.recording_jobs AS j ON j.session_id = s.session_id\nWHERE s.started_at::timestamptz >= %s::timestamptz\n  AND s.status = %s\nORDER BY s.started_at::timestamptz ASC",
+    "dsn_persisted": false
+  },
+  "field_mappings": {
+    "session_id": "live_sessions.session_id",
+    "started_at": "live_sessions.started_at；字段为 TEXT，查询时显式转换为 timestamptz",
+    "current_duration": "recording_jobs.partial_dir/completed_dir 中选定的非空媒体刷新片段，经 FFprobe 单文件取 format.duration 后求和",
+    "restart_count": "recording_jobs.restart_count",
+    "recording_gap_seen": "live_sessions.metadata_json.recording_gap_seen；键缺失按运行逻辑的 falsey 语义展示为 false，并另存 present 标志",
+    "last_heartbeat": "live_sessions.metadata_json.recording_health.last_observed_at",
+    "stream_url_sha256": "partial/completed 目录中 mtime 最新的 *.recording-state.json 的 stream.url_sha256"
+  },
+  "ffprobe": {
+    "binary": "/opt/homebrew/bin/ffprobe",
+    "network_protocols_allowed": false,
+    "protocol_whitelist": [
+      "file",
+      "pipe"
+    ],
+    "active_file_probe_warning": "录制仍在写入；时长是各文件 ffprobe_checked_at 的只读快照，不是同一原子时刻。"
+  },
+  "row_count": 5,
+  "rows": [
+    {
+      "session_id": "session_d0294cf1aab4328f317f273dca9af173",
+      "started_at": "2026-08-29T09:42:34.761Z",
+      "current_duration_seconds": 6338.764,
+      "current_duration_hms": "01:45:38.764",
+      "restart_count": 0,
+      "recording_gap_seen": false,
+      "recording_gap_seen_present_in_metadata": false,
+      "last_heartbeat": "2026-08-29T11:28:10.277Z",
+      "stream_url_sha256": "9527cfc457491e6077f60999a99a8a893f29a3454bd60313a1d6dbc5f773faf2",
+      "session_status": "RECORDING",
+      "recording_job_status": "RUNNING",
+      "recording_job_updated_at": "2026-08-29T11:28:10.277Z",
+      "partial_dir": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_836db3961058b668/sess_535ed07d323422437670b25b",
+      "completed_dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_836db3961058b668/sess_535ed07d323422437670b25b",
+      "directory_evidence": {
+        "partial_exists": true,
+        "completed_exists": false,
+        "partial_media_file_count": 8,
+        "completed_media_file_count": 0,
+        "selected_media_root": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_836db3961058b668/sess_535ed07d323422437670b25b",
+        "selection_reason": "活动场次 partial 目录存在非空媒体；以 partial 刷新片段累计，completed 仅检查存在性"
+      },
+      "media_files": [
+        {
+          "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_836db3961058b668/sess_535ed07d323422437670b25b/整场直播.refresh0001.ts.partial",
+          "size_bytes_before_probe": 189219556,
+          "mtime_at_probe_start": "2026-08-29T10:12:42.408Z",
+          "ffprobe_checked_at": "2026-08-29T11:28:43.856Z",
+          "ffprobe_status": "OK",
+          "duration_seconds": 900.1665,
+          "format_name": "mpegts",
+          "ffprobe_size_bytes": 189219556,
+          "stream_types": [
+            "audio",
+            "video"
+          ],
+          "attempt": 1
+        },
+        {
+          "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_836db3961058b668/sess_535ed07d323422437670b25b/整场直播.refresh0002.ts.partial",
+          "size_bytes_before_probe": 189767576,
+          "mtime_at_probe_start": "2026-08-29T10:27:39.564Z",
+          "ffprobe_checked_at": "2026-08-29T11:28:43.856Z",
+          "ffprobe_status": "OK",
+          "duration_seconds": 900.1685,
+          "format_name": "mpegts",
+          "ffprobe_size_bytes": 189767576,
+          "stream_types": [
+            "audio",
+            "video"
+          ],
+          "attempt": 1
+        },
+        {
+          "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_836db3961058b668/sess_535ed07d323422437670b25b/整场直播.refresh0003.ts.partial",
+          "size_bytes_before_probe": 189239672,
+          "mtime_at_probe_start": "2026-08-29T10:42:58.744Z",
+          "ffprobe_checked_at": "2026-08-29T11:28:44.320Z",
+          "ffprobe_status": "OK",
+          "duration_seconds": 900.1695,
+          "format_name": "mpegts",
+          "ffprobe_size_bytes": 189239672,
+          "stream_types": [
+            "audio",
+            "video"
+          ],
+          "attempt": 1
+        },
+        {
+          "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_836db3961058b668/sess_535ed07d323422437670b25b/整场直播.refresh0004.ts.partial",
+          "size_bytes_before_probe": 188945640,
+          "mtime_at_probe_start": "2026-08-29T10:57:56.595Z",
+          "ffprobe_checked_at": "2026-08-29T11:28:44.335Z",
+          "ffprobe_status": "OK",
+          "duration_seconds": 900.22,
+          "format_name": "mpegts",
+          "ffprobe_size_bytes": 188945640,
+          "stream_types": [
+            "audio",
+            "video"
+          ],
+          "attempt": 1
+        },
+        {
+          "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_836db3961058b668/sess_535ed07d323422437670b25b/整场直播.refresh0005.ts.partial",
+          "size_bytes_before_probe": 188815168,
+          "mtime_at_probe_start": "2026-08-29T11:12:54.059Z",
+          "ffprobe_checked_at": "2026-08-29T11:28:44.746Z",
+          "ffprobe_status": "OK",
+          "duration_seconds": 900.1175,
+          "format_name": "mpegts",
+          "ffprobe_size_bytes": 188815168,
+          "stream_types": [
+            "audio",
+            "video"
+          ],
+          "attempt": 1
+        },
+        {
+          "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_836db3961058b668/sess_535ed07d323422437670b25b/整场直播.refresh0006.ts.partial",
+          "size_bytes_before_probe": 189794836,
+          "mtime_at_probe_start": "2026-08-29T11:27:51.693Z",
+          "ffprobe_checked_at": "2026-08-29T11:28:44.887Z",
+          "ffprobe_status": "OK",
+          "duration_seconds": 900.265,
+          "format_name": "mpegts",
+          "ffprobe_size_bytes": 189794836,
+          "stream_types": [
+            "audio",
+            "video"
+          ],
+          "attempt": 1
+        },
+        {
+          "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_836db3961058b668/sess_535ed07d323422437670b25b/整场直播.refresh0007.ts.partial",
+          "size_bytes_before_probe": 7602176,
+          "mtime_at_probe_start": "2026-08-29T11:28:44.927Z",
+          "ffprobe_checked_at": "2026-08-29T11:28:45.335Z",
+          "ffprobe_status": "OK",
+          "duration_seconds": 37.4985,
+          "format_name": "mpegts",
+          "ffprobe_size_bytes": 7602176,
+          "stream_types": [
+            "audio",
+            "video"
+          ],
+          "attempt": 1
+        },
+        {
+          "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_836db3961058b668/sess_535ed07d323422437670b25b/整场直播.ts.partial",
+          "size_bytes_before_probe": 192669732,
+          "mtime_at_probe_start": "2026-08-29T09:57:43.459Z",
+          "ffprobe_checked_at": "2026-08-29T11:28:45.434Z",
+          "ffprobe_status": "OK",
+          "duration_seconds": 900.1585,
+          "format_name": "mpegts",
+          "ffprobe_size_bytes": 192669732,
+          "stream_types": [
+            "audio",
+            "video"
+          ],
+          "attempt": 1
+        }
+      ],
+      "probed_duration_seconds_successful_files": 6338.764,
+      "all_selected_media_ffprobe_ok": true,
+      "recording_state_file_count": 8,
+      "latest_recording_state": {
+        "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_836db3961058b668/sess_535ed07d323422437670b25b/整场直播.refresh0007.ts.partial.recording-state.json",
+        "mtime": "2026-08-29T11:28:42.082Z",
+        "parse_status": "OK",
+        "state_status": "RUNNING",
+        "checked_at": "2026-08-29T11:28:42.081+00:00",
+        "last_file_write_at": "2026-08-29T11:28:41.309+00:00",
+        "output_size_bytes": 6815744,
+        "stream": {
+          "protocol": "FLV",
+          "resolved_at": "2026-08-29T11:28:05.211+00:00",
+          "url_sha256": "9527cfc457491e6077f60999a99a8a893f29a3454bd60313a1d6dbc5f773faf2",
+          "hostname": "pull-flv-l13.douyincdn.com",
+          "path_sha256": "a3869fe7f69003ffaac9e9302f5e765b561c8a9db95a85b1bc45cf549c6f16ef",
+          "query_keys": [
+            "arch_hrchy",
+            "exp_hrchy",
+            "expire",
+            "major_anchor_level",
+            "sign",
+            "t_id",
+            "unique_id"
+          ],
+          "query_sha256": "94d8dba960658ff804576a8deec2f5a108e96a1f37389e3a85f81b0aeae1650f"
+        }
+      },
+      "warnings": [
+        "RECORDING_GAP_SEEN_KEY_ABSENT_TREATED_AS_FALSE"
+      ]
+    },
+    {
+      "session_id": "session_acafc38cebf7f4809d223f17fc073657",
+      "started_at": "2026-08-29T10:10:17.487Z",
+      "current_duration_seconds": 4710.020333,
+      "current_duration_hms": "01:18:30.020",
+      "restart_count": 0,
+      "recording_gap_seen": false,
+      "recording_gap_seen_present_in_metadata": false,
+      "last_heartbeat": "2026-08-29T11:28:11.149Z",
+      "stream_url_sha256": "19282626e3ea5479c4b813ba019b8322db6560ef62c5dcb03fc3dcd4bb4c2183",
+      "session_status": "RECORDING",
+      "recording_job_status": "RUNNING",
+      "recording_job_updated_at": "2026-08-29T11:28:11.149Z",
+      "partial_dir": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_986a90186541e9b0/sess_a2c03bcdfde51bb9abb8a13e",
+      "completed_dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_986a90186541e9b0/sess_a2c03bcdfde51bb9abb8a13e",
+      "directory_evidence": {
+        "partial_exists": true,
+        "completed_exists": false,
+        "partial_media_file_count": 6,
+        "completed_media_file_count": 0,
+        "selected_media_root": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_986a90186541e9b0/sess_a2c03bcdfde51bb9abb8a13e",
+        "selection_reason": "活动场次 partial 目录存在非空媒体；以 partial 刷新片段累计，completed 仅检查存在性"
+      },
+      "media_files": [
+        {
+          "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_986a90186541e9b0/sess_a2c03bcdfde51bb9abb8a13e/整场直播.refresh0001.ts.partial",
+          "size_bytes_before_probe": 67880408,
+          "mtime_at_probe_start": "2026-08-29T10:40:18.984Z",
+          "ffprobe_checked_at": "2026-08-29T11:28:46.068Z",
+          "ffprobe_status": "OK",
+          "duration_seconds": 900.2,
+          "format_name": "mpegts",
+          "ffprobe_size_bytes": 67880408,
+          "stream_types": [
+            "audio",
+            "video"
+          ],
+          "attempt": 1
+        },
+        {
+          "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_986a90186541e9b0/sess_a2c03bcdfde51bb9abb8a13e/整场直播.refresh0002.ts.partial",
+          "size_bytes_before_probe": 68530700,
+          "mtime_at_probe_start": "2026-08-29T10:55:17.002Z",
+          "ffprobe_checked_at": "2026-08-29T11:28:46.072Z",
+          "ffprobe_status": "OK",
+          "duration_seconds": 900.2,
+          "format_name": "mpegts",
+          "ffprobe_size_bytes": 68530700,
+          "stream_types": [
+            "audio",
+            "video"
+          ],
+          "attempt": 1
+        },
+        {
+          "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_986a90186541e9b0/sess_a2c03bcdfde51bb9abb8a13e/整场直播.refresh0003.ts.partial",
+          "size_bytes_before_probe": 68790516,
+          "mtime_at_probe_start": "2026-08-29T11:10:14.987Z",
+          "ffprobe_checked_at": "2026-08-29T11:28:46.556Z",
+          "ffprobe_status": "OK",
+          "duration_seconds": 900.2,
+          "format_name": "mpegts",
+          "ffprobe_size_bytes": 68790516,
+          "stream_types": [
+            "audio",
+            "video"
+          ],
+          "attempt": 1
+        },
+        {
+          "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_986a90186541e9b0/sess_a2c03bcdfde51bb9abb8a13e/整场直播.refresh0004.ts.partial",
+          "size_bytes_before_probe": 83345100,
+          "mtime_at_probe_start": "2026-08-29T11:25:15.140Z",
+          "ffprobe_checked_at": "2026-08-29T11:28:46.568Z",
+          "ffprobe_status": "OK",
+          "duration_seconds": 900.093,
+          "format_name": "mpegts",
+          "ffprobe_size_bytes": 83345100,
+          "stream_types": [
+            "audio",
+            "video"
+          ],
+          "attempt": 1
+        },
+        {
+          "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_986a90186541e9b0/sess_a2c03bcdfde51bb9abb8a13e/整场直播.refresh0005.ts.partial",
+          "size_bytes_before_probe": 25690112,
+          "mtime_at_probe_start": "2026-08-29T11:28:46.144Z",
+          "ffprobe_checked_at": "2026-08-29T11:28:46.983Z",
+          "ffprobe_status": "OK",
+          "duration_seconds": 209.16,
+          "format_name": "mpegts",
+          "ffprobe_size_bytes": 25690112,
+          "stream_types": [
+            "audio",
+            "video"
+          ],
+          "attempt": 1
+        },
+        {
+          "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_986a90186541e9b0/sess_a2c03bcdfde51bb9abb8a13e/整场直播.ts.partial",
+          "size_bytes_before_probe": 72661624,
+          "mtime_at_probe_start": "2026-08-29T10:25:20.825Z",
+          "ffprobe_checked_at": "2026-08-29T11:28:47.102Z",
+          "ffprobe_status": "OK",
+          "duration_seconds": 900.167333,
+          "format_name": "mpegts",
+          "ffprobe_size_bytes": 72661624,
+          "stream_types": [
+            "audio",
+            "video"
+          ],
+          "attempt": 1
+        }
+      ],
+      "probed_duration_seconds_successful_files": 4710.020333,
+      "all_selected_media_ffprobe_ok": true,
+      "recording_state_file_count": 6,
+      "latest_recording_state": {
+        "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_986a90186541e9b0/sess_a2c03bcdfde51bb9abb8a13e/整场直播.refresh0005.ts.partial.recording-state.json",
+        "mtime": "2026-08-29T11:28:46.489Z",
+        "parse_status": "OK",
+        "state_status": "RUNNING",
+        "checked_at": "2026-08-29T11:28:46.488+00:00",
+        "last_file_write_at": "2026-08-29T11:28:46.144+00:00",
+        "output_size_bytes": 25690112,
+        "stream": {
+          "protocol": "FLV",
+          "resolved_at": "2026-08-29T11:25:17.549+00:00",
+          "url_sha256": "19282626e3ea5479c4b813ba019b8322db6560ef62c5dcb03fc3dcd4bb4c2183",
+          "hostname": "pull-flv-h11.douyincdn.com",
+          "path_sha256": "b3964ef9afa9f059823dbcca4ca54f100307878963bcb4ee26ffef815ec2e912",
+          "query_keys": [
+            "arch_hrchy",
+            "exp_hrchy",
+            "expire",
+            "major_anchor_level",
+            "sign",
+            "t_id",
+            "unique_id"
+          ],
+          "query_sha256": "01689678371e94ffad5b3eac031d835fe5217ab6d6fed061c8a6a8751c2df1d1"
+        }
+      },
+      "warnings": [
+        "RECORDING_GAP_SEEN_KEY_ABSENT_TREATED_AS_FALSE"
+      ]
+    },
+    {
+      "session_id": "session_d2486d4e9805e31cec39ea70b4f12440",
+      "started_at": "2026-08-29T10:28:02.582Z",
+      "current_duration_seconds": 3638.733,
+      "current_duration_hms": "01:00:38.733",
+      "restart_count": 0,
+      "recording_gap_seen": false,
+      "recording_gap_seen_present_in_metadata": false,
+      "last_heartbeat": "2026-08-29T11:28:12.407Z",
+      "stream_url_sha256": "551eaea62fa384a9db76e1e65fe876cfb839b0bef7ddc8241df05df4ecd261b6",
+      "session_status": "RECORDING",
+      "recording_job_status": "RUNNING",
+      "recording_job_updated_at": "2026-08-29T11:28:12.407Z",
+      "partial_dir": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_da976e262ebf85ce/sess_923bb35c0c7a3e24ad48d9d4",
+      "completed_dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_da976e262ebf85ce/sess_923bb35c0c7a3e24ad48d9d4",
+      "directory_evidence": {
+        "partial_exists": true,
+        "completed_exists": false,
+        "partial_media_file_count": 5,
+        "completed_media_file_count": 0,
+        "selected_media_root": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_da976e262ebf85ce/sess_923bb35c0c7a3e24ad48d9d4",
+        "selection_reason": "活动场次 partial 目录存在非空媒体；以 partial 刷新片段累计，completed 仅检查存在性"
+      },
+      "media_files": [
+        {
+          "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_da976e262ebf85ce/sess_923bb35c0c7a3e24ad48d9d4/整场直播.refresh0001.ts.partial",
+          "size_bytes_before_probe": 73354592,
+          "mtime_at_probe_start": "2026-08-29T10:58:02.566Z",
+          "ffprobe_checked_at": "2026-08-29T11:28:47.871Z",
+          "ffprobe_status": "OK",
+          "duration_seconds": 900.2,
+          "format_name": "mpegts",
+          "ffprobe_size_bytes": 73354592,
+          "stream_types": [
+            "audio",
+            "video"
+          ],
+          "attempt": 1
+        },
+        {
+          "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_da976e262ebf85ce/sess_923bb35c0c7a3e24ad48d9d4/整场直播.refresh0002.ts.partial",
+          "size_bytes_before_probe": 73255328,
+          "mtime_at_probe_start": "2026-08-29T11:13:02.565Z",
+          "ffprobe_checked_at": "2026-08-29T11:28:47.874Z",
+          "ffprobe_status": "OK",
+          "duration_seconds": 900.2,
+          "format_name": "mpegts",
+          "ffprobe_size_bytes": 73255328,
+          "stream_types": [
+            "audio",
+            "video"
+          ],
+          "attempt": 1
+        },
+        {
+          "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_da976e262ebf85ce/sess_923bb35c0c7a3e24ad48d9d4/整场直播.refresh0003.ts.partial",
+          "size_bytes_before_probe": 83006136,
+          "mtime_at_probe_start": "2026-08-29T11:28:02.696Z",
+          "ffprobe_checked_at": "2026-08-29T11:28:48.303Z",
+          "ffprobe_status": "OK",
+          "duration_seconds": 900.093,
+          "format_name": "mpegts",
+          "ffprobe_size_bytes": 83006136,
+          "stream_types": [
+            "audio",
+            "video"
+          ],
+          "attempt": 1
+        },
+        {
+          "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_da976e262ebf85ce/sess_923bb35c0c7a3e24ad48d9d4/整场直播.refresh0004.ts.partial",
+          "size_bytes_before_probe": 5505024,
+          "mtime_at_probe_start": "2026-08-29T11:28:46.659Z",
+          "ffprobe_checked_at": "2026-08-29T11:28:48.464Z",
+          "ffprobe_status": "OK",
+          "duration_seconds": 38.04,
+          "format_name": "mpegts",
+          "ffprobe_size_bytes": 5505024,
+          "stream_types": [
+            "audio",
+            "video"
+          ],
+          "attempt": 1
+        },
+        {
+          "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_da976e262ebf85ce/sess_923bb35c0c7a3e24ad48d9d4/整场直播.ts.partial",
+          "size_bytes_before_probe": 73643360,
+          "mtime_at_probe_start": "2026-08-29T10:43:02.567Z",
+          "ffprobe_checked_at": "2026-08-29T11:28:48.627Z",
+          "ffprobe_status": "OK",
+          "duration_seconds": 900.2,
+          "format_name": "mpegts",
+          "ffprobe_size_bytes": 73643360,
+          "stream_types": [
+            "audio",
+            "video"
+          ],
+          "attempt": 1
+        }
+      ],
+      "probed_duration_seconds_successful_files": 3638.733,
+      "all_selected_media_ffprobe_ok": true,
+      "recording_state_file_count": 5,
+      "latest_recording_state": {
+        "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_da976e262ebf85ce/sess_923bb35c0c7a3e24ad48d9d4/整场直播.refresh0004.ts.partial.recording-state.json",
+        "mtime": "2026-08-29T11:28:45.094Z",
+        "parse_status": "OK",
+        "state_status": "RUNNING",
+        "checked_at": "2026-08-29T11:28:45.093+00:00",
+        "last_file_write_at": "2026-08-29T11:28:44.654+00:00",
+        "output_size_bytes": 5242880,
+        "stream": {
+          "protocol": "FLV",
+          "resolved_at": "2026-08-29T11:28:08.251+00:00",
+          "url_sha256": "551eaea62fa384a9db76e1e65fe876cfb839b0bef7ddc8241df05df4ecd261b6",
+          "hostname": "pull-flv-h26.douyincdn.com",
+          "path_sha256": "fdb0364d373c283327eb64b8ccc1df22310a3b72c6a3bfb512917a1c530cda4e",
+          "query_keys": [
+            "arch_hrchy",
+            "exp_hrchy",
+            "expire",
+            "major_anchor_level",
+            "sign",
+            "t_id",
+            "unique_id"
+          ],
+          "query_sha256": "0c99776d5794ac4496423b29d82cddbc6d06769663429946777a114e9ba77747"
+        }
+      },
+      "warnings": [
+        "RECORDING_GAP_SEEN_KEY_ABSENT_TREATED_AS_FALSE"
+      ]
+    },
+    {
+      "session_id": "session_c172c813b22817f0f8cdf6392c939bf5",
+      "started_at": "2026-08-29T10:44:56.887Z",
+      "current_duration_seconds": 2626.417332,
+      "current_duration_hms": "00:43:46.417",
+      "restart_count": 0,
+      "recording_gap_seen": false,
+      "recording_gap_seen_present_in_metadata": false,
+      "last_heartbeat": "2026-08-29T11:28:13.463Z",
+      "stream_url_sha256": "ad98b91cb1fe2850b601a8aad94623d5fab742fa56e81c1953e1fb7f9769228c",
+      "session_status": "RECORDING",
+      "recording_job_status": "RUNNING",
+      "recording_job_updated_at": "2026-08-29T11:28:13.463Z",
+      "partial_dir": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_2830f009c4673f6f/sess_1777ad859093703aca27c0c6",
+      "completed_dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_1777ad859093703aca27c0c6",
+      "directory_evidence": {
+        "partial_exists": true,
+        "completed_exists": false,
+        "partial_media_file_count": 3,
+        "completed_media_file_count": 0,
+        "selected_media_root": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_2830f009c4673f6f/sess_1777ad859093703aca27c0c6",
+        "selection_reason": "活动场次 partial 目录存在非空媒体；以 partial 刷新片段累计，completed 仅检查存在性"
+      },
+      "media_files": [
+        {
+          "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_2830f009c4673f6f/sess_1777ad859093703aca27c0c6/整场直播.refresh0001.ts.partial",
+          "size_bytes_before_probe": 205440760,
+          "mtime_at_probe_start": "2026-08-29T11:15:02.930Z",
+          "ffprobe_checked_at": "2026-08-29T11:28:49.233Z",
+          "ffprobe_status": "OK",
+          "duration_seconds": 900.091444,
+          "format_name": "mpegts",
+          "ffprobe_size_bytes": 205440760,
+          "stream_types": [
+            "audio",
+            "video"
+          ],
+          "attempt": 1
+        },
+        {
+          "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_2830f009c4673f6f/sess_1777ad859093703aca27c0c6/整场直播.refresh0002.ts.partial",
+          "size_bytes_before_probe": 188481536,
+          "mtime_at_probe_start": "2026-08-29T11:28:48.725Z",
+          "ffprobe_checked_at": "2026-08-29T11:28:49.234Z",
+          "ffprobe_status": "OK",
+          "duration_seconds": 826.056444,
+          "format_name": "mpegts",
+          "ffprobe_size_bytes": 188481536,
+          "stream_types": [
+            "audio",
+            "video"
+          ],
+          "attempt": 1
+        },
+        {
+          "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_2830f009c4673f6f/sess_1777ad859093703aca27c0c6/整场直播.ts.partial",
+          "size_bytes_before_probe": 205396016,
+          "mtime_at_probe_start": "2026-08-29T11:00:04.912Z",
+          "ffprobe_checked_at": "2026-08-29T11:28:49.733Z",
+          "ffprobe_status": "OK",
+          "duration_seconds": 900.269444,
+          "format_name": "mpegts",
+          "ffprobe_size_bytes": 205396016,
+          "stream_types": [
+            "audio",
+            "video"
+          ],
+          "attempt": 1
+        }
+      ],
+      "probed_duration_seconds_successful_files": 2626.417332,
+      "all_selected_media_ffprobe_ok": true,
+      "recording_state_file_count": 3,
+      "latest_recording_state": {
+        "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_2830f009c4673f6f/sess_1777ad859093703aca27c0c6/整场直播.refresh0002.ts.partial.recording-state.json",
+        "mtime": "2026-08-29T11:28:45.587Z",
+        "parse_status": "OK",
+        "state_status": "RUNNING",
+        "checked_at": "2026-08-29T11:28:45.581+00:00",
+        "last_file_write_at": "2026-08-29T11:28:45.420+00:00",
+        "output_size_bytes": 187695104,
+        "stream": {
+          "protocol": "FLV",
+          "resolved_at": "2026-08-29T11:15:04.669+00:00",
+          "url_sha256": "ad98b91cb1fe2850b601a8aad94623d5fab742fa56e81c1953e1fb7f9769228c",
+          "hostname": "pull-e5.douyincdn.com",
+          "path_sha256": "7d987bf952e1d3aee2782d1d62852ce87dda89c8e7ae5181c792aefceb85e2be",
+          "query_keys": [
+            "arch_hrchy",
+            "exp_hrchy",
+            "expire",
+            "major_anchor_level",
+            "sign",
+            "t_id",
+            "unique_id",
+            "volcSecret",
+            "volcTime"
+          ],
+          "query_sha256": "a41f48de13a5eeaaa2f0e441c7a5aaf565cbe0e013175c41bec48c418250842a"
+        }
+      },
+      "warnings": [
+        "RECORDING_GAP_SEEN_KEY_ABSENT_TREATED_AS_FALSE"
+      ]
+    },
+    {
+      "session_id": "session_bd4847bc8b66caff905fa10cf0a61e3e",
+      "started_at": "2026-08-29T11:19:56.452Z",
+      "current_duration_seconds": 530.383667,
+      "current_duration_hms": "00:08:50.384",
+      "restart_count": 0,
+      "recording_gap_seen": false,
+      "recording_gap_seen_present_in_metadata": false,
+      "last_heartbeat": "2026-08-29T11:28:04.464Z",
+      "stream_url_sha256": "31bba49bf9b1023e01e4e761616f03d4ac076218e5d37070227b5293a4aa1077",
+      "session_status": "RECORDING",
+      "recording_job_status": "RUNNING",
+      "recording_job_updated_at": "2026-08-29T11:28:04.464Z",
+      "partial_dir": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_0d701166362f3482/sess_3ae2425e3cdac61d08fd7336",
+      "completed_dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_0d701166362f3482/sess_3ae2425e3cdac61d08fd7336",
+      "directory_evidence": {
+        "partial_exists": true,
+        "completed_exists": false,
+        "partial_media_file_count": 1,
+        "completed_media_file_count": 0,
+        "selected_media_root": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_0d701166362f3482/sess_3ae2425e3cdac61d08fd7336",
+        "selection_reason": "活动场次 partial 目录存在非空媒体；以 partial 刷新片段累计，completed 仅检查存在性"
+      },
+      "media_files": [
+        {
+          "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_0d701166362f3482/sess_3ae2425e3cdac61d08fd7336/整场直播.ts.partial",
+          "size_bytes_before_probe": 147062784,
+          "mtime_at_probe_start": "2026-08-29T11:28:49.503Z",
+          "ffprobe_checked_at": "2026-08-29T11:28:50.070Z",
+          "ffprobe_status": "OK",
+          "duration_seconds": 530.383667,
+          "format_name": "mpegts",
+          "ffprobe_size_bytes": 147062784,
+          "stream_types": [
+            "audio",
+            "video"
+          ],
+          "attempt": 1
+        }
+      ],
+      "probed_duration_seconds_successful_files": 530.383667,
+      "all_selected_media_ffprobe_ok": true,
+      "recording_state_file_count": 1,
+      "latest_recording_state": {
+        "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_0d701166362f3482/sess_3ae2425e3cdac61d08fd7336/整场直播.ts.partial.recording-state.json",
+        "mtime": "2026-08-29T11:28:47.411Z",
+        "parse_status": "OK",
+        "state_status": "RUNNING",
+        "checked_at": "2026-08-29T11:28:47.410+00:00",
+        "last_file_write_at": "2026-08-29T11:28:46.846+00:00",
+        "output_size_bytes": 146276352,
+        "stream": {
+          "protocol": "FLV",
+          "resolved_at": "2026-08-29T11:19:59.901+00:00",
+          "url_sha256": "31bba49bf9b1023e01e4e761616f03d4ac076218e5d37070227b5293a4aa1077",
+          "hostname": "pull-flv-q13.douyincdn.com",
+          "path_sha256": "307dec403c59a759f591feb713ec9b5972da634c1c827d4b5640bb6804fea434",
+          "query_keys": [
+            "arch_hrchy",
+            "exp_hrchy",
+            "expire",
+            "major_anchor_level",
+            "sign",
+            "t_id",
+            "unique_id"
+          ],
+          "query_sha256": "4e02f2c40183a56193267431e5695463cdcbec090ed088dec92aec84edcace60"
+        }
+      },
+      "warnings": [
+        "RECORDING_GAP_SEEN_KEY_ABSENT_TREATED_AS_FALSE"
+      ]
+    }
+  ],
+  "evidence_limits": [
+    "数据库使用 REPEATABLE READ READ ONLY；媒体目录不属于数据库事务，因此 DB 与文件系统不能形成跨系统原子快照。",
+    "活动媒体持续增长，current_duration_seconds 仅代表逐文件 FFprobe 检查时刻；后续会增加。",
+    "recording_gap_seen 键缺失时，运行代码把它按 falsey 处理；证据同时保留键是否实际存在。",
+    "stream_url_sha256 只取最新 sidecar 的不可逆指纹；输出未读取或持久化原始流 URL/token。"
+  ]
+}

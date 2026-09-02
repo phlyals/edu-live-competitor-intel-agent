@@ -1,0 +1,123 @@
+--- /Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/v3_analysis_worker.py	2026-08-31 01:03:25
++++ staging/runtime/v3/v3_analysis_worker.py	2026-08-31 01:19:08
+@@ -1168,13 +1168,19 @@
+         ]
+     qualified = target_met = blocked = waiting = evidence_pending = 0
+     for row in rows:
+-        if row["status"] == "COMPLETE" and _current_analysis_gate(row, minimum, target):
++        if (
++            row["status"] == "COMPLETE"
++            and row.get("lineage_state") == "CURRENT"
++            and _current_analysis_gate(row, minimum, target)
++        ):
+             qualified += 1
+             coverage = json_object(row.get("metadata_json")).get("analysis_coverage") or {}
+             if coverage.get("meets_target") is True:
+                 target_met += 1
+             if row.get("evidence_status") != "VERIFIED":
+                 evidence_pending += 1
++        elif row.get("lineage_state") in {"STALE", "CANDIDATE"}:
++            waiting += 1
+         elif row["status"] in {
+             "QUALITY_BLOCKED", "BLOCKED_SOURCE_QUALIFICATION", "FAILED_FINAL"
+         }:
+@@ -1338,6 +1344,12 @@
+     """Process exactly one fenced analysis lease."""
+     minimum, target = load_analysis_quality_config()
+     analysis_metadata = json_object(job.get("metadata_json"))
++    recompute_request_id = str(
++        analysis_metadata.get("recompute_request_id") or ""
++    )
++    is_recompute_candidate = bool(
++        recompute_request_id and job.get("lineage_state") == "CANDIDATE"
++    )
+     try:
+         expected_transcript_id = str(job.get("transcript_id") or "")
+         with connect() as conn:
+@@ -1367,15 +1379,22 @@
+                 hashlib.sha256(("FULL_SESSION:" + canonical_hash).encode()).hexdigest()
+                 if canonical_hash else None
+             )
++            expected_edge_state = "CANDIDATE" if is_recompute_candidate else "CURRENT"
+             edges = [
+                 (str(edge["upstream_id"]), str(edge["upstream_version"]))
+                 for edge in conn.execute(
+                     "SELECT upstream_id,upstream_version FROM lineage_edges "
+                     "WHERE downstream_type='analysis' AND downstream_id=? "
+-                    "AND upstream_type='transcript' AND state='CURRENT' ORDER BY edge_id",
+-                    (job["analysis_id"],),
++                    "AND upstream_type='transcript' AND state=? ORDER BY edge_id",
++                    (job["analysis_id"], expected_edge_state),
+                 ).fetchall()
+             ]
++            recompute_request = conn.execute(
++                "SELECT request_id,status,candidate_analysis_id,upstream_id,"
++                "new_upstream_digest,target_analysis_spec_version,target_model_version,"
++                "target_prompt_version FROM recompute_requests WHERE request_id=?",
++                (recompute_request_id,),
++            ).fetchone() if is_recompute_candidate else None
+ 
+         eligible, qualification_state, qualification = transcript_qualification(
+             row_dict, canonical_source_digest=canonical_source_digest, minimum=minimum,
+@@ -1398,6 +1417,17 @@
+             immutable_reasons.append("ANALYSIS_SOURCE_DIGEST_MISMATCH")
+         if edges != [(expected_transcript_id, expected_digest)]:
+             immutable_reasons.append("LINEAGE_NOT_EXACTLY_ONE_EXPECTED_TRANSCRIPT_DIGEST")
++        if is_recompute_candidate and (
++            not recompute_request
++            or recompute_request["status"] != "CANDIDATE_CREATED"
++            or recompute_request["candidate_analysis_id"] != job["analysis_id"]
++            or recompute_request["upstream_id"] != expected_transcript_id
++            or recompute_request["new_upstream_digest"] != expected_digest
++            or recompute_request["target_analysis_spec_version"] != ANALYSIS_SPEC_VERSION
++            or recompute_request["target_model_version"] != MODEL_VERSION
++            or recompute_request["target_prompt_version"] != PROMPT_VERSION
++        ):
++            immutable_reasons.append("RECOMPUTE_REQUEST_IDENTITY_MISMATCH")
+         if not eligible or immutable_reasons:
+             qualification["reasons"] = [*qualification.get("reasons", []), *immutable_reasons]
+             return _block_source_claim(
+@@ -1514,6 +1544,7 @@
+             "qualification_state": QUALIFIED,
+             "lease_epoch": int(job["lease_epoch"]),
+             "attempt": int(job["attempts"]),
++            "recompute_request_id": recompute_request_id or None,
+             "engine": engine,
+             "created_at": utc_now(),
+             "evidence": evidence,
+@@ -1576,7 +1607,9 @@
+                     "metadata_json": json.dumps(
+                         metadata, ensure_ascii=False, sort_keys=True
+                     ),
+-                    "lineage_state": "CURRENT",
++                    "lineage_state": (
++                        "CANDIDATE" if is_recompute_candidate else "CURRENT"
++                    ),
+                     "qualification_status": QUALIFIED,
+                     "checkpoint_json": json.dumps(
+                         final_checkpoint, ensure_ascii=False, sort_keys=True
+@@ -1584,7 +1617,7 @@
+                 },
+                 commit_transaction=False,
+             )
+-            superseded_rows = conn.execute(
++            superseded_rows = [] if is_recompute_candidate else conn.execute(
+                 "SELECT analysis_id,metadata_json FROM analyses WHERE transcript_id=? "
+                 "AND analysis_type='single_session' AND analysis_id<>? "
+                 "AND status='COMPLETE' AND lineage_state='CURRENT'",
+@@ -1661,6 +1694,7 @@
+                         "formal_analysis_eligible": True,
+                         "release_projection_after_evidence": True,
+                         "lease_epoch": int(job["lease_epoch"]),
++                        "recompute_request_id": recompute_request_id or None,
+                     }, ensure_ascii=False, sort_keys=True),
+                 ),
+             )
+@@ -1676,6 +1710,7 @@
+                     "artifact_digest": artifact_digest,
+                     "analysis_spec_version": ANALYSIS_SPEC_VERSION,
+                     "release_after_evidence_analysis_id": job["analysis_id"],
++                    "recompute_request_id": recompute_request_id or None,
+                 },
+                 scope=ANALYSIS_SCOPE_FORMAL,
+                 qualification_status=QUALIFIED,

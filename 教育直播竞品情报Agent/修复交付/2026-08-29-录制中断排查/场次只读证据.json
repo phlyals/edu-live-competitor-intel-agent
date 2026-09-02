@@ -1,0 +1,68 @@
+{
+  "captured_at": "2026-08-28T16:33:07.560134+00:00",
+  "session": {
+    "session_id": "session_0923b62f50088b6401c06373fc916038",
+    "monitor_target_id": "monitor:buyin:v2_0a2f4d3021b3c89afea3919e0956a29d68f42ce6585aaa9c580304c2e2fe5f5f93145b6afffd65ec8a16a2fa9a1134de5f1a4b0a3c0000000000000000000050d57402d11113f59b355eac43600743cbf55f7e343d3ec648c70a708fa0e007886c212ef0e7b16d1ce47e52f317e31e1a981093dd9a0e18e5ade4c9012001220103e6ad91bd",
+    "platform_session_id": "douyin:7679006521677712128",
+    "status": "MEDIA_COMPLETE",
+    "started_at": "2026-08-28T09:08:29.514Z",
+    "ended_at": "2026-08-28T15:06:37.919Z",
+    "completeness": "PARTIAL",
+    "source_url": "https://live.douyin.com/81560799535",
+    "metadata_json": "{\"anchor_name\": null, \"authorization_mode\": \"persistent_gate\", \"checked_at\": \"2026-08-28T09:08:25.032Z\", \"down_since\": \"2026-08-28T15:01:33.004Z\", \"last_seen_live_at\": \"2026-08-28T10:18:33.209Z\", \"last_unknown_at\": \"2026-08-28T14:58:13.557Z\", \"live_status\": \"LIVE\", \"primary_probe\": \"UNKNOWN\", \"recording_started\": false, \"return_code\": 2, \"room_id\": \"7679006521677712128\", \"secondary_detail\": {\"anchor_name\": \"耘书筑梦\", \"room_id\": \"7679006521677712128\", \"status\": \"LIVE\", \"title\": \"新初三规划！初中妈妈必听！\", \"upstream_version\": \"4.0.10\"}, \"secondary_probe\": \"LIVE\", \"shared_status\": \"error\", \"status\": \"UNKNOWN\", \"title\": null, \"media_coverage\": {\"duration_seconds\": 4229.749333, \"observed_session_seconds\": 21488.405, \"continuous_capture\": false, \"checked_at\": \"2026-08-28T16:02:47.676Z\"}}"
+  },
+  "job": {
+    "job_id": "recjob_073506ff856ed27304d97df1",
+    "session_id": "session_0923b62f50088b6401c06373fc916038",
+    "status": "COMPLETE",
+    "pid": null,
+    "account_key": "acct_86bb728a51564fb6",
+    "recording_key": "sess_073506ff856ed27304d97df1",
+    "partial_dir": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_86bb728a51564fb6/sess_073506ff856ed27304d97df1",
+    "completed_dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_86bb728a51564fb6/sess_073506ff856ed27304d97df1",
+    "started_at": "2026-08-28T09:08:29.514Z",
+    "updated_at": "2026-08-28T16:32:49.223Z",
+    "restart_count": 1,
+    "last_error": null
+  },
+  "target": {
+    "monitor_target_id": "monitor:buyin:v2_0a2f4d3021b3c89afea3919e0956a29d68f42ce6585aaa9c580304c2e2fe5f5f93145b6afffd65ec8a16a2fa9a1134de5f1a4b0a3c0000000000000000000050d57402d11113f59b355eac43600743cbf55f7e343d3ec648c70a708fa0e007886c212ef0e7b16d1ce47e52f317e31e1a981093dd9a0e18e5ade4c9012001220103e6ad91bd",
+    "competitor_id": "buyin:v2_0a2f4d3021b3c89afea3919e0956a29d68f42ce6585aaa9c580304c2e2fe5f5f93145b6afffd65ec8a16a2fa9a1134de5f1a4b0a3c0000000000000000000050d57402d11113f59b355eac43600743cbf55f7e343d3ec648c70a708fa0e007886c212ef0e7b16d1ce47e52f317e31e1a981093dd9a0e18e5ade4c9012001220103e6ad91bd",
+    "status": "ACTIVE",
+    "live_url": "https://live.douyin.com/81560799535",
+    "live_status": "OFFLINE_CONFIRMED",
+    "last_checked_at": "2026-08-28T16:32:48.602Z",
+    "next_check_at": "2026-08-28T16:33:20.610Z",
+    "consecutive_unknown": 0,
+    "metadata_json": "{\"account_name\":\"耘书筑梦\",\"canonical_profile_url\":\"https://www.douyin.com/share/user/7635529914997638203\",\"douyin_stable_id\":\"uid:7635529914997638203\",\"monitor_probe\":{\"anchor_name\":\"耘书筑梦\",\"checked_at\":\"2026-08-28T14:05:19.302Z\",\"platform_user_id\":null,\"raw_status\":4,\"reason\":null,\"recording_started\":false,\"room_id\":\"7679006521677712128\",\"sec_uid\":null,\"status\":\"OFFLINE_CONFIRMED\",\"title\":\"新初三规划！初中妈妈必听！\",\"unique_id\":null,\"upstream_version\":\"4.0.10\",\"web_rid\":null},\"source_kind\":\"verified_qr_and_monitor_probe\",\"source_scan\":\"scan:a913b41cc71e0341308099c26891f3d0b2dda88c\"}"
+  },
+  "outbox_history": [
+    {
+      "object_type": "session_projection",
+      "status": "SENT",
+      "last_attempt_at": "2026-08-28T09:08:29.701Z",
+      "payload_json": "{\"profile_id\":\"edu_live_competitor_intel\",\"session_id\":\"session_0923b62f50088b6401c06373fc916038\",\"status\":\"RECORDING\"}"
+    },
+    {
+      "object_type": "monitor_status",
+      "status": "SENT",
+      "last_attempt_at": "2026-08-28T09:08:37.816Z",
+      "payload_json": "{\"monitor_id\":\"monitor:buyin:v2_0a2f4d3021b3c89afea3919e0956a29d68f42ce6585aaa9c580304c2e2fe5f5f93145b6afffd65ec8a16a2fa9a1134de5f1a4b0a3c0000000000000000000050d57402d11113f59b355eac43600743cbf55f7e343d3ec648c70a708fa0e007886c212ef0e7b16d1ce47e52f317e31e1a981093dd9a0e18e5ade4c9012001220103e6ad91bd\",\"profile_id\":\"edu_live_competitor_intel\",\"state\":\"LIVE\"}"
+    },
+    {
+      "object_type": "monitor_status",
+      "status": "SENT",
+      "last_attempt_at": "2026-08-28T10:19:42.531Z",
+      "payload_json": "{\"monitor_id\":\"monitor:buyin:v2_0a2f4d3021b3c89afea3919e0956a29d68f42ce6585aaa9c580304c2e2fe5f5f93145b6afffd65ec8a16a2fa9a1134de5f1a4b0a3c0000000000000000000050d57402d11113f59b355eac43600743cbf55f7e343d3ec648c70a708fa0e007886c212ef0e7b16d1ce47e52f317e31e1a981093dd9a0e18e5ade4c9012001220103e6ad91bd\",\"profile_id\":\"edu_live_competitor_intel\",\"state\":\"UNKNOWN\"}"
+    },
+    {
+      "object_type": "monitor_status",
+      "status": "SENT",
+      "last_attempt_at": "2026-08-28T15:02:40.810Z",
+      "payload_json": "{\"monitor_id\":\"monitor:buyin:v2_0a2f4d3021b3c89afea3919e0956a29d68f42ce6585aaa9c580304c2e2fe5f5f93145b6afffd65ec8a16a2fa9a1134de5f1a4b0a3c0000000000000000000050d57402d11113f59b355eac43600743cbf55f7e343d3ec648c70a708fa0e007886c212ef0e7b16d1ce47e52f317e31e1a981093dd9a0e18e5ade4c9012001220103e6ad91bd\",\"profile_id\":\"edu_live_competitor_intel\",\"state\":\"OFFLINE_CONFIRMED\"}"
+    }
+  ],
+  "domain_events": [],
+  "recording_gaps": [],
+  "audit_log": []
+}

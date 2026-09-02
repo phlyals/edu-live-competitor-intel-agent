@@ -1,0 +1,9 @@
+{
+  "service_name": "projection-reconciler-v3",
+  "pid": 62558,
+  "status": "READY",
+  "started_at": "2026-08-30T18:31:11.977Z",
+  "last_heartbeat_at": "2026-08-30T18:33:01.714Z",
+  "last_success_at": "2026-08-30T18:33:01.714Z",
+  "details_json": "{\"blocked_outbox\":0,\"checked_at\":\"2026-08-30T18:33:01.714Z\",\"legacy_held_cancelled\":0,\"missing_receipts\":0,\"receipt_mismatches\":0,\"recreated_outbox\":0,\"tasks_completed\":0}"
+}

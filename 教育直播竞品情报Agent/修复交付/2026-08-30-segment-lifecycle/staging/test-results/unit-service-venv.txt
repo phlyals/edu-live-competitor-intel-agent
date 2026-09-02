@@ -1,0 +1,12 @@
+test_finalizer_does_not_overwrite_existing_destination_owner (test_candidate_code.CandidateCodeTests.test_finalizer_does_not_overwrite_existing_destination_owner) ... ok
+test_finalizer_relocates_retained_source_without_unique_conflict (test_candidate_code.CandidateCodeTests.test_finalizer_relocates_retained_source_without_unique_conflict) ... ok
+test_fresh_schema_contains_fail_closed_lifecycle_columns (test_candidate_code.CandidateCodeTests.test_fresh_schema_contains_fail_closed_lifecycle_columns) ... ok
+test_pipeline_only_attempts_canonical_active (test_candidate_code.CandidateCodeTests.test_pipeline_only_attempts_canonical_active) ... ok
+test_classifies_canonical_move_supersede_and_lost (test_segment_lifecycle_sqlite.SQLitePlanningTests.test_classifies_canonical_move_supersede_and_lost) ... ok
+test_invalid_manifest_never_supersedes (test_segment_lifecycle_sqlite.SQLitePlanningTests.test_invalid_manifest_never_supersedes) ... ok
+test_only_superseded_missing_waiting_transcript_is_cancelled (test_segment_lifecycle_sqlite.SQLitePlanningTests.test_only_superseded_missing_waiting_transcript_is_cancelled) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.161s
+
+OK

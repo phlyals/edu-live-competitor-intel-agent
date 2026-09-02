@@ -1,0 +1,125 @@
+{
+  "database_transaction_read_only": "on",
+  "analysis_rows": 6,
+  "items": [
+    {
+      "analysis_id": "analysis_16bdca57a497943fd6eb0c05",
+      "status": "COMPLETE",
+      "analysis_type": "single_session",
+      "output_path": "/Volumes/ExternalStorage/同行直播录制/analysis/drafts/runtime-v3/analysis/analysis_16bdca57a497943fd6eb0c05.json",
+      "transcript_id": "transcript_875ba0bd045001857d6cd2dc",
+      "transcript_path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c8c4a8ea998e6e/sess_3f33dd38cdc004f62bbf1d34/整场直播.cf465540aaa0.transcript.json",
+      "transcript_scope": "FULL_SESSION",
+      "sample_only": false,
+      "transcript_timestamp_coverage": {
+        "audio_duration_seconds": 4387.491625,
+        "coverage_rate": 0.9880816581615691,
+        "is_qualified": true,
+        "meets_target": true
+      },
+      "analysis_metadata_coverage": null,
+      "stored_analysis_coverage": {
+        "source_duration_seconds": 4386.7093125,
+        "first_timestamp_seconds": 0.0,
+        "last_timestamp_seconds": 4385.42,
+        "timeline_coverage_rate": 0.9997060866339317,
+        "chunk_count": 11,
+        "input_row_count": 1454,
+        "analyzed_unique_segment_count": 1454,
+        "segment_coverage_rate": 1.0,
+        "all_chunks_complete": true
+      }
+    },
+    {
+      "analysis_id": "analysis_8801cb766ceca4ab6327511a",
+      "status": "COMPLETE",
+      "analysis_type": "single_session",
+      "output_path": "/Volumes/ExternalStorage/同行直播录制/analysis/drafts/runtime-v3/analysis/analysis_8801cb766ceca4ab6327511a.json",
+      "transcript_id": "transcript_c198e4037bf2e8ead83a1b6e",
+      "transcript_path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_565c3ca37ff7c78d/sess_fa45b280aa74e86625d5e7f3/00_直播录像.sample300s.transcript.json",
+      "transcript_scope": null,
+      "sample_only": true,
+      "transcript_timestamp_coverage": {
+        "audio_duration_seconds": null,
+        "coverage_rate": null,
+        "is_qualified": null,
+        "meets_target": null
+      },
+      "analysis_metadata_coverage": null,
+      "stored_analysis_coverage": {}
+    },
+    {
+      "analysis_id": "analysis_bb3f658b48a46b764b835fab",
+      "status": "SKIPPED_HISTORICAL",
+      "analysis_type": "single_session",
+      "output_path": null,
+      "transcript_id": "tr-4c6ce301082381f6e3f210d4",
+      "transcript_path": "/Volumes/ExternalStorage/同行直播录制/analysis/drafts/mvp-e/20260824-225108_陈兴笃学_4c6ce301/transcript_raw.md",
+      "transcript_scope": null,
+      "sample_only": null,
+      "transcript_timestamp_coverage": {
+        "audio_duration_seconds": null,
+        "coverage_rate": null,
+        "is_qualified": null,
+        "meets_target": null
+      },
+      "analysis_metadata_coverage": null,
+      "stored_analysis_coverage": {}
+    },
+    {
+      "analysis_id": "analysis_f261f8101b4ea725a954c23f",
+      "status": "COMPLETE",
+      "analysis_type": "single_session",
+      "output_path": "/Volumes/ExternalStorage/同行直播录制/analysis/drafts/runtime-v3/analysis/analysis_f261f8101b4ea725a954c23f.json",
+      "transcript_id": "transcript_413c54e763036c6b65b9a56b",
+      "transcript_path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_3209ade1e6024113/sess_fe1fceb6536f9090c4723255/00_直播录像.sample300s.transcript.json",
+      "transcript_scope": null,
+      "sample_only": true,
+      "transcript_timestamp_coverage": {
+        "audio_duration_seconds": null,
+        "coverage_rate": null,
+        "is_qualified": null,
+        "meets_target": null
+      },
+      "analysis_metadata_coverage": null,
+      "stored_analysis_coverage": {}
+    },
+    {
+      "analysis_id": "cmp-4b66f69594dd-vs-4c6ce3010823",
+      "status": "COMPLETE",
+      "analysis_type": "完整场N对N-1",
+      "output_path": "https://j10akfek917.feishu.cn/docx/B1NzdxphjocvOtx2Fc5c9k87ntO](https://j10akfek917.feishu.cn/docx/B1NzdxphjocvOtx2Fc5c9k87ntO",
+      "transcript_id": "tr-4b66f69594dddbc0992f1340",
+      "transcript_path": "/Volumes/ExternalStorage/同行直播录制/analysis/drafts/mvp-e/20260824-215422_陈兴笃学_4b66f695/transcript_raw.md",
+      "transcript_scope": null,
+      "sample_only": null,
+      "transcript_timestamp_coverage": {
+        "audio_duration_seconds": null,
+        "coverage_rate": null,
+        "is_qualified": null,
+        "meets_target": null
+      },
+      "analysis_metadata_coverage": null,
+      "stored_analysis_coverage": {}
+    },
+    {
+      "analysis_id": "cmp-f4be143e30cf-vs-4b66f69594dd",
+      "status": "COMPLETE",
+      "analysis_type": "完整场N对N-1",
+      "output_path": "https://j10akfek917.feishu.cn/docx/KPVrd8QvdowyIPxWNb5cbvxSnxe](https://j10akfek917.feishu.cn/docx/KPVrd8QvdowyIPxWNb5cbvxSnxe",
+      "transcript_id": "tr-f4be143e30cff3ac60e18c81",
+      "transcript_path": "/Volumes/ExternalStorage/同行直播录制/analysis/drafts/mvp-e/20260825-090221_陈兴笃学_f4be143e/transcript_raw.md",
+      "transcript_scope": null,
+      "sample_only": null,
+      "transcript_timestamp_coverage": {
+        "audio_duration_seconds": null,
+        "coverage_rate": null,
+        "is_qualified": null,
+        "meets_target": null
+      },
+      "analysis_metadata_coverage": null,
+      "stored_analysis_coverage": {}
+    }
+  ],
+  "production_mutations": 0
+}

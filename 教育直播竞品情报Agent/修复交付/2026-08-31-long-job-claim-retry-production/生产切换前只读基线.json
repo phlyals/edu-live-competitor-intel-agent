@@ -1,0 +1,232 @@
+{
+  "transaction_read_only": "on",
+  "live_status_counts": [
+    {
+      "status": "DUPLICATE_SUPERSEDED",
+      "count": 2
+    },
+    {
+      "status": "ENDED",
+      "count": 10
+    },
+    {
+      "status": "MEDIA_COMPLETE",
+      "count": 112
+    },
+    {
+      "status": "RECORDING",
+      "count": 1
+    },
+    {
+      "status": "WAITING_STREAM",
+      "count": 1
+    }
+  ],
+  "active_sessions": [
+    {
+      "session_id": "session_585f96d367ba7a062a99dd7788a271fd",
+      "status": "RECORDING",
+      "started_at": "2026-08-30T16:20:08.427Z",
+      "ended_at": null,
+      "completeness": "UNKNOWN",
+      "metadata_json": "{\"anchor_name\": \"高中选科指导规划\", \"authorization_mode\": \"persistent_gate\", \"checked_at\": \"2026-08-30T16:20:00.790Z\", \"first_media_growth_at\": \"2026-08-30T16:21:53.974Z\", \"last_seen_live_at\": \"2026-08-30T16:59:14.888Z\", \"live_status\": \"LIVE\", \"primary_probe\": \"LIVE\", \"reason\": null, \"recording_gap_seen\": true, \"recording_health\": {\"bytes\": 376537380, \"checked_at\": \"2026-08-30T16:20:59.907Z\", \"consecutive_failures\": 0, \"growth_observations\": 34, \"last_failure\": \"recorder exited before session end was confirmed\", \"last_failure_at\": \"2026-08-30T16:20:11.679Z\", \"last_growth_at\": \"2026-08-30T16:59:17.391Z\", \"last_observed_at\": \"2026-08-30T16:59:17.391Z\", \"next_retry_at\": null, \"pid\": 95627}, \"recording_started\": false, \"return_code\": 0, \"room_id\": \"7679859952059648810\", \"secondary_detail\": {\"anchor_name\": \"高中选科指导规划\", \"room_id\": \"7679859952059648810\", \"status\": \"LIVE\", \"title\": \"新高一选科太重要了，90%选错\", \"upstream_version\": \"4.0.10\"}, \"secondary_probe\": \"LIVE\", \"shared_status\": \"live\", \"status\": \"LIVE\", \"title\": \"新高一选科太重要了，90%选错\"}"
+    },
+    {
+      "session_id": "session_d651f6323970f15cd9aa64958c20ca8f",
+      "status": "WAITING_STREAM",
+      "started_at": "2026-08-30T16:46:11.686Z",
+      "ended_at": null,
+      "completeness": "UNKNOWN",
+      "metadata_json": "{\"anchor_name\": \"班主任罗老师（选老师）\", \"authorization_mode\": \"persistent_gate\", \"checked_at\": \"2026-08-30T16:46:03.547Z\", \"last_seen_live_at\": \"2026-08-30T16:59:14.539Z\", \"live_status\": \"LIVE\", \"primary_probe\": \"OFFLINE_CONFIRMED\", \"reason\": null, \"recording_gap_seen\": true, \"recording_health\": {\"bytes\": 0, \"checked_at\": \"2026-08-30T16:50:13.012Z\", \"consecutive_failures\": 4, \"growth_observations\": 0, \"last_failure\": \"recorder exited before session end was confirmed\", \"last_failure_at\": \"2026-08-30T16:50:14.573Z\", \"last_growth_at\": null, \"next_retry_at\": \"2026-08-30T17:00:14.573Z\", \"pid\": 10441}, \"recording_started\": false, \"return_code\": 2, \"room_id\": \"7679866754713062186\", \"secondary_detail\": {\"anchor_name\": \"班主任罗老师（选老师）\", \"room_id\": \"7679866754713062186\", \"status\": \"LIVE\", \"title\": \"代数难题直播破解\", \"upstream_version\": \"4.0.10\"}, \"secondary_probe\": \"LIVE\", \"shared_status\": \"not_live\", \"status\": \"OFFLINE_CONFIRMED\", \"title\": \"代数难题直播破解\"}"
+    }
+  ],
+  "recording_job_counts": [
+    {
+      "status": "COMPLETE",
+      "count": 109
+    },
+    {
+      "status": "RUNNING",
+      "count": 1
+    },
+    {
+      "status": "WAITING_STREAM",
+      "count": 11
+    }
+  ],
+  "active_recording_jobs": [
+    {
+      "session_id": "session_14545a898436b0f4b4310122056296ff",
+      "status": "WAITING_STREAM",
+      "pid": null,
+      "restart_count": 638,
+      "updated_at": "2026-08-30T16:59:16.084Z",
+      "last_error": null
+    },
+    {
+      "session_id": "session_3e0f9aae6ec1173f1b8becdeee58ffa3",
+      "status": "WAITING_STREAM",
+      "pid": null,
+      "restart_count": 7,
+      "updated_at": "2026-08-30T16:59:16.463Z",
+      "last_error": "recorder exited before session end was confirmed; retry at 2026-08-29T22:31:16.386Z"
+    },
+    {
+      "session_id": "session_585f96d367ba7a062a99dd7788a271fd",
+      "status": "RUNNING",
+      "pid": 95627,
+      "restart_count": 1,
+      "updated_at": "2026-08-30T16:59:17.391Z",
+      "last_error": null
+    },
+    {
+      "session_id": "session_808c5516d0916b2ecfe7aac883959418",
+      "status": "WAITING_STREAM",
+      "pid": null,
+      "restart_count": 0,
+      "updated_at": "2026-08-30T16:31:52.635Z",
+      "last_error": null
+    },
+    {
+      "session_id": "session_9708d43787243bfaf16f5652c253010a",
+      "status": "WAITING_STREAM",
+      "pid": null,
+      "restart_count": 15,
+      "updated_at": "2026-08-30T16:59:15.814Z",
+      "last_error": "media stopped growing for 120 seconds; retry at 2026-08-29T01:12:39.465Z"
+    },
+    {
+      "session_id": "session_abc56c93fe6d127324576c8d7e0e0f29",
+      "status": "WAITING_STREAM",
+      "pid": null,
+      "restart_count": 26,
+      "updated_at": "2026-08-30T16:59:16.574Z",
+      "last_error": null
+    },
+    {
+      "session_id": "session_b41d371b16003575bf7f32f427d71f6e",
+      "status": "WAITING_STREAM",
+      "pid": null,
+      "restart_count": 11,
+      "updated_at": "2026-08-30T16:59:16.484Z",
+      "last_error": "media stopped growing for 120 seconds; retry at 2026-08-29T02:05:25.192Z"
+    },
+    {
+      "session_id": "session_b6ecf240e5fc8b2e7fcecaf3d73ea12b",
+      "status": "WAITING_STREAM",
+      "pid": null,
+      "restart_count": 19,
+      "updated_at": "2026-08-30T16:59:16.561Z",
+      "last_error": "media stopped growing for 120 seconds; retry at 2026-08-29T01:41:49.804Z"
+    },
+    {
+      "session_id": "session_bc7f4492de88bcba7b35bf4c06bcc7f2",
+      "status": "WAITING_STREAM",
+      "pid": null,
+      "restart_count": 753,
+      "updated_at": "2026-08-30T16:59:15.863Z",
+      "last_error": null
+    },
+    {
+      "session_id": "session_c002ec6d88123aa130f094825365e87e",
+      "status": "WAITING_STREAM",
+      "pid": null,
+      "restart_count": 15,
+      "updated_at": "2026-08-30T16:59:16.595Z",
+      "last_error": "media stopped growing for 120 seconds; retry at 2026-08-29T05:59:51.582Z"
+    },
+    {
+      "session_id": "session_c3f9b7d5bddf370c423aabda3a6e7439",
+      "status": "WAITING_STREAM",
+      "pid": null,
+      "restart_count": 3,
+      "updated_at": "2026-08-30T16:59:16.340Z",
+      "last_error": null
+    },
+    {
+      "session_id": "session_d651f6323970f15cd9aa64958c20ca8f",
+      "status": "WAITING_STREAM",
+      "pid": null,
+      "restart_count": 3,
+      "updated_at": "2026-08-30T16:50:14.573Z",
+      "last_error": "recorder exited before session end was confirmed; retry at 2026-08-30T17:00:14.573Z"
+    }
+  ],
+  "transcript_status_counts": [
+    {
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "count": 245
+    },
+    {
+      "status": "COMPLETE",
+      "count": 6
+    }
+  ],
+  "analysis_status_counts": [
+    {
+      "status": "COMPLETE",
+      "count": 5
+    },
+    {
+      "status": "SAMPLE_NONQUALIFYING",
+      "count": 2
+    },
+    {
+      "status": "SKIPPED_HISTORICAL",
+      "count": 1
+    }
+  ],
+  "heartbeats": [
+    {
+      "service_name": "analysis-v3",
+      "pid": 92221,
+      "status": "READY",
+      "last_heartbeat_at": "2026-08-30T17:00:03.839Z",
+      "last_success_at": "2026-08-30T17:00:03.839Z"
+    },
+    {
+      "service_name": "evidence-v3",
+      "pid": 92491,
+      "status": "READY",
+      "last_heartbeat_at": "2026-08-30T17:00:05.309Z",
+      "last_success_at": "2026-08-30T17:00:05.309Z"
+    },
+    {
+      "service_name": "pipeline-v3",
+      "pid": 87505,
+      "status": "READY",
+      "last_heartbeat_at": "2026-08-30T17:00:05.405Z",
+      "last_success_at": "2026-08-30T17:00:05.405Z"
+    },
+    {
+      "service_name": "recompute-v3",
+      "pid": 708,
+      "status": "READY",
+      "last_heartbeat_at": "2026-08-30T16:59:30.800Z",
+      "last_success_at": "2026-08-30T16:59:30.800Z"
+    },
+    {
+      "service_name": "retention-v3",
+      "pid": 34907,
+      "status": "READY",
+      "last_heartbeat_at": "2026-08-30T16:59:28.320Z",
+      "last_success_at": "2026-08-30T16:59:28.320Z"
+    },
+    {
+      "service_name": "runtime-v3",
+      "pid": 15494,
+      "status": "STARTING",
+      "last_heartbeat_at": "2026-08-30T17:00:05.364Z",
+      "last_success_at": "2026-08-30T16:31:52.641Z"
+    }
+  ],
+  "migration_marker": [],
+  "media_inventory": [
+    {
+      "rows": 384,
+      "canonical_rows": 107,
+      "recorded_bytes": "162353757888"
+    }
+  ],
+  "actionable_long_jobs": []
+}

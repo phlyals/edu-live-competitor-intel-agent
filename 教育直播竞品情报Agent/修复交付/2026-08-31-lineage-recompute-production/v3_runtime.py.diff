@@ -1,0 +1,11 @@
+--- /Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/v3_runtime.py	2026-08-30 23:11:45
++++ staging/runtime/v3/v3_runtime.py	2026-08-31 01:30:34
+@@ -903,7 +903,7 @@
+ 
+ def status_snapshot() -> dict:
+     with connect() as conn:
+-        tables = ["inbox_messages", "tasks", "task_attempts", "checkpoints", "domain_events", "products", "competitors", "identities", "scan_runs", "scan_observations", "product_competitors", "monitor_targets", "live_sessions", "recording_jobs", "recording_segments", "transcripts", "analyses", "strategy_candidates", "knowledge_versions", "knowledge_diffs", "review_items", "retention_jobs", "approvals", "outbox", "delivery_receipts", "dead_letters", "lineage_edges", "evidence_bundles", "heartbeats", "task_leases", "identity_evidence", "identity_conflicts", "worker_nodes", "recording_leases", "recording_gaps", "media_manifests", "deployment_releases", "projection_reconciliations", "capacity_test_runs", "fault_drill_runs", "audit_log"]
++        tables = ["inbox_messages", "tasks", "task_attempts", "checkpoints", "domain_events", "products", "competitors", "identities", "scan_runs", "scan_observations", "product_competitors", "monitor_targets", "live_sessions", "recording_jobs", "recording_segments", "transcripts", "analyses", "strategy_candidates", "knowledge_versions", "knowledge_diffs", "review_items", "retention_jobs", "approvals", "outbox", "delivery_receipts", "dead_letters", "lineage_edges", "recompute_requests", "evidence_bundles", "heartbeats", "task_leases", "identity_evidence", "identity_conflicts", "worker_nodes", "recording_leases", "recording_gaps", "media_manifests", "deployment_releases", "projection_reconciliations", "capacity_test_runs", "fault_drill_runs", "audit_log"]
+         counts = {table: conn.execute(f"SELECT count(*) FROM {table}").fetchone()[0] for table in tables}
+         schema = conn.execute("SELECT value FROM schema_meta WHERE key='schema_version'").fetchone()[0]
+     return {"profile_id": PROFILE_ID, "bot_name": BOT_NAME, "app_id": APP_ID, "schema_version": schema, "control_plane_backend": _configured_backend(), "counts": counts, "activation": activation_readiness()}

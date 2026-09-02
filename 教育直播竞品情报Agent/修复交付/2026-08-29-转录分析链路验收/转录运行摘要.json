@@ -1,0 +1,14 @@
+{
+  "status": "READY",
+  "engine": "faster-whisper",
+  "model_dir": "/Volumes/ExternalStorage/AgentInfrastructure/isolated/profiles/edu_live_competitor_intel/runtime/models/models--Systran--faster-whisper-small",
+  "language": "zh",
+  "audio_duration_seconds": 3787.244688,
+  "asr_reported_duration_seconds": 3787.1146875,
+  "processing_elapsed_seconds": 3392.97,
+  "segment_count": 1060,
+  "low_confidence_count": 0,
+  "transcript_chars": 23345,
+  "created_at": "2026-08-29T13:43:26.912Z",
+  "transcript_sha256": "5a849d0da203cdffb262fac0ec693a3f63f87b3a9d6f52c9e3811de2f929badf"
+}

@@ -1,0 +1,124 @@
+{
+  "observed_at": "2026-08-30T14:19:29.599630+00:00",
+  "transaction_read_only": "on",
+  "production_hashes": {
+    "v3_pipeline_worker.py": "aedaa9245b85b08e9e73994214eed916957c5eb4c1349b3c7bb584b8f938678c",
+    "v3_config.json": "751a0837ad6644a08db9e953c6e28af088cd4b6f91f2553df58a36485606a7c5"
+  },
+  "pipeline": {
+    "service_name": "pipeline-v3",
+    "pid": 15999,
+    "status": "READY",
+    "last_heartbeat_at": "2026-08-30T14:19:09.522Z",
+    "last_success_at": "2026-08-30T14:19:09.522Z",
+    "details_json": "{\"analysis_tasks\":0,\"checked_at\":\"2026-08-30T14:19:09.522Z\",\"segments\":104,\"transcripts\":0}"
+  },
+  "active_recording_jobs": [
+    {
+      "job_id": "recjob_b02574aa870775054f6777a4",
+      "session_id": "session_301089a174e24811a1a3e0376ac4e40d",
+      "status": "RUNNING",
+      "pid": 72241,
+      "partial_dir": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_2830f009c4673f6f/sess_b02574aa870775054f6777a4",
+      "completed_dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_b02574aa870775054f6777a4",
+      "restart_count": 0,
+      "updated_at": "2026-08-30T14:18:36.801Z",
+      "session_status": "RECORDING",
+      "pid_alive": true,
+      "media_files": []
+    },
+    {
+      "job_id": "recjob_180bfa12dacf647106fc324e",
+      "session_id": "session_f941587f590eb58681a00688b1dfb5d1",
+      "status": "RUNNING",
+      "pid": 89484,
+      "partial_dir": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_e8f8785e8b29630c/sess_180bfa12dacf647106fc324e",
+      "completed_dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_e8f8785e8b29630c/sess_180bfa12dacf647106fc324e",
+      "restart_count": 0,
+      "updated_at": "2026-08-30T14:18:36.582Z",
+      "session_status": "RECORDING",
+      "pid_alive": true,
+      "media_files": []
+    },
+    {
+      "job_id": "recjob_866923f0e08c195f90161f8a",
+      "session_id": "session_ff57b5a50cbe69850e8ade07ebf3671d",
+      "status": "RUNNING",
+      "pid": 7267,
+      "partial_dir": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_3209ade1e6024113/sess_866923f0e08c195f90161f8a",
+      "completed_dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_3209ade1e6024113/sess_866923f0e08c195f90161f8a",
+      "restart_count": 0,
+      "updated_at": "2026-08-30T14:18:36.490Z",
+      "session_status": "RECORDING",
+      "pid_alive": true,
+      "media_files": []
+    },
+    {
+      "job_id": "recjob_09c668504d013ddcced8e429",
+      "session_id": "session_e5facf61caaf58cec588cedbaf0bd2c7",
+      "status": "RUNNING",
+      "pid": 20352,
+      "partial_dir": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_d0fa112503e2aabc/sess_09c668504d013ddcced8e429",
+      "completed_dir": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d0fa112503e2aabc/sess_09c668504d013ddcced8e429",
+      "restart_count": 0,
+      "updated_at": "2026-08-30T14:18:36.686Z",
+      "session_status": "RECORDING",
+      "pid_alive": true,
+      "media_files": []
+    }
+  ],
+  "transcript_counts": [
+    {
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "count": 245
+    },
+    {
+      "status": "COMPLETE",
+      "count": 6
+    }
+  ],
+  "heartbeats": [
+    {
+      "service_name": "analysis-v3",
+      "pid": 85928,
+      "status": "READY",
+      "last_heartbeat_at": "2026-08-30T14:18:12.846Z"
+    },
+    {
+      "service_name": "evidence-v3",
+      "pid": 705,
+      "status": "READY",
+      "last_heartbeat_at": "2026-08-30T14:18:12.914Z"
+    },
+    {
+      "service_name": "feishu-ingress-v3",
+      "pid": 29890,
+      "status": "READY",
+      "last_heartbeat_at": "2026-08-30T14:19:17.336Z"
+    },
+    {
+      "service_name": "pipeline-v3",
+      "pid": 15999,
+      "status": "READY",
+      "last_heartbeat_at": "2026-08-30T14:19:09.522Z"
+    },
+    {
+      "service_name": "recompute-v3",
+      "pid": 708,
+      "status": "READY",
+      "last_heartbeat_at": "2026-08-30T14:19:09.490Z"
+    },
+    {
+      "service_name": "retention-v3",
+      "pid": 34907,
+      "status": "READY",
+      "last_heartbeat_at": "2026-08-30T14:18:33.352Z"
+    },
+    {
+      "service_name": "runtime-v3",
+      "pid": 16001,
+      "status": "READY",
+      "last_heartbeat_at": "2026-08-30T14:18:36.871Z"
+    }
+  ]
+}

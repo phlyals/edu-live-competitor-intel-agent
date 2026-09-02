@@ -1,0 +1,34 @@
+{
+  "status": "APPLIED",
+  "migration_version": "2",
+  "plan_sha256": "63cd469c7fde308d76cf4b1c8324c3dde236c307c498e9b51d6edf5abbbc9804",
+  "backup_path": "/Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/backups/sample-analysis-qualification-20260830-2310/pre-sample-analysis-qualification-20260830-231113-556185.json",
+  "backup_sha256": "f593908c496213594b263e786d85c91ea66e30ffdaead072b550db7b75ab7d35",
+  "sample_actions": 2,
+  "formal_annotations": 1,
+  "postconditions": {
+    "healthy": true,
+    "schema_missing": {},
+    "indexes": [
+      "idx_analyses_qualification",
+      "idx_analyses_transcript_id",
+      "idx_outbox_qualification",
+      "uq_analyses_transcript_spec"
+    ],
+    "trigger": true,
+    "unclassified": {
+      "transcripts": 0,
+      "analyses": 0,
+      "evidence_bundles": 0,
+      "outbox": 0,
+      "delivery_receipts": 0
+    },
+    "lineage_errors": [],
+    "sample_lineage_errors": [],
+    "correction_errors": [],
+    "bad_formal": 0,
+    "bad_sample": 0,
+    "bad_formal_evidence": 0,
+    "bad_sample_evidence": 0
+  }
+}

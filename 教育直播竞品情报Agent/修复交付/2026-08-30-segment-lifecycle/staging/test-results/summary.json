@@ -1,0 +1,27 @@
+{
+  "status": "PASS",
+  "production_applied": false,
+  "candidate_unit_tests": {
+    "runtime": "/Users/mac/.local/share/edu-live-runtime-v3-venv/bin/python",
+    "tests_run": 7,
+    "failures": 0,
+    "errors": 0
+  },
+  "ephemeral_postgresql": {
+    "dry_run_read_only": true,
+    "wrong_plan_digest_rejected_without_schema_change": true,
+    "apply_passed": true,
+    "second_apply_status": "ALREADY_APPLIED",
+    "ddl_two_additional_runs_passed": true,
+    "backup_permissions": "0600"
+  },
+  "production_read_only_inventory": {
+    "recording_segments": 373,
+    "canonical_active_proposed": 97,
+    "source_superseded_proposed": 274,
+    "source_retained_review": 2,
+    "waiting_tool": 245,
+    "cancelled_superseded_source_proposed": 245,
+    "database_writes": 0
+  }
+}

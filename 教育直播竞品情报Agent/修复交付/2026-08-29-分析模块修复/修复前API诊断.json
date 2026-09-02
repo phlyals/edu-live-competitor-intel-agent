@@ -1,0 +1,20 @@
+{
+  "checked_at": "2026-08-29T14:43:58.052389+00:00",
+  "response_id": "9d0d6a71-a004-4c09-83b0-c82fbdbe99c0",
+  "finish_reason": "length",
+  "usage": {
+    "prompt_tokens": 10319,
+    "completion_tokens": 8192,
+    "total_tokens": 18511,
+    "prompt_tokens_details": {
+      "cached_tokens": 10240
+    },
+    "prompt_cache_hit_tokens": 10240,
+    "prompt_cache_miss_tokens": 79
+  },
+  "input_chars": 16000,
+  "content_chars": 18092,
+  "content_sha256": "ecf731502ffdf907c942ea6c946b21c097d8b7ef5a4131661cd7f7fd93b8bee6",
+  "json_parseable": false,
+  "json_error": "Unterminated string starting at: line 801 column 18 (char 18062)"
+}

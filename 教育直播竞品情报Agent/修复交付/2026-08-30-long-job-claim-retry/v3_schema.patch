@@ -1,0 +1,48 @@
+--- /Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/v3_schema.sql	2026-08-30 21:53:21
++++ /Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-30-long-job-claim-retry/staging/runtime/v3/v3_schema.sql	2026-08-30 22:44:11
+@@ -241,6 +241,17 @@
+     output_path TEXT,
+     low_confidence_count INTEGER NOT NULL DEFAULT 0,
+     created_at TEXT NOT NULL,
++    updated_at TEXT,
++    attempts INTEGER NOT NULL DEFAULT 0,
++    max_attempts INTEGER NOT NULL DEFAULT 5,
++    next_attempt_at TEXT,
++    last_attempt_at TEXT,
++    lease_owner TEXT,
++    lease_until TEXT,
++    lease_epoch INTEGER NOT NULL DEFAULT 0,
++    last_error_type TEXT,
++    last_error TEXT,
++    checkpoint_json TEXT NOT NULL DEFAULT '{}',
+     metadata_json TEXT NOT NULL DEFAULT '{}',
+     UNIQUE(session_id, source_digest)
+ );
+@@ -253,10 +264,27 @@
+     status TEXT NOT NULL DEFAULT 'PENDING',
+     output_path TEXT,
+     lineage_state TEXT NOT NULL DEFAULT 'CURRENT',
++    updated_at TEXT,
++    attempts INTEGER NOT NULL DEFAULT 0,
++    max_attempts INTEGER NOT NULL DEFAULT 5,
++    next_attempt_at TEXT,
++    last_attempt_at TEXT,
++    lease_owner TEXT,
++    lease_until TEXT,
++    lease_epoch INTEGER NOT NULL DEFAULT 0,
++    last_error_type TEXT,
++    last_error TEXT,
++    checkpoint_json TEXT NOT NULL DEFAULT '{}',
+     metadata_json TEXT NOT NULL DEFAULT '{}',
+     UNIQUE(session_id, analysis_type, source_digest)
+ );
+ 
++CREATE INDEX IF NOT EXISTS idx_transcripts_long_job_due
++ON transcripts(status, next_attempt_at, lease_until);
++
++CREATE INDEX IF NOT EXISTS idx_analyses_long_job_due
++ON analyses(status, next_attempt_at, lease_until);
++
+ CREATE TABLE IF NOT EXISTS approvals (
+     approval_id TEXT PRIMARY KEY,
+     object_type TEXT NOT NULL,

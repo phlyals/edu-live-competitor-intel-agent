@@ -1,0 +1,84 @@
+{
+  "checked_at": "2026-08-30T07:47:43.769193+00:00",
+  "transaction_read_only": "on",
+  "services": {
+    "runtime-v3": {
+      "state": "running",
+      "pid": "71442",
+      "runs": "61",
+      "last_exit_code": "0"
+    },
+    "pipeline-v3": {
+      "state": "running",
+      "pid": "91389",
+      "runs": "34",
+      "last_exit_code": "1"
+    },
+    "analysis-v3": {
+      "state": "running",
+      "pid": "85928",
+      "runs": "2",
+      "last_exit_code": "0"
+    },
+    "evidence-v3": {
+      "state": "running",
+      "pid": "705",
+      "runs": "1",
+      "last_exit_code": "(never exited)"
+    },
+    "recompute-v3": {
+      "state": "running",
+      "pid": "708",
+      "runs": "1",
+      "last_exit_code": "(never exited)"
+    },
+    "retention-v3": {
+      "state": "running",
+      "pid": "34907",
+      "runs": "2",
+      "last_exit_code": null
+    }
+  },
+  "other_service_pids_unchanged": true,
+  "runtime_heartbeat": {
+    "pid": 71442,
+    "status": "READY",
+    "last_heartbeat_at": "2026-08-30T07:46:59.294Z",
+    "details": {
+      "audio_retention_hours": 168,
+      "capacity_test_concurrency": 65,
+      "due_target_count": 41,
+      "expected_max_recording_concurrency": 50,
+      "final_ready": false,
+      "full_fleet": true,
+      "live_count": 2,
+      "normal_recording_concurrency": 30,
+      "production_gate": "BLOCKED",
+      "recording_duration_seconds": 0,
+      "recording_health": {
+        "finalized": 96,
+        "restarted": 0,
+        "running": 2
+      },
+      "recording_mode": "LOWEST_VIDEO_WITH_AUDIO",
+      "recording_quality": "LD",
+      "recording_segment_seconds": 0,
+      "result_count": 41,
+      "speech_audio_bitrate_kbps": 48,
+      "speech_audio_format": "opus",
+      "target_count": 41,
+      "unknown_count": 27,
+      "video_retention_hours": 72
+    }
+  },
+  "retention": {
+    "delete_enabled": false,
+    "idle": true,
+    "mode": "DELETE_DISABLED",
+    "next_scan_in_seconds": 166
+  },
+  "baseline_media_missing": [],
+  "runtime_error_log_growth_bytes": 0,
+  "loaded_code_sha256": "19fb28d9635af81227b178980cefbb111f1133272a2f0e45c9a55476a058181f",
+  "pass": true
+}

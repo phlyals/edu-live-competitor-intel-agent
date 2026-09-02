@@ -1,0 +1,11 @@
+{
+  "completed_at": "2026-08-31T15:43:28.506140+00:00",
+  "requested_count": 304,
+  "requested_bytes": 52103684692,
+  "deleted_count": 304,
+  "deleted_bytes": 52103684692,
+  "deleted_gib": 48.525,
+  "failed_count": 0,
+  "failures": [],
+  "all_absent": true
+}

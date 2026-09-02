@@ -1,0 +1,15 @@
+{
+  "status": "ALREADY_APPLIED",
+  "migration_version": "1",
+  "health": {
+    "healthy": true,
+    "schema_missing": {},
+    "indexes": [
+      "idx_analyses_long_job_due",
+      "idx_transcripts_long_job_due"
+    ],
+    "marker": "1",
+    "row_errors": [],
+    "checkpoint_invalid": []
+  }
+}

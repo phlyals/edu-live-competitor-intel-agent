@@ -1,0 +1,8 @@
+{
+  "checked_at": "2026-08-30T13:22:20.380921+00:00",
+  "files": {
+    "/Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/v3_worker.py": "04353e3f05ce09479869f925b1cc4b51ac044d05e64268c0575377c0f4564f62",
+    "/Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/test_v3_recording_transcription.py": "fa142d21eb42aa9182cb29c538c09980eb0ab4a938d762d5f0b5b98d5fbc18f2",
+    "/Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/test_v3_finalizer_evidence.py": "c18f417ae61a1853e52b7397581df7e16bf6478f419d8b40b7ed29dc7a360d00"
+  }
+}

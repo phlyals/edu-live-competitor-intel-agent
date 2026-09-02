@@ -1,0 +1,544 @@
+{
+  "observed_at": "2026-08-30T15:46:54.893570+00:00",
+  "transaction_read_only": "on",
+  "analyses": [
+    {
+      "analysis_id": "analysis_16bdca57a497943fd6eb0c05",
+      "status": "COMPLETE",
+      "lineage_state": "SUPERSEDED",
+      "scope": "FORMAL_SINGLE_SESSION",
+      "qualification_status": "FULL_SESSION_QUALIFIED",
+      "transcript_id": "transcript_875ba0bd045001857d6cd2dc",
+      "transcript_content_digest": "f9cf878d81b2721631046fba9d9f5610b7115c583bc26d77cc41a5ba908cd9a0",
+      "analysis_spec_version": "single-session-evidence-v2",
+      "model_version": "deepseek-chat",
+      "prompt_version": "deepseek-evidence-chunks-v3",
+      "artifact_digest": "45b576f6e35c6db85135f544abf879792180a81c682c91df82f6d7b1e5f5222e",
+      "output_path": "/Volumes/ExternalStorage/同行直播录制/analysis/drafts/runtime-v3/analysis/analysis_16bdca57a497943fd6eb0c05.json",
+      "output_exists": true,
+      "actual_artifact_digest": "45b576f6e35c6db85135f544abf879792180a81c682c91df82f6d7b1e5f5222e",
+      "digest_matches": true,
+      "coverage": {
+        "source_duration_seconds": 4386.7093125,
+        "first_timestamp_seconds": 0.0,
+        "last_timestamp_seconds": 4385.42,
+        "timeline_coverage_rate": 0.9997060866339317,
+        "chunk_count": 11,
+        "input_row_count": 1454,
+        "analyzed_unique_segment_count": 1454,
+        "segment_coverage_rate": 1.0,
+        "all_chunks_complete": true
+      },
+      "gap_count": 0,
+      "artifact_root": {
+        "analysis_id": "analysis_16bdca57a497943fd6eb0c05",
+        "session_id": "session_d352eca016af9f5ec3698768dd69aa0f",
+        "transcript_id": "transcript_875ba0bd045001857d6cd2dc",
+        "transcript_content_digest": null,
+        "analysis_spec_version": null,
+        "model_version": null,
+        "prompt_version": null,
+        "qualification_state": null
+      },
+      "module_names": [
+        "开场",
+        "干货",
+        "需求",
+        "信任",
+        "商品承接",
+        "成交",
+        "答疑"
+      ]
+    },
+    {
+      "analysis_id": "analysis_8801cb766ceca4ab6327511a",
+      "status": "SAMPLE_NONQUALIFYING",
+      "lineage_state": "INVALIDATED",
+      "scope": "SAMPLE_AUXILIARY",
+      "qualification_status": "SAMPLE_NONQUALIFYING",
+      "transcript_id": "transcript_c198e4037bf2e8ead83a1b6e",
+      "transcript_content_digest": "2ff17f5dc3ea4455ee50ec4fcfe21b4f0cb3abd9034dde88982174e3ba829268",
+      "analysis_spec_version": "legacy-sample-analysis-v1",
+      "model_version": "deepseek-chat",
+      "prompt_version": "legacy-unversioned",
+      "artifact_digest": "d64d1ede9ee97628cf74d0b5ed4dcfce82a6f872edf51cbef9749feff1bee817",
+      "output_path": "/Volumes/ExternalStorage/同行直播录制/analysis/drafts/runtime-v3/analysis/analysis_8801cb766ceca4ab6327511a.json",
+      "output_exists": true,
+      "actual_artifact_digest": "d64d1ede9ee97628cf74d0b5ed4dcfce82a6f872edf51cbef9749feff1bee817",
+      "digest_matches": true,
+      "coverage": {},
+      "gap_count": 0,
+      "artifact_root": {
+        "analysis_id": "analysis_8801cb766ceca4ab6327511a",
+        "session_id": "session:buyin:v2_0a2c3260d2a047cb90c511176c8aaaf87749950704fcb16fd3100d169c4951c429b973c800b368afc6951fbffbae1a4b0a3c0000000000000000000050d246c9c793c494637aeeb1b40faee12a69f3df246431775441e37315fbeb119327310cb3555f1c5ec5afcddb7cd2f680c410d1bb9a0e18e5ade4c901200122010341fa26ac:target:buyin:v2_0a2c3260d2a047cb90c511176c8aaaf87749950704fcb16fd3100d169c4951c429b973c800b368afc6951fbffbae1a4b0a3c0000000000000000000050d246c9c793c494637aeeb1b40faee12a69f3df246431775441e37315fbeb119327310cb3555f1c5ec5afcddb7cd2f680c410d1bb9a0e18e5ade4c901200122010341fa26ac:day:2026-08-25",
+        "transcript_id": "transcript_c198e4037bf2e8ead83a1b6e",
+        "transcript_content_digest": null,
+        "analysis_spec_version": null,
+        "model_version": null,
+        "prompt_version": null,
+        "qualification_state": null
+      },
+      "module_names": []
+    },
+    {
+      "analysis_id": "analysis_bb3f658b48a46b764b835fab",
+      "status": "SKIPPED_HISTORICAL",
+      "lineage_state": "CURRENT",
+      "scope": "HISTORICAL_SINGLE_SESSION",
+      "qualification_status": "NONQUALIFYING_LEGACY",
+      "transcript_id": null,
+      "transcript_content_digest": null,
+      "analysis_spec_version": null,
+      "model_version": null,
+      "prompt_version": null,
+      "artifact_digest": null,
+      "output_path": null,
+      "output_exists": false,
+      "actual_artifact_digest": null,
+      "digest_matches": false,
+      "coverage": {},
+      "gap_count": 0,
+      "artifact_root": null,
+      "module_names": []
+    },
+    {
+      "analysis_id": "analysis_d52f07f183321d1b75620e21",
+      "status": "COMPLETE",
+      "lineage_state": "CURRENT",
+      "scope": "FORMAL_SINGLE_SESSION",
+      "qualification_status": "FULL_SESSION_QUALIFIED",
+      "transcript_id": "transcript_875ba0bd045001857d6cd2dc",
+      "transcript_content_digest": "f9cf878d81b2721631046fba9d9f5610b7115c583bc26d77cc41a5ba908cd9a0",
+      "analysis_spec_version": "single-session-evidence-v3-coverage",
+      "model_version": "deepseek-chat",
+      "prompt_version": "deepseek-evidence-chunks-v3",
+      "artifact_digest": "d37b7363bb5a01ccc9c7c69665887f26bea534bd16aeba49ce4e88a08a48343d",
+      "output_path": "/Volumes/ExternalStorage/同行直播录制/analysis/drafts/runtime-v3/analysis/analysis_d52f07f183321d1b75620e21.json",
+      "output_exists": true,
+      "actual_artifact_digest": "d37b7363bb5a01ccc9c7c69665887f26bea534bd16aeba49ce4e88a08a48343d",
+      "digest_matches": true,
+      "coverage": {
+        "schema_version": 2,
+        "coverage_scope": "FULL_SESSION",
+        "source_duration_seconds": 4387.491625,
+        "source_timestamp_covered_seconds": 4335.199999999997,
+        "source_transcript_coverage_rate": 0.9880816581615691,
+        "analyzed_timestamp_covered_seconds": 4335.199999999997,
+        "analysis_coverage_rate": 0.9880816581615691,
+        "timeline_coverage_rate": 0.9880816581615691,
+        "source_segment_count": 1454,
+        "analyzed_unique_segment_count": 1454,
+        "segment_coverage_rate": 1.0,
+        "source_segment_ids_sha256": "ebe11986e0bddaf6d8475bcdc6e1b32ca2088b5a0d818d8e61e5c696d6946aaf",
+        "successful_source_segment_ids_sha256": "ebe11986e0bddaf6d8475bcdc6e1b32ca2088b5a0d818d8e61e5c696d6946aaf",
+        "minimum_coverage_rate": 0.9,
+        "target_coverage_rate": 0.95,
+        "timestamps_valid": true,
+        "source_segment_ids_valid": true,
+        "all_chunks_complete": true,
+        "is_qualified": true,
+        "meets_target": true,
+        "validation_errors": [],
+        "first_timestamp_seconds": 0.0,
+        "last_timestamp_seconds": 4385.42,
+        "chunk_count": 11,
+        "input_row_count": 1454
+      },
+      "gap_count": 123,
+      "artifact_root": {
+        "analysis_id": "analysis_d52f07f183321d1b75620e21",
+        "session_id": "session_d352eca016af9f5ec3698768dd69aa0f",
+        "transcript_id": "transcript_875ba0bd045001857d6cd2dc",
+        "transcript_content_digest": "f9cf878d81b2721631046fba9d9f5610b7115c583bc26d77cc41a5ba908cd9a0",
+        "analysis_spec_version": "single-session-evidence-v3-coverage",
+        "model_version": "deepseek-chat",
+        "prompt_version": "deepseek-evidence-chunks-v3",
+        "qualification_state": "FULL_SESSION_QUALIFIED"
+      },
+      "module_names": [
+        "开场",
+        "干货",
+        "需求",
+        "信任",
+        "商品承接",
+        "成交",
+        "答疑"
+      ]
+    },
+    {
+      "analysis_id": "analysis_f261f8101b4ea725a954c23f",
+      "status": "SAMPLE_NONQUALIFYING",
+      "lineage_state": "INVALIDATED",
+      "scope": "SAMPLE_AUXILIARY",
+      "qualification_status": "SAMPLE_NONQUALIFYING",
+      "transcript_id": "transcript_413c54e763036c6b65b9a56b",
+      "transcript_content_digest": "9afc3910ab398ed1caa4f576520e5ee9f2fe92fa1c2c704161a5ff31eb70760b",
+      "analysis_spec_version": "legacy-sample-analysis-v1",
+      "model_version": "deepseek-chat",
+      "prompt_version": "legacy-unversioned",
+      "artifact_digest": "14147e0d1536df6e157f3c8acd3a2c700926de9f1b45d192e7b106d692fa5c10",
+      "output_path": "/Volumes/ExternalStorage/同行直播录制/analysis/drafts/runtime-v3/analysis/analysis_f261f8101b4ea725a954c23f.json",
+      "output_exists": true,
+      "actual_artifact_digest": "14147e0d1536df6e157f3c8acd3a2c700926de9f1b45d192e7b106d692fa5c10",
+      "digest_matches": true,
+      "coverage": {},
+      "gap_count": 0,
+      "artifact_root": {
+        "analysis_id": "analysis_f261f8101b4ea725a954c23f",
+        "session_id": "session:buyin:v2_0a2c420c2c8c31b37fc12aba6cc9e7913dfb9016baff338037350b73c39ac91885ba481faa3121dec2ee672b334c1a4b0a3c0000000000000000000050d246c9c793c494637aeeb1b40faee12a69f3df246431775441e37315fbeb119327310cb3555f1c5ec5afcddb7cd2f680c41093bb9a0e18e5ade4c90120012201032b94ed75:target:buyin:v2_0a2c420c2c8c31b37fc12aba6cc9e7913dfb9016baff338037350b73c39ac91885ba481faa3121dec2ee672b334c1a4b0a3c0000000000000000000050d246c9c793c494637aeeb1b40faee12a69f3df246431775441e37315fbeb119327310cb3555f1c5ec5afcddb7cd2f680c41093bb9a0e18e5ade4c90120012201032b94ed75:day:2026-08-25",
+        "transcript_id": "transcript_413c54e763036c6b65b9a56b",
+        "transcript_content_digest": null,
+        "analysis_spec_version": null,
+        "model_version": null,
+        "prompt_version": null,
+        "qualification_state": null
+      },
+      "module_names": []
+    }
+  ],
+  "bundles": [
+    {
+      "object_id": "analysis_16bdca57a497943fd6eb0c05",
+      "status": "VERIFIED",
+      "scope": "FORMAL_SINGLE_SESSION",
+      "qualification_status": "FULL_SESSION_QUALIFIED",
+      "manifest_path": "/Volumes/ExternalStorage/同行直播录制/analysis/drafts/runtime-v3/analysis/analysis_16bdca57a497943fd6eb0c05.json",
+      "manifest_hash": "45b576f6e35c6db85135f544abf879792180a81c682c91df82f6d7b1e5f5222e",
+      "verified_at": "2026-08-30T15:12:28.499Z",
+      "exists": true,
+      "actual_hash": "45b576f6e35c6db85135f544abf879792180a81c682c91df82f6d7b1e5f5222e",
+      "hash_matches": true
+    },
+    {
+      "object_id": "analysis_8801cb766ceca4ab6327511a",
+      "status": "INVALIDATED_SAMPLE",
+      "scope": "SAMPLE_AUXILIARY",
+      "qualification_status": "SAMPLE_NONQUALIFYING",
+      "manifest_path": "/Volumes/ExternalStorage/同行直播录制/analysis/drafts/runtime-v3/analysis/analysis_8801cb766ceca4ab6327511a.json",
+      "manifest_hash": "d64d1ede9ee97628cf74d0b5ed4dcfce82a6f872edf51cbef9749feff1bee817",
+      "verified_at": "2026-08-25T08:32:26.273Z",
+      "exists": true,
+      "actual_hash": "d64d1ede9ee97628cf74d0b5ed4dcfce82a6f872edf51cbef9749feff1bee817",
+      "hash_matches": true
+    },
+    {
+      "object_id": "analysis_d52f07f183321d1b75620e21",
+      "status": "VERIFIED",
+      "scope": "FORMAL_SINGLE_SESSION",
+      "qualification_status": "FULL_SESSION_QUALIFIED",
+      "manifest_path": "/Volumes/ExternalStorage/同行直播录制/analysis/drafts/runtime-v3/analysis/analysis_d52f07f183321d1b75620e21.json",
+      "manifest_hash": "d37b7363bb5a01ccc9c7c69665887f26bea534bd16aeba49ce4e88a08a48343d",
+      "verified_at": "2026-08-30T15:44:04.813Z",
+      "exists": true,
+      "actual_hash": "d37b7363bb5a01ccc9c7c69665887f26bea534bd16aeba49ce4e88a08a48343d",
+      "hash_matches": true
+    },
+    {
+      "object_id": "analysis_f261f8101b4ea725a954c23f",
+      "status": "INVALIDATED_SAMPLE",
+      "scope": "SAMPLE_AUXILIARY",
+      "qualification_status": "SAMPLE_NONQUALIFYING",
+      "manifest_path": "/Volumes/ExternalStorage/同行直播录制/analysis/drafts/runtime-v3/analysis/analysis_f261f8101b4ea725a954c23f.json",
+      "manifest_hash": "14147e0d1536df6e157f3c8acd3a2c700926de9f1b45d192e7b106d692fa5c10",
+      "verified_at": "2026-08-25T08:32:26.276Z",
+      "exists": true,
+      "actual_hash": "14147e0d1536df6e157f3c8acd3a2c700926de9f1b45d192e7b106d692fa5c10",
+      "hash_matches": true
+    }
+  ],
+  "lineage_edges": [
+    {
+      "downstream_id": "analysis_16bdca57a497943fd6eb0c05",
+      "upstream_id": "transcript_875ba0bd045001857d6cd2dc",
+      "upstream_version": "f9cf878d81b2721631046fba9d9f5610b7115c583bc26d77cc41a5ba908cd9a0",
+      "state": "SUPERSEDED"
+    },
+    {
+      "downstream_id": "analysis_8801cb766ceca4ab6327511a",
+      "upstream_id": "transcript_c198e4037bf2e8ead83a1b6e",
+      "upstream_version": "65b1be093efe305d2851167a26ba9894aa9f10386f3e6ed5e5a2c8b94dd5b4e9",
+      "state": "INVALIDATED"
+    },
+    {
+      "downstream_id": "analysis_8801cb766ceca4ab6327511a",
+      "upstream_id": "transcript_c198e4037bf2e8ead83a1b6e",
+      "upstream_version": "3ef50d89d409b84c277030d7ce59758154dca4615f9f3e1736123b413505c192",
+      "state": "INVALIDATED"
+    },
+    {
+      "downstream_id": "analysis_bb3f658b48a46b764b835fab",
+      "upstream_id": "tr-4c6ce301082381f6e3f210d4",
+      "upstream_version": "6dd1534fc62935deb7c7b50ca5a6603452a7906b7ae0f6273a2aeea46ae7e522",
+      "state": "CURRENT"
+    },
+    {
+      "downstream_id": "analysis_d52f07f183321d1b75620e21",
+      "upstream_id": "transcript_875ba0bd045001857d6cd2dc",
+      "upstream_version": "f9cf878d81b2721631046fba9d9f5610b7115c583bc26d77cc41a5ba908cd9a0",
+      "state": "CURRENT"
+    },
+    {
+      "downstream_id": "analysis_f261f8101b4ea725a954c23f",
+      "upstream_id": "transcript_413c54e763036c6b65b9a56b",
+      "upstream_version": "0be1153d373fbc2376bb31be76806712ae4a001bb12ab2e3f0e429e9e2996c6a",
+      "state": "INVALIDATED"
+    },
+    {
+      "downstream_id": "analysis_f261f8101b4ea725a954c23f",
+      "upstream_id": "transcript_413c54e763036c6b65b9a56b",
+      "upstream_version": "01d19e91fd2b2bfc506d46530cc4abf7a1fcd16ade27d14d5fe2d7e405fa3657",
+      "state": "INVALIDATED"
+    },
+    {
+      "downstream_id": "cmp-4b66f69594dd-vs-4c6ce3010823",
+      "upstream_id": "tr-4b66f69594dddbc0992f1340",
+      "upstream_version": "509d0f228d1f7aeb5b88ae01d670f8d82c8f108096fa4907182a8511c8cfc1f2",
+      "state": "CURRENT"
+    },
+    {
+      "downstream_id": "cmp-f4be143e30cf-vs-4b66f69594dd",
+      "upstream_id": "tr-f4be143e30cff3ac60e18c81",
+      "upstream_version": "1a48fe683d608ef2e7e0afa6199bd85335376dccb1d5e6dbbf6a72212f20b8c5",
+      "state": "CURRENT"
+    }
+  ],
+  "projections": [
+    {
+      "outbox_id": "out_ffb2555dbce9425eb9a1fc2ed7d166ac",
+      "object_id": "analysis_16bdca57a497943fd6eb0c05",
+      "status": "SENT",
+      "scope": "FORMAL_SINGLE_SESSION",
+      "qualification_status": "FULL_SESSION_QUALIFIED",
+      "receipt_status": "VERIFIED",
+      "receipt_scope": "FORMAL_SINGLE_SESSION",
+      "receipt_qualification": "FULL_SESSION_QUALIFIED",
+      "payload": {
+        "analysis_id": "analysis_16bdca57a497943fd6eb0c05",
+        "correction_version": 1,
+        "lineage_state": "SUPERSEDED",
+        "profile_id": "edu_live_competitor_intel",
+        "superseded_by_analysis_id": "analysis_d52f07f183321d1b75620e21"
+      },
+      "delivery_status": "VERIFIED",
+      "delivery_qualification": "SUPERSEDED_FORMAL_VERSION",
+      "feishu_record_id": "recvtMbwsB1VU4",
+      "feishu_fields": {
+        "分析类型": [
+          "单场分析"
+        ],
+        "状态": [
+          "完成"
+        ],
+        "证据说明": "SUPERSEDED_FORMAL_VERSION：该报告来源完整，但已被新版分析替代，不再是当前决策版本；superseded_by=analysis_d52f07f183321d1b75620e21"
+      }
+    },
+    {
+      "outbox_id": "out_d295f18ead5743179f173a2bd336f2de",
+      "object_id": "analysis_d52f07f183321d1b75620e21",
+      "status": "SENT",
+      "scope": "FORMAL_SINGLE_SESSION",
+      "qualification_status": "FULL_SESSION_QUALIFIED",
+      "receipt_status": "VERIFIED",
+      "receipt_scope": "FORMAL_SINGLE_SESSION",
+      "receipt_qualification": "FULL_SESSION_QUALIFIED",
+      "payload": {
+        "analysis_id": "analysis_d52f07f183321d1b75620e21",
+        "analysis_spec_version": "single-session-evidence-v3-coverage",
+        "artifact_digest": "d37b7363bb5a01ccc9c7c69665887f26bea534bd16aeba49ce4e88a08a48343d",
+        "profile_id": "edu_live_competitor_intel",
+        "qualification_state": "FULL_SESSION_QUALIFIED"
+      },
+      "delivery_status": "VERIFIED",
+      "delivery_qualification": "FULL_SESSION_QUALIFIED",
+      "feishu_record_id": null,
+      "feishu_fields": {
+        "分析类型": null,
+        "状态": null,
+        "证据说明": null
+      }
+    }
+  ],
+  "heartbeats": [
+    {
+      "service_name": "analysis-v3",
+      "pid": 75216,
+      "status": "READY",
+      "last_heartbeat_at": "2026-08-30T15:45:54.309Z",
+      "pid_alive": true,
+      "details": {
+        "analysis_spec_version": "single-session-evidence-v3-coverage",
+        "checked_at": "2026-08-30T15:45:54.309Z",
+        "completed": 0,
+        "current_spec_blocked": 0,
+        "current_spec_evidence_pending": 0,
+        "current_spec_meets_target": 1,
+        "current_spec_qualified": 1,
+        "current_spec_total": 1,
+        "current_spec_waiting": 0,
+        "health_reasons": [],
+        "minimum_coverage_rate": 0.9,
+        "quality_blocked": 0,
+        "revalidated": 0,
+        "source_qualification_blocked": 0,
+        "target_coverage_rate": 0.95,
+        "waiting_model": 0
+      }
+    },
+    {
+      "service_name": "evidence-v3",
+      "pid": 75263,
+      "status": "READY",
+      "last_heartbeat_at": "2026-08-30T15:46:05.379Z",
+      "pid_alive": true,
+      "details": {
+        "blocked": 0,
+        "checked_at": "2026-08-30T15:46:05.379Z",
+        "verified": 0
+      }
+    },
+    {
+      "service_name": "pipeline-v3",
+      "pid": 75161,
+      "status": "READY",
+      "last_heartbeat_at": "2026-08-30T15:46:24.826Z",
+      "pid_alive": true,
+      "details": {
+        "analysis_tasks": 0,
+        "checked_at": "2026-08-30T15:46:24.826Z",
+        "eligible_canonical_pending": 0,
+        "eligible_canonical_total": 1,
+        "full_session_meets_target": 1,
+        "full_session_qualified": 1,
+        "health_reasons": [],
+        "quality_blocked": 0,
+        "segments": 108,
+        "stale_backlog": {
+          "missing_output": 0,
+          "missing_source": 0,
+          "unrecoverable": 0
+        },
+        "transcripts": 0
+      }
+    },
+    {
+      "service_name": "recompute-v3",
+      "pid": 708,
+      "status": "READY",
+      "last_heartbeat_at": "2026-08-30T15:46:26.482Z",
+      "pid_alive": true,
+      "details": {
+        "checked_at": "2026-08-30T15:46:26.482Z",
+        "stale_items": 0
+      }
+    },
+    {
+      "service_name": "retention-v3",
+      "pid": 34907,
+      "status": "READY",
+      "last_heartbeat_at": "2026-08-30T15:46:44.789Z",
+      "pid_alive": true,
+      "details": {
+        "delete_enabled": false,
+        "idle": true,
+        "mode": "DELETE_DISABLED",
+        "next_scan_in_seconds": 293
+      }
+    },
+    {
+      "service_name": "runtime-v3",
+      "pid": 59961,
+      "status": "READY",
+      "last_heartbeat_at": "2026-08-30T15:46:36.484Z",
+      "pid_alive": true,
+      "details": {
+        "audio_retention_hours": 168,
+        "capacity_test_concurrency": 65,
+        "due_target_count": 41,
+        "expected_max_recording_concurrency": 50,
+        "final_ready": false,
+        "full_fleet": true,
+        "live_count": 2,
+        "normal_recording_concurrency": 30,
+        "production_gate": "BLOCKED",
+        "recording_duration_seconds": 0,
+        "recording_health": {
+          "finalized": 117,
+          "restarted": 0,
+          "running": 2
+        },
+        "recording_mode": "LOWEST_VIDEO_WITH_AUDIO",
+        "recording_quality": "LD",
+        "recording_segment_seconds": 0,
+        "result_count": 41,
+        "speech_audio_bitrate_kbps": 48,
+        "speech_audio_format": "opus",
+        "target_count": 41,
+        "unknown_count": 0,
+        "video_retention_hours": 72
+      }
+    }
+  ],
+  "recorders": [
+    {
+      "job_id": "recjob_90409f2eb76bb8754dbf56d7",
+      "pid": 35736,
+      "alive": true,
+      "restart_count": 0,
+      "before": 1314322436,
+      "after": 1315633156,
+      "grew": true
+    },
+    {
+      "job_id": "recjob_6a668c48730ed52bca520bdd",
+      "pid": 43809,
+      "alive": true,
+      "restart_count": 0,
+      "before": 549739724,
+      "after": 550526156,
+      "grew": true
+    }
+  ],
+  "analysis_quality": {
+    "full_session_min_timestamp_coverage_rate": 0.9,
+    "full_session_target_timestamp_coverage_rate": 0.95
+  },
+  "transcript_quality": {
+    "full_session_min_timestamp_coverage_rate": 0.9,
+    "full_session_target_timestamp_coverage_rate": 0.95
+  },
+  "retention_delete_enabled": false,
+  "candidate_hashes": [
+    {
+      "path": "v3_analysis_contract.py",
+      "matches": true
+    },
+    {
+      "path": "v3_analysis_worker.py",
+      "matches": true
+    },
+    {
+      "path": "v3_project_feishu.py",
+      "matches": true
+    },
+    {
+      "path": "v3_sample_analysis_migration.py",
+      "matches": true
+    },
+    {
+      "path": "v3_config.json",
+      "matches": true
+    },
+    {
+      "path": "test_v3_analysis_worker.py",
+      "matches": true
+    },
+    {
+      "path": "test_v3_sample_analysis_qualification.py",
+      "matches": true
+    },
+    {
+      "path": "test_v3_analysis_coverage_gate.py",
+      "matches": true
+    }
+  ]
+}

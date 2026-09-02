@@ -1,0 +1,1206 @@
+--- /Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/v3_analysis_contract.py	2026-08-30 23:42:17
++++ /Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-30-analysis-source-binding-production/staging/runtime/v3/v3_analysis_contract.py	2026-08-30 23:50:21
+@@ -12,8 +12,8 @@
+ QUALIFIED = "FULL_SESSION_QUALIFIED"
+ SAMPLE_NONQUALIFYING = "SAMPLE_NONQUALIFYING"
+ SOURCE_NONQUALIFYING = "SOURCE_NONQUALIFYING"
+-ANALYSIS_SPEC_VERSION = "single-session-evidence-v3-coverage"
+-PROMPT_VERSION = "deepseek-evidence-chunks-v3"
++ANALYSIS_SPEC_VERSION = "single-session-evidence-v4-source-ids"
++PROMPT_VERSION = "deepseek-source-segment-ids-v1"
+ MODEL_VERSION = "deepseek-chat"
+ MIN_TIMESTAMP_COVERAGE_RATE = 0.90
+ 
+--- /Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/v3_analysis_worker.py	2026-08-30 23:42:17
++++ /Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-30-analysis-source-binding-production/staging/runtime/v3/v3_analysis_worker.py	2026-08-31 00:00:56
+@@ -86,56 +86,74 @@
+     return ""
+ 
+ 
+-def transcript_text(path: Path, limit: int | None = None) -> tuple[str, list[dict]]:
+-    payload = json.loads(path.read_text(encoding="utf-8"))
+-    rows = payload.get("segments") or []
+-    parts = []
+-    for row in rows:
+-        # Feed the losslessly normalized view to the semantic model while the
+-        # original `text` remains in the transcript artifact for evidence and
+-        # audit.  The normalizer only removes Unicode/whitespace noise; it
+-        # never substitutes an unverified domain term.
+-        text = str(row.get("normalized_text") or row.get("text") or "").strip()
+-        if text:
+-            parts.append(f"[{float(row.get('start') or 0):.2f}-{float(row.get('end') or 0):.2f}] {text}")
+-    text = "\n".join(parts)
+-    return (text[:limit] if limit is not None else text), rows
++def _json_digest(value: object) -> str:
++    body = json.dumps(
++        value, ensure_ascii=False, sort_keys=True,
++        separators=(",", ":"), allow_nan=False,
++    )
++    return hashlib.sha256(body.encode("utf-8")).hexdigest()
+ 
+ 
+-def source_rows_from_transcript(payload: dict, transcript_id: str) -> list[dict]:
+-    """Build stable, auditable source rows from the original transcript.
+-
+-    ASR artifacts currently do not carry a segment primary key.  The transcript
+-    id plus the original array index is stable for that immutable artifact and
+-    avoids pretending a model-produced timestamp is a source identifier.
+-    Invalid timestamps or empty text fail closed before any model call.
+-    """
+-    segments = payload.get("segments")
+-    if not isinstance(segments, list) or not segments:
+-        raise ValueError("analysis source transcript has no segment array")
+-    rows: list[dict] = []
+-    for index, item in enumerate(segments):
+-        if not isinstance(item, dict):
+-            raise ValueError(f"analysis source segment {index} is not an object")
+-        start, end = finite_number(item.get("start")), finite_number(item.get("end"))
++def bind_transcript_segments(rows: object) -> list[dict]:
++    """Bind every original ASR row to an immutable, content-derived ID."""
++    if not isinstance(rows, list) or not rows:
++        raise ValueError("transcript segments must be a non-empty array")
++    bound: list[dict] = []
++    seen: set[str] = set()
++    for index, raw in enumerate(rows):
++        if not isinstance(raw, dict):
++            raise ValueError(f"transcript segment {index} is not an object")
++        start = finite_number(raw.get("start"))
++        end = finite_number(raw.get("end"))
+         if start is None or end is None or start < 0 or end <= start:
+-            raise ValueError(f"analysis source segment {index} has invalid timestamps")
+-        text = str(item.get("normalized_text") or item.get("text") or "").strip()
+-        if not text:
+-            raise ValueError(f"analysis source segment {index} has no analyzable text")
+-        segment_id = f"{transcript_id}:segment:{index:06d}"
+-        rows.append({
++            raise ValueError(f"transcript segment {index} has invalid start/end")
++        source_text = str(raw.get("text") or "")
++        analysis_text = re.sub(
++            r"\s+", " ", str(raw.get("normalized_text") or source_text)
++        ).strip()
++        if not source_text.strip() or not analysis_text:
++            raise ValueError(f"transcript segment {index} has no text")
++        content_digest = hashlib.sha256(source_text.encode("utf-8")).hexdigest()
++        identity_digest = _json_digest({
+             "segment_index": index,
+-            "source_segment_id": segment_id,
+             "start": start,
+             "end": end,
+-            "text": text,
+-            "line": f"[{start:.2f}-{end:.2f}] {text}",
++            "content_digest": content_digest,
+         })
+-    return rows
++        source_segment_id = f"srcseg_{index:06d}_{identity_digest[:20]}"
++        if source_segment_id in seen:
++            raise ValueError(f"duplicate source segment id: {source_segment_id}")
++        seen.add(source_segment_id)
++        bound.append({
++            "segment_index": index,
++            "source_segment_id": source_segment_id,
++            "start": start,
++            "end": end,
++            "text": source_text,
++            "analysis_text": analysis_text,
++            "content_digest": content_digest,
++            # The model receives an ID and text, never a timestamp.
++            "line": f"[{source_segment_id}] {analysis_text}",
++        })
++    return bound
+ 
+ 
++def transcript_text(path: Path, limit: int | None = None) -> tuple[str, list[dict]]:
++    payload = json.loads(path.read_text(encoding="utf-8"))
++    if not isinstance(payload, dict):
++        raise ValueError("transcript artifact must be a JSON object")
++    rows = bind_transcript_segments(payload.get("segments"))
++    text = "\n".join(row["line"] for row in rows)
++    return (text[:limit] if limit is not None else text), rows
++
++
++def source_rows_from_transcript(payload: dict, transcript_id: str) -> list[dict]:
++    del transcript_id  # Identity is content-bound and independent of DB naming.
++    return bind_transcript_segments(payload.get("segments"))
++
++
+ def timed_lines(text: str) -> list[dict]:
++    """Compatibility parser for tests; model output never uses this format."""
+     rows = []
+     pattern = re.compile(r"^\[([0-9]+(?:\.[0-9]+)?)-([0-9]+(?:\.[0-9]+)?)\]\s*(.*)$")
+     for line in text.splitlines():
+@@ -143,12 +161,10 @@
+         if not match:
+             continue
+         start, end = float(match.group(1)), float(match.group(2))
+-        if start < 0 or end < start:
++        if start < 0 or end <= start:
+             continue
+-        index = len(rows)
+-        rows.append({"segment_index": index, "source_segment_id": f"line:segment:{index:06d}",
+-                     "start": start, "end": end, "text": match.group(3), "line": line.strip()})
+-    return rows
++        rows.append({"start": start, "end": end, "text": match.group(3)})
++    return bind_transcript_segments(rows)
+ 
+ 
+ def analysis_chunks(text: str, char_limit: int = ANALYSIS_CHUNK_CHAR_LIMIT,
+@@ -186,9 +202,18 @@
+ def validate_chunk_result(value: object, chunk: dict) -> dict:
+     if not isinstance(value, dict):
+         raise ValueError("analysis chunk response must be a JSON object")
++    missing = sorted(set(CHUNK_FIELDS) - set(value))
++    unknown = sorted(set(value) - set(CHUNK_FIELDS))
++    if missing:
++        raise ValueError(f"analysis chunk response omitted fields: {missing}")
++    if unknown:
++        raise ValueError(f"analysis chunk response has unknown fields: {unknown}")
++    source_by_id = {row["source_segment_id"]: row for row in chunk.get("rows") or []}
++    if not source_by_id:
++        raise ValueError("analysis source chunk has no bound transcript segments")
+     result = empty_chunk_result()
+     for field in CHUNK_FIELDS:
+-        items = value.get(field, [])
++        items = value[field]
+         if not isinstance(items, list):
+             raise ValueError(f"analysis field {field} must be an array")
+         if len(items) > 3:
+@@ -197,16 +222,41 @@
+         for item in items:
+             if not isinstance(item, dict):
+                 raise ValueError(f"analysis field {field} contains a non-object item")
+-            try:
+-                start, end = float(item["start"]), float(item["end"])
+-            except (KeyError, TypeError, ValueError):
+-                raise ValueError(f"analysis field {field} item lacks numeric start/end") from None
+-            if start < chunk["start"] - 0.01 or end > chunk["end"] + 0.01 or end < start:
+-                raise ValueError(f"analysis field {field} timestamp is outside its source chunk")
+-            summary = str(item.get("summary") or item.get("name") or "").strip()
++            if set(item) != {"summary", "source_segment_ids"}:
++                raise ValueError(
++                    f"analysis field {field} item must contain only summary/source_segment_ids"
++                )
++            summary = str(item.get("summary") or "").strip()
+             if not summary or len(summary) > 160:
+                 raise ValueError(f"analysis field {field} item has invalid summary length")
+-            normalized.append({"summary": summary, "start": start, "end": end})
++            source_ids = item.get("source_segment_ids")
++            if (not isinstance(source_ids, list) or not 1 <= len(source_ids) <= 3
++                    or not all(isinstance(source_id, str) and source_id for source_id in source_ids)):
++                raise ValueError(f"analysis field {field} item has invalid source_segment_ids")
++            if len(set(source_ids)) != len(source_ids):
++                raise ValueError(f"analysis field {field} item has duplicate source_segment_ids")
++            unavailable = [source_id for source_id in source_ids if source_id not in source_by_id]
++            if unavailable:
++                raise ValueError(
++                    f"analysis field {field} references source_segment_id outside its source chunk"
++                )
++            source_segments = [{
++                "source_segment_id": source_id,
++                "start": source_by_id[source_id]["start"],
++                "end": source_by_id[source_id]["end"],
++                "source_text": source_by_id[source_id]["text"],
++                "content_digest": source_by_id[source_id]["content_digest"],
++            } for source_id in source_ids]
++            normalized.append({
++                "summary": summary,
++                "source_segment_ids": list(source_ids),
++                "source_segments": source_segments,
++                # Compatibility fields for existing consumers.  These values
++                # are computed exclusively from cited original segments.
++                "start": min(ref["start"] for ref in source_segments),
++                "end": max(ref["end"] for ref in source_segments),
++                "source_binding_digest": _json_digest(source_segments),
++            })
+         result[field] = normalized
+     return result
+ 
+@@ -217,9 +267,11 @@
+         raise RuntimeError("DEEPSEEK_API_KEY is not configured")
+     example = {field: [] for field in CHUNK_FIELDS}
+     system = (
+-        "你是直播竞品情报分析器。只能从所给时间片逐字稿提取证据，不能补写事实。"
++        "你是直播竞品情报分析器。输入每行格式为[source_segment_id]逐字稿原文。"
++        "只能从所给逐字稿提取证据，不能补写事实，不能生成、猜测或输出任何时间戳。"
+         "输出严格JSON对象，不要Markdown或解释。必须包含示例中的全部字段，每字段最多2项；"
+-        "每项格式只能是{summary,start,end}，summary不超过80个汉字，start/end必须落在本时间片。"
++        "每项格式只能是{summary,source_segment_ids}，summary不超过80个汉字，"
++        "source_segment_ids必须是包含1到3个本时间片原始ID的数组，不得改写或虚构ID。"
+         "instructor只记录当前说话者明确自称或家长明确称呼当前主播的姓名，summary只能写“X老师”；"
+         "提及课程作者、其他老师或合作老师绝不能算当前讲师；无法唯一确认就返回空数组。JSON示例："
+         + json.dumps(example, ensure_ascii=False, separators=(",", ":"))
+@@ -250,7 +302,8 @@
+             failures.append(f"attempt {attempt}: {exc}")
+             body["messages"].append({"role": "assistant", "content": content[-1000:]})
+             body["messages"].append({"role": "user", "content":
+-                "上次输出无效或被截断。重新从原时间片生成更短的完整JSON；每字段最多1项，不能省略字段。"})
++                "上次输出无效或被截断。重新生成更短的完整JSON；每字段最多1项，不能省略字段。"
++                "只能引用输入中的source_segment_id；不要输出start/end或其他字段。"})
+     raise RuntimeError("analysis chunk failed after retries: " + " | ".join(failures))
+ 
+ 
+@@ -416,7 +469,10 @@
+     for result in results:
+         for field in CHUNK_FIELDS:
+             for item in result[field]:
+-                key = (re.sub(r"\s+", "", item["summary"]).lower(), round(item["start"], 2), round(item["end"], 2))
++                key = (
++                    re.sub(r"\s+", "", item["summary"]).lower(),
++                    tuple(item["source_segment_ids"]),
++                )
+                 if key not in seen[field]:
+                     seen[field].add(key)
+                     merged[field].append(item)
+@@ -436,15 +492,14 @@
+     for name, field in module_sources:
+         values = merged[field]
+         timestamps = []
++        seen_module_refs: set[str] = set()
+         for item in values:
+-            candidates = [row for row in source_rows if row["end"] > item["start"] and row["start"] < item["end"]]
+-            if not candidates:
+-                candidates = source_rows
+-            row = min(candidates, key=lambda candidate: abs(candidate["start"] - item["start"]))
+-            timestamps.append({"start": row["start"], "end": row["end"],
+-                               "source_segment_index": row["segment_index"],
+-                               "source_segment_id": row.get("source_segment_id"),
+-                               "source_text": row["text"]})
++            for reference in item["source_segments"]:
++                source_id = reference["source_segment_id"]
++                if source_id in seen_module_refs:
++                    continue
++                seen_module_refs.add(source_id)
++                timestamps.append(dict(reference))
+         modules.append({"name": name, "summary": "；".join(item["summary"] for item in values[:5]),
+                         "timestamps": timestamps})
+     inferred_successful_ids = [
+@@ -458,7 +513,7 @@
+         all_chunks_complete=len(results) == len(chunks), transcript_quality=transcript_quality,
+     )
+     merged.update({
+-        "schema_version": "2.0",
++        "schema_version": "3.0",
+         "instructor": {"status": instructor_status,
+                        "names": instructor_names, "evidence_refs": instructor_items},
+         "interaction": list(merged["interaction_patterns"]),
+@@ -469,10 +524,84 @@
+                               "last_timestamp_seconds": max(row["end"] for row in source_rows),
+                               "chunk_count": len(chunks),
+                               "input_row_count": sum(chunk["row_count"] for chunk in chunks)},
++        "evidence_binding": {
++            "schema_version": "1.0",
++            "mode": "STRICT_SOURCE_SEGMENT_IDS",
++            "model_generated_timestamps": False,
++            "nearest_segment_fallback": False,
++            "all_references_valid": True,
++        },
+     })
+     return merged
++
++
++def source_reference_manifest(result: dict) -> dict:
++    """Return a compact immutable index of every source reference in a result."""
++    references: dict[str, dict] = {}
++
++    def visit(value: object) -> None:
++        if isinstance(value, dict):
++            source_segments = value.get("source_segments")
++            if isinstance(source_segments, list):
++                for ref in source_segments:
++                    if not isinstance(ref, dict):
++                        raise ValueError("analysis contains a malformed source segment reference")
++                    required = ("source_segment_id", "start", "end", "source_text", "content_digest")
++                    if any(key not in ref for key in required):
++                        raise ValueError("analysis contains an incomplete source segment reference")
++                    source_id = str(ref["source_segment_id"])
++                    expected_digest = hashlib.sha256(str(ref["source_text"]).encode("utf-8")).hexdigest()
++                    if str(ref["content_digest"]) != expected_digest:
++                        raise ValueError("analysis source segment content digest mismatch")
++                    compact = {
++                        "source_segment_id": source_id,
++                        "start": float(ref["start"]),
++                        "end": float(ref["end"]),
++                        "content_digest": expected_digest,
++                    }
++                    prior = references.get(source_id)
++                    if prior is not None and prior != compact:
++                        raise ValueError("analysis source segment id resolves to conflicting evidence")
++                    references[source_id] = compact
++            for nested in value.values():
++                visit(nested)
++        elif isinstance(value, list):
++            for nested in value:
++                visit(nested)
++
++    visit(result)
++    ordered = [references[source_id] for source_id in sorted(references)]
++    return {
++        "schema_version": "1.0",
++        "mode": "STRICT_SOURCE_SEGMENT_IDS",
++        "reference_count": len(ordered),
++        "references": ordered,
++        "source_binding_digest": _json_digest(ordered),
++    }
++
++
++def artifact_binding_status(artifact: object) -> str:
++    """Classify old artifacts without inventing bindings for their timestamps."""
++    if not isinstance(artifact, dict):
++        return "INVALID"
++    result = artifact.get("result")
++    evidence = artifact.get("evidence")
++    if (isinstance(result, dict) and result.get("schema_version") == "3.0"
++            and isinstance(evidence, dict)
++            and evidence.get("mode") == "STRICT_SOURCE_SEGMENT_IDS"):
++        try:
++            manifest = source_reference_manifest(result)
++        except (TypeError, ValueError):
++            return "INVALID"
++        if manifest["source_binding_digest"] == evidence.get("source_binding_digest"):
++            return "BOUND_V1"
++        return "INVALID"
++    # Schema 2/free-timestamp artifacts remain readable, but are not upgraded
++    # by nearest-line matching.  A verified migration must re-run the model.
++    return "LEGACY_UNBOUND"
+ 
+ 
++
+ def write_json_atomic(path: Path, payload: dict) -> None:
+     serialized = json.dumps(payload, ensure_ascii=False, indent=2, allow_nan=False) + "\n"
+     parsed = json.loads(serialized)
+@@ -603,6 +732,8 @@
+     chunk diagnostic exactly match the chunks deterministically rebuilt from
+     the current source transcript.
+     """
++    if artifact_binding_status(artifact) != "BOUND_V1":
++        raise ValueError("legacy free-timestamp analysis cannot be upgraded without a model rerun")
+     engine = json_object(artifact.get("engine"))
+     if engine.get("source_content_hash") != hashlib.sha256(text.encode()).hexdigest():
+         raise ValueError("existing analysis source hash does not match transcript")
+@@ -681,9 +812,15 @@
+     )
+     return merged, {"provider": "deepseek", "model": "deepseek-chat", "response_ids": [d["response_id"] for d in diagnostics],
+                     "source_content_hash": hashlib.sha256(text.encode()).hexdigest(), "chunk_count": len(chunks),
++                    "source_segment_set_digest": _json_digest([
++                        {"source_segment_id": row["source_segment_id"],
++                         "content_digest": row["content_digest"]}
++                        for row in (source_rows or [])
++                    ]),
+                     "successful_source_segment_count": len(successful_ids),
+                     "successful_source_segment_ids_sha256": _identifier_hash(successful_ids),
+-                    "chunk_diagnostics": diagnostics, "merge_engine": "deterministic-python-v3-coverage-gated"}
++                    "chunk_diagnostics": diagnostics,
++                    "merge_engine": "deterministic-python-v4-source-ids-coverage-gated"}
+ 
+ 
+ def _coverage_metadata(coverage: dict) -> dict:
+@@ -1050,6 +1187,38 @@
+                 analysis_metadata=analysis_metadata,
+             )
+             quality_blocked += 1
++            continue
++
++        try:
++            reference_manifest = source_reference_manifest(result)
++            if reference_manifest["reference_count"] < 1:
++                raise ValueError("analysis returned no source-bound evidence references")
++            evidence = {
++                **reference_manifest,
++                "transcript_id": expected_transcript_id,
++                "transcript_artifact_sha256": expected_digest,
++                "source_content_hash": engine["source_content_hash"],
++                "source_segment_set_digest": engine["source_segment_set_digest"],
++                "model_generated_timestamps": False,
++                "nearest_segment_fallback": False,
++            }
++        except (KeyError, TypeError, ValueError) as exc:
++            with connect() as conn:
++                conn.execute(
++                    "UPDATE analyses SET status='WAITING_MODEL',metadata_json=? "
++                    "WHERE analysis_id=?",
++                    (
++                        json.dumps({
++                            **analysis_metadata,
++                            "error_type": "AnalysisEvidenceBindingError",
++                            "error_message": str(exc)[:500],
++                            "checked_at": utc_now(),
++                        }, ensure_ascii=False, sort_keys=True),
++                        analysis_row["analysis_id"],
++                    ),
++                )
++                conn.commit()
++            failed += 1
+             continue
+ 
+         artifact = {
+@@ -1063,8 +1232,11 @@
+             "qualification_state": QUALIFIED,
+             "engine": engine,
+             "created_at": utc_now(),
++            "evidence": evidence,
+             "result": result,
+         }
++        if artifact_binding_status(artifact) != "BOUND_V1":
++            raise RuntimeError("analysis artifact failed strict source binding self-check")
+         output_path = ANALYSIS_ROOT / f"{analysis_row['analysis_id']}.json"
+         write_json_atomic(output_path, artifact)
+         artifact_digest = file_sha256(output_path)
+@@ -1081,6 +1253,10 @@
+             "qualification_state": QUALIFIED,
+             "formal_analysis_eligible": True,
+             "artifact_digest": artifact_digest,
++            "evidence_binding_status": "BOUND_V1",
++            "source_binding_digest": evidence["source_binding_digest"],
++            "referenced_source_segment_count": evidence["reference_count"],
++            "transcript_artifact_sha256": evidence["transcript_artifact_sha256"],
+             "qualification_checked_at": utc_now(),
+         }
+         with connect() as conn:
+@@ -1124,16 +1300,22 @@
+                     "AND upstream_type='transcript' AND state='CURRENT'",
+                     (old["analysis_id"],),
+                 )
+-                enqueue_outbox_conn(
++                superseded_outbox_id = enqueue_outbox_conn(
+                     conn, object_type="semantic_projection", object_id=old["analysis_id"],
+                     destination="feishu_base",
+                     payload={"analysis_id": old["analysis_id"],
+                              "profile_id": "edu_live_competitor_intel",
+                              "lineage_state": "SUPERSEDED",
+                              "superseded_by_analysis_id": analysis_row["analysis_id"],
++                             "release_after_evidence_analysis_id": analysis_row["analysis_id"],
+                              "correction_version": 1},
+                     scope=ANALYSIS_SCOPE_FORMAL, qualification_status=QUALIFIED,
+                 )
++                conn.execute(
++                    "UPDATE outbox SET status='HELD_EVIDENCE' WHERE outbox_id=? "
++                    "AND status='PENDING'",
++                    (superseded_outbox_id,),
++                )
+ 
+             conn.execute(
+                 "INSERT INTO evidence_bundles(bundle_id,object_type,object_id,status,"
+@@ -1152,21 +1334,37 @@
+                         "transcript_content_digest": expected_digest,
+                         "artifact_digest": artifact_digest,
+                         "analysis_coverage": _coverage_metadata(coverage),
++                        "evidence_binding_status": "BOUND_V1",
++                        "source_binding_digest": evidence["source_binding_digest"],
++                        "referenced_source_segments": [
++                            {
++                                "source_segment_id": ref["source_segment_id"],
++                                "content_digest": ref["content_digest"],
++                            }
++                            for ref in evidence["references"]
++                        ],
+                         "qualification_state": QUALIFIED,
+                         "formal_analysis_eligible": True,
++                        "release_projection_after_evidence": True,
+                     }, ensure_ascii=False, sort_keys=True),
+                 ),
+             )
+-            enqueue_outbox_conn(
++            current_outbox_id = enqueue_outbox_conn(
+                 conn, object_type="semantic_projection",
+                 object_id=analysis_row["analysis_id"], destination="feishu_base",
+                 payload={"analysis_id": analysis_row["analysis_id"],
+                          "profile_id": "edu_live_competitor_intel",
+                          "qualification_state": QUALIFIED,
+                          "artifact_digest": artifact_digest,
+-                         "analysis_spec_version": ANALYSIS_SPEC_VERSION},
++                         "analysis_spec_version": ANALYSIS_SPEC_VERSION,
++                         "release_after_evidence_analysis_id": analysis_row["analysis_id"]},
+                 scope=ANALYSIS_SCOPE_FORMAL, qualification_status=QUALIFIED,
+             )
++            conn.execute(
++                "UPDATE outbox SET status='HELD_EVIDENCE' WHERE outbox_id=? "
++                "AND status='PENDING'",
++                (current_outbox_id,),
++            )
+             conn.commit()
+         completed += 1
+ 
+--- /Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/v3_evidence_worker.py	2026-08-30 23:11:45
++++ /Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-30-analysis-source-binding-production/staging/runtime/v3/v3_evidence_worker.py	2026-08-31 00:01:23
+@@ -12,6 +12,11 @@
+ 
+ from v3_runtime import connect, init_db, upsert_heartbeat, utc_now
+ from v3_analysis_contract import file_sha256
++from v3_analysis_worker import (
++    _json_digest,
++    bind_transcript_segments,
++    source_reference_manifest,
++)
+ 
+ RUNNING = True
+ 
+@@ -46,6 +51,79 @@
+     )
+ 
+ 
++def verify_strict_source_binding(
++    artifact: dict,
++    transcript_path: Path,
++    analysis,
++) -> tuple[bool, str, dict]:
++    """Cross-check every model citation against the immutable transcript."""
++    result = artifact.get("result")
++    binding = artifact.get("evidence")
++    result_binding = result.get("evidence_binding") if isinstance(result, dict) else None
++    if not isinstance(result, dict) or not isinstance(binding, dict):
++        return False, "strict_source_binding_missing", {}
++    if (
++        binding.get("mode") != "STRICT_SOURCE_SEGMENT_IDS"
++        or binding.get("model_generated_timestamps") is not False
++        or binding.get("nearest_segment_fallback") is not False
++        or not isinstance(result_binding, dict)
++        or result_binding.get("mode") != "STRICT_SOURCE_SEGMENT_IDS"
++        or result_binding.get("model_generated_timestamps") is not False
++        or result_binding.get("nearest_segment_fallback") is not False
++    ):
++        return False, "strict_source_binding_policy_mismatch", {}
++    try:
++        manifest = source_reference_manifest(result)
++        transcript_payload = json.loads(transcript_path.read_text(encoding="utf-8"))
++        source_rows = bind_transcript_segments(transcript_payload.get("segments"))
++    except (OSError, json.JSONDecodeError, TypeError, ValueError) as exc:
++        return False, "strict_source_binding_invalid", {"error": str(exc)[:300]}
++    source_by_id = {row["source_segment_id"]: row for row in source_rows}
++    if manifest["reference_count"] < 1:
++        return False, "strict_source_binding_empty", {}
++    if (
++        manifest["source_binding_digest"] != binding.get("source_binding_digest")
++        or manifest["reference_count"] != binding.get("reference_count")
++    ):
++        return False, "strict_source_binding_manifest_mismatch", {}
++    reference_errors = []
++    for reference in manifest["references"]:
++        source = source_by_id.get(reference["source_segment_id"])
++        if (
++            not source
++            or float(reference["start"]) != float(source["start"])
++            or float(reference["end"]) != float(source["end"])
++            or reference["content_digest"] != source["content_digest"]
++        ):
++            reference_errors.append(reference["source_segment_id"])
++    if reference_errors:
++        return False, "strict_source_binding_reference_mismatch", {
++            "reference_ids": reference_errors[:20],
++            "reference_error_count": len(reference_errors),
++        }
++    source_set_digest = _json_digest([
++        {
++            "source_segment_id": row["source_segment_id"],
++            "content_digest": row["content_digest"],
++        }
++        for row in source_rows
++    ])
++    source_text = "\n".join(row["line"] for row in source_rows)
++    if (
++        binding.get("transcript_id") != analysis["transcript_id"]
++        or binding.get("transcript_artifact_sha256") != analysis["transcript_content_digest"]
++        or binding.get("source_segment_set_digest") != source_set_digest
++        or binding.get("source_content_hash") != hashlib.sha256(source_text.encode()).hexdigest()
++    ):
++        return False, "strict_source_binding_transcript_mismatch", {}
++    return True, "strict_source_binding_verified", {
++        "evidence_binding_status": "BOUND_V1",
++        "source_binding_digest": manifest["source_binding_digest"],
++        "referenced_source_segment_count": manifest["reference_count"],
++        "source_segment_set_digest": source_set_digest,
++    }
++
++
+ def verify_analysis_identity(conn, row, path: Path, actual_digest: str) -> tuple[bool, str, dict]:
+     analysis = conn.execute(
+         "SELECT analysis_id,session_id,transcript_id,analysis_type,status,output_path,lineage_state,scope,"
+@@ -124,11 +202,38 @@
+         identity_mode = "LEGACY_ROOT_IDS_PLUS_THREE_WAY_DIGEST"
+     else:
+         return False, "analysis_artifact_version_identity_missing", {"sample": False}
+-    return True, "verified", {"sample": False, "identity_mode": identity_mode, "analysis_id": analysis["analysis_id"], "transcript_id": analysis["transcript_id"], "transcript_content_digest": analysis["transcript_content_digest"], "artifact_digest": actual_digest, "analysis_spec_version": analysis["analysis_spec_version"], "model_version": analysis["model_version"], "prompt_version": analysis["prompt_version"]}
++    strict_details = {}
++    if analysis["analysis_spec_version"] == "single-session-evidence-v4-source-ids":
++        strict_ok, strict_reason, strict_details = verify_strict_source_binding(
++            artifact, transcript_path, analysis,
++        )
++        if not strict_ok:
++            return False, strict_reason, {"sample": False, **strict_details}
++        identity_mode = "VERSIONED_ROOT_IDENTITY_AND_STRICT_SOURCE_IDS"
++    return True, "verified", {"sample": False, "identity_mode": identity_mode, "analysis_id": analysis["analysis_id"], "transcript_id": analysis["transcript_id"], "transcript_content_digest": analysis["transcript_content_digest"], "artifact_digest": actual_digest, "analysis_spec_version": analysis["analysis_spec_version"], "model_version": analysis["model_version"], "prompt_version": analysis["prompt_version"], **strict_details}
+ 
+ 
++def release_held_projections(conn, analysis_id: str) -> int:
++    """Release only outbox rows explicitly gated by this verified evidence."""
++    released = 0
++    rows = conn.execute(
++        "SELECT outbox_id,payload_json FROM outbox WHERE status='HELD_EVIDENCE'"
++    ).fetchall()
++    for row in rows:
++        payload = json_object(row["payload_json"])
++        if payload.get("release_after_evidence_analysis_id") != analysis_id:
++            continue
++        cursor = conn.execute(
++            "UPDATE outbox SET status='PENDING',next_attempt_at=?,lease_owner=NULL,"
++            "lease_until=NULL WHERE outbox_id=? AND status='HELD_EVIDENCE'",
++            (utc_now(), row["outbox_id"]),
++        )
++        released += cursor.rowcount
++    return released
++
++
+ def once() -> dict:
+-    verified = blocked = 0
++    verified = blocked = released = 0
+     init_db()
+     with connect() as conn:
+         rows = conn.execute("SELECT * FROM evidence_bundles WHERE status IN ('REQUIRED','RETRY')").fetchall()
+@@ -149,11 +254,17 @@
+                 block_bundle(conn, row, "manifest_hash_mismatch", {"actual": digest, "expected": row["manifest_hash"]})
+                 blocked += 1
+                 continue
+-            metadata = {**json_object(row["metadata_json"]), "verified": True, "checked_at": utc_now(), **(details if row["object_type"] == "analysis" else {})}
++            original_metadata = json_object(row["metadata_json"])
++            if (
++                row["object_type"] == "analysis"
++                and original_metadata.get("release_projection_after_evidence") is True
++            ):
++                released += release_held_projections(conn, row["object_id"])
++            metadata = {**original_metadata, "verified": True, "checked_at": utc_now(), **(details if row["object_type"] == "analysis" else {})}
+             conn.execute("UPDATE evidence_bundles SET status='VERIFIED',verified_at=?,manifest_hash=?,metadata_json=? WHERE bundle_id=?", (utc_now(), digest, json.dumps(metadata, ensure_ascii=False, sort_keys=True), row["bundle_id"]))
+             verified += 1
+         conn.commit()
+-    result = {"verified": verified, "blocked": blocked, "checked_at": utc_now()}
++    result = {"verified": verified, "blocked": blocked, "released_projections": released, "checked_at": utc_now()}
+     upsert_heartbeat("evidence-v3", "READY" if blocked == 0 else "DEGRADED", result, success=blocked == 0)
+     return result
+ 
+--- /Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/test_v3_analysis_worker.py	2026-08-30 23:42:17
++++ /Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-30-analysis-source-binding-production/staging/runtime/v3/test_v3_analysis_worker.py	2026-08-30 23:54:49
+@@ -1,3 +1,4 @@
++import hashlib
+ import json
+ import tempfile
+ import unittest
+@@ -13,6 +14,16 @@
+     return payload
+ 
+ 
++def bound_chunks(raw_rows, char_limit=5000):
++    rows = analysis.bind_transcript_segments(raw_rows)
++    text = "\n".join(row["line"] for row in rows if row["analysis_text"])
++    return rows, analysis.analysis_chunks(text, char_limit=char_limit, source_rows=rows)
++
++
++def cited(summary, *source_ids):
++    return {"summary": summary, "source_segment_ids": list(source_ids)}
++
++
+ class FakeResponse:
+     def __init__(self, content, finish_reason="stop", response_id="response"):
+         self.payload = {"id": response_id, "choices": [{"finish_reason": finish_reason,
+@@ -28,6 +39,7 @@
+ 
+ class FakeClient:
+     responses = []
++    requests = []
+ 
+     def __init__(self, **_kwargs):
+         pass
+@@ -38,59 +50,137 @@
+     def __exit__(self, *_args):
+         return False
+ 
+-    def post(self, *_args, **_kwargs):
++    def post(self, *_args, **kwargs):
++        self.requests.append(kwargs)
+         return self.responses.pop(0)
+ 
+ 
+-class TranscriptChunkTests(unittest.TestCase):
+-    def test_default_transcript_text_is_not_truncated(self):
++class TranscriptBindingTests(unittest.TestCase):
++    def test_default_transcript_text_is_not_truncated_and_hides_timestamps(self):
+         with tempfile.TemporaryDirectory() as directory:
+             path = Path(directory) / "transcript.json"
+             path.write_text(json.dumps({"segments": [{"start": 0, "end": 1, "text": "字" * 17000}]}))
+             text, rows = analysis.transcript_text(path)
+             self.assertGreater(len(text), 16000)
+             self.assertEqual(len(rows), 1)
++            self.assertIn(rows[0]["source_segment_id"], text)
++            self.assertNotIn("[0.00-1.00]", text)
+             limited, _ = analysis.transcript_text(path, limit=16000)
+             self.assertEqual(len(limited), 16000)
+ 
++    def test_source_ids_are_stable_across_chunk_limits_and_normalized_text_changes(self):
++        raw = [{"start": 1.25, "end": 2.5, "text": " 原 始 ", "normalized_text": "原始"},
++               {"start": 3, "end": 4, "text": "第二句"}]
++        first = analysis.bind_transcript_segments(raw)
++        changed = analysis.bind_transcript_segments([{**raw[0], "normalized_text": "原始文本"}, raw[1]])
++        self.assertEqual([row["source_segment_id"] for row in first],
++                         [row["source_segment_id"] for row in changed])
++        text = "\n".join(row["line"] for row in first)
++        one = analysis.analysis_chunks(text, char_limit=10000, source_rows=first)
++        many = analysis.analysis_chunks(text, char_limit=10, source_rows=first)
++        self.assertEqual([row["source_segment_id"] for chunk in one for row in chunk["rows"]],
++                         [row["source_segment_id"] for chunk in many for row in chunk["rows"]])
++
++    def test_content_digest_uses_original_not_normalized_text(self):
++        row = analysis.bind_transcript_segments([
++            {"start": 0, "end": 1, "text": "原 始", "normalized_text": "原始"}
++        ])[0]
++        self.assertEqual(row["content_digest"], hashlib.sha256("原 始".encode()).hexdigest())
++
+     def test_chunks_cover_every_timestamped_row_once(self):
+         text = "\n".join(f"[{i:.2f}-{i + 1:.2f}] " + "字" * 40 for i in range(100))
+         chunks = analysis.analysis_chunks(text, char_limit=500)
+         self.assertGreater(len(chunks), 1)
+         self.assertEqual(sum(chunk["row_count"] for chunk in chunks), 100)
+-        self.assertEqual(chunks[0]["start"], 0)
+-        self.assertEqual(chunks[-1]["end"], 100)
++        ids = [source_id for chunk in chunks for source_id in chunk["source_segment_ids"]]
++        self.assertEqual(len(ids), len(set(ids)))
+ 
+-    def test_merge_has_new_and_legacy_fields_with_coverage(self):
+-        chunks = [{"index": 0, "start": 0, "end": 50, "row_count": 1,
+-                   "rows": [{"segment_index": 0, "start": 0, "end": 10, "text": "开场"}]},
+-                  {"index": 1, "start": 50, "end": 99, "row_count": 1,
+-                   "rows": [{"segment_index": 1, "start": 50, "end": 70, "text": "互动"}]}]
+-        first = chunk_payload(instructor=[{"summary": "陈老师", "start": 1, "end": 2}],
+-                              course_content=[{"summary": "选科", "start": 3, "end": 4}])
+-        second = chunk_payload(interaction_patterns=[{"summary": "评论区答题", "start": 60, "end": 61}],
+-                               product_handoff=[{"summary": "小黄车", "start": 80, "end": 81}])
+-        result = analysis.merge_chunk_results([first, second], chunks, source_duration=100)
+-        self.assertEqual(result["schema_version"], "2.0")
+-        self.assertEqual(result["instructor"]["names"], ["陈老师"])
+-        self.assertEqual(result["interaction"], result["interaction_patterns"])
+-        self.assertEqual(result["product_fulfillment"], result["product_handoff"])
+-        self.assertEqual([module["name"] for module in result["modules"]],
+-                         ["开场", "干货", "需求", "信任", "商品承接", "成交", "答疑"])
+-        # Only 0-10 and 50-70 are covered.  The outer 0-99 span must not hide
+-        # the internal forty-second gap.
+-        self.assertEqual(result["analysis_coverage"]["timeline_coverage_rate"], .30)
+-        self.assertEqual(result["analysis_coverage"]["segment_coverage_rate"], 1)
+-        self.assertFalse(result["analysis_coverage"]["is_qualified"])
+-        self.assertIn("source_segment_index", result["modules"][1]["timestamps"][0])
+-        for key in ("course_content", "interaction", "product_handoff", "claims", "evidence_refs"):
+-            self.assertIn(key, result)
++    def test_invalid_original_timestamp_fails_closed(self):
++        for raw in ([{"start": 1, "end": 1, "text": "bad"}],
++                    [{"start": "nan", "end": 2, "text": "bad"}], [{}]):
++            with self.subTest(raw=raw), self.assertRaises(ValueError):
++                analysis.bind_transcript_segments(raw)
+ 
+-    def test_out_of_chunk_timestamp_is_rejected(self):
+-        value = chunk_payload(claims=[{"summary": "越界", "start": 99, "end": 100}])
+-        with self.assertRaises(ValueError):
+-            analysis.validate_chunk_result(value, {"start": 0, "end": 10})
+ 
++class ValidationAndMergeTests(unittest.TestCase):
++    def setUp(self):
++        self.rows, chunks = bound_chunks([
++            {"start": 0, "end": 10, "text": "开场原文"},
++            {"start": 10, "end": 20, "text": "课程原文"},
++            {"start": 20, "end": 30, "text": "互动原文"},
++        ], char_limit=40)
++        self.chunks = chunks
++
++    def test_exact_source_reference_is_server_bound(self):
++        chunk = self.chunks[0]
++        row = chunk["rows"][0]
++        value = chunk_payload(hook=[cited("开场", row["source_segment_id"])])
++        item = analysis.validate_chunk_result(value, chunk)["hook"][0]
++        self.assertEqual(item["start"], row["start"])
++        self.assertEqual(item["end"], row["end"])
++        self.assertEqual(item["source_segments"][0]["source_text"], "开场原文")
++        self.assertEqual(item["source_segments"][0]["content_digest"], row["content_digest"])
++
++    def test_forged_and_cross_chunk_ids_fail_closed(self):
++        first = self.chunks[0]
++        candidates = ["srcseg_forged"]
++        if len(self.chunks) > 1:
++            candidates.append(self.chunks[-1]["rows"][0]["source_segment_id"])
++        for source_id in candidates:
++            with self.subTest(source_id=source_id), self.assertRaisesRegex(ValueError, "outside"):
++                analysis.validate_chunk_result(
++                    chunk_payload(claims=[cited("伪造", source_id)]), first
++                )
++
++    def test_free_timestamps_are_rejected_even_when_inside_chunk(self):
++        value = chunk_payload(claims=[{"summary": "旧格式", "start": 1, "end": 2}])
++        with self.assertRaisesRegex(ValueError, "summary/source_segment_ids"):
++            analysis.validate_chunk_result(value, self.chunks[0])
++
++    def test_missing_or_extra_schema_fields_fail_closed(self):
++        row = self.chunks[0]["rows"][0]
++        missing = {"hook": [cited("开场", row["source_segment_id"])]}
++        with self.assertRaisesRegex(ValueError, "omitted"):
++            analysis.validate_chunk_result(missing, self.chunks[0])
++        extra = chunk_payload(extra=[])
++        with self.assertRaisesRegex(ValueError, "unknown"):
++            analysis.validate_chunk_result(extra, self.chunks[0])
++
++    def test_merge_uses_exact_refs_and_has_no_nearest_fallback(self):
++        first, second = self.rows[0], self.rows[-1]
++        first_result = analysis.validate_chunk_result(
++            chunk_payload(instructor=[cited("陈老师", first["source_segment_id"])],
++                          hook=[cited("欢迎", first["source_segment_id"])]), self.chunks[0]
++        )
++        final_chunk = next(chunk for chunk in self.chunks if second["source_segment_id"] in chunk["source_segment_ids"])
++        second_result = analysis.validate_chunk_result(
++            chunk_payload(interaction_patterns=[cited("评论区答题", second["source_segment_id"])]), final_chunk
++        )
++        result = analysis.merge_chunk_results([first_result, second_result],
++                                              [self.chunks[0], final_chunk], source_duration=30)
++        self.assertEqual(result["schema_version"], "3.0")
++        self.assertFalse(result["evidence_binding"]["nearest_segment_fallback"])
++        opening = next(module for module in result["modules"] if module["name"] == "开场")
++        self.assertEqual(opening["timestamps"][0]["source_segment_id"], first["source_segment_id"])
++        self.assertEqual(opening["timestamps"][0]["start"], 0)
++        self.assertNotIn("source_segment_index", opening["timestamps"][0])
++
++    def test_reference_manifest_detects_text_digest_tampering(self):
++        row = self.chunks[0]["rows"][0]
++        validated = analysis.validate_chunk_result(
++            chunk_payload(hook=[cited("开场", row["source_segment_id"])]), self.chunks[0]
++        )
++        result = analysis.merge_chunk_results([validated], [self.chunks[0]], source_duration=30)
++        manifest = analysis.source_reference_manifest(result)
++        artifact = {"result": result, "evidence": manifest}
++        self.assertEqual(analysis.artifact_binding_status(artifact), "BOUND_V1")
++        result["hook"][0]["source_segments"][0]["source_text"] = "篡改"
++        self.assertEqual(analysis.artifact_binding_status(artifact), "INVALID")
++
++    def test_legacy_artifact_stays_readable_but_unbound(self):
++        legacy = {"result": {"schema_version": "2.0", "hook": [{"start": 1, "end": 2}]}}
++        self.assertEqual(analysis.artifact_binding_status(legacy), "LEGACY_UNBOUND")
++
+     def test_atomic_json_round_trip(self):
+         with tempfile.TemporaryDirectory() as directory:
+             path = Path(directory) / "analysis.json"
+@@ -102,19 +192,28 @@
+ class APIResponseTests(unittest.TestCase):
+     def setUp(self):
+         FakeClient.responses = []
+-        self.chunk = {"index": 0, "start": 0, "end": 10, "row_count": 1, "text": "[0.00-10.00] 测试"}
+-        self.valid = json.dumps(chunk_payload(course_content=[{"summary": "选科", "start": 0, "end": 10}]), ensure_ascii=False)
++        FakeClient.requests = []
++        rows, chunks = bound_chunks([{"start": 0, "end": 10, "text": "测试"}])
++        self.row = rows[0]
++        self.chunk = chunks[0]
++        self.valid = json.dumps(chunk_payload(
++            course_content=[cited("选科", self.row["source_segment_id"])]
++        ), ensure_ascii=False)
+ 
+     def call(self):
+         with patch.object(analysis, "read_env_key", return_value="configured"), \
+              patch.object(analysis.httpx, "Client", FakeClient):
+             return analysis.request_chunk(self.chunk)
+ 
+-    def test_valid_stop_response_is_accepted(self):
++    def test_valid_stop_response_is_accepted_and_prompt_forbids_time(self):
+         FakeClient.responses = [FakeResponse(self.valid)]
+         result, meta = self.call()
+         self.assertEqual(result["course_content"][0]["summary"], "选科")
+         self.assertEqual(meta["finish_reason"], "stop")
++        body = FakeClient.requests[0]["json"]
++        self.assertIn(self.row["source_segment_id"], body["messages"][1]["content"])
++        self.assertNotIn("[0.00-10.00]", body["messages"][1]["content"])
++        self.assertIn("不能生成、猜测或输出任何时间戳", body["messages"][0]["content"])
+ 
+     def test_length_response_is_never_parsed_as_success(self):
+         FakeClient.responses = [FakeResponse('{"course_content":[', finish_reason="length"), FakeResponse(self.valid)]
+@@ -122,11 +221,12 @@
+         self.assertEqual(meta["attempt"], 2)
+         self.assertEqual(result["course_content"][0]["summary"], "选科")
+ 
+-    def test_invalid_json_is_retried(self):
+-        FakeClient.responses = [FakeResponse("not-json"), FakeResponse(self.valid)]
++    def test_legacy_timestamp_response_is_retried_not_nearest_mapped(self):
++        legacy = json.dumps(chunk_payload(course_content=[{"summary": "旧", "start": 0, "end": 10}]))
++        FakeClient.responses = [FakeResponse(legacy), FakeResponse(self.valid)]
+         result, meta = self.call()
+         self.assertEqual(meta["attempt"], 2)
+-        self.assertTrue(result["course_content"])
++        self.assertEqual(result["course_content"][0]["source_segment_ids"], [self.row["source_segment_id"]])
+ 
+     def test_three_invalid_responses_fail_closed(self):
+         FakeClient.responses = [FakeResponse("bad") for _ in range(3)]
+--- /Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/test_v3_analysis_coverage_gate.py	2026-08-30 23:42:17
++++ /Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-30-analysis-source-binding-production/staging/runtime/v3/test_v3_analysis_coverage_gate.py	2026-08-31 00:02:07
+@@ -10,6 +10,7 @@
+ from test_v3_workflow import RuntimeCase
+ 
+ import v3_analysis_worker as analysis
++import v3_evidence_worker as evidence
+ import v3_pipeline_worker as pipeline
+ import v3_project_feishu as projector
+ from v3_analysis_contract import (
+@@ -98,7 +99,7 @@
+             [item["code"] for item in mismatch["validation_errors"]],
+         )
+ 
+-    def test_revalidation_requires_exact_complete_chunk_diagnostics(self):
++    def test_free_timestamp_artifact_cannot_be_revalidated_into_source_binding(self):
+         rows = coverage_rows((0, 50), (50, 100))
+         text = "\n".join(row["line"] for row in rows)
+         chunks = analysis.analysis_chunks(text, source_rows=rows)
+@@ -118,15 +119,7 @@
+             },
+             "result": {"modules": []},
+         }
+-        updated, result = analysis.revalidate_existing_artifact(
+-            artifact, text, rows, 100, "FULL_SESSION", None, 0.90, 0.95,
+-        )
+-        self.assertTrue(result["is_qualified"])
+-        self.assertEqual(
+-            updated["result"]["analysis_coverage"]["analysis_coverage_rate"], 1.0,
+-        )
+-        artifact["engine"]["chunk_diagnostics"][0]["row_count"] = 999
+-        with self.assertRaisesRegex(ValueError, "do not match"):
++        with self.assertRaisesRegex(ValueError, "legacy free-timestamp"):
+             analysis.revalidate_existing_artifact(
+                 artifact, text, rows, 100, "FULL_SESSION", None, 0.90, 0.95,
+             )
+@@ -316,19 +309,36 @@
+                 (ANALYSIS_SPEC_VERSION,),
+             ).fetchone())
+ 
+-    def test_new_coverage_version_revalidates_without_model_and_supersedes_old(self):
++    def test_new_source_binding_version_reruns_model_and_supersedes_old(self):
+         self.seed()
+         candidate = self.create_candidate()
+         old_bytes = self.old_artifact.read_bytes()
++        model_calls = []
++
++        def bound_response(chunk):
++            model_calls.append(chunk["index"])
++            payload = analysis.empty_chunk_result()
++            payload["hook"] = [{
++                "summary": "严格证据",
++                "source_segment_ids": [chunk["rows"][0]["source_segment_id"]],
++            }]
++            return analysis.validate_chunk_result(payload, chunk), {
++                "response_id": f"response-{chunk['index']}",
++                "finish_reason": "stop",
++                "usage": {},
++                "attempt": 1,
++                "content_hash": "test",
++            }
++
+         with patch.object(analysis, "init_db"), \
+              patch.object(analysis, "ANALYSIS_ROOT", self.root / "analysis"), \
+              patch.object(analysis, "load_analysis_quality_config", return_value=(0.90, 0.95)), \
+-             patch.object(analysis, "request_analysis") as model, \
++             patch.object(analysis, "request_chunk", side_effect=bound_response), \
+              patch.object(analysis, "upsert_heartbeat"):
+             result = analysis.once()
+-        model.assert_not_called()
+         self.assertEqual(result["completed"], 1)
+-        self.assertEqual(result["revalidated"], 1)
++        self.assertEqual(result["revalidated"], 0)
++        self.assertGreater(len(model_calls), 0)
+         self.assertEqual(result["current_spec_evidence_pending"], 1)
+         self.assertEqual(self.old_artifact.read_bytes(), old_bytes)
+         with self.connect() as conn:
+@@ -344,7 +354,7 @@
+                 (candidate["analysis_id"],),
+             ).fetchone()
+             outbox = list(conn.execute(
+-                "SELECT object_id FROM outbox WHERE object_type='semantic_projection' "
++                "SELECT object_id,status FROM outbox WHERE object_type='semantic_projection' "
+                 "ORDER BY object_id"
+             ))
+         self.assertEqual((current["status"], current["lineage_state"]), ("COMPLETE", "CURRENT"))
+@@ -353,13 +363,22 @@
+         coverage = artifact["result"]["analysis_coverage"]
+         self.assertEqual(coverage["analysis_coverage_rate"], 0.95)
+         self.assertTrue(coverage["meets_target"])
++        self.assertEqual(analysis.artifact_binding_status(artifact), "BOUND_V1")
++        self.assertFalse(artifact["result"]["evidence_binding"]["nearest_segment_fallback"])
+         self.assertEqual(bundle["status"], "REQUIRED")
+         self.assertEqual({row["object_id"] for row in outbox}, {candidate["analysis_id"], "analysis-old"})
++        self.assertEqual({row["status"] for row in outbox}, {"HELD_EVIDENCE"})
++        with patch.object(evidence, "connect", side_effect=self.connect), \
++             patch.object(evidence, "init_db"), \
++             patch.object(evidence, "upsert_heartbeat"):
++            evidence_result = evidence.once()
++        self.assertEqual(evidence_result["verified"], 1)
++        self.assertEqual(evidence_result["released_projections"], 2)
+         with self.connect() as conn:
+-            conn.execute(
+-                "UPDATE evidence_bundles SET status='VERIFIED' WHERE object_id=?",
+-                (candidate["analysis_id"],),
+-            )
++            released = list(conn.execute(
++                "SELECT status FROM outbox WHERE object_type='semantic_projection'"
++            ))
++        self.assertEqual({row["status"] for row in released}, {"PENDING"})
+         with patch.object(analysis, "init_db"), \
+              patch.object(analysis, "upsert_heartbeat") as heartbeat:
+             replay = analysis.once()
+--- /Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/test_v3_sample_analysis_qualification.py	2026-08-30 23:42:17
++++ /Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-30-analysis-source-binding-production/staging/runtime/v3/test_v3_sample_analysis_qualification.py	2026-08-31 00:02:24
+@@ -135,6 +135,7 @@
+             CREATE TABLE analyses(analysis_id TEXT PRIMARY KEY,session_id TEXT,transcript_id TEXT,analysis_type TEXT,source_digest TEXT,status TEXT,output_path TEXT,lineage_state TEXT,scope TEXT,qualification_status TEXT,transcript_content_digest TEXT,analysis_spec_version TEXT,model_version TEXT,prompt_version TEXT,artifact_digest TEXT,metadata_json TEXT);
+             CREATE TABLE lineage_edges(edge_id TEXT PRIMARY KEY,downstream_type TEXT,downstream_id TEXT,upstream_type TEXT,upstream_id TEXT,upstream_version TEXT,state TEXT,created_at TEXT);
+             CREATE TABLE evidence_bundles(bundle_id TEXT PRIMARY KEY,object_type TEXT,object_id TEXT,status TEXT,manifest_path TEXT,manifest_hash TEXT,verified_at TEXT,scope TEXT,qualification_status TEXT,metadata_json TEXT,UNIQUE(object_type,object_id));
++            CREATE TABLE outbox(outbox_id TEXT PRIMARY KEY,status TEXT,next_attempt_at TEXT,lease_owner TEXT,lease_until TEXT,payload_json TEXT);
+             """)
+ 
+     def tearDown(self): self.temp.cleanup()
+@@ -187,22 +188,18 @@
+             conn.execute("INSERT INTO transcripts VALUES('full','s',?,'COMPLETE',?,'FULL_SESSION','FULL_SESSION_QUALIFIED',?)", (canonical_source_digest(), str(transcript), json.dumps(full_meta())))
+             conn.execute("INSERT INTO analyses(analysis_id,session_id,transcript_id,analysis_type,source_digest,status,lineage_state,scope,qualification_status,transcript_content_digest,analysis_spec_version,model_version,prompt_version,metadata_json) VALUES('a','s','full','single_session',?,'PENDING','CURRENT',?,?,?,?,?,?,?)", (content_digest,'FORMAL_SINGLE_SESSION','FULL_SESSION_QUALIFIED',content_digest,contract.ANALYSIS_SPEC_VERSION,contract.MODEL_VERSION,contract.PROMPT_VERSION,json.dumps({"source_transcript_id":"full","qualification_state":"FULL_SESSION_QUALIFIED","formal_analysis_eligible":True})))
+             conn.execute("INSERT INTO lineage_edges VALUES('e','analysis','a','transcript','full',?,'CURRENT','now')",(content_digest,))
+-        heartbeat = Mock(); enqueue = Mock()
+-        accepted_coverage = {
+-            "schema_version": 2,
+-            "coverage_scope": "FULL_SESSION",
+-            "analysis_coverage_rate": 1.0,
+-            "source_transcript_coverage_rate": 1.0,
+-            "segment_coverage_rate": 1.0,
+-            "timestamps_valid": True,
+-            "source_segment_ids_valid": True,
+-            "all_chunks_complete": True,
+-            "is_qualified": True,
+-            "meets_target": True,
+-            "minimum_coverage_rate": 0.9,
+-            "target_coverage_rate": 0.95,
+-        }
+-        with patch.object(analysis, "connect", connect_factory(self.db)), patch.object(analysis, "init_db"), patch.object(analysis, "upsert_heartbeat", heartbeat), patch.object(analysis, "ANALYSIS_ROOT", analysis_root), patch.object(analysis, "request_analysis", return_value=({"schema_version":"test","modules":[],"analysis_coverage":accepted_coverage},{"provider":"test"})), patch.object(analysis, "enqueue_outbox_conn", enqueue):
++        heartbeat = Mock(); enqueue = Mock(return_value="out-test")
++        def strict_response(chunk):
++            payload = analysis.empty_chunk_result()
++            payload["course_content"] = [{
++                "summary": "课程",
++                "source_segment_ids": [chunk["rows"][0]["source_segment_id"]],
++            }]
++            return analysis.validate_chunk_result(payload, chunk), {
++                "response_id": "test", "finish_reason": "stop",
++                "usage": {}, "attempt": 1, "content_hash": "test",
++            }
++        with patch.object(analysis, "connect", connect_factory(self.db)), patch.object(analysis, "init_db"), patch.object(analysis, "upsert_heartbeat", heartbeat), patch.object(analysis, "ANALYSIS_ROOT", analysis_root), patch.object(analysis, "request_chunk", side_effect=strict_response), patch.object(analysis, "enqueue_outbox_conn", enqueue):
+             result = analysis.once()
+         self.assertEqual(result["completed"], 1); enqueue.assert_called_once()
+         with connect_factory(self.db)() as conn:
+@@ -271,7 +268,7 @@
+             CREATE TABLE evidence_bundles(bundle_id TEXT PRIMARY KEY,object_type TEXT,object_id TEXT,status TEXT,manifest_path TEXT,manifest_hash TEXT,verified_at TEXT,scope TEXT,qualification_status TEXT,metadata_json TEXT);
+             """)
+             meta={"qualification_state":"FULL_SESSION_QUALIFIED","formal_analysis_eligible":True,"artifact_identity_mode":"LEGACY_ROOT_IDS_PLUS_THREE_WAY_DIGEST"}
+-            conn.execute("INSERT INTO analyses VALUES('a','s','t','single_session','COMPLETE',?,'CURRENT','FORMAL_SINGLE_SESSION','FULL_SESSION_QUALIFIED',?,?,?,?,?,?)",(str(analysis_path),transcript_digest,contract.ANALYSIS_SPEC_VERSION,contract.MODEL_VERSION,contract.PROMPT_VERSION,analysis_digest or actual,json.dumps(meta)))
++            conn.execute("INSERT INTO analyses VALUES('a','s','t','single_session','COMPLETE',?,'CURRENT','FORMAL_SINGLE_SESSION','FULL_SESSION_QUALIFIED',?,?,?,?,?,?)",(str(analysis_path),transcript_digest,"single-session-evidence-v2",contract.MODEL_VERSION,"deepseek-evidence-chunks-v3",analysis_digest or actual,json.dumps(meta)))
+             conn.execute("INSERT INTO transcripts VALUES('t',?,'FULL_SESSION','FULL_SESSION_QUALIFIED')",(str(transcript),))
+             conn.execute("INSERT INTO lineage_edges VALUES('e','analysis','a','transcript','t',?,'CURRENT')",(lineage_digest or transcript_digest,))
+             conn.execute("INSERT INTO evidence_bundles VALUES('b','analysis','a','REQUIRED',?,?,NULL,'FORMAL_SINGLE_SESSION','FULL_SESSION_QUALIFIED',?)",(str(analysis_path),bundle_digest or actual,json.dumps({"audit_marker":"preserve-me"})))
+--- /dev/null	2026-08-31 00:03:46
++++ /Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-30-analysis-source-binding-production/staging/runtime/v3/test_v3_analysis_source_binding.py	2026-08-30 23:56:33
+@@ -0,0 +1,109 @@
++import hashlib
++import json
++import tempfile
++import unittest
++from pathlib import Path
++
++import v3_analysis_worker as analysis
++import v3_evidence_worker as evidence
++
++
++class EvidenceBindingTests(unittest.TestCase):
++    def artifact(self):
++        directory = tempfile.TemporaryDirectory()
++        transcript = Path(directory.name) / "transcript.json"
++        payload = {
++            "segments": [
++                {"start": 0, "end": 1, "text": "原始甲"},
++                {"start": 1, "end": 2, "text": "原始乙"},
++            ]
++        }
++        transcript.write_text(json.dumps(payload, ensure_ascii=False))
++        rows = analysis.bind_transcript_segments(payload["segments"])
++        text = "\n".join(row["line"] for row in rows)
++        chunks = analysis.analysis_chunks(text, source_rows=rows)
++        chunk_results = []
++        for chunk in chunks:
++            value = analysis.empty_chunk_result()
++            value["course_content"] = [{
++                "summary": "课程",
++                "source_segment_ids": [chunk["rows"][0]["source_segment_id"]],
++            }]
++            chunk_results.append(analysis.validate_chunk_result(value, chunk))
++        result = analysis.merge_chunk_results(
++            chunk_results, chunks, 2,
++            successful_source_segment_ids=[row["source_segment_id"] for row in rows],
++        )
++        manifest = analysis.source_reference_manifest(result)
++        transcript_digest = hashlib.sha256(transcript.read_bytes()).hexdigest()
++        source_set_digest = analysis._json_digest([
++            {
++                "source_segment_id": row["source_segment_id"],
++                "content_digest": row["content_digest"],
++            }
++            for row in rows
++        ])
++        artifact = {
++            "result": result,
++            "evidence": {
++                **manifest,
++                "transcript_id": "t",
++                "transcript_artifact_sha256": transcript_digest,
++                "source_content_hash": hashlib.sha256(text.encode()).hexdigest(),
++                "source_segment_set_digest": source_set_digest,
++                "model_generated_timestamps": False,
++                "nearest_segment_fallback": False,
++            },
++        }
++        db_row = {
++            "transcript_id": "t",
++            "transcript_content_digest": transcript_digest,
++        }
++        return directory, transcript, artifact, db_row
++
++    def test_exact_source_binding_matches_immutable_transcript(self):
++        directory, transcript, artifact, db_row = self.artifact()
++        try:
++            ok, reason, details = evidence.verify_strict_source_binding(
++                artifact, transcript, db_row,
++            )
++            self.assertTrue(ok)
++            self.assertEqual(reason, "strict_source_binding_verified")
++            self.assertEqual(details["evidence_binding_status"], "BOUND_V1")
++            self.assertGreater(details["referenced_source_segment_count"], 0)
++        finally:
++            directory.cleanup()
++
++    def test_tampered_reference_cannot_be_resigned_into_valid_evidence(self):
++        directory, transcript, artifact, db_row = self.artifact()
++        try:
++            item = artifact["result"]["course_content"][0]["source_segments"][0]
++            item["start"] = 0.25
++            # Recompute the artifact's self-manifest as an attacker might; the
++            # immutable transcript comparison must still reject it.
++            artifact["evidence"].update(
++                analysis.source_reference_manifest(artifact["result"])
++            )
++            ok, reason, _ = evidence.verify_strict_source_binding(
++                artifact, transcript, db_row,
++            )
++            self.assertFalse(ok)
++            self.assertEqual(reason, "strict_source_binding_reference_mismatch")
++        finally:
++            directory.cleanup()
++
++    def test_nearest_fallback_or_model_timestamp_policy_is_rejected(self):
++        directory, transcript, artifact, db_row = self.artifact()
++        try:
++            artifact["result"]["evidence_binding"]["nearest_segment_fallback"] = True
++            ok, reason, _ = evidence.verify_strict_source_binding(
++                artifact, transcript, db_row,
++            )
++            self.assertFalse(ok)
++            self.assertEqual(reason, "strict_source_binding_policy_mismatch")
++        finally:
++            directory.cleanup()
++
++
++if __name__ == "__main__":
++    unittest.main(verbosity=2)

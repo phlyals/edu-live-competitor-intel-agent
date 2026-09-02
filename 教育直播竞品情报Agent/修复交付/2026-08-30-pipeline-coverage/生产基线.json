@@ -1,0 +1,116 @@
+{
+  "audit_mode": {
+    "database_transaction_read_only": true,
+    "database_isolation": "REPEATABLE READ",
+    "database_mutations": 0,
+    "code_service_media_mutations": 0
+  },
+  "observed_at": "2026-08-30T22:01:10.873416+08:00",
+  "database": "edu_live_competitor_intel_v3",
+  "counts": {
+    "transcripts_total": 251,
+    "transcripts_complete": 6,
+    "transcripts_cancelled_superseded_source": 245,
+    "full_session_complete": 1,
+    "canonical_active_complete_media_sessions": 99,
+    "eligible_sessions": 1,
+    "qualified_sessions": 1,
+    "eligible_missing_qualified_transcript": 0,
+    "ineligible_partial_or_noncontinuous_sessions": 98
+  },
+  "eligibility_definition": [
+    "live_sessions.status=MEDIA_COMPLETE",
+    "live_sessions.completeness=COMPLETE",
+    "recording_segments.status=COMPLETE",
+    "recording_segments.lifecycle_status=CANONICAL_ACTIVE",
+    "canonical file name=整场直播.ts and file exists",
+    "live_sessions.metadata_json.media_coverage.continuous_capture=true"
+  ],
+  "qualification_definition": [
+    "transcripts.status=COMPLETE",
+    "metadata coverage_scope=FULL_SESSION and sample_only=false",
+    "audio and transcript JSON exist",
+    "all segment timestamps valid and within audio timeline",
+    "original acceptance coverage is computable and >=0.90"
+  ],
+  "full_session": {
+    "session_id": "session_d352eca016af9f5ec3698768dd69aa0f",
+    "transcript_id": "transcript_875ba0bd045001857d6cd2dc",
+    "segment_id": "segment_d052f45eb97e050cafa185d5",
+    "media_path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c8c4a8ea998e6e/sess_3f33dd38cdc004f62bbf1d34/整场直播.ts",
+    "media_exists": true,
+    "media_size_bytes": 571999588,
+    "media_sha256_db": "cf465540aaa06026a37ecf525611948d0ad8ef244bb039bfa54273c0e2dda353",
+    "media_sha256_matches_transcript_metadata": true,
+    "recording_completeness": "COMPLETE",
+    "continuous_capture": true,
+    "recording_duration_seconds": 4387.636667,
+    "observed_session_seconds": 4449.163,
+    "audio_path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c8c4a8ea998e6e/sess_3f33dd38cdc004f62bbf1d34/整场直播.cf465540aaa0.opus",
+    "audio_exists": true,
+    "audio_size_bytes": 27002276,
+    "audio_duration_seconds": 4387.491625,
+    "audio_sha256": "b922924636e3cf35c7487587be6d82baef124d3bb6179f0b4b03189b39ae5a7d",
+    "audio_sha256_matches_metadata": true,
+    "transcript_json_path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c8c4a8ea998e6e/sess_3f33dd38cdc004f62bbf1d34/整场直播.cf465540aaa0.transcript.json",
+    "transcript_json_exists": true,
+    "transcript_json_size_bytes": 457904,
+    "transcript_json_sha256": "a61a7813c1b1ef83a274e456a2a5d42a1c0d0a146904adff1d8db3bb2892c604",
+    "json_status": "READY",
+    "json_coverage_scope": "FULL_SESSION",
+    "db_metadata_sample_only": false,
+    "json_sample_only": null,
+    "asr_reported_duration_seconds": 4386.7093125,
+    "asr_vs_audio_duration_difference_seconds": 0.7823124999995343,
+    "segments_count": 1454,
+    "invalid_timestamp_count": 0,
+    "transcript_total_chars": 23143,
+    "covered_duration_seconds": 4335.199999999997,
+    "coverage_rate_raw": 0.9880816581615691,
+    "coverage_rate_original_rounded": 0.99,
+    "meets_0_90": true,
+    "meets_0_95": true,
+    "gap_count": 123,
+    "total_gap_seconds": 52.29162500000257,
+    "max_gap_seconds": 2.0716249999995853,
+    "max_gap": {
+      "start_time": 4385.42,
+      "end_time": 4387.491625
+    },
+    "tail_gap_seconds": 2.0716249999995853,
+    "tail_gap": {
+      "start_time": 4385.42,
+      "end_time": 4387.491625
+    },
+    "acceptance_result_path": "/Users/mac/Documents/agent架构师/教育直播竞品情报Agent/验收结果/session_d352eca016af9f5ec3698768dd69aa0f_check_transcription.json",
+    "acceptance_status": "PASS",
+    "acceptance_checked_at": "2026-08-30T13:58:21.193987+00:00"
+  },
+  "pipeline": {
+    "pid": 15999,
+    "pid_alive": true,
+    "process_command": "/Users/mac/.local/share/edu-live-runtime-v3-venv/bin/python .../v3_pipeline_worker.py daemon",
+    "status": "READY",
+    "last_heartbeat_at": "2026-08-30T14:00:58.154Z",
+    "last_success_at": "2026-08-30T14:00:58.154Z",
+    "details": {
+      "analysis_tasks": 0,
+      "checked_at": "2026-08-30T14:00:58.154Z",
+      "segments": 101,
+      "transcripts": 0
+    },
+    "current_blocker": null,
+    "interpretation": "READY且没有符合资格但缺少QUALIFIED整场转录的场次；本轮transcripts=0是无新可处理输入，不是阻塞。",
+    "error_log_path": "/Users/mac/.local/state/agent-bootstrap-logs/ai.hermes.pipeline-v3-edu_live_competitor_intel.error.log",
+    "error_log_last_modified": "2026-08-28T23:35:42+0800",
+    "new_error_since_current_pipeline_start": false,
+    "historical_error": "旧日志含recording_segments主键UniqueViolation；日志自2026-08-28后未更新，当前进程/心跳无新增错误。"
+  },
+  "conclusion": {
+    "status": "PASS_WITH_NOTE",
+    "full_session_exists": true,
+    "coverage_meets_0_90_and_0_95": true,
+    "eligible_missing_qualified": 0,
+    "note": "唯一整场产物满足当前门槛。98场PARTIAL/non-continuous canonical媒体被正确排除，不能视为缺转录；JSON内sample_only缺失，但数据库metadata明确为false，原验收仍可确定为FULL_SESSION。"
+  }
+}

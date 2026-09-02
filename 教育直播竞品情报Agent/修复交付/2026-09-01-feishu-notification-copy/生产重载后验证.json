@@ -1,0 +1,85 @@
+{
+  "checked_at": "2026-09-01T10:24:09.285532+00:00",
+  "database_read_only": "on",
+  "recordings": [
+    {
+      "session_id": "session_2a60bb19e6d7a74489225cdb1acdc281",
+      "pid": null,
+      "restart_count": 3,
+      "partial_dir": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_86bb728a51564fb6/sess_d4104909ca45b1e764eed9b4",
+      "updated_at": "2026-09-01T10:23:36.999Z",
+      "session_status": "WAITING_STREAM",
+      "actual_bytes": 733682966,
+      "file_count": 10,
+      "same_pid": false,
+      "restart_unchanged": true,
+      "byte_delta": 4353657
+    },
+    {
+      "session_id": "session_b5bad54f795b4f18e9ac9aabcaea94b6",
+      "pid": 58011,
+      "restart_count": 9,
+      "partial_dir": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_836db3961058b668/sess_4caf2931eb28c1d516f5455e",
+      "updated_at": "2026-09-01T10:23:35.985Z",
+      "session_status": "RECORDING",
+      "actual_bytes": 157612415,
+      "file_count": 4,
+      "same_pid": true,
+      "restart_unchanged": true,
+      "byte_delta": 14155776
+    },
+    {
+      "session_id": "session_b9859257df275605d47840e2d086d191",
+      "pid": 40809,
+      "restart_count": 2,
+      "partial_dir": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_87b3bb4c9e29eb3b/sess_3f0b3aa868fd45141e1817fc",
+      "updated_at": "2026-09-01T10:23:35.832Z",
+      "session_status": "RECORDING",
+      "actual_bytes": 323027221,
+      "file_count": 6,
+      "same_pid": true,
+      "restart_unchanged": true,
+      "byte_delta": 12320769
+    },
+    {
+      "session_id": "session_cd601ac4090a6982be220bcc6c4cfe23",
+      "pid": 60948,
+      "restart_count": 0,
+      "partial_dir": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_986a90186541e9b0/sess_8fca5d3f7513230108b58c1c",
+      "updated_at": "2026-09-01T10:23:36.977Z",
+      "session_status": "RECORDING",
+      "actual_bytes": 89130170,
+      "file_count": 2,
+      "same_pid": true,
+      "restart_unchanged": true,
+      "byte_delta": 11534336
+    }
+  ],
+  "heartbeats": [
+    {
+      "service_name": "feishu-ingress-v3",
+      "pid": 68921,
+      "status": "READY",
+      "last_heartbeat_at": "2026-09-01T10:23:48.944Z",
+      "details_json": "{\"app_id\":\"cli_a978a6e73f785cc5\",\"connection_mode\":\"websocket\",\"profile_id\":\"edu_live_competitor_intel\",\"websocket_connected\":true}"
+    },
+    {
+      "service_name": "runtime-v3",
+      "pid": 68321,
+      "status": "READY",
+      "last_heartbeat_at": "2026-09-01T10:23:37.004Z",
+      "details_json": "{\"audio_retention_hours\": 168, \"capacity_test_concurrency\": 65, \"due_target_count\": 37, \"expected_max_recording_concurrency\": 50, \"final_ready\": false, \"full_fleet\": true, \"live_count\": 3, \"normal_recording_concurrency\": 30, \"production_gate\": \"BLOCKED\", \"recording_duration_seconds\": 0, \"recording_health\": {\"finalized\": 192, \"restarted\": 0, \"running\": 3}, \"recording_mode\": \"LOWEST_VIDEO_WITH_AUDIO\", \"recording_quality\": \"LD\", \"recording_segment_seconds\": 0, \"result_count\": 37, \"speech_audio_bitrate_kbps\": 48, \"speech_audio_format\": \"opus\", \"target_count\": 41, \"unknown_count\": 0, \"video_retention_hours\": 72}"
+    }
+  ],
+  "waiting_task": {
+    "task_id": "task_db30ca313b934a97a81404fc37b08ebb",
+    "status": "WAITING_HUMAN",
+    "current_step": "PRODUCT_RESOLVED",
+    "attempts": 1,
+    "error_type": "TABBIT_ACQUISITION_BLOCKED",
+    "updated_at": "2026-09-01T09:57:20.850Z"
+  },
+  "all_same_pid": false,
+  "all_restart_unchanged": true,
+  "growing_count": 4
+}

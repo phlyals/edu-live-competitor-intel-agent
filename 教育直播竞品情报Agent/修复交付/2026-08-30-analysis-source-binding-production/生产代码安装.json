@@ -1,0 +1,24 @@
+{
+  "installed_at": "2026-08-30T16:05:31.890638+00:00",
+  "backup_dir": "/Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/backups/source-binding-code-20260831-0005",
+  "backed_up": [
+    "v3_analysis_contract.py",
+    "v3_analysis_worker.py",
+    "v3_evidence_worker.py",
+    "test_v3_analysis_worker.py",
+    "test_v3_analysis_coverage_gate.py",
+    "test_v3_sample_analysis_qualification.py"
+  ],
+  "new_files": [
+    "test_v3_analysis_source_binding.py"
+  ],
+  "installed_hashes": {
+    "v3_analysis_contract.py": "f3b106183da57e74ccf994228a5a43a7e7022b54576ed845acfd424497ead5ef",
+    "v3_analysis_worker.py": "4ecd70429f3c28f01ebb7a4b0585299d744380d5de212956019b23e1818d0a20",
+    "v3_evidence_worker.py": "7196f0ba53105ead2844ff8d6a6008a87dab20e394530fa08cb815eb2142ff58",
+    "test_v3_analysis_worker.py": "16e350cbf8d46323cb821998c4676129690ece1f3dd6cedd07d02fc6c06f3115",
+    "test_v3_analysis_coverage_gate.py": "255d6e01b73378243046ebb4ec7fb644a171d60bcf7482a4f5c694d3c7e058f6",
+    "test_v3_sample_analysis_qualification.py": "9117a02c1618cc182d0d390d2e2b337d8795266a4749d6fe9d4b4d36399dad5e",
+    "test_v3_analysis_source_binding.py": "75fcbfdee931e2bb340d66b74461391eb4cec6c9aae12929faace0a2d1b8043b"
+  }
+}

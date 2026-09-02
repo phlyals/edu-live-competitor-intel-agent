@@ -1,0 +1,21 @@
+{
+  "source_duration_seconds": 3787.299122,
+  "recorded_duration_seconds": 3787.299667,
+  "difference_seconds": 0.0005450000003293098,
+  "relative_error": 1.4390202167118656e-07,
+  "acceptance_result": {
+    "file_exists": true,
+    "file_path": "/Volumes/ExternalStorage/同行直播录制/exports/recording-stream-rootcause-verification-20260829/full-replay-v2/整场直播.ts",
+    "duration_seconds": 3787.299667,
+    "file_size_mb": 716.15,
+    "expected_duration_seconds": 3787.299122,
+    "is_complete": true,
+    "session_id": "replay_20260829_stream_refresh",
+    "script": "check_recording",
+    "checked_at": "2026-08-29T06:43:22.437554+00:00",
+    "status": "PASS",
+    "message": "录制时长误差在 5% 以内"
+  },
+  "real_live_final_acceptance": false,
+  "checked_at": "2026-08-29T06:43:22.931174+00:00"
+}

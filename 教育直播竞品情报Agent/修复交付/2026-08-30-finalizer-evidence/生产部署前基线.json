@@ -1,0 +1,3014 @@
+{
+  "checked_at": "2026-08-30T13:19:04.545960+00:00",
+  "transaction_read_only": "on",
+  "backup_directory": "/Volumes/ExternalStorage/AgentInfrastructure/backups/edu-finalizer-evidence-fix-20260830",
+  "hashes": {
+    "/Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/v3_worker.py": "19fb28d9635af81227b178980cefbb111f1133272a2f0e45c9a55476a058181f",
+    "/Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/test_v3_recording_transcription.py": "096df2804d3b95f6e33dd40cf41dbe7e8cf9085c2f3ae34795ec4cd1175584d9",
+    "candidate": "04353e3f05ce09479869f925b1cc4b51ac044d05e64268c0575377c0f4564f62"
+  },
+  "active_recorders": [
+    {
+      "session_id": "session_301089a174e24811a1a3e0376ac4e40d",
+      "pid": 72241,
+      "job_status": "RUNNING",
+      "session_status": "RECORDING",
+      "monitor_status": "LIVE",
+      "partial_dir": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_2830f009c4673f6f/sess_b02574aa870775054f6777a4",
+      "bytes": 170393600
+    },
+    {
+      "session_id": "session_a11008384fa574090555c6e1389a4686",
+      "pid": 50442,
+      "job_status": "RUNNING",
+      "session_status": "RECORDING",
+      "monitor_status": "LIVE",
+      "partial_dir": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_08513b0271791c3c/sess_6097a2e5cd5a7f46efd0801e",
+      "bytes": 269649312
+    },
+    {
+      "session_id": "session_c21d1f47b1546038aca956d96dca5e9a",
+      "pid": 36906,
+      "job_status": "RUNNING",
+      "session_status": "RECORDING",
+      "monitor_status": "LIVE",
+      "partial_dir": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_91c8c4a8ea998e6e/sess_45d04a07827993aaee08df3d",
+      "bytes": 180385084
+    }
+  ],
+  "services": {
+    "runtime-v3": {
+      "state": "running",
+      "pid": "71442",
+      "runs": "61"
+    },
+    "pipeline-v3": {
+      "state": "running",
+      "pid": "91389",
+      "runs": "34"
+    },
+    "analysis-v3": {
+      "state": "running",
+      "pid": "85928",
+      "runs": "2"
+    },
+    "evidence-v3": {
+      "state": "running",
+      "pid": "705",
+      "runs": "1"
+    },
+    "recompute-v3": {
+      "state": "running",
+      "pid": "708",
+      "runs": "1"
+    },
+    "retention-v3": {
+      "state": "running",
+      "pid": "34907",
+      "runs": "2"
+    }
+  },
+  "retention": {
+    "delete_enabled": false,
+    "idle": true,
+    "mode": "DELETE_DISABLED",
+    "next_scan_in_seconds": 1902
+  },
+  "media_inventory": [
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c1f0dca03af0c0/sess_01773108761b95704ff63f02/整场直播.ts.partial.recording-state.json",
+      "size": 3231,
+      "mtime_ns": 1787958293204647918
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c1f0dca03af0c0/sess_01773108761b95704ff63f02/media-manifest.json",
+      "size": 655,
+      "mtime_ns": 1787963877053848117
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c1f0dca03af0c0/sess_01773108761b95704ff63f02/整场直播.part01.ts.partial.recording-state.json",
+      "size": 3360,
+      "mtime_ns": 1787963526322661461
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c1f0dca03af0c0/sess_01773108761b95704ff63f02/整场直播.ts",
+      "size": 759603472,
+      "mtime_ns": 1787958293088515143
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c1f0dca03af0c0/sess_c5fd1505d97a5611d9783a07/整场直播.ts.partial.recording-state.json",
+      "size": 1130,
+      "mtime_ns": 1788049305739091529
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c1f0dca03af0c0/sess_c5fd1505d97a5611d9783a07/整场直播.refresh0003.ts.partial.recording-state.json",
+      "size": 3543,
+      "mtime_ns": 1788051960260263387
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c1f0dca03af0c0/sess_c5fd1505d97a5611d9783a07/media-manifest.json",
+      "size": 655,
+      "mtime_ns": 1788052325399405352
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c1f0dca03af0c0/sess_c5fd1505d97a5611d9783a07/整场直播.refresh0001.ts.partial.recording-state.json",
+      "size": 1142,
+      "mtime_ns": 1788050203691089362
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c1f0dca03af0c0/sess_c5fd1505d97a5611d9783a07/整场直播.refresh0002.ts.partial.recording-state.json",
+      "size": 1142,
+      "mtime_ns": 1788051101822728951
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c1f0dca03af0c0/sess_c5fd1505d97a5611d9783a07/整场直播.ts",
+      "size": 933094760,
+      "mtime_ns": 1788052312156695825
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c1f0dca03af0c0/sess_e4c5207a17b4976853f1cfc8/media-manifest.json",
+      "size": 657,
+      "mtime_ns": 1787933323802906397
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c1f0dca03af0c0/sess_e4c5207a17b4976853f1cfc8/整场直播.ts",
+      "size": 1930547372,
+      "mtime_ns": 1787933296335172500
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c1f0dca03af0c0/sess_c758b04d2d71236122d9081a/整场直播.ts.partial.recording-state.json",
+      "size": 1139,
+      "mtime_ns": 1788054829379262266
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c1f0dca03af0c0/sess_c758b04d2d71236122d9081a/整场直播.refresh0003.ts.partial.recording-state.json",
+      "size": 1401,
+      "mtime_ns": 1788057321801395241
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c1f0dca03af0c0/sess_c758b04d2d71236122d9081a/media-manifest.json",
+      "size": 655,
+      "mtime_ns": 1788057835477985644
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c1f0dca03af0c0/sess_c758b04d2d71236122d9081a/整场直播.refresh0001.ts.partial.recording-state.json",
+      "size": 4343,
+      "mtime_ns": 1788055753043418364
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c1f0dca03af0c0/sess_c758b04d2d71236122d9081a/整场直播.refresh0002.ts.partial.recording-state.json",
+      "size": 1151,
+      "mtime_ns": 1788056657649555679
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c1f0dca03af0c0/sess_c758b04d2d71236122d9081a/整场直播.ts",
+      "size": 787163708,
+      "mtime_ns": 1788057825977748021
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c1f0dca03af0c0/sess_c4eb30075fc01d648a9c37a0/整场直播.ts.partial.recording-state.json",
+      "size": 1139,
+      "mtime_ns": 1788044797332684826
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c1f0dca03af0c0/sess_c4eb30075fc01d648a9c37a0/整场直播.refresh0003.ts.partial.recording-state.json",
+      "size": 1394,
+      "mtime_ns": 1788046699474535384
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c1f0dca03af0c0/sess_c4eb30075fc01d648a9c37a0/media-manifest.json",
+      "size": 655,
+      "mtime_ns": 1788047092498502017
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c1f0dca03af0c0/sess_c4eb30075fc01d648a9c37a0/整场直播.refresh0001.ts.partial.recording-state.json",
+      "size": 1151,
+      "mtime_ns": 1788045721341419655
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c1f0dca03af0c0/sess_c4eb30075fc01d648a9c37a0/整场直播.refresh0002.ts.partial.recording-state.json",
+      "size": 1151,
+      "mtime_ns": 1788046645195289236
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c1f0dca03af0c0/sess_c4eb30075fc01d648a9c37a0/整场直播.ts",
+      "size": 660650800,
+      "mtime_ns": 1788047090647334486
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_d3cda3017305e71255f1cd90/整场直播.ts.partial.recording-state.json",
+      "size": 1172,
+      "mtime_ns": 1787989996740883037
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_d3cda3017305e71255f1cd90/整场直播.refresh0003.ts.partial.recording-state.json",
+      "size": 1184,
+      "mtime_ns": 1787992690827748210
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_d3cda3017305e71255f1cd90/整场直播.part05.refresh0002.ts.partial.recording-state.json",
+      "size": 1190,
+      "mtime_ns": 1787997620003455134
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_d3cda3017305e71255f1cd90/整场直播.part05.ts.partial.recording-state.json",
+      "size": 1179,
+      "mtime_ns": 1787995804370211007
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_d3cda3017305e71255f1cd90/整场直播.part05.refresh0001.ts.partial.recording-state.json",
+      "size": 1191,
+      "mtime_ns": 1787996702054371955
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_d3cda3017305e71255f1cd90/整场直播.part05.refresh0004.ts.partial.recording-state.json",
+      "size": 2751,
+      "mtime_ns": 1787998826722152602
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_d3cda3017305e71255f1cd90/media-manifest.json",
+      "size": 656,
+      "mtime_ns": 1787999202716966218
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_d3cda3017305e71255f1cd90/整场直播.refresh0004.ts.partial.recording-state.json",
+      "size": 2746,
+      "mtime_ns": 1787993305970202519
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_d3cda3017305e71255f1cd90/整场直播.refresh0001.ts.partial.recording-state.json",
+      "size": 1184,
+      "mtime_ns": 1787990894480194989
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_d3cda3017305e71255f1cd90/整场直播.refresh0002.ts.partial.recording-state.json",
+      "size": 1184,
+      "mtime_ns": 1787991792384022681
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_d3cda3017305e71255f1cd90/整场直播.ts",
+      "size": 1795026820,
+      "mtime_ns": 1787999179994981500
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_d3cda3017305e71255f1cd90/整场直播.part05.refresh0003.ts.partial.recording-state.json",
+      "size": 1191,
+      "mtime_ns": 1787998518020412775
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_1777ad859093703aca27c0c6/整场直播.ts.partial.recording-state.json",
+      "size": 1172,
+      "mtime_ns": 1788001205225421547
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_1777ad859093703aca27c0c6/整场直播.refresh0003.ts.partial.recording-state.json",
+      "size": 1184,
+      "mtime_ns": 1788003910990112862
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_1777ad859093703aca27c0c6/media-manifest.json",
+      "size": 655,
+      "mtime_ns": 1788004865942886126
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_1777ad859093703aca27c0c6/整场直播.refresh0004.ts.partial.recording-state.json",
+      "size": 2696,
+      "mtime_ns": 1788004444029575869
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_1777ad859093703aca27c0c6/整场直播.refresh0001.ts.partial.recording-state.json",
+      "size": 1183,
+      "mtime_ns": 1788002103225662101
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_1777ad859093703aca27c0c6/整场直播.refresh0002.ts.partial.recording-state.json",
+      "size": 1184,
+      "mtime_ns": 1788003003290286198
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_1777ad859093703aca27c0c6/整场直播.ts",
+      "size": 913036664,
+      "mtime_ns": 1788004853569424405
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_418aa147c8356bcf0dfddccc/media-manifest.json",
+      "size": 658,
+      "mtime_ns": 1787933934500785560
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_418aa147c8356bcf0dfddccc/整场直播.ts",
+      "size": 3827398940,
+      "mtime_ns": 1787933836815890000
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_d8001e1a26912b9beaedc79e/整场直播.ts.partial.recording-state.json",
+      "size": 1890,
+      "mtime_ns": 1787982112918849469
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_d8001e1a26912b9beaedc79e/media-manifest.json",
+      "size": 657,
+      "mtime_ns": 1787988014615502157
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_d8001e1a26912b9beaedc79e/整场直播.part01.ts.partial.recording-state.json",
+      "size": 1895,
+      "mtime_ns": 1787987491286276671
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_d8001e1a26912b9beaedc79e/整场直播.ts",
+      "size": 2002462448,
+      "mtime_ns": 1787987969474983897
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_4d6e4d144f6b4cbd085f5d66/整场直播.ts.partial.recording-state.json",
+      "size": 1177,
+      "mtime_ns": 1788089557321499564
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_4d6e4d144f6b4cbd085f5d66/整场直播.refresh0003.ts.partial.recording-state.json",
+      "size": 1189,
+      "mtime_ns": 1788092253356752095
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_4d6e4d144f6b4cbd085f5d66/media-manifest.json",
+      "size": 655,
+      "mtime_ns": 1788093168185407986
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_4d6e4d144f6b4cbd085f5d66/整场直播.refresh0004.ts.partial.recording-state.json",
+      "size": 3575,
+      "mtime_ns": 1788092857206667434
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_4d6e4d144f6b4cbd085f5d66/整场直播.refresh0001.ts.partial.recording-state.json",
+      "size": 1192,
+      "mtime_ns": 1788090455684373205
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_4d6e4d144f6b4cbd085f5d66/整场直播.refresh0002.ts.partial.recording-state.json",
+      "size": 1192,
+      "mtime_ns": 1788091353717821107
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_4d6e4d144f6b4cbd085f5d66/整场直播.ts",
+      "size": 590337296,
+      "mtime_ns": 1788093165381587939
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_3eff83953b41ae849ebe85f1/整场直播.ts.partial.recording-state.json",
+      "size": 1177,
+      "mtime_ns": 1788082122765094803
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_3eff83953b41ae849ebe85f1/整场直播.refresh0003.ts.partial.recording-state.json",
+      "size": 1192,
+      "mtime_ns": 1788084820210859278
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_3eff83953b41ae849ebe85f1/media-manifest.json",
+      "size": 655,
+      "mtime_ns": 1788086032290993712
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_3eff83953b41ae849ebe85f1/整场直播.refresh0004.ts.partial.recording-state.json",
+      "size": 3372,
+      "mtime_ns": 1788085620199536665
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_3eff83953b41ae849ebe85f1/整场直播.refresh0001.ts.partial.recording-state.json",
+      "size": 1189,
+      "mtime_ns": 1788083022729375824
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_3eff83953b41ae849ebe85f1/整场直播.refresh0002.ts.partial.recording-state.json",
+      "size": 1192,
+      "mtime_ns": 1788083922664553932
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_2830f009c4673f6f/sess_3eff83953b41ae849ebe85f1/整场直播.ts",
+      "size": 619714364,
+      "mtime_ns": 1788086021075634443
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_52685aee09f31906/sess_97a657f9375934e87128fca7/整场直播.ts.partial.recording-state.json",
+      "size": 4158,
+      "mtime_ns": 1787962607609874160
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_52685aee09f31906/sess_97a657f9375934e87128fca7/media-manifest.json",
+      "size": 657,
+      "mtime_ns": 1787984346050253097
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_52685aee09f31906/sess_97a657f9375934e87128fca7/整场直播.ts",
+      "size": 1340586264,
+      "mtime_ns": 1787962607569269458
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_52685aee09f31906/sess_8c6baa05c0e9bff1a8409547/整场直播.ts.partial.recording-state.json",
+      "size": 1172,
+      "mtime_ns": 1788043411540544111
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_52685aee09f31906/sess_8c6baa05c0e9bff1a8409547/media-manifest.json",
+      "size": 655,
+      "mtime_ns": 1788044541365116090
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_52685aee09f31906/sess_8c6baa05c0e9bff1a8409547/整场直播.refresh0001.ts.partial.recording-state.json",
+      "size": 2939,
+      "mtime_ns": 1788044265137802104
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_52685aee09f31906/sess_8c6baa05c0e9bff1a8409547/整场直播.ts",
+      "size": 368183900,
+      "mtime_ns": 1788044540247189730
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_4096b05b78a4d383/sess_6cd4fef3544eebcd912ff79e/整场直播.ts.partial.recording-state.json",
+      "size": 1121,
+      "mtime_ns": 1788045603265393975
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_4096b05b78a4d383/sess_6cd4fef3544eebcd912ff79e/media-manifest.json",
+      "size": 656,
+      "mtime_ns": 1788056488267379663
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_4096b05b78a4d383/sess_6cd4fef3544eebcd912ff79e/整场直播.part01.refresh0002.ts.partial.recording-state.json",
+      "size": 1295,
+      "mtime_ns": 1788049352118225398
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_4096b05b78a4d383/sess_6cd4fef3544eebcd912ff79e/整场直播.part01.ts.partial.recording-state.json",
+      "size": 1127,
+      "mtime_ns": 1788047607348271941
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_4096b05b78a4d383/sess_6cd4fef3544eebcd912ff79e/整场直播.part01.refresh0001.ts.partial.recording-state.json",
+      "size": 1140,
+      "mtime_ns": 1788048525212122146
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_4096b05b78a4d383/sess_6cd4fef3544eebcd912ff79e/整场直播.ts",
+      "size": 349488052,
+      "mtime_ns": 1788056485010621175
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_4096b05b78a4d383/sess_b33e6a9878b5bedda64f7b2d/整场直播.ts.partial.recording-state.json",
+      "size": 4109,
+      "mtime_ns": 1787962677247862631
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_4096b05b78a4d383/sess_b33e6a9878b5bedda64f7b2d/media-manifest.json",
+      "size": 656,
+      "mtime_ns": 1787984353216653450
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_4096b05b78a4d383/sess_b33e6a9878b5bedda64f7b2d/整场直播.ts",
+      "size": 531830568,
+      "mtime_ns": 1787962677137254833
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d84cba350eb545bf/sess_21e40a6a8757b142c3d92061/整场直播.ts.partial.recording-state.json",
+      "size": 1175,
+      "mtime_ns": 1788064279233452008
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d84cba350eb545bf/sess_21e40a6a8757b142c3d92061/整场直播.refresh0003.ts.partial.recording-state.json",
+      "size": 1187,
+      "mtime_ns": 1788066979469060204
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d84cba350eb545bf/sess_21e40a6a8757b142c3d92061/整场直播.refresh0005.ts.partial.recording-state.json",
+      "size": 8283,
+      "mtime_ns": 1788068341001086092
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d84cba350eb545bf/sess_21e40a6a8757b142c3d92061/media-manifest.json",
+      "size": 656,
+      "mtime_ns": 1788069210094226031
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d84cba350eb545bf/sess_21e40a6a8757b142c3d92061/整场直播.refresh0004.ts.partial.recording-state.json",
+      "size": 1187,
+      "mtime_ns": 1788067899560333354
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d84cba350eb545bf/sess_21e40a6a8757b142c3d92061/整场直播.refresh0001.ts.partial.recording-state.json",
+      "size": 1187,
+      "mtime_ns": 1788065179296559368
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d84cba350eb545bf/sess_21e40a6a8757b142c3d92061/整场直播.refresh0002.ts.partial.recording-state.json",
+      "size": 1187,
+      "mtime_ns": 1788066079532661719
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d84cba350eb545bf/sess_21e40a6a8757b142c3d92061/整场直播.ts",
+      "size": 1382229768,
+      "mtime_ns": 1788069186581615990
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d84cba350eb545bf/sess_14d0e105c19223fd4676816d/整场直播.ts.partial.recording-state.json",
+      "size": 3233,
+      "mtime_ns": 1787982049167222641
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d84cba350eb545bf/sess_14d0e105c19223fd4676816d/media-manifest.json",
+      "size": 656,
+      "mtime_ns": 1787984448404757536
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d84cba350eb545bf/sess_14d0e105c19223fd4676816d/整场直播.ts",
+      "size": 1365830152,
+      "mtime_ns": 1787982049156329689
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d84cba350eb545bf/sess_f7406cbd9736dce7e2df5829/media-manifest.json",
+      "size": 658,
+      "mtime_ns": 1787930705609345622
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d84cba350eb545bf/sess_f7406cbd9736dce7e2df5829/整场直播.ts",
+      "size": 8481732988,
+      "mtime_ns": 1787930200209920285
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d84cba350eb545bf/sess_44dab34f0fb72b130df5123a/整场直播.ts.partial.recording-state.json",
+      "size": 1172,
+      "mtime_ns": 1788004684855393599
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d84cba350eb545bf/sess_44dab34f0fb72b130df5123a/整场直播.refresh0003.ts.partial.recording-state.json",
+      "size": 1184,
+      "mtime_ns": 1788007385378705332
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d84cba350eb545bf/sess_44dab34f0fb72b130df5123a/整场直播.refresh0005.ts.partial.recording-state.json",
+      "size": 2614,
+      "mtime_ns": 1788009110741048115
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d84cba350eb545bf/sess_44dab34f0fb72b130df5123a/media-manifest.json",
+      "size": 653,
+      "mtime_ns": 1788011653584660126
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d84cba350eb545bf/sess_44dab34f0fb72b130df5123a/整场直播.refresh0004.ts.partial.recording-state.json",
+      "size": 1184,
+      "mtime_ns": 1788008294082598001
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d84cba350eb545bf/sess_44dab34f0fb72b130df5123a/整场直播.refresh0001.ts.partial.recording-state.json",
+      "size": 1184,
+      "mtime_ns": 1788005584927608124
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d84cba350eb545bf/sess_44dab34f0fb72b130df5123a/整场直播.refresh0002.ts.partial.recording-state.json",
+      "size": 1183,
+      "mtime_ns": 1788006485399098092
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d84cba350eb545bf/sess_44dab34f0fb72b130df5123a/整场直播.ts",
+      "size": 1459019872,
+      "mtime_ns": 1788011634525847731
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_83f47f2ba13de9df/sess_0c04c2b5ba18964e5619dfe9/整场直播.ts.partial.recording-state.json",
+      "size": 1177,
+      "mtime_ns": 1788083968302082054
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_83f47f2ba13de9df/sess_0c04c2b5ba18964e5619dfe9/整场直播.refresh0003.ts.partial.recording-state.json",
+      "size": 1192,
+      "mtime_ns": 1788086662232476021
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_83f47f2ba13de9df/sess_0c04c2b5ba18964e5619dfe9/整场直播.refresh0006.ts.partial.recording-state.json",
+      "size": 3372,
+      "mtime_ns": 1788089157228977010
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_83f47f2ba13de9df/sess_0c04c2b5ba18964e5619dfe9/整场直播.refresh0005.ts.partial.recording-state.json",
+      "size": 1192,
+      "mtime_ns": 1788088460219379212
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_83f47f2ba13de9df/sess_0c04c2b5ba18964e5619dfe9/media-manifest.json",
+      "size": 655,
+      "mtime_ns": 1788089490408576198
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_83f47f2ba13de9df/sess_0c04c2b5ba18964e5619dfe9/整场直播.refresh0004.ts.partial.recording-state.json",
+      "size": 1189,
+      "mtime_ns": 1788087562478199233
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_83f47f2ba13de9df/sess_0c04c2b5ba18964e5619dfe9/整场直播.refresh0001.ts.partial.recording-state.json",
+      "size": 1192,
+      "mtime_ns": 1788084865917470685
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_83f47f2ba13de9df/sess_0c04c2b5ba18964e5619dfe9/整场直播.refresh0002.ts.partial.recording-state.json",
+      "size": 1192,
+      "mtime_ns": 1788085763869885627
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_83f47f2ba13de9df/sess_0c04c2b5ba18964e5619dfe9/整场直播.ts",
+      "size": 900025748,
+      "mtime_ns": 1788089483514066988
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_83f47f2ba13de9df/sess_42a5baebe22fbb202aba92a0/media-manifest.json",
+      "size": 657,
+      "mtime_ns": 1787933002889135753
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_83f47f2ba13de9df/sess_42a5baebe22fbb202aba92a0/整场直播.ts",
+      "size": 1059847180,
+      "mtime_ns": 1787929743839103545
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_83f47f2ba13de9df/sess_41b78e190197ecee6bd5fef4/整场直播.ts.partial.recording-state.json",
+      "size": 2589,
+      "mtime_ns": 1787959000902226442
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_83f47f2ba13de9df/sess_41b78e190197ecee6bd5fef4/整场直播.part03.refresh0004.ts.partial.recording-state.json",
+      "size": 1190,
+      "mtime_ns": 1788001849993863340
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_83f47f2ba13de9df/sess_41b78e190197ecee6bd5fef4/整场直播.part03.refresh0001.ts.partial.recording-state.json",
+      "size": 1191,
+      "mtime_ns": 1787999145651000003
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_83f47f2ba13de9df/sess_41b78e190197ecee6bd5fef4/整场直播.part03.ts.partial.recording-state.json",
+      "size": 1179,
+      "mtime_ns": 1787998245874739485
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_83f47f2ba13de9df/sess_41b78e190197ecee6bd5fef4/整场直播.part03.refresh0002.ts.partial.recording-state.json",
+      "size": 1191,
+      "mtime_ns": 1788000050137005225
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_83f47f2ba13de9df/sess_41b78e190197ecee6bd5fef4/media-manifest.json",
+      "size": 656,
+      "mtime_ns": 1788002683644554856
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_83f47f2ba13de9df/sess_41b78e190197ecee6bd5fef4/整场直播.part03.refresh0003.ts.partial.recording-state.json",
+      "size": 1191,
+      "mtime_ns": 1788000949807708415
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_83f47f2ba13de9df/sess_41b78e190197ecee6bd5fef4/整场直播.part01.ts.partial.recording-state.json",
+      "size": 4200,
+      "mtime_ns": 1787980182479504524
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_83f47f2ba13de9df/sess_41b78e190197ecee6bd5fef4/整场直播.part02.ts.partial.recording-state.json",
+      "size": 4087,
+      "mtime_ns": 1787984250594289673
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_83f47f2ba13de9df/sess_41b78e190197ecee6bd5fef4/整场直播.ts",
+      "size": 3722681436,
+      "mtime_ns": 1788002583937753551
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_83f47f2ba13de9df/sess_41b78e190197ecee6bd5fef4/整场直播.part03.refresh0005.ts.partial.recording-state.json",
+      "size": 2557,
+      "mtime_ns": 1788002023669876742
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_83f47f2ba13de9df/sess_89148c08501af6775a50da25/整场直播.ts.partial.recording-state.json",
+      "size": 1139,
+      "mtime_ns": 1788043414087365804
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_83f47f2ba13de9df/sess_89148c08501af6775a50da25/media-manifest.json",
+      "size": 652,
+      "mtime_ns": 1788045503948865045
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_83f47f2ba13de9df/sess_89148c08501af6775a50da25/整场直播.part01.ts.partial.recording-state.json",
+      "size": 1146,
+      "mtime_ns": 1788044542008270845
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_83f47f2ba13de9df/sess_89148c08501af6775a50da25/整场直播.part01.refresh0001.ts.partial.recording-state.json",
+      "size": 3356,
+      "mtime_ns": 1788045111915649221
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_83f47f2ba13de9df/sess_89148c08501af6775a50da25/整场直播.ts",
+      "size": 633720176,
+      "mtime_ns": 1788045501543504597
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d0fa112503e2aabc/sess_0ac713a45f309587953c3911/media-manifest.json",
+      "size": 658,
+      "mtime_ns": 1787932299026114349
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d0fa112503e2aabc/sess_0ac713a45f309587953c3911/整场直播.ts",
+      "size": 3129180664,
+      "mtime_ns": 1787932229447202944
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d0fa112503e2aabc/sess_10f5e8e313b4fdb26cd58cc4/整场直播.ts.partial.recording-state.json",
+      "size": 1168,
+      "mtime_ns": 1788092172842320193
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d0fa112503e2aabc/sess_10f5e8e313b4fdb26cd58cc4/整场直播.refresh0003.ts.partial.recording-state.json",
+      "size": 3504,
+      "mtime_ns": 1788094734577000186
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d0fa112503e2aabc/sess_10f5e8e313b4fdb26cd58cc4/media-manifest.json",
+      "size": 655,
+      "mtime_ns": 1788095214952759795
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d0fa112503e2aabc/sess_10f5e8e313b4fdb26cd58cc4/整场直播.refresh0001.ts.partial.recording-state.json",
+      "size": 1182,
+      "mtime_ns": 1788093071021409966
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d0fa112503e2aabc/sess_10f5e8e313b4fdb26cd58cc4/整场直播.refresh0002.ts.partial.recording-state.json",
+      "size": 1183,
+      "mtime_ns": 1788093969061903609
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d0fa112503e2aabc/sess_10f5e8e313b4fdb26cd58cc4/整场直播.ts",
+      "size": 521349380,
+      "mtime_ns": 1788095210220377539
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d0fa112503e2aabc/sess_48a4eb557ab1e47ea86559d0/整场直播.ts.partial.recording-state.json",
+      "size": 1139,
+      "mtime_ns": 1788074251052491967
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d0fa112503e2aabc/sess_48a4eb557ab1e47ea86559d0/media-manifest.json",
+      "size": 655,
+      "mtime_ns": 1788077040029109819
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d0fa112503e2aabc/sess_48a4eb557ab1e47ea86559d0/整场直播.part02.refresh0001.ts.partial.recording-state.json",
+      "size": 3338,
+      "mtime_ns": 1788076628428583521
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d0fa112503e2aabc/sess_48a4eb557ab1e47ea86559d0/整场直播.refresh0001.ts.partial.recording-state.json",
+      "size": 1151,
+      "mtime_ns": 1788075151053303077
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d0fa112503e2aabc/sess_48a4eb557ab1e47ea86559d0/整场直播.part02.ts.partial.recording-state.json",
+      "size": 1146,
+      "mtime_ns": 1788076150961746485
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d0fa112503e2aabc/sess_48a4eb557ab1e47ea86559d0/整场直播.ts",
+      "size": 709118140,
+      "mtime_ns": 1788077031738199540
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d0fa112503e2aabc/sess_60f18d5e98205cfb7d43d824/整场直播.ts.partial.recording-state.json",
+      "size": 1172,
+      "mtime_ns": 1788013000462554371
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d0fa112503e2aabc/sess_60f18d5e98205cfb7d43d824/整场直播.refresh0003.ts.partial.recording-state.json",
+      "size": 2650,
+      "mtime_ns": 1788015458671081169
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d0fa112503e2aabc/sess_60f18d5e98205cfb7d43d824/media-manifest.json",
+      "size": 656,
+      "mtime_ns": 1788022600350747612
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d0fa112503e2aabc/sess_60f18d5e98205cfb7d43d824/整场直播.refresh0001.ts.partial.recording-state.json",
+      "size": 1184,
+      "mtime_ns": 1788013900862036010
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d0fa112503e2aabc/sess_60f18d5e98205cfb7d43d824/整场直播.refresh0002.ts.partial.recording-state.json",
+      "size": 1184,
+      "mtime_ns": 1788014800249519973
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d0fa112503e2aabc/sess_60f18d5e98205cfb7d43d824/整场直播.ts",
+      "size": 708146932,
+      "mtime_ns": 1788022594909465382
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d0fa112503e2aabc/sess_ed7fe2e71b1dc23a3bab896c/整场直播.ts.partial.recording-state.json",
+      "size": 1130,
+      "mtime_ns": 1788007611691286486
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d0fa112503e2aabc/sess_ed7fe2e71b1dc23a3bab896c/整场直播.refresh0003.ts.partial.recording-state.json",
+      "size": 3604,
+      "mtime_ns": 1788010129947529845
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d0fa112503e2aabc/sess_ed7fe2e71b1dc23a3bab896c/media-manifest.json",
+      "size": 655,
+      "mtime_ns": 1788011581742261408
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d0fa112503e2aabc/sess_ed7fe2e71b1dc23a3bab896c/整场直播.refresh0001.ts.partial.recording-state.json",
+      "size": 1142,
+      "mtime_ns": 1788008521814991137
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d0fa112503e2aabc/sess_ed7fe2e71b1dc23a3bab896c/整场直播.refresh0002.ts.partial.recording-state.json",
+      "size": 1142,
+      "mtime_ns": 1788009445611654417
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d0fa112503e2aabc/sess_ed7fe2e71b1dc23a3bab896c/整场直播.ts",
+      "size": 626140204,
+      "mtime_ns": 1788011573052100220
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d0fa112503e2aabc/sess_be4218e564d2694de5f804b7/整场直播.ts.partial.recording-state.json",
+      "size": 1721,
+      "mtime_ns": 1787987961549862321
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d0fa112503e2aabc/sess_be4218e564d2694de5f804b7/整场直播.refresh0003.ts.partial.recording-state.json",
+      "size": 2986,
+      "mtime_ns": 1787990376348070332
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d0fa112503e2aabc/sess_be4218e564d2694de5f804b7/media-manifest.json",
+      "size": 656,
+      "mtime_ns": 1788006663593268707
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d0fa112503e2aabc/sess_be4218e564d2694de5f804b7/整场直播.part04.ts.partial.recording-state.json",
+      "size": 1146,
+      "mtime_ns": 1788005821915072817
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d0fa112503e2aabc/sess_be4218e564d2694de5f804b7/整场直播.refresh0001.ts.partial.recording-state.json",
+      "size": 1187,
+      "mtime_ns": 1787988859724471386
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d0fa112503e2aabc/sess_be4218e564d2694de5f804b7/整场直播.refresh0002.ts.partial.recording-state.json",
+      "size": 1187,
+      "mtime_ns": 1787989757100812749
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d0fa112503e2aabc/sess_be4218e564d2694de5f804b7/整场直播.ts",
+      "size": 814146972,
+      "mtime_ns": 1788006653282302492
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_d0fa112503e2aabc/sess_be4218e564d2694de5f804b7/整场直播.part04.refresh0001.ts.partial.recording-state.json",
+      "size": 3541,
+      "mtime_ns": 1788006340285067908
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_1ae8502cb7f2968a/sess_2d1c680a41c4505cda9706bc/整场直播.ts.partial.recording-state.json",
+      "size": 1172,
+      "mtime_ns": 1788052308032445323
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_1ae8502cb7f2968a/sess_2d1c680a41c4505cda9706bc/media-manifest.json",
+      "size": 655,
+      "mtime_ns": 1788053582362357600
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_1ae8502cb7f2968a/sess_2d1c680a41c4505cda9706bc/整场直播.refresh0001.ts.partial.recording-state.json",
+      "size": 3417,
+      "mtime_ns": 1788053305294527765
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_1ae8502cb7f2968a/sess_2d1c680a41c4505cda9706bc/整场直播.ts",
+      "size": 330300396,
+      "mtime_ns": 1788053581188385092
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_1ae8502cb7f2968a/sess_ea72146339142d4a04a473de/整场直播.ts.partial.recording-state.json",
+      "size": 1046,
+      "mtime_ns": 1787971148085393450
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_1ae8502cb7f2968a/sess_ea72146339142d4a04a473de/media-manifest.json",
+      "size": 657,
+      "mtime_ns": 1788011462935635271
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_1ae8502cb7f2968a/sess_ea72146339142d4a04a473de/整场直播.ts",
+      "size": 1466039604,
+      "mtime_ns": 1787971148012115989
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_986a90186541e9b0/sess_39a6663f563375010b00729b/整场直播.ts.partial.recording-state.json",
+      "size": 1177,
+      "mtime_ns": 1788085395578043486
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_986a90186541e9b0/sess_39a6663f563375010b00729b/整场直播.refresh0003.ts.partial.recording-state.json",
+      "size": 1192,
+      "mtime_ns": 1788088092193843952
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_986a90186541e9b0/sess_39a6663f563375010b00729b/整场直播.refresh0005.ts.partial.recording-state.json",
+      "size": 1436,
+      "mtime_ns": 1788089432134721152
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_986a90186541e9b0/sess_39a6663f563375010b00729b/media-manifest.json",
+      "size": 652,
+      "mtime_ns": 1788089902470491523
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_986a90186541e9b0/sess_39a6663f563375010b00729b/整场直播.refresh0004.ts.partial.recording-state.json",
+      "size": 1188,
+      "mtime_ns": 1788088992284694376
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_986a90186541e9b0/sess_39a6663f563375010b00729b/整场直播.refresh0001.ts.partial.recording-state.json",
+      "size": 1191,
+      "mtime_ns": 1788086293897275768
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_986a90186541e9b0/sess_39a6663f563375010b00729b/整场直播.refresh0002.ts.partial.recording-state.json",
+      "size": 10044,
+      "mtime_ns": 1788087192169380548
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_986a90186541e9b0/sess_39a6663f563375010b00729b/整场直播.ts",
+      "size": 611857092,
+      "mtime_ns": 1788089900050884231
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_986a90186541e9b0/sess_a2c03bcdfde51bb9abb8a13e/整场直播.ts.partial.recording-state.json",
+      "size": 1184,
+      "mtime_ns": 1787999120917826025
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_986a90186541e9b0/sess_a2c03bcdfde51bb9abb8a13e/整场直播.refresh0003.ts.partial.recording-state.json",
+      "size": 1149,
+      "mtime_ns": 1788001815010648289
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_986a90186541e9b0/sess_a2c03bcdfde51bb9abb8a13e/整场直播.refresh0005.ts.partial.recording-state.json",
+      "size": 1303,
+      "mtime_ns": 1788003218193107579
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_986a90186541e9b0/sess_a2c03bcdfde51bb9abb8a13e/media-manifest.json",
+      "size": 656,
+      "mtime_ns": 1788015801044897988
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_986a90186541e9b0/sess_a2c03bcdfde51bb9abb8a13e/整场直播.refresh0004.ts.partial.recording-state.json",
+      "size": 1150,
+      "mtime_ns": 1788002715164940981
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_986a90186541e9b0/sess_a2c03bcdfde51bb9abb8a13e/整场直播.refresh0001.ts.partial.recording-state.json",
+      "size": 1150,
+      "mtime_ns": 1788000019285216480
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_986a90186541e9b0/sess_a2c03bcdfde51bb9abb8a13e/整场直播.refresh0002.ts.partial.recording-state.json",
+      "size": 1150,
+      "mtime_ns": 1788000917066745082
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_986a90186541e9b0/sess_a2c03bcdfde51bb9abb8a13e/整场直播.ts",
+      "size": 420253320,
+      "mtime_ns": 1788015794625750508
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_986a90186541e9b0/sess_69e2804021654aab37ecb518/media-manifest.json",
+      "size": 657,
+      "mtime_ns": 1787933192304602282
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_986a90186541e9b0/sess_69e2804021654aab37ecb518/整场直播.ts",
+      "size": 1233715784,
+      "mtime_ns": 1787933179091214740
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_565c3ca37ff7c78d/sess_fa45b280aa74e86625d5e7f3/00_直播录像.sample300s.transcript.json",
+      "size": 48889,
+      "mtime_ns": 1787646312097715208
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_565c3ca37ff7c78d/sess_fa45b280aa74e86625d5e7f3/00_直播录像.sample300s.wav",
+      "size": 9600078,
+      "mtime_ns": 1787646153582473625
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_565c3ca37ff7c78d/sess_fa45b280aa74e86625d5e7f3/00_直播录像.ts",
+      "size": 2109417716,
+      "mtime_ns": 1787637455964398546
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_565c3ca37ff7c78d/sess_2fb3614d5ec1e620f3f78a84/media-manifest.json",
+      "size": 659,
+      "mtime_ns": 1787932127321780540
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_565c3ca37ff7c78d/sess_2fb3614d5ec1e620f3f78a84/整场直播.ts",
+      "size": 3493061056,
+      "mtime_ns": 1787932039442018496
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_c053e231c459ecda/sess_f13aadcc0383ab05fdb9d9f6/media-manifest.json",
+      "size": 656,
+      "mtime_ns": 1787932537148725634
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_c053e231c459ecda/sess_f13aadcc0383ab05fdb9d9f6/整场直播.opus",
+      "size": 17403644,
+      "mtime_ns": 1787929671107956300
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_c053e231c459ecda/sess_f13aadcc0383ab05fdb9d9f6/整场直播.ts",
+      "size": 835679740,
+      "mtime_ns": 1787929623576293842
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_3e8022c5df7ea4c8/sess_37da3f58bb3f21619211be32/media-manifest.json",
+      "size": 656,
+      "mtime_ns": 1787933357256108137
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_3e8022c5df7ea4c8/sess_37da3f58bb3f21619211be32/整场直播.ts",
+      "size": 861522972,
+      "mtime_ns": 1787851677013670756
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_3e8022c5df7ea4c8/sess_2b6b0ca2f28a161860a877a0/整场直播.ts.partial.recording-state.json",
+      "size": 2588,
+      "mtime_ns": 1787937576732812348
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_3e8022c5df7ea4c8/sess_2b6b0ca2f28a161860a877a0/media-manifest.json",
+      "size": 655,
+      "mtime_ns": 1787941443870247828
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_3e8022c5df7ea4c8/sess_2b6b0ca2f28a161860a877a0/整场直播.ts",
+      "size": 705181796,
+      "mtime_ns": 1787937576583467576
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_53fe49068cf4e0ba/sess_7160969aed7fa634464c9092/整场直播.ts.partial.recording-state.json",
+      "size": 1139,
+      "mtime_ns": 1788062675904180540
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_53fe49068cf4e0ba/sess_7160969aed7fa634464c9092/整场直播.refresh0003.ts.partial.recording-state.json",
+      "size": 1151,
+      "mtime_ns": 1788065374031160353
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_53fe49068cf4e0ba/sess_7160969aed7fa634464c9092/media-manifest.json",
+      "size": 656,
+      "mtime_ns": 1788066073630823673
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_53fe49068cf4e0ba/sess_7160969aed7fa634464c9092/整场直播.refresh0004.ts.partial.recording-state.json",
+      "size": 1303,
+      "mtime_ns": 1788065434396206118
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_53fe49068cf4e0ba/sess_7160969aed7fa634464c9092/整场直播.refresh0001.ts.partial.recording-state.json",
+      "size": 1151,
+      "mtime_ns": 1788063573760436224
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_53fe49068cf4e0ba/sess_7160969aed7fa634464c9092/整场直播.refresh0002.ts.partial.recording-state.json",
+      "size": 1151,
+      "mtime_ns": 1788064472087215048
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_53fe49068cf4e0ba/sess_7160969aed7fa634464c9092/整场直播.ts",
+      "size": 1042542156,
+      "mtime_ns": 1788066057151068181
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_53fe49068cf4e0ba/sess_2e55ffd121132fe3dded197d/整场直播.ts.partial.recording-state.json",
+      "size": 1130,
+      "mtime_ns": 1788057023079306709
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_53fe49068cf4e0ba/sess_2e55ffd121132fe3dded197d/整场直播.refresh0003.ts.partial.recording-state.json",
+      "size": 3591,
+      "mtime_ns": 1788059737079027574
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_53fe49068cf4e0ba/sess_2e55ffd121132fe3dded197d/media-manifest.json",
+      "size": 655,
+      "mtime_ns": 1788060018097337654
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_53fe49068cf4e0ba/sess_2e55ffd121132fe3dded197d/整场直播.refresh0001.ts.partial.recording-state.json",
+      "size": 1142,
+      "mtime_ns": 1788057923190694168
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_53fe49068cf4e0ba/sess_2e55ffd121132fe3dded197d/整场直播.refresh0002.ts.partial.recording-state.json",
+      "size": 1142,
+      "mtime_ns": 1788058821661799009
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_53fe49068cf4e0ba/sess_2e55ffd121132fe3dded197d/整场直播.ts",
+      "size": 792799008,
+      "mtime_ns": 1788060009955823147
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_53fe49068cf4e0ba/sess_2c86ef1ac85eac2083d7e914/整场直播.ts.partial.recording-state.json",
+      "size": 3113,
+      "mtime_ns": 1787973316576060806
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_53fe49068cf4e0ba/sess_2c86ef1ac85eac2083d7e914/media-manifest.json",
+      "size": 654,
+      "mtime_ns": 1788011549710901071
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_53fe49068cf4e0ba/sess_2c86ef1ac85eac2083d7e914/整场直播.part01.ts.partial.recording-state.json",
+      "size": 3073,
+      "mtime_ns": 1787979288058136568
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_53fe49068cf4e0ba/sess_2c86ef1ac85eac2083d7e914/整场直播.ts",
+      "size": 1846261520,
+      "mtime_ns": 1788011527005646498
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_085261530d5b7db7/sess_4a52ae516fd9e5a2393e0fdb/media-manifest.json",
+      "size": 655,
+      "mtime_ns": 1787932483906641290
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_085261530d5b7db7/sess_4a52ae516fd9e5a2393e0fdb/整场直播.ts",
+      "size": 618002248,
+      "mtime_ns": 1787928842423829457
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_6e6a8a489e97fdc4/sess_c603181e47701150f42bb828/整场直播.ts.partial.recording-state.json",
+      "size": 1139,
+      "mtime_ns": 1788053045580347771
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_6e6a8a489e97fdc4/sess_c603181e47701150f42bb828/整场直播.part03.ts.partial.recording-state.json",
+      "size": 3344,
+      "mtime_ns": 1788056742208736709
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_6e6a8a489e97fdc4/sess_c603181e47701150f42bb828/media-manifest.json",
+      "size": 655,
+      "mtime_ns": 1788057105216724576
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_6e6a8a489e97fdc4/sess_c603181e47701150f42bb828/整场直播.refresh0001.ts.partial.recording-state.json",
+      "size": 1151,
+      "mtime_ns": 1788053943965041192
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_6e6a8a489e97fdc4/sess_c603181e47701150f42bb828/整场直播.refresh0002.ts.partial.recording-state.json",
+      "size": 1151,
+      "mtime_ns": 1788054843906628893
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_6e6a8a489e97fdc4/sess_c603181e47701150f42bb828/整场直播.ts",
+      "size": 531621136,
+      "mtime_ns": 1788057102862119233
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_6e6a8a489e97fdc4/sess_368870d2bb605e9c381c9115/整场直播.ts.partial.recording-state.json",
+      "size": 1160,
+      "mtime_ns": 1788044217849819136
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_6e6a8a489e97fdc4/sess_368870d2bb605e9c381c9115/media-manifest.json",
+      "size": 655,
+      "mtime_ns": 1788047899226233549
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_6e6a8a489e97fdc4/sess_368870d2bb605e9c381c9115/整场直播.part01.refresh0002.ts.partial.recording-state.json",
+      "size": 2301,
+      "mtime_ns": 1788047551656334081
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_6e6a8a489e97fdc4/sess_368870d2bb605e9c381c9115/整场直播.part01.ts.partial.recording-state.json",
+      "size": 1167,
+      "mtime_ns": 1788046095995437754
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_6e6a8a489e97fdc4/sess_368870d2bb605e9c381c9115/整场直播.part01.refresh0001.ts.partial.recording-state.json",
+      "size": 1179,
+      "mtime_ns": 1788046996028314305
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_6e6a8a489e97fdc4/sess_368870d2bb605e9c381c9115/整场直播.ts",
+      "size": 559522968,
+      "mtime_ns": 1788047897765818364
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_6e6a8a489e97fdc4/sess_e4847f6b45a7784a983f4ef4/整场直播.ts.partial.recording-state.json",
+      "size": 1130,
+      "mtime_ns": 1788061001677113377
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_6e6a8a489e97fdc4/sess_e4847f6b45a7784a983f4ef4/media-manifest.json",
+      "size": 656,
+      "mtime_ns": 1788064990488578572
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_6e6a8a489e97fdc4/sess_e4847f6b45a7784a983f4ef4/整场直播.part02.refresh0001.ts.partial.recording-state.json",
+      "size": 1149,
+      "mtime_ns": 1788063829758694365
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_6e6a8a489e97fdc4/sess_e4847f6b45a7784a983f4ef4/整场直播.refresh0001.ts.partial.recording-state.json",
+      "size": 1142,
+      "mtime_ns": 1788061901628867223
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_6e6a8a489e97fdc4/sess_e4847f6b45a7784a983f4ef4/整场直播.part02.refresh0002.ts.partial.recording-state.json",
+      "size": 3448,
+      "mtime_ns": 1788064605588280232
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_6e6a8a489e97fdc4/sess_e4847f6b45a7784a983f4ef4/整场直播.part02.ts.partial.recording-state.json",
+      "size": 1137,
+      "mtime_ns": 1788062925881152703
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_6e6a8a489e97fdc4/sess_e4847f6b45a7784a983f4ef4/整场直播.ts",
+      "size": 1195210940,
+      "mtime_ns": 1788064972869229726
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_6e6a8a489e97fdc4/sess_b4772ef50cbeb834d401db88/整场直播.ts.partial.recording-state.json",
+      "size": 4267,
+      "mtime_ns": 1787957904401242060
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_6e6a8a489e97fdc4/sess_b4772ef50cbeb834d401db88/media-manifest.json",
+      "size": 655,
+      "mtime_ns": 1788015673918641552
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_6e6a8a489e97fdc4/sess_b4772ef50cbeb834d401db88/整场直播.ts",
+      "size": 106293508,
+      "mtime_ns": 1787957904119448149
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_af34eac1ff917a9a/sess_4a7abcb76406713276a54e03/整场直播.ts.partial.recording-state.json",
+      "size": 1139,
+      "mtime_ns": 1788044542517521275
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_af34eac1ff917a9a/sess_4a7abcb76406713276a54e03/media-manifest.json",
+      "size": 653,
+      "mtime_ns": 1788056035456813991
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_af34eac1ff917a9a/sess_4a7abcb76406713276a54e03/整场直播.refresh0001.ts.partial.recording-state.json",
+      "size": 1151,
+      "mtime_ns": 1788045466584462768
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_af34eac1ff917a9a/sess_4a7abcb76406713276a54e03/整场直播.refresh0002.ts.partial.recording-state.json",
+      "size": 1401,
+      "mtime_ns": 1788046069601731150
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_af34eac1ff917a9a/sess_4a7abcb76406713276a54e03/整场直播.ts",
+      "size": 647983548,
+      "mtime_ns": 1788056027743674984
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_af34eac1ff917a9a/sess_dbdab255139a6d0502fcf1a4/整场直播.ts.partial.recording-state.json",
+      "size": 3408,
+      "mtime_ns": 1787962169157892056
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_af34eac1ff917a9a/sess_dbdab255139a6d0502fcf1a4/media-manifest.json",
+      "size": 657,
+      "mtime_ns": 1787984430032109517
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_af34eac1ff917a9a/sess_dbdab255139a6d0502fcf1a4/整场直播.ts",
+      "size": 1277331220,
+      "mtime_ns": 1787962168952906534
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_af34eac1ff917a9a/sess_f27bc46a277e3f815bdb08e1/整场直播.ts.partial.recording-state.json",
+      "size": 2589,
+      "mtime_ns": 1787990151974517550
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_af34eac1ff917a9a/sess_f27bc46a277e3f815bdb08e1/media-manifest.json",
+      "size": 657,
+      "mtime_ns": 1788015658668592500
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_af34eac1ff917a9a/sess_f27bc46a277e3f815bdb08e1/整场直播.ts",
+      "size": 1294366276,
+      "mtime_ns": 1787990151921034382
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_0d701166362f3482/sess_a9f0284f9116c98577370c23/media-manifest.json",
+      "size": 657,
+      "mtime_ns": 1787932989253475412
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_0d701166362f3482/sess_a9f0284f9116c98577370c23/整场直播.ts",
+      "size": 1715608852,
+      "mtime_ns": 1787922118577993741
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_0d701166362f3482/sess_3ae2425e3cdac61d08fd7336/整场直播.ts.partial.recording-state.json",
+      "size": 1139,
+      "mtime_ns": 1788003299520880534
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_0d701166362f3482/sess_3ae2425e3cdac61d08fd7336/整场直播.refresh0003.ts.partial.recording-state.json",
+      "size": 1151,
+      "mtime_ns": 1788006027551491961
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_0d701166362f3482/sess_3ae2425e3cdac61d08fd7336/整场直播.refresh0006.ts.partial.recording-state.json",
+      "size": 3331,
+      "mtime_ns": 1788008211134590394
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_0d701166362f3482/sess_3ae2425e3cdac61d08fd7336/整场直播.refresh0005.ts.partial.recording-state.json",
+      "size": 1151,
+      "mtime_ns": 1788007839832852678
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_0d701166362f3482/sess_3ae2425e3cdac61d08fd7336/media-manifest.json",
+      "size": 656,
+      "mtime_ns": 1788011444307213370
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_0d701166362f3482/sess_3ae2425e3cdac61d08fd7336/整场直播.refresh0004.ts.partial.recording-state.json",
+      "size": 1151,
+      "mtime_ns": 1788006931612258665
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_0d701166362f3482/sess_3ae2425e3cdac61d08fd7336/整场直播.refresh0001.ts.partial.recording-state.json",
+      "size": 1151,
+      "mtime_ns": 1788004204259125963
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_0d701166362f3482/sess_3ae2425e3cdac61d08fd7336/整场直播.refresh0002.ts.partial.recording-state.json",
+      "size": 1151,
+      "mtime_ns": 1788005123532433362
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_0d701166362f3482/sess_3ae2425e3cdac61d08fd7336/整场直播.ts",
+      "size": 1572192112,
+      "mtime_ns": 1788011419880145522
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_3209ade1e6024113/sess_be0618a6c518741ab9d9df75/整场直播.ts.partial.recording-state.json",
+      "size": 1139,
+      "mtime_ns": 1788011966829816298
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_3209ade1e6024113/sess_be0618a6c518741ab9d9df75/整场直播.refresh0003.ts.partial.recording-state.json",
+      "size": 1151,
+      "mtime_ns": 1788014678215400986
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_3209ade1e6024113/sess_be0618a6c518741ab9d9df75/media-manifest.json",
+      "size": 656,
+      "mtime_ns": 1788019024630035996
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_3209ade1e6024113/sess_be0618a6c518741ab9d9df75/整场直播.refresh0004.ts.partial.recording-state.json",
+      "size": 3331,
+      "mtime_ns": 1788015044612771083
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_3209ade1e6024113/sess_be0618a6c518741ab9d9df75/整场直播.refresh0001.ts.partial.recording-state.json",
+      "size": 1151,
+      "mtime_ns": 1788012869921184035
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_3209ade1e6024113/sess_be0618a6c518741ab9d9df75/整场直播.refresh0002.ts.partial.recording-state.json",
+      "size": 1151,
+      "mtime_ns": 1788013773426929519
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_3209ade1e6024113/sess_be0618a6c518741ab9d9df75/整场直播.ts",
+      "size": 1053287296,
+      "mtime_ns": 1788019012886344583
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_3209ade1e6024113/sess_fe1fceb6536f9090c4723255/00_直播录像.sample300s.transcript.json",
+      "size": 23967,
+      "mtime_ns": 1787646637148034412
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_3209ade1e6024113/sess_fe1fceb6536f9090c4723255/00_直播录像.sample300s.wav",
+      "size": 9600078,
+      "mtime_ns": 1787646538168649283
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_3209ade1e6024113/sess_fe1fceb6536f9090c4723255/00_直播录像.ts",
+      "size": 3860919528,
+      "mtime_ns": 1787636980551992783
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_3209ade1e6024113/sess_abc393a6f5ad29c2141f3fba/media-manifest.json",
+      "size": 659,
+      "mtime_ns": 1787932952599784859
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_3209ade1e6024113/sess_abc393a6f5ad29c2141f3fba/整场直播.ts",
+      "size": 5911233052,
+      "mtime_ns": 1787932731513159822
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_3209ade1e6024113/sess_2db15dd1142c361ff36474d9/整场直播.ts.partial.recording-state.json",
+      "size": 1168,
+      "mtime_ns": 1788065080257931834
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_3209ade1e6024113/sess_2db15dd1142c361ff36474d9/整场直播.refresh0003.ts.partial.recording-state.json",
+      "size": 1134,
+      "mtime_ns": 1788067776417376056
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_3209ade1e6024113/sess_2db15dd1142c361ff36474d9/整场直播.refresh0005.ts.partial.recording-state.json",
+      "size": 1380,
+      "mtime_ns": 1788068764113917937
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_3209ade1e6024113/sess_2db15dd1142c361ff36474d9/media-manifest.json",
+      "size": 653,
+      "mtime_ns": 1788070275712016461
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_3209ade1e6024113/sess_2db15dd1142c361ff36474d9/整场直播.refresh0004.ts.partial.recording-state.json",
+      "size": 1134,
+      "mtime_ns": 1788068694347337282
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_3209ade1e6024113/sess_2db15dd1142c361ff36474d9/整场直播.refresh0001.ts.partial.recording-state.json",
+      "size": 1134,
+      "mtime_ns": 1788065980248329352
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_3209ade1e6024113/sess_2db15dd1142c361ff36474d9/整场直播.refresh0002.ts.partial.recording-state.json",
+      "size": 1134,
+      "mtime_ns": 1788066878604460814
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_3209ade1e6024113/sess_2db15dd1142c361ff36474d9/整场直播.ts",
+      "size": 1234781932,
+      "mtime_ns": 1788070255888869180
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_8fa98f187cbe460f/sess_80a0bd19e36d7f1a7f8a51f5/整场直播.ts.partial.recording-state.json",
+      "size": 1139,
+      "mtime_ns": 1787995639354040597
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_8fa98f187cbe460f/sess_80a0bd19e36d7f1a7f8a51f5/整场直播.refresh0003.ts.partial.recording-state.json",
+      "size": 1151,
+      "mtime_ns": 1787998358854969453
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_8fa98f187cbe460f/sess_80a0bd19e36d7f1a7f8a51f5/media-manifest.json",
+      "size": 655,
+      "mtime_ns": 1787998827301102417
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_8fa98f187cbe460f/sess_80a0bd19e36d7f1a7f8a51f5/整场直播.refresh0004.ts.partial.recording-state.json",
+      "size": 1398,
+      "mtime_ns": 1787998408393331297
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_8fa98f187cbe460f/sess_80a0bd19e36d7f1a7f8a51f5/整场直播.refresh0001.ts.partial.recording-state.json",
+      "size": 1151,
+      "mtime_ns": 1787996547011630887
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_8fa98f187cbe460f/sess_80a0bd19e36d7f1a7f8a51f5/整场直播.refresh0002.ts.partial.recording-state.json",
+      "size": 1150,
+      "mtime_ns": 1787997450991725074
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_8fa98f187cbe460f/sess_80a0bd19e36d7f1a7f8a51f5/整场直播.ts",
+      "size": 753808184,
+      "mtime_ns": 1787998821490010048
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_8fa98f187cbe460f/sess_8252e1ba27a75661d495b376/整场直播.ts.partial.recording-state.json",
+      "size": 1139,
+      "mtime_ns": 1788048884843598039
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_8fa98f187cbe460f/sess_8252e1ba27a75661d495b376/media-manifest.json",
+      "size": 652,
+      "mtime_ns": 1788051225564138581
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_8fa98f187cbe460f/sess_8252e1ba27a75661d495b376/整场直播.refresh0001.ts.partial.recording-state.json",
+      "size": 1151,
+      "mtime_ns": 1788049788936306112
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_8fa98f187cbe460f/sess_8252e1ba27a75661d495b376/整场直播.refresh0002.ts.partial.recording-state.json",
+      "size": 1151,
+      "mtime_ns": 1788050692965583784
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_8fa98f187cbe460f/sess_8252e1ba27a75661d495b376/整场直播.ts",
+      "size": 759695028,
+      "mtime_ns": 1788051213044985364
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_8fa98f187cbe460f/sess_bdb1861867b9dfe7745a8928/整场直播.ts.partial.recording-state.json",
+      "size": 1139,
+      "mtime_ns": 1788067568724004767
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_8fa98f187cbe460f/sess_bdb1861867b9dfe7745a8928/整场直播.refresh0003.ts.partial.recording-state.json",
+      "size": 1151,
+      "mtime_ns": 1788070303034170782
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_8fa98f187cbe460f/sess_bdb1861867b9dfe7745a8928/media-manifest.json",
+      "size": 656,
+      "mtime_ns": 1788072275958115588
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_8fa98f187cbe460f/sess_bdb1861867b9dfe7745a8928/整场直播.refresh0004.ts.partial.recording-state.json",
+      "size": 3331,
+      "mtime_ns": 1788070484548453048
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_8fa98f187cbe460f/sess_bdb1861867b9dfe7745a8928/整场直播.refresh0001.ts.partial.recording-state.json",
+      "size": 1151,
+      "mtime_ns": 1788068487093501877
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_8fa98f187cbe460f/sess_bdb1861867b9dfe7745a8928/整场直播.refresh0002.ts.partial.recording-state.json",
+      "size": 1150,
+      "mtime_ns": 1788069395042173282
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_8fa98f187cbe460f/sess_bdb1861867b9dfe7745a8928/整场直播.ts",
+      "size": 1045379640,
+      "mtime_ns": 1788072264649131055
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_08513b0271791c3c/sess_2c2efc8ede8948dcf258a697/整场直播.ts.partial.recording-state.json",
+      "size": 1139,
+      "mtime_ns": 1788011964239996816
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_08513b0271791c3c/sess_2c2efc8ede8948dcf258a697/media-manifest.json",
+      "size": 655,
+      "mtime_ns": 1788016216784513321
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_08513b0271791c3c/sess_2c2efc8ede8948dcf258a697/整场直播.refresh0001.ts.partial.recording-state.json",
+      "size": 1303,
+      "mtime_ns": 1788012146100826479
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_08513b0271791c3c/sess_2c2efc8ede8948dcf258a697/整场直播.ts",
+      "size": 165472336,
+      "mtime_ns": 1788016216231027842
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_08513b0271791c3c/sess_26f68c9d79d9438551799d66/整场直播.ts.partial.recording-state.json",
+      "size": 1172,
+      "mtime_ns": 1788048555762766191
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_08513b0271791c3c/sess_26f68c9d79d9438551799d66/整场直播.part03.refresh0001.ts.partial.recording-state.json",
+      "size": 2516,
+      "mtime_ns": 1788052259306749002
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_08513b0271791c3c/sess_26f68c9d79d9438551799d66/整场直播.part03.ts.partial.recording-state.json",
+      "size": 1179,
+      "mtime_ns": 1788051445819890420
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_08513b0271791c3c/sess_26f68c9d79d9438551799d66/media-manifest.json",
+      "size": 653,
+      "mtime_ns": 1788055950183693859
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_08513b0271791c3c/sess_26f68c9d79d9438551799d66/整场直播.part01.ts.partial.recording-state.json",
+      "size": 1179,
+      "mtime_ns": 1788049549717597707
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_08513b0271791c3c/sess_26f68c9d79d9438551799d66/整场直播.part01.refresh0001.ts.partial.recording-state.json",
+      "size": 1191,
+      "mtime_ns": 1788050455853011314
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_08513b0271791c3c/sess_26f68c9d79d9438551799d66/整场直播.ts",
+      "size": 1214231088,
+      "mtime_ns": 1788055935871850607
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_9664f575b6878d0d/sess_a5c9b612fa352fd645e105b8/整场直播.ts.partial.recording-state.json",
+      "size": 3344,
+      "mtime_ns": 1787963926705544112
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_9664f575b6878d0d/sess_a5c9b612fa352fd645e105b8/media-manifest.json",
+      "size": 655,
+      "mtime_ns": 1787967893248573026
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_9664f575b6878d0d/sess_a5c9b612fa352fd645e105b8/整场直播.part01.ts.partial.recording-state.json",
+      "size": 4109,
+      "mtime_ns": 1787967419246765338
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_9664f575b6878d0d/sess_a5c9b612fa352fd645e105b8/整场直播.ts",
+      "size": 836360488,
+      "mtime_ns": 1787967886912013107
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_9664f575b6878d0d/sess_ae9578b83647a5cfc984eb94/整场直播.ts.partial.recording-state.json",
+      "size": 1660,
+      "mtime_ns": 1788050568929354330
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_9664f575b6878d0d/sess_ae9578b83647a5cfc984eb94/整场直播.refresh0003.ts.partial.recording-state.json",
+      "size": 1151,
+      "mtime_ns": 1788053301215031589
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_9664f575b6878d0d/sess_ae9578b83647a5cfc984eb94/media-manifest.json",
+      "size": 656,
+      "mtime_ns": 1788056005112181409
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_9664f575b6878d0d/sess_ae9578b83647a5cfc984eb94/整场直播.part04.ts.partial.recording-state.json",
+      "size": 3344,
+      "mtime_ns": 1788054226187827441
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_9664f575b6878d0d/sess_ae9578b83647a5cfc984eb94/整场直播.refresh0001.ts.partial.recording-state.json",
+      "size": 1151,
+      "mtime_ns": 1788051473204579161
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_9664f575b6878d0d/sess_ae9578b83647a5cfc984eb94/整场直播.refresh0002.ts.partial.recording-state.json",
+      "size": 1151,
+      "mtime_ns": 1788052395449264597
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_9664f575b6878d0d/sess_ae9578b83647a5cfc984eb94/整场直播.ts",
+      "size": 1181687536,
+      "mtime_ns": 1788055990657562588
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c8c4a8ea998e6e/sess_cf4d4239b737104047a71294/media-manifest.json",
+      "size": 652,
+      "mtime_ns": 1787932526548985922
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c8c4a8ea998e6e/sess_cf4d4239b737104047a71294/整场直播.ts",
+      "size": 992544684,
+      "mtime_ns": 1787932516640569994
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c8c4a8ea998e6e/sess_3f33dd38cdc004f62bbf1d34/整场直播.ts.partial.recording-state.json",
+      "size": 1176,
+      "mtime_ns": 1788080019302382295
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c8c4a8ea998e6e/sess_3f33dd38cdc004f62bbf1d34/整场直播.refresh0003.ts.partial.recording-state.json",
+      "size": 1191,
+      "mtime_ns": 1788082713177354979
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c8c4a8ea998e6e/sess_3f33dd38cdc004f62bbf1d34/整场直播.cf465540aaa0.transcript.json",
+      "size": 457904,
+      "mtime_ns": 1788087042000869600
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c8c4a8ea998e6e/sess_3f33dd38cdc004f62bbf1d34/media-manifest.json",
+      "size": 655,
+      "mtime_ns": 1788083967923533365
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c8c4a8ea998e6e/sess_3f33dd38cdc004f62bbf1d34/整场直播.cf465540aaa0.opus",
+      "size": 27002276,
+      "mtime_ns": 1788084054236534423
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c8c4a8ea998e6e/sess_3f33dd38cdc004f62bbf1d34/整场直播.refresh0004.ts.partial.recording-state.json",
+      "size": 1442,
+      "mtime_ns": 1788083513747172369
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c8c4a8ea998e6e/sess_3f33dd38cdc004f62bbf1d34/整场直播.refresh0001.ts.partial.recording-state.json",
+      "size": 1191,
+      "mtime_ns": 1788080917142849476
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c8c4a8ea998e6e/sess_3f33dd38cdc004f62bbf1d34/整场直播.refresh0002.ts.partial.recording-state.json",
+      "size": 1191,
+      "mtime_ns": 1788081815354843032
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c8c4a8ea998e6e/sess_3f33dd38cdc004f62bbf1d34/整场直播.ts",
+      "size": 571999588,
+      "mtime_ns": 1788083961921716155
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c8c4a8ea998e6e/sess_fe6d1b5bfa0da364fae5242b/整场直播.ts.partial.recording-state.json",
+      "size": 1138,
+      "mtime_ns": 1787993646795186226
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c8c4a8ea998e6e/sess_fe6d1b5bfa0da364fae5242b/整场直播.refresh0003.ts.partial.recording-state.json",
+      "size": 1398,
+      "mtime_ns": 1787996153929271180
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c8c4a8ea998e6e/sess_fe6d1b5bfa0da364fae5242b/整场直播.part04.refresh0005.ts.partial.recording-state.json",
+      "size": 1404,
+      "mtime_ns": 1788011929412490016
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c8c4a8ea998e6e/sess_fe6d1b5bfa0da364fae5242b/整场直播.part04.refresh0003.ts.partial.recording-state.json",
+      "size": 1157,
+      "mtime_ns": 1788010881054993549
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c8c4a8ea998e6e/sess_fe6d1b5bfa0da364fae5242b/media-manifest.json",
+      "size": 656,
+      "mtime_ns": 1788012394854429143
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c8c4a8ea998e6e/sess_fe6d1b5bfa0da364fae5242b/整场直播.part04.refresh0002.ts.partial.recording-state.json",
+      "size": 1157,
+      "mtime_ns": 1788009947623674631
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c8c4a8ea998e6e/sess_fe6d1b5bfa0da364fae5242b/整场直播.part04.ts.partial.recording-state.json",
+      "size": 1154,
+      "mtime_ns": 1788008109722917431
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c8c4a8ea998e6e/sess_fe6d1b5bfa0da364fae5242b/整场直播.refresh0001.ts.partial.recording-state.json",
+      "size": 1150,
+      "mtime_ns": 1787994546816962895
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c8c4a8ea998e6e/sess_fe6d1b5bfa0da364fae5242b/整场直播.refresh0002.ts.partial.recording-state.json",
+      "size": 1150,
+      "mtime_ns": 1787995445002527883
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c8c4a8ea998e6e/sess_fe6d1b5bfa0da364fae5242b/整场直播.part04.refresh0004.ts.partial.recording-state.json",
+      "size": 1158,
+      "mtime_ns": 1788011802867863586
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c8c4a8ea998e6e/sess_fe6d1b5bfa0da364fae5242b/整场直播.ts",
+      "size": 944469324,
+      "mtime_ns": 1788012381835996067
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_91c8c4a8ea998e6e/sess_fe6d1b5bfa0da364fae5242b/整场直播.part04.refresh0001.ts.partial.recording-state.json",
+      "size": 1157,
+      "mtime_ns": 1788009012677861164
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_8e61cc2464a297e6/sess_850d613b397229af6f437c06/整场直播.ts.partial.recording-state.json",
+      "size": 1139,
+      "mtime_ns": 1788049146215089032
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_8e61cc2464a297e6/sess_850d613b397229af6f437c06/整场直播.refresh0003.ts.partial.recording-state.json",
+      "size": 1150,
+      "mtime_ns": 1788051900297581038
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_8e61cc2464a297e6/sess_850d613b397229af6f437c06/整场直播.refresh0005.ts.partial.recording-state.json",
+      "size": 1401,
+      "mtime_ns": 1788053731727437721
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_8e61cc2464a297e6/sess_850d613b397229af6f437c06/media-manifest.json",
+      "size": 653,
+      "mtime_ns": 1788055893444852594
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_8e61cc2464a297e6/sess_850d613b397229af6f437c06/整场直播.refresh0004.ts.partial.recording-state.json",
+      "size": 1151,
+      "mtime_ns": 1788052802458508998
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_8e61cc2464a297e6/sess_850d613b397229af6f437c06/整场直播.refresh0001.ts.partial.recording-state.json",
+      "size": 1151,
+      "mtime_ns": 1788050052191194363
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_8e61cc2464a297e6/sess_850d613b397229af6f437c06/整场直播.refresh0002.ts.partial.recording-state.json",
+      "size": 1151,
+      "mtime_ns": 1788050976175933995
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_8e61cc2464a297e6/sess_850d613b397229af6f437c06/整场直播.ts",
+      "size": 1451219940,
+      "mtime_ns": 1788055859694663152
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_8e61cc2464a297e6/sess_423ec7caccac42f052d7a1c4/media-manifest.json",
+      "size": 657,
+      "mtime_ns": 1787933139630588489
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_8e61cc2464a297e6/sess_423ec7caccac42f052d7a1c4/整场直播.ts",
+      "size": 2561216872,
+      "mtime_ns": 1787933082086640968
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_c718a1ed89414166/sess_221f0ba0239cd654cfc83fe8/media-manifest.json",
+      "size": 659,
+      "mtime_ns": 1787932351632285946
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_c718a1ed89414166/sess_221f0ba0239cd654cfc83fe8/整场直播.ts",
+      "size": 1270928316,
+      "mtime_ns": 1787932338387649345
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_00a2da5e9c4d90e8/sess_42ce038d99c17e0487aad3a5/整场直播.ts.partial.recording-state.json",
+      "size": 1139,
+      "mtime_ns": 1788011963941070808
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_00a2da5e9c4d90e8/sess_42ce038d99c17e0487aad3a5/media-manifest.json",
+      "size": 652,
+      "mtime_ns": 1788014012861098105
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_00a2da5e9c4d90e8/sess_42ce038d99c17e0487aad3a5/整场直播.refresh0001.ts.partial.recording-state.json",
+      "size": 1151,
+      "mtime_ns": 1788012867943214116
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_00a2da5e9c4d90e8/sess_42ce038d99c17e0487aad3a5/整场直播.refresh0002.ts.partial.recording-state.json",
+      "size": 3378,
+      "mtime_ns": 1788013619509645048
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_00a2da5e9c4d90e8/sess_42ce038d99c17e0487aad3a5/整场直播.ts",
+      "size": 376637884,
+      "mtime_ns": 1788014009424986414
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_00a2da5e9c4d90e8/sess_00765a791edf03e320c77eb0/media-manifest.json",
+      "size": 658,
+      "mtime_ns": 1787933238825501446
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_00a2da5e9c4d90e8/sess_00765a791edf03e320c77eb0/整场直播.ts",
+      "size": 1102792208,
+      "mtime_ns": 1787933227045809911
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_00a2da5e9c4d90e8/sess_0d5011a2d8af132ce1b497c4/整场直播.ts.partial.recording-state.json",
+      "size": 1139,
+      "mtime_ns": 1787993697422698996
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_00a2da5e9c4d90e8/sess_0d5011a2d8af132ce1b497c4/整场直播.refresh0003.ts.partial.recording-state.json",
+      "size": 1151,
+      "mtime_ns": 1787996421818748215
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_00a2da5e9c4d90e8/sess_0d5011a2d8af132ce1b497c4/整场直播.refresh0005.ts.partial.recording-state.json",
+      "size": 3349,
+      "mtime_ns": 1787998078767587308
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_00a2da5e9c4d90e8/sess_0d5011a2d8af132ce1b497c4/media-manifest.json",
+      "size": 654,
+      "mtime_ns": 1788003606081762984
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_00a2da5e9c4d90e8/sess_0d5011a2d8af132ce1b497c4/整场直播.refresh0004.ts.partial.recording-state.json",
+      "size": 1149,
+      "mtime_ns": 1787997329848068537
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_00a2da5e9c4d90e8/sess_0d5011a2d8af132ce1b497c4/整场直播.refresh0001.ts.partial.recording-state.json",
+      "size": 1151,
+      "mtime_ns": 1787994605868941758
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_00a2da5e9c4d90e8/sess_0d5011a2d8af132ce1b497c4/整场直播.refresh0002.ts.partial.recording-state.json",
+      "size": 1151,
+      "mtime_ns": 1787995513933929859
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_00a2da5e9c4d90e8/sess_0d5011a2d8af132ce1b497c4/整场直播.ts",
+      "size": 1014673224,
+      "mtime_ns": 1788003593362195588
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_650c33d1973a5825/sess_276e38684a5294c8342e733c/整场直播.ts.partial.recording-state.json",
+      "size": 1139,
+      "mtime_ns": 1788071777719515884
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_650c33d1973a5825/sess_276e38684a5294c8342e733c/整场直播.refresh0003.ts.partial.recording-state.json",
+      "size": 1151,
+      "mtime_ns": 1788074483783161787
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_650c33d1973a5825/sess_276e38684a5294c8342e733c/整场直播.part06.ts.partial.recording-state.json",
+      "size": 3364,
+      "mtime_ns": 1788076623741818386
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_650c33d1973a5825/sess_276e38684a5294c8342e733c/整场直播.refresh0005.ts.partial.recording-state.json",
+      "size": 1151,
+      "mtime_ns": 1788076281717770569
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_650c33d1973a5825/sess_276e38684a5294c8342e733c/media-manifest.json",
+      "size": 656,
+      "mtime_ns": 1788077228837218331
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_650c33d1973a5825/sess_276e38684a5294c8342e733c/整场直播.refresh0004.ts.partial.recording-state.json",
+      "size": 1151,
+      "mtime_ns": 1788075383550121896
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_650c33d1973a5825/sess_276e38684a5294c8342e733c/整场直播.refresh0001.ts.partial.recording-state.json",
+      "size": 1151,
+      "mtime_ns": 1788072681321321916
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_650c33d1973a5825/sess_276e38684a5294c8342e733c/整场直播.refresh0002.ts.partial.recording-state.json",
+      "size": 1151,
+      "mtime_ns": 1788073585714018916
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_650c33d1973a5825/sess_276e38684a5294c8342e733c/整场直播.ts",
+      "size": 1180525320,
+      "mtime_ns": 1788077215954706887
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_650c33d1973a5825/sess_28becd1dc2dc71de8a2f6c81/整场直播.ts.partial.recording-state.json",
+      "size": 4145,
+      "mtime_ns": 1787965008422921526
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_650c33d1973a5825/sess_28becd1dc2dc71de8a2f6c81/media-manifest.json",
+      "size": 658,
+      "mtime_ns": 1787975368615265528
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_650c33d1973a5825/sess_28becd1dc2dc71de8a2f6c81/整场直播.part01.ts.partial.recording-state.json",
+      "size": 3372,
+      "mtime_ns": 1787974812300944366
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_650c33d1973a5825/sess_28becd1dc2dc71de8a2f6c81/整场直播.ts",
+      "size": 3005870336,
+      "mtime_ns": 1787975301157281835
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_650c33d1973a5825/sess_a44279c4f3247e47de2fe9d1/整场直播.ts.partial.recording-state.json",
+      "size": 4235,
+      "mtime_ns": 1787990288074128851
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_650c33d1973a5825/sess_a44279c4f3247e47de2fe9d1/media-manifest.json",
+      "size": 656,
+      "mtime_ns": 1788015672317218695
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_650c33d1973a5825/sess_a44279c4f3247e47de2fe9d1/整场直播.ts",
+      "size": 882765656,
+      "mtime_ns": 1787990288011835613
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_650c33d1973a5825/sess_75b7f205b3c4031bdd645413/整场直播.ts.partial.recording-state.json",
+      "size": 1172,
+      "mtime_ns": 1788046879830799518
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_650c33d1973a5825/sess_75b7f205b3c4031bdd645413/整场直播.refresh0003.ts.partial.recording-state.json",
+      "size": 1184,
+      "mtime_ns": 1788049573600487417
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_650c33d1973a5825/sess_75b7f205b3c4031bdd645413/整场直播.part07.refresh0003.ts.partial.recording-state.json",
+      "size": 1158,
+      "mtime_ns": 1788060013067090258
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_650c33d1973a5825/sess_75b7f205b3c4031bdd645413/整场直播.part07.refresh0005.ts.partial.recording-state.json",
+      "size": 3542,
+      "mtime_ns": 1788061199224906803
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_650c33d1973a5825/sess_75b7f205b3c4031bdd645413/media-manifest.json",
+      "size": 655,
+      "mtime_ns": 1788061530830157976
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_650c33d1973a5825/sess_75b7f205b3c4031bdd645413/整场直播.part07.refresh0004.ts.partial.recording-state.json",
+      "size": 1158,
+      "mtime_ns": 1788060912930999406
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_650c33d1973a5825/sess_75b7f205b3c4031bdd645413/整场直播.part04.refresh0002.ts.partial.recording-state.json",
+      "size": 2609,
+      "mtime_ns": 1788051619160637827
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_650c33d1973a5825/sess_75b7f205b3c4031bdd645413/整场直播.part04.ts.partial.recording-state.json",
+      "size": 1179,
+      "mtime_ns": 1788050565718492632
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_650c33d1973a5825/sess_75b7f205b3c4031bdd645413/整场直播.part07.refresh0001.ts.partial.recording-state.json",
+      "size": 1158,
+      "mtime_ns": 1788058193197663238
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_650c33d1973a5825/sess_75b7f205b3c4031bdd645413/整场直播.refresh0001.ts.partial.recording-state.json",
+      "size": 1184,
+      "mtime_ns": 1788047777726395462
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_650c33d1973a5825/sess_75b7f205b3c4031bdd645413/整场直播.refresh0002.ts.partial.recording-state.json",
+      "size": 1184,
+      "mtime_ns": 1788048675827034337
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_650c33d1973a5825/sess_75b7f205b3c4031bdd645413/整场直播.ts",
+      "size": 1767364312,
+      "mtime_ns": 1788061504966809795
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_650c33d1973a5825/sess_75b7f205b3c4031bdd645413/整场直播.part07.ts.partial.recording-state.json",
+      "size": 1146,
+      "mtime_ns": 1788057292946773241
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_650c33d1973a5825/sess_75b7f205b3c4031bdd645413/整场直播.part04.refresh0001.ts.partial.recording-state.json",
+      "size": 1191,
+      "mtime_ns": 1788051463999028427
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_650c33d1973a5825/sess_75b7f205b3c4031bdd645413/整场直播.part07.refresh0002.ts.partial.recording-state.json",
+      "size": 1158,
+      "mtime_ns": 1788059093204616238
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_650c33d1973a5825/sess_38cab02b604fecf173b2dae1/media-manifest.json",
+      "size": 659,
+      "mtime_ns": 1787931920879649987
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_650c33d1973a5825/sess_38cab02b604fecf173b2dae1/整场直播.ts",
+      "size": 9975623288,
+      "mtime_ns": 1787931694740812339
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_836db3961058b668/sess_9084eb54bfbf924386718758/整场直播.ts.partial.recording-state.json",
+      "size": 1139,
+      "mtime_ns": 1788056535075546319
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_836db3961058b668/sess_9084eb54bfbf924386718758/整场直播.part01.refresh0005.ts.partial.recording-state.json",
+      "size": 1158,
+      "mtime_ns": 1788062055326899564
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_836db3961058b668/sess_9084eb54bfbf924386718758/整场直播.part01.refresh0006.ts.partial.recording-state.json",
+      "size": 3338,
+      "mtime_ns": 1788062308966290044
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_836db3961058b668/sess_9084eb54bfbf924386718758/整场直播.part01.refresh0003.ts.partial.recording-state.json",
+      "size": 1158,
+      "mtime_ns": 1788060258525650979
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_836db3961058b668/sess_9084eb54bfbf924386718758/media-manifest.json",
+      "size": 655,
+      "mtime_ns": 1788062723695334724
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_836db3961058b668/sess_9084eb54bfbf924386718758/整场直播.part01.refresh0002.ts.partial.recording-state.json",
+      "size": 1158,
+      "mtime_ns": 1788059361100321513
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_836db3961058b668/sess_9084eb54bfbf924386718758/整场直播.part01.ts.partial.recording-state.json",
+      "size": 1146,
+      "mtime_ns": 1788057564908274357
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_836db3961058b668/sess_9084eb54bfbf924386718758/整场直播.part01.refresh0001.ts.partial.recording-state.json",
+      "size": 1158,
+      "mtime_ns": 1788058463998832713
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_836db3961058b668/sess_9084eb54bfbf924386718758/整场直播.part01.refresh0004.ts.partial.recording-state.json",
+      "size": 1158,
+      "mtime_ns": 1788061157031176370
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_836db3961058b668/sess_9084eb54bfbf924386718758/整场直播.ts",
+      "size": 904433972,
+      "mtime_ns": 1788062709000781999
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_836db3961058b668/sess_535ed07d323422437670b25b/整场直播.ts.partial.recording-state.json",
+      "size": 1138,
+      "mtime_ns": 1787997463594062231
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_836db3961058b668/sess_535ed07d323422437670b25b/整场直播.refresh0003.ts.partial.recording-state.json",
+      "size": 1151,
+      "mtime_ns": 1788000179070482358
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_836db3961058b668/sess_535ed07d323422437670b25b/整场直播.refresh0006.ts.partial.recording-state.json",
+      "size": 1151,
+      "mtime_ns": 1788002872638260136
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_836db3961058b668/sess_535ed07d323422437670b25b/整场直播.refresh0005.ts.partial.recording-state.json",
+      "size": 1150,
+      "mtime_ns": 1788001974348628120
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_836db3961058b668/sess_535ed07d323422437670b25b/media-manifest.json",
+      "size": 655,
+      "mtime_ns": 1788015209375833772
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_836db3961058b668/sess_535ed07d323422437670b25b/整场直播.refresh0004.ts.partial.recording-state.json",
+      "size": 1151,
+      "mtime_ns": 1788001076728674176
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_836db3961058b668/sess_535ed07d323422437670b25b/整场直播.refresh0001.ts.partial.recording-state.json",
+      "size": 1151,
+      "mtime_ns": 1787998362660062224
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_836db3961058b668/sess_535ed07d323422437670b25b/整场直播.refresh0007.ts.partial.recording-state.json",
+      "size": 3331,
+      "mtime_ns": 1788003392465796402
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_836db3961058b668/sess_535ed07d323422437670b25b/整场直播.refresh0002.ts.partial.recording-state.json",
+      "size": 1151,
+      "mtime_ns": 1787999259738572952
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_836db3961058b668/sess_535ed07d323422437670b25b/整场直播.ts",
+      "size": 1422973316,
+      "mtime_ns": 1788015190303253111
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_836db3961058b668/sess_463919ded03fa079d5f9cff3/整场直播.ts.partial.recording-state.json",
+      "size": 1177,
+      "mtime_ns": 1788083562756447072
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_836db3961058b668/sess_463919ded03fa079d5f9cff3/整场直播.refresh0003.ts.partial.recording-state.json",
+      "size": 1192,
+      "mtime_ns": 1788086265880056877
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_836db3961058b668/sess_463919ded03fa079d5f9cff3/整场直播.refresh0006.ts.partial.recording-state.json",
+      "size": 1191,
+      "mtime_ns": 1788088962680530119
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_836db3961058b668/sess_463919ded03fa079d5f9cff3/整场直播.refresh0005.ts.partial.recording-state.json",
+      "size": 1189,
+      "mtime_ns": 1788088067224852874
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_836db3961058b668/sess_463919ded03fa079d5f9cff3/media-manifest.json",
+      "size": 656,
+      "mtime_ns": 1788090263375515432
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_836db3961058b668/sess_463919ded03fa079d5f9cff3/整场直播.refresh0004.ts.partial.recording-state.json",
+      "size": 1192,
+      "mtime_ns": 1788087163318446864
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_836db3961058b668/sess_463919ded03fa079d5f9cff3/整场直播.refresh0001.ts.partial.recording-state.json",
+      "size": 1188,
+      "mtime_ns": 1788084470239138835
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_836db3961058b668/sess_463919ded03fa079d5f9cff3/整场直播.refresh0007.ts.partial.recording-state.json",
+      "size": 1439,
+      "mtime_ns": 1788089780895490677
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_836db3961058b668/sess_463919ded03fa079d5f9cff3/整场直播.refresh0002.ts.partial.recording-state.json",
+      "size": 1192,
+      "mtime_ns": 1788085367644617419
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_836db3961058b668/sess_463919ded03fa079d5f9cff3/整场直播.ts",
+      "size": 1359393972,
+      "mtime_ns": 1788090242709249026
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_145bdcf5bfa08759/sess_1bed3436373e33445bb86a19/整场直播.ts.partial.recording-state.json",
+      "size": 1130,
+      "mtime_ns": 1788011967685929396
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_145bdcf5bfa08759/sess_1bed3436373e33445bb86a19/整场直播.refresh0003.ts.partial.recording-state.json",
+      "size": 1142,
+      "mtime_ns": 1788014667890385325
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_145bdcf5bfa08759/sess_1bed3436373e33445bb86a19/整场直播.refresh0005.ts.partial.recording-state.json",
+      "size": 3340,
+      "mtime_ns": 1788016564990000069
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_145bdcf5bfa08759/sess_1bed3436373e33445bb86a19/media-manifest.json",
+      "size": 655,
+      "mtime_ns": 1788017016277539609
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_145bdcf5bfa08759/sess_1bed3436373e33445bb86a19/整场直播.refresh0004.ts.partial.recording-state.json",
+      "size": 1142,
+      "mtime_ns": 1788015573806045623
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_145bdcf5bfa08759/sess_1bed3436373e33445bb86a19/整场直播.refresh0001.ts.partial.recording-state.json",
+      "size": 1142,
+      "mtime_ns": 1788012865559516568
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_145bdcf5bfa08759/sess_1bed3436373e33445bb86a19/整场直播.refresh0002.ts.partial.recording-state.json",
+      "size": 3025,
+      "mtime_ns": 1788013767417985359
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_145bdcf5bfa08759/sess_1bed3436373e33445bb86a19/整场直播.ts",
+      "size": 804602400,
+      "mtime_ns": 1788017009200253190
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_199f0706146a1c75/sess_4825f16a51fe30fa2b64e11d/整场直播.ts.partial.recording-state.json",
+      "size": 1172,
+      "mtime_ns": 1788048882410830893
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_199f0706146a1c75/sess_4825f16a51fe30fa2b64e11d/media-manifest.json",
+      "size": 655,
+      "mtime_ns": 1788050110524128115
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_199f0706146a1c75/sess_4825f16a51fe30fa2b64e11d/整场直播.refresh0001.ts.partial.recording-state.json",
+      "size": 2596,
+      "mtime_ns": 1788049656057361538
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_199f0706146a1c75/sess_4825f16a51fe30fa2b64e11d/整场直播.ts",
+      "size": 349430336,
+      "mtime_ns": 1788050109553772798
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_3fda32b6a5c38fa3/sess_76789051113ef9bc844fd9ae/media-manifest.json",
+      "size": 657,
+      "mtime_ns": 1787931388985282744
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_3fda32b6a5c38fa3/sess_76789051113ef9bc844fd9ae/整场直播.pre-reload-unverified.ts.audit",
+      "size": 1952134284,
+      "mtime_ns": 1787930451002593274
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_3fda32b6a5c38fa3/sess_76789051113ef9bc844fd9ae/整场直播.ts",
+      "size": 1952134284,
+      "mtime_ns": 1787930767532110441
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_3fda32b6a5c38fa3/sess_0b74d9454078d72919a2aa0f/整场直播.ts.partial.recording-state.json",
+      "size": 1172,
+      "mtime_ns": 1788005995453211104
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_3fda32b6a5c38fa3/sess_0b74d9454078d72919a2aa0f/整场直播.refresh0003.ts.partial.recording-state.json",
+      "size": 1184,
+      "mtime_ns": 1788008706350409215
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_3fda32b6a5c38fa3/sess_0b74d9454078d72919a2aa0f/media-manifest.json",
+      "size": 655,
+      "mtime_ns": 1788012055394910789
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_3fda32b6a5c38fa3/sess_0b74d9454078d72919a2aa0f/整场直播.refresh0004.ts.partial.recording-state.json",
+      "size": 2507,
+      "mtime_ns": 1788009514632449526
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_3fda32b6a5c38fa3/sess_0b74d9454078d72919a2aa0f/整场直播.refresh0001.ts.partial.recording-state.json",
+      "size": 1184,
+      "mtime_ns": 1788006898252266916
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_3fda32b6a5c38fa3/sess_0b74d9454078d72919a2aa0f/整场直播.refresh0002.ts.partial.recording-state.json",
+      "size": 1184,
+      "mtime_ns": 1788007802501310684
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_3fda32b6a5c38fa3/sess_0b74d9454078d72919a2aa0f/整场直播.ts",
+      "size": 758575300,
+      "mtime_ns": 1788012052895300556
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_e8f8785e8b29630c/sess_29260f13d8c175b8a9d055a9/整场直播.ts.partial.recording-state.json",
+      "size": 1172,
+      "mtime_ns": 1788011963521402343
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_e8f8785e8b29630c/sess_29260f13d8c175b8a9d055a9/整场直播.refresh0003.ts.partial.recording-state.json",
+      "size": 1184,
+      "mtime_ns": 1788014665255186118
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_e8f8785e8b29630c/sess_29260f13d8c175b8a9d055a9/media-manifest.json",
+      "size": 655,
+      "mtime_ns": 1788015777216186767
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_e8f8785e8b29630c/sess_29260f13d8c175b8a9d055a9/整场直播.refresh0004.ts.partial.recording-state.json",
+      "size": 2602,
+      "mtime_ns": 1788014779715298688
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_e8f8785e8b29630c/sess_29260f13d8c175b8a9d055a9/整场直播.refresh0001.ts.partial.recording-state.json",
+      "size": 1184,
+      "mtime_ns": 1788012863514355801
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_e8f8785e8b29630c/sess_29260f13d8c175b8a9d055a9/整场直播.refresh0002.ts.partial.recording-state.json",
+      "size": 1184,
+      "mtime_ns": 1788013763471148022
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_e8f8785e8b29630c/sess_29260f13d8c175b8a9d055a9/整场直播.ts",
+      "size": 974887912,
+      "mtime_ns": 1788015766815302333
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_87b3bb4c9e29eb3b/sess_0f220133d7ba4344129ce3e0/整场直播.ts.partial.recording-state.json",
+      "size": 1159,
+      "mtime_ns": 1788083747571543561
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_87b3bb4c9e29eb3b/sess_0f220133d7ba4344129ce3e0/整场直播.refresh0003.ts.partial.recording-state.json",
+      "size": 1171,
+      "mtime_ns": 1788086441537008942
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_87b3bb4c9e29eb3b/sess_0f220133d7ba4344129ce3e0/media-manifest.json",
+      "size": 652,
+      "mtime_ns": 1788087598395020183
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_87b3bb4c9e29eb3b/sess_0f220133d7ba4344129ce3e0/整场直播.refresh0004.ts.partial.recording-state.json",
+      "size": 1425,
+      "mtime_ns": 1788087175918546567
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_87b3bb4c9e29eb3b/sess_0f220133d7ba4344129ce3e0/整场直播.refresh0001.ts.partial.recording-state.json",
+      "size": 1171,
+      "mtime_ns": 1788084645406990218
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_87b3bb4c9e29eb3b/sess_0f220133d7ba4344129ce3e0/整场直播.refresh0002.ts.partial.recording-state.json",
+      "size": 1174,
+      "mtime_ns": 1788085543337912146
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_87b3bb4c9e29eb3b/sess_0f220133d7ba4344129ce3e0/整场直播.ts",
+      "size": 413270624,
+      "mtime_ns": 1788087597028575773
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_87b3bb4c9e29eb3b/sess_8d3a3471c97bd51e101e6e90/media-manifest.json",
+      "size": 658,
+      "mtime_ns": 1787932475238413621
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_87b3bb4c9e29eb3b/sess_8d3a3471c97bd51e101e6e90/整场直播.ts",
+      "size": 2274207800,
+      "mtime_ns": 1787932422336954558
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_87b3bb4c9e29eb3b/sess_9364647b9a4a7dbaee8eca2a/整场直播.ts.partial.recording-state.json",
+      "size": 1160,
+      "mtime_ns": 1787997249431098149
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_87b3bb4c9e29eb3b/sess_9364647b9a4a7dbaee8eca2a/整场直播.refresh0003.ts.partial.recording-state.json",
+      "size": 1172,
+      "mtime_ns": 1787999951563110905
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_87b3bb4c9e29eb3b/sess_9364647b9a4a7dbaee8eca2a/media-manifest.json",
+      "size": 656,
+      "mtime_ns": 1788015239872388554
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_87b3bb4c9e29eb3b/sess_9364647b9a4a7dbaee8eca2a/整场直播.refresh0004.ts.partial.recording-state.json",
+      "size": 2399,
+      "mtime_ns": 1788000426062648802
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_87b3bb4c9e29eb3b/sess_9364647b9a4a7dbaee8eca2a/整场直播.refresh0001.ts.partial.recording-state.json",
+      "size": 1172,
+      "mtime_ns": 1787998151442541746
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_87b3bb4c9e29eb3b/sess_9364647b9a4a7dbaee8eca2a/整场直播.refresh0002.ts.partial.recording-state.json",
+      "size": 1172,
+      "mtime_ns": 1787999051361580767
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_87b3bb4c9e29eb3b/sess_9364647b9a4a7dbaee8eca2a/整场直播.ts",
+      "size": 602608432,
+      "mtime_ns": 1788015232587293130
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_86bb728a51564fb6/sess_073506ff856ed27304d97df1/media-manifest.json",
+      "size": 657,
+      "mtime_ns": 1787932968578039723
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_86bb728a51564fb6/sess_073506ff856ed27304d97df1/整场直播.ts",
+      "size": 1201959576,
+      "mtime_ns": 1787929670409485009
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_86bb728a51564fb6/sess_e31d5c5f2c8ced5e9d28f1df/整场直播.ts.partial.recording-state.json",
+      "size": 1139,
+      "mtime_ns": 1787995394075370416
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_86bb728a51564fb6/sess_e31d5c5f2c8ced5e9d28f1df/整场直播.refresh0003.ts.partial.recording-state.json",
+      "size": 5637,
+      "mtime_ns": 1787998092017402614
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_86bb728a51564fb6/sess_e31d5c5f2c8ced5e9d28f1df/media-manifest.json",
+      "size": 657,
+      "mtime_ns": 1788015733432656229
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_86bb728a51564fb6/sess_e31d5c5f2c8ced5e9d28f1df/整场直播.refresh0004.ts.partial.recording-state.json",
+      "size": 1401,
+      "mtime_ns": 1787998925744540901
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_86bb728a51564fb6/sess_e31d5c5f2c8ced5e9d28f1df/整场直播.refresh0001.ts.partial.recording-state.json",
+      "size": 1151,
+      "mtime_ns": 1787996293842335376
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_86bb728a51564fb6/sess_e31d5c5f2c8ced5e9d28f1df/整场直播.refresh0002.ts.partial.recording-state.json",
+      "size": 1151,
+      "mtime_ns": 1787997192025692824
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_86bb728a51564fb6/sess_e31d5c5f2c8ced5e9d28f1df/整场直播.ts",
+      "size": 1254675716,
+      "mtime_ns": 1788015716469859541
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_86bb728a51564fb6/sess_a91af2d3a6196f6b58cbeeca/整场直播.ts.partial.recording-state.json",
+      "size": 1177,
+      "mtime_ns": 1788081873272905843
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_86bb728a51564fb6/sess_a91af2d3a6196f6b58cbeeca/整场直播.refresh0003.ts.partial.recording-state.json",
+      "size": 1192,
+      "mtime_ns": 1788084571150511776
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_86bb728a51564fb6/sess_a91af2d3a6196f6b58cbeeca/media-manifest.json",
+      "size": 655,
+      "mtime_ns": 1788085109949263783
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_86bb728a51564fb6/sess_a91af2d3a6196f6b58cbeeca/整场直播.refresh0004.ts.partial.recording-state.json",
+      "size": 1436,
+      "mtime_ns": 1788084621400808517
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_86bb728a51564fb6/sess_a91af2d3a6196f6b58cbeeca/整场直播.refresh0001.ts.partial.recording-state.json",
+      "size": 1191,
+      "mtime_ns": 1788082773104229829
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_86bb728a51564fb6/sess_a91af2d3a6196f6b58cbeeca/整场直播.refresh0002.ts.partial.recording-state.json",
+      "size": 1192,
+      "mtime_ns": 1788083673120218686
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_86bb728a51564fb6/sess_a91af2d3a6196f6b58cbeeca/整场直播.ts",
+      "size": 560625212,
+      "mtime_ns": 1788085102698664530
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_77ae4f4bebcaca48/sess_619f6c790caf4a07adb37a45/整场直播.ts.partial.recording-state.json",
+      "size": 1181,
+      "mtime_ns": 1788043730632432495
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_77ae4f4bebcaca48/sess_619f6c790caf4a07adb37a45/media-manifest.json",
+      "size": 652,
+      "mtime_ns": 1788056472266957098
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_77ae4f4bebcaca48/sess_619f6c790caf4a07adb37a45/整场直播.part01.ts.partial.recording-state.json",
+      "size": 1188,
+      "mtime_ns": 1788044708688502402
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_77ae4f4bebcaca48/sess_619f6c790caf4a07adb37a45/整场直播.part01.refresh0001.ts.partial.recording-state.json",
+      "size": 2666,
+      "mtime_ns": 1788045514057449117
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_77ae4f4bebcaca48/sess_619f6c790caf4a07adb37a45/整场直播.ts",
+      "size": 717043844,
+      "mtime_ns": 1788056469049133528
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_77ae4f4bebcaca48/sess_41aeb32ecec07c7b42be25b7/整场直播.ts.partial.recording-state.json",
+      "size": 1139,
+      "mtime_ns": 1788062756816229246
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_77ae4f4bebcaca48/sess_41aeb32ecec07c7b42be25b7/整场直播.refresh0003.ts.partial.recording-state.json",
+      "size": 3631,
+      "mtime_ns": 1788065543458468569
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_77ae4f4bebcaca48/sess_41aeb32ecec07c7b42be25b7/media-manifest.json",
+      "size": 655,
+      "mtime_ns": 1788066556959111260
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_77ae4f4bebcaca48/sess_41aeb32ecec07c7b42be25b7/整场直播.refresh0001.ts.partial.recording-state.json",
+      "size": 1151,
+      "mtime_ns": 1788063658801892928
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_77ae4f4bebcaca48/sess_41aeb32ecec07c7b42be25b7/整场直播.refresh0002.ts.partial.recording-state.json",
+      "size": 1151,
+      "mtime_ns": 1788064558699057661
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_77ae4f4bebcaca48/sess_41aeb32ecec07c7b42be25b7/整场直播.ts",
+      "size": 997370456,
+      "mtime_ns": 1788066541819372264
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_77ae4f4bebcaca48/sess_64b42136edb536d7cf7f26a9/整场直播.ts.partial.recording-state.json",
+      "size": 4166,
+      "mtime_ns": 1787978823114393823
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_77ae4f4bebcaca48/sess_64b42136edb536d7cf7f26a9/media-manifest.json",
+      "size": 657,
+      "mtime_ns": 1787984370653000507
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_77ae4f4bebcaca48/sess_64b42136edb536d7cf7f26a9/整场直播.ts",
+      "size": 1471162040,
+      "mtime_ns": 1787978822939130000
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_da976e262ebf85ce/sess_1c9f10427989050422ac4821/整场直播.ts.partial.recording-state.json",
+      "size": 1176,
+      "mtime_ns": 1788086597426592028
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_da976e262ebf85ce/sess_1c9f10427989050422ac4821/整场直播.refresh0003.ts.partial.recording-state.json",
+      "size": 1191,
+      "mtime_ns": 1788089295515256524
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_da976e262ebf85ce/sess_1c9f10427989050422ac4821/整场直播.refresh0005.ts.partial.recording-state.json",
+      "size": 3220,
+      "mtime_ns": 1788090635114305557
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_da976e262ebf85ce/sess_1c9f10427989050422ac4821/media-manifest.json",
+      "size": 652,
+      "mtime_ns": 1788090940602485839
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_da976e262ebf85ce/sess_1c9f10427989050422ac4821/整场直播.refresh0004.ts.partial.recording-state.json",
+      "size": 1192,
+      "mtime_ns": 1788090193999597538
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_da976e262ebf85ce/sess_1c9f10427989050422ac4821/整场直播.refresh0001.ts.partial.recording-state.json",
+      "size": 1191,
+      "mtime_ns": 1788087497547554437
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_da976e262ebf85ce/sess_1c9f10427989050422ac4821/整场直播.refresh0002.ts.partial.recording-state.json",
+      "size": 1191,
+      "mtime_ns": 1788088395535103105
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_da976e262ebf85ce/sess_1c9f10427989050422ac4821/整场直播.ts",
+      "size": 484200580,
+      "mtime_ns": 1788090939021674958
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_da976e262ebf85ce/sess_0dec1a5fc934413d46b028e2/media-manifest.json",
+      "size": 658,
+      "mtime_ns": 1787933347527627009
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_da976e262ebf85ce/sess_0dec1a5fc934413d46b028e2/整场直播.ts",
+      "size": 2017167620,
+      "mtime_ns": 1787929836263963252
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_da976e262ebf85ce/sess_923bb35c0c7a3e24ad48d9d4/整场直播.ts.partial.recording-state.json",
+      "size": 1138,
+      "mtime_ns": 1788000182699529180
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_da976e262ebf85ce/sess_923bb35c0c7a3e24ad48d9d4/整场直播.refresh0003.ts.partial.recording-state.json",
+      "size": 1150,
+      "mtime_ns": 1788002882780670850
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_da976e262ebf85ce/sess_923bb35c0c7a3e24ad48d9d4/整场直播.refresh0005.ts.partial.recording-state.json",
+      "size": 3389,
+      "mtime_ns": 1788004101500982131
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_da976e262ebf85ce/sess_923bb35c0c7a3e24ad48d9d4/media-manifest.json",
+      "size": 652,
+      "mtime_ns": 1788004593470401224
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_da976e262ebf85ce/sess_923bb35c0c7a3e24ad48d9d4/整场直播.refresh0004.ts.partial.recording-state.json",
+      "size": 1151,
+      "mtime_ns": 1788003788985030648
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_da976e262ebf85ce/sess_923bb35c0c7a3e24ad48d9d4/整场直播.refresh0001.ts.partial.recording-state.json",
+      "size": 1150,
+      "mtime_ns": 1788001082733750692
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_da976e262ebf85ce/sess_923bb35c0c7a3e24ad48d9d4/整场直播.refresh0002.ts.partial.recording-state.json",
+      "size": 1149,
+      "mtime_ns": 1788001982583135771
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_da976e262ebf85ce/sess_923bb35c0c7a3e24ad48d9d4/整场直播.ts",
+      "size": 456306832,
+      "mtime_ns": 1788004591688671151
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_c59658a52d6ad5a7/sess_3d1ec8edebc87316dc880d8e/media-manifest.json",
+      "size": 658,
+      "mtime_ns": 1787941740562593109
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_c59658a52d6ad5a7/sess_3d1ec8edebc87316dc880d8e/整场直播.ts",
+      "size": 5551417972,
+      "mtime_ns": 1787941616512296921
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_c59658a52d6ad5a7/sess_e513de065c13d06c303f8f74/整场直播.ts.partial.recording-state.json",
+      "size": 1172,
+      "mtime_ns": 1788014674254311441
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_c59658a52d6ad5a7/sess_e513de065c13d06c303f8f74/整场直播.refresh0003.ts.partial.recording-state.json",
+      "size": 1862,
+      "mtime_ns": 1788017382004884229
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_c59658a52d6ad5a7/sess_e513de065c13d06c303f8f74/media-manifest.json",
+      "size": 657,
+      "mtime_ns": 1788027910471335693
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_c59658a52d6ad5a7/sess_e513de065c13d06c303f8f74/整场直播.part04.refresh0002.ts.partial.recording-state.json",
+      "size": 2990,
+      "mtime_ns": 1788019933283288353
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_c59658a52d6ad5a7/sess_e513de065c13d06c303f8f74/整场直播.part04.ts.partial.recording-state.json",
+      "size": 1179,
+      "mtime_ns": 1788018402185466843
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_c59658a52d6ad5a7/sess_e513de065c13d06c303f8f74/整场直播.refresh0001.ts.partial.recording-state.json",
+      "size": 1184,
+      "mtime_ns": 1788015581770734206
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_c59658a52d6ad5a7/sess_e513de065c13d06c303f8f74/整场直播.refresh0002.ts.partial.recording-state.json",
+      "size": 1184,
+      "mtime_ns": 1788016482072942424
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_c59658a52d6ad5a7/sess_e513de065c13d06c303f8f74/整场直播.ts",
+      "size": 1635101048,
+      "mtime_ns": 1788027886983185836
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_c59658a52d6ad5a7/sess_e513de065c13d06c303f8f74/整场直播.part04.refresh0001.ts.partial.recording-state.json",
+      "size": 1465,
+      "mtime_ns": 1788019304036450153
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_91c1f0dca03af0c0/sess_c7198ad1b01acaa5fa734667/整场直播.ts.partial.recording-state.json",
+      "size": 3353,
+      "mtime_ns": 1787968524794392921
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_2830f009c4673f6f/sess_b02574aa870775054f6777a4/整场直播.ts.partial.recording-state.json",
+      "size": 1202,
+      "mtime_ns": 1788095940541650938
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_2830f009c4673f6f/sess_b02574aa870775054f6777a4/整场直播.ts.partial",
+      "size": 170917888,
+      "mtime_ns": 1788095943437422925
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_d84cba350eb545bf/sess_1089b9ba5fa1fb9b6cc7f13b/整场直播.ts.partial.recording-state.json",
+      "size": 1177,
+      "mtime_ns": 1788091245975996058
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_d84cba350eb545bf/sess_1089b9ba5fa1fb9b6cc7f13b/整场直播.refresh0003.ts.partial.recording-state.json",
+      "size": 1192,
+      "mtime_ns": 1788093945845791236
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_d84cba350eb545bf/sess_1089b9ba5fa1fb9b6cc7f13b/整场直播.refresh0002.ts.partial",
+      "size": 251516364,
+      "mtime_ns": 1788093045593319115
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_d84cba350eb545bf/sess_1089b9ba5fa1fb9b6cc7f13b/整场直播.refresh0005.ts.partial",
+      "size": 161882664,
+      "mtime_ns": 1788095499842522143
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_d84cba350eb545bf/sess_1089b9ba5fa1fb9b6cc7f13b/整场直播.refresh0005.ts.partial.recording-state.json",
+      "size": 3387,
+      "mtime_ns": 1788095500069709337
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_d84cba350eb545bf/sess_1089b9ba5fa1fb9b6cc7f13b/整场直播.refresh0003.ts.partial",
+      "size": 251315956,
+      "mtime_ns": 1788093945586945856
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_d84cba350eb545bf/sess_1089b9ba5fa1fb9b6cc7f13b/整场直播.refresh0004.ts.partial.recording-state.json",
+      "size": 1189,
+      "mtime_ns": 1788094849742333949
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_d84cba350eb545bf/sess_1089b9ba5fa1fb9b6cc7f13b/整场直播.refresh0001.ts.partial.recording-state.json",
+      "size": 1192,
+      "mtime_ns": 1788092145929032928
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_d84cba350eb545bf/sess_1089b9ba5fa1fb9b6cc7f13b/整场直播.ts.partial",
+      "size": 251320468,
+      "mtime_ns": 1788091245739199080
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_d84cba350eb545bf/sess_1089b9ba5fa1fb9b6cc7f13b/整场直播.refresh0002.ts.partial.recording-state.json",
+      "size": 1191,
+      "mtime_ns": 1788093045882232944
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_d84cba350eb545bf/sess_1089b9ba5fa1fb9b6cc7f13b/整场直播.refresh0001.ts.partial",
+      "size": 251463348,
+      "mtime_ns": 1788092145660694347
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_d84cba350eb545bf/sess_1089b9ba5fa1fb9b6cc7f13b/整场直播.refresh0004.ts.partial",
+      "size": 251251848,
+      "mtime_ns": 1788094849718086169
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_565c3ca37ff7c78d/sess_e0eea59b5bc445ab775112dd/00_直播录像.ts",
+      "size": 1034673980,
+      "mtime_ns": 1787637455862245590
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_0d701166362f3482/sess_d8a4d4628b76596244287bd3/整场直播.ts.partial.recording-state.json",
+      "size": 1160,
+      "mtime_ns": 1788089814699201939
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_0d701166362f3482/sess_d8a4d4628b76596244287bd3/整场直播.refresh0003.ts.partial.recording-state.json",
+      "size": 1172,
+      "mtime_ns": 1788092508299623145
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_0d701166362f3482/sess_d8a4d4628b76596244287bd3/整场直播.refresh0006.ts.partial.recording-state.json",
+      "size": 3039,
+      "mtime_ns": 1788095084661852967
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_0d701166362f3482/sess_d8a4d4628b76596244287bd3/整场直播.refresh0002.ts.partial",
+      "size": 248988892,
+      "mtime_ns": 1788091610287600662
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_0d701166362f3482/sess_d8a4d4628b76596244287bd3/整场直播.refresh0005.ts.partial",
+      "size": 247681164,
+      "mtime_ns": 1788094304397716162
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_0d701166362f3482/sess_d8a4d4628b76596244287bd3/整场直播.refresh0005.ts.partial.recording-state.json",
+      "size": 1175,
+      "mtime_ns": 1788094304542950374
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_0d701166362f3482/sess_d8a4d4628b76596244287bd3/整场直播.refresh0003.ts.partial",
+      "size": 247436764,
+      "mtime_ns": 1788092508235069362
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_0d701166362f3482/sess_d8a4d4628b76596244287bd3/整场直播.refresh0004.ts.partial.recording-state.json",
+      "size": 1172,
+      "mtime_ns": 1788093406584742312
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_0d701166362f3482/sess_d8a4d4628b76596244287bd3/整场直播.refresh0006.ts.partial",
+      "size": 160956416,
+      "mtime_ns": 1788094893888256311
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_0d701166362f3482/sess_d8a4d4628b76596244287bd3/整场直播.refresh0001.ts.partial.recording-state.json",
+      "size": 1172,
+      "mtime_ns": 1788090712559029517
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_0d701166362f3482/sess_d8a4d4628b76596244287bd3/整场直播.ts.partial",
+      "size": 248306828,
+      "mtime_ns": 1788089814445194277
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_0d701166362f3482/sess_d8a4d4628b76596244287bd3/整场直播.refresh0002.ts.partial.recording-state.json",
+      "size": 1175,
+      "mtime_ns": 1788091610357892119
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_0d701166362f3482/sess_d8a4d4628b76596244287bd3/整场直播.refresh0001.ts.partial",
+      "size": 248224672,
+      "mtime_ns": 1788090712432570349
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_0d701166362f3482/sess_d8a4d4628b76596244287bd3/整场直播.refresh0004.ts.partial",
+      "size": 248928920,
+      "mtime_ns": 1788093406257369346
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_3209ade1e6024113/sess_bd2b462d69c430cd03282cec/整场直播.ts.partial.recording-state.json",
+      "size": 3353,
+      "mtime_ns": 1787982590853079869
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_3209ade1e6024113/sess_4e328764c09f64213742a23e/00_直播录像.ts",
+      "size": 1626653456,
+      "mtime_ns": 1787636980531407297
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_08513b0271791c3c/sess_354ba535fa7c7402fb252aa2/整场直播.ts.partial.recording-state.json",
+      "size": 3469,
+      "mtime_ns": 1787965358577394714
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_08513b0271791c3c/sess_6097a2e5cd5a7f46efd0801e/整场直播.ts.partial.recording-state.json",
+      "size": 1177,
+      "mtime_ns": 1788095044405935170
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_08513b0271791c3c/sess_6097a2e5cd5a7f46efd0801e/整场直播.refresh0002.ts.partial",
+      "size": 262144,
+      "mtime_ns": 1788095944286135660
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_08513b0271791c3c/sess_6097a2e5cd5a7f46efd0801e/整场直播.refresh0001.ts.partial.recording-state.json",
+      "size": 1192,
+      "mtime_ns": 1788095942552245248
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_08513b0271791c3c/sess_6097a2e5cd5a7f46efd0801e/整场直播.ts.partial",
+      "size": 134907296,
+      "mtime_ns": 1788095044332889076
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_08513b0271791c3c/sess_6097a2e5cd5a7f46efd0801e/整场直播.refresh0002.ts.partial.recording-state.json",
+      "size": 1130,
+      "mtime_ns": 1788095943957629762
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_08513b0271791c3c/sess_6097a2e5cd5a7f46efd0801e/整场直播.refresh0001.ts.partial",
+      "size": 135099244,
+      "mtime_ns": 1788095942335713435
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_91c8c4a8ea998e6e/sess_45d04a07827993aaee08df3d/整场直播.ts.partial.recording-state.json",
+      "size": 1176,
+      "mtime_ns": 1788094477124105478
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_91c8c4a8ea998e6e/sess_45d04a07827993aaee08df3d/整场直播.refresh0002.ts.partial",
+      "size": 41418752,
+      "mtime_ns": 1788095944106361628
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_91c8c4a8ea998e6e/sess_45d04a07827993aaee08df3d/整场直播.refresh0001.ts.partial.recording-state.json",
+      "size": 1191,
+      "mtime_ns": 1788095377450099953
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_91c8c4a8ea998e6e/sess_45d04a07827993aaee08df3d/整场直播.ts.partial",
+      "size": 73351396,
+      "mtime_ns": 1788094476828112067
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_91c8c4a8ea998e6e/sess_45d04a07827993aaee08df3d/整场直播.refresh0002.ts.partial.recording-state.json",
+      "size": 1164,
+      "mtime_ns": 1788095942536122424
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_91c8c4a8ea998e6e/sess_45d04a07827993aaee08df3d/整场直播.refresh0001.ts.partial",
+      "size": 65877080,
+      "mtime_ns": 1788095377246904742
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_8e61cc2464a297e6/sess_141bc33ae49979e26437ad50/整场直播.ts.partial.recording-state.json",
+      "size": 2723,
+      "mtime_ns": 1787967108720318095
+    },
+    {
+      "path": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_836db3961058b668/sess_4d54b3bc1db45986557c3861/整场直播.ts.partial.recording-state.json",
+      "size": 3860,
+      "mtime_ns": 1787977247330510859
+    }
+  ]
+}

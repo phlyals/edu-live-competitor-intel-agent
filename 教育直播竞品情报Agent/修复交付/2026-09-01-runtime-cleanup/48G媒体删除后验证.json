@@ -1,0 +1,12 @@
+{
+  "verified_at": "2026-08-31T15:45:46.688056+00:00",
+  "remaining_completed_partial_count": 0,
+  "remaining_completed_partial_paths": [],
+  "all_manifest_paths_absent": true,
+  "affected_session_count": 56,
+  "final_files_present": 56,
+  "missing_final_files": 0,
+  "disk_free_gib": 467.4,
+  "disk_used_gib": 231.04,
+  "runtime_degraded_unrelated_reason": "41 monitor targets UNKNOWN; production gate BLOCKED; one active recording restart_count=0"
+}

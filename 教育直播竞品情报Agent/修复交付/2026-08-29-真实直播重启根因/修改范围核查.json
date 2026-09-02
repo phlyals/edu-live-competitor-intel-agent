@@ -1,0 +1,12 @@
+{
+  "changed_hashed_files": [
+    "/Volumes/ExternalStorage/AgentInfrastructure/isolated/profiles/edu_live_competitor_intel/runtime/bin/recorder.py",
+    "/Volumes/ExternalStorage/AgentInfrastructure/isolated/shared/avtranscribe/record_douyin_live.py",
+    "/Volumes/ExternalStorage/AgentInfrastructure/isolated/profiles/edu_live_competitor_intel/runtime/v3/test_v3_recording_transcription.py"
+  ],
+  "additional_changed_recording_config": "/Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/v3_config.json",
+  "protected_files_changed": [],
+  "acceptance_transcription_analysis_unchanged": true,
+  "backup_directory": "/Volumes/ExternalStorage/AgentInfrastructure/backups/edu-live-stream-rootcause-20260829",
+  "validated_deployment_cutoff_utc": "2026-08-29T06:45:23Z"
+}

@@ -1,0 +1,546 @@
+--- a/runtime/v3/v3_worker.py
++++ b/runtime/v3/v3_worker.py
+@@ -451,6 +451,136 @@
+     return {"started": True, "pid": process.pid, "recording_key": recording_key}
+ 
+ 
++FINALIZER_SOURCE_MANIFEST = "source-segments.preconcat.json"
++FINALIZER_CONCAT_LIST = ".concat-list.txt"
++FINALIZER_MERGE_TEMP = ".整场直播.merge.tmp"
++
++
++def _atomic_write_json(path: Path, payload: dict) -> None:
++    temporary = path.with_name(f".{path.name}.{os.getpid()}.tmp")
++    temporary.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
++    temporary.replace(path)
++
++
++def _parse_source_time(value: object) -> tuple[float, str] | None:
++    if not isinstance(value, str) or not value.strip():
++        return None
++    try:
++        parsed = datetime.fromisoformat(value.strip().replace("Z", "+00:00"))
++    except ValueError:
++        return None
++    if parsed.tzinfo is None:
++        parsed = parsed.replace(tzinfo=timezone.utc)
++    parsed = parsed.astimezone(timezone.utc)
++    return parsed.timestamp(), parsed.isoformat(timespec="milliseconds").replace("+00:00", "Z")
++
++
++def _source_generation(name: str) -> tuple[int, int, int]:
++    part = re.search(r"\.part(\d+)(?:\.|$)", name, flags=re.IGNORECASE)
++    refresh = re.search(r"\.refresh(\d+)(?:\.|$)", name, flags=re.IGNORECASE)
++    legacy = re.search(r"_(\d+)\.ts$", name, flags=re.IGNORECASE)
++    if name.startswith("整场直播.") or name.startswith("整场直播.ts"):
++        return (int(part.group(1)) if part else 0,
++                int(refresh.group(1)) if refresh else 0, 0)
++    return (1_000_000_000, 0, int(legacy.group(1)) if legacy else 1_000_000_000)
++
++
++def _source_sidecar(path: Path) -> tuple[Path, dict, str]:
++    sidecar = Path(str(path) + ".recording-state.json")
++    if not sidecar.is_file():
++        return sidecar, {}, "MISSING"
++    try:
++        payload = json.loads(sidecar.read_text(encoding="utf-8"))
++    except (OSError, json.JSONDecodeError):
++        return sidecar, {}, "MALFORMED_JSON"
++    if not isinstance(payload, dict):
++        return sidecar, {}, "MALFORMED_JSON"
++    classification = "PRESENT_VALID" if _parse_source_time(payload.get("started_at")) else "PRESENT_NO_STARTED_AT"
++    return sidecar, payload, classification
++
++
++def _probe_media_details(path: Path) -> dict:
++    ffprobe = shutil.which("ffprobe") or "/opt/homebrew/bin/ffprobe"
++    proc = subprocess.run(
++        [ffprobe, "-v", "error", "-show_entries",
++         "format=duration,size:stream=index,codec_type,codec_name,channels,width,height",
++         "-of", "json", str(path)],
++        capture_output=True, text=True, timeout=60, check=False,
++    )
++    try:
++        payload = json.loads(proc.stdout or "{}")
++        duration = float((payload.get("format") or {}).get("duration"))
++    except (ValueError, TypeError, json.JSONDecodeError):
++        payload = {}
++        duration = 0.0
++    streams = []
++    for stream in payload.get("streams") or []:
++        stream_type = stream.get("codec_type")
++        codec = stream.get("codec_name")
++        if stream_type not in {"audio", "video"} or not codec:
++            continue
++        streams.append({
++            "index": stream.get("index"),
++            "codec_type": stream_type,
++            "codec_name": codec,
++            "channels": stream.get("channels"),
++            "width": stream.get("width"),
++            "height": stream.get("height"),
++        })
++    stream_types = sorted({stream["codec_type"] for stream in streams})
++    codecs = sorted({(stream["codec_type"], stream["codec_name"]) for stream in streams})
++    return {
++        "ok": proc.returncode == 0 and duration > 0 and stream_types == ["audio", "video"],
++        "return_code": proc.returncode,
++        "duration_seconds": duration,
++        "stream_types": stream_types,
++        "codecs": [{"codec_type": stream_type, "codec_name": codec} for stream_type, codec in codecs],
++        "streams": streams,
++        "stderr_tail": (proc.stderr or "")[-1000:],
++    }
++
++
++def _source_manifest_entries(parts: list[Path]) -> tuple[list[dict], str]:
++    entries = []
++    for part in parts:
++        sidecar, sidecar_payload, classification = _source_sidecar(part)
++        parsed_started_at = _parse_source_time(sidecar_payload.get("started_at"))
++        entries.append({
++            "path": str(part),
++            "name": part.name,
++            "sha256": file_digest(part),
++            "bytes": part.stat().st_size,
++            "generation": _source_generation(part.name),
++            "sidecar": {
++                "path": str(sidecar),
++                "classification": classification,
++                "sha256": file_digest(sidecar) if sidecar.is_file() else None,
++                "started_at": parsed_started_at[1] if parsed_started_at else None,
++                "ended_at": sidecar_payload.get("ended_at"),
++                "status": sidecar_payload.get("status"),
++                "return_code": sidecar_payload.get("return_code"),
++                "exit_kind": sidecar_payload.get("exit_kind"),
++                "ffmpeg_tail_class": sidecar_payload.get("ffmpeg_tail_class"),
++                "ffmpeg_error_codes": sidecar_payload.get("ffmpeg_error_codes") or [],
++            },
++            "_started_at_epoch": parsed_started_at[0] if parsed_started_at else None,
++        })
++    if entries and all(entry["_started_at_epoch"] is not None for entry in entries):
++        strategy = "SIDECAR_STARTED_AT"
++        entries.sort(key=lambda entry: (entry["_started_at_epoch"], entry["generation"], entry["name"]))
++    else:
++        strategy = "EXPLICIT_GENERATION_THEN_FILENAME"
++        entries.sort(key=lambda entry: (entry["generation"], entry["name"]))
++    for entry in entries:
++        entry.pop("_started_at_epoch", None)
++        entry["probe"] = _probe_media_details(Path(entry["path"]))
++    return entries, strategy
++
++
++def _record_finalizer_error(conn, session_id: str, reason: str) -> None:
++    conn.execute("UPDATE recording_jobs SET last_error=? WHERE session_id=?", (reason[:2000], session_id))
++
++
+ def finalize_media_for_session(conn, session: dict, job: dict) -> None:
+     partial_dir = Path(job["partial_dir"])
+     completed_dir = Path(job["completed_dir"])
+@@ -464,36 +594,95 @@
+     if not partial_dir.exists() and not completed_dir.exists():
+         return
+     media_root = completed_dir if completed_dir.exists() else partial_dir
++    source_entries: list[dict] = []
++    ordering_strategy = "NO_SOURCE_MANIFEST"
++    source_manifest_path = media_root / FINALIZER_SOURCE_MANIFEST
++    if source_manifest_path.is_file():
++        try:
++            saved_manifest = json.loads(source_manifest_path.read_text(encoding="utf-8"))
++            saved_sources = saved_manifest.get("sources")
++            ordering_strategy = str(saved_manifest.get("ordering_strategy") or "RECOVERED_SOURCE_MANIFEST")
++        except (OSError, json.JSONDecodeError, AttributeError):
++            saved_sources = None
++        if not isinstance(saved_sources, list):
++            _record_finalizer_error(conn, session["session_id"], "source manifest is malformed; retained evidence not promoted")
++            return
++        source_entries = saved_sources
+     if media_root == partial_dir:
+         parts = [path for path in media_root.iterdir() if path.is_file() and (path.name.endswith(".ts.partial") or path.name.endswith(".ts")) and path.name != "整场直播.ts"]
+-        # Preserve capture order across old fixed-segment files and any V3
+-        # continuation file created during migration.  mtime is the only
+-        # reliable common ordering available for the legacy names; filename is
+-        # a deterministic tie-breaker.
+-        parts.sort(key=lambda path: (path.stat().st_mtime_ns, path.name))
+         final_path = media_root / "整场直播.ts"
+         if parts and not final_path.exists():
+-            if len(parts) == 1:
+-                parts[0].rename(final_path)
++            source_entries, ordering_strategy = _source_manifest_entries(parts)
++            source_manifest = {
++                "session_id": session["session_id"],
++                "phase": "PRE_CONCAT",
++                "created_at": utc_now(),
++                "ordering_strategy": ordering_strategy,
++                "sources": source_entries,
++            }
++            _atomic_write_json(source_manifest_path, source_manifest)
++            invalid_sources = [entry["name"] for entry in source_entries if not entry["probe"]["ok"]]
++            codec_signatures = {
++                tuple((codec["codec_type"], codec["codec_name"]) for codec in entry["probe"]["codecs"])
++                for entry in source_entries if entry["probe"]["ok"]
++            }
++            if invalid_sources:
++                _record_finalizer_error(conn, session["session_id"], "source media validation failed; source parts retained: " + ", ".join(invalid_sources))
++                return
++            if len(codec_signatures) != 1:
++                _record_finalizer_error(conn, session["session_id"], "source codec/stream layout changed; source parts retained")
++                return
++            ordered_parts = [Path(entry["path"]) for entry in source_entries]
++            concat_list = media_root / FINALIZER_CONCAT_LIST
++            concat_list.write_text("".join("file '" + path.as_posix().replace("'", "'\\''") + "'\n" for path in ordered_parts), encoding="utf-8")
++            merging = media_root / FINALIZER_MERGE_TEMP
++            if merging.exists():
++                merging.unlink()
++            if len(ordered_parts) == 1:
++                shutil.copyfile(ordered_parts[0], merging)
++                proc = None
+             else:
+-                concat_list = media_root / ".concat-list.txt"
+-                concat_list.write_text("".join("file '" + path.as_posix().replace("'", "'\\''") + "'\n" for path in parts), encoding="utf-8")
+                 ffmpeg = shutil.which("ffmpeg") or "/opt/homebrew/bin/ffmpeg"
+-                merging=media_root/'整场直播.merge.tmp'
+-                proc = subprocess.run([ffmpeg, "-hide_banner", "-loglevel", "error", "-y", "-f", "concat", "-safe", "0", "-i", str(concat_list), "-c", "copy", '-f','mpegts',str(merging)], capture_output=True, text=True, timeout=3600, check=False)
+-                if proc.returncode != 0 or not merging.exists() or merging.stat().st_size == 0:
+-                    conn.execute("UPDATE recording_jobs SET last_error='media concat failed; source parts retained' WHERE session_id=?",(session['session_id'],))
+-                    return
+-                merging.replace(final_path)
+-                for part in parts:
+-                    if part != final_path and part.exists():
+-                        part.unlink()
+-                if concat_list.exists():
+-                    concat_list.unlink()
++                proc = subprocess.run([ffmpeg, "-hide_banner", "-loglevel", "error", "-y", "-f", "concat", "-safe", "0", "-i", str(concat_list), "-c", "copy", "-f", "mpegts", str(merging)], capture_output=True, text=True, timeout=3600, check=False)
++            if (proc is not None and proc.returncode != 0) or not merging.exists() or merging.stat().st_size == 0:
++                detail = (proc.stderr or "")[-1000:] if proc is not None else "empty copied output"
++                _record_finalizer_error(conn, session["session_id"], "media concat failed; source parts retained: " + detail)
++                return
++            merged_probe = _probe_media_details(merging)
++            expected_concat_duration = sum(entry["probe"]["duration_seconds"] for entry in source_entries)
++            duration_tolerance = max(2.0, expected_concat_duration * 0.02)
++            source_codecs = next(iter(codec_signatures))
++            merged_codecs = tuple((codec["codec_type"], codec["codec_name"]) for codec in merged_probe["codecs"])
++            if (not merged_probe["ok"] or
++                    abs(merged_probe["duration_seconds"] - expected_concat_duration) > duration_tolerance or
++                    merged_codecs != source_codecs):
++                _record_finalizer_error(
++                    conn, session["session_id"],
++                    "merged media validation failed; source parts retained "
++                    f"expected_duration={expected_concat_duration:.3f} actual_duration={merged_probe['duration_seconds']:.3f} "
++                    f"expected_codecs={source_codecs!r} actual_codecs={merged_codecs!r}",
++                )
++                return
++            merging.replace(final_path)
+         if final_path.exists() and not completed_dir.exists():
+             completed_dir.parent.mkdir(parents=True, exist_ok=True)
+             partial_dir.replace(completed_dir)
+             media_root = completed_dir
++            if source_entries:
++                for entry in source_entries:
++                    entry["original_path"] = entry["path"]
++                    entry["path"] = str(media_root / entry["name"])
++                    entry["sidecar"]["original_path"] = entry["sidecar"]["path"]
++                    entry["sidecar"]["path"] = str(Path(str(media_root / entry["name"]) + ".recording-state.json"))
++                source_manifest_path = media_root / FINALIZER_SOURCE_MANIFEST
++                source_manifest = {
++                    "session_id": session["session_id"],
++                    "phase": "PUBLISHED_SOURCES_RETAINED",
++                    "created_at": utc_now(),
++                    "ordering_strategy": ordering_strategy,
++                    "sources": source_entries,
++                }
++                _atomic_write_json(source_manifest_path, source_manifest)
+     for path in sorted(media_root.glob("整场直播.ts")) if media_root.exists() else []:
+         segment_id = "segment_" + hashlib.sha256(f"{session['session_id']}:{path.name}".encode("utf-8")).hexdigest()[:24]
+         checksum = file_digest(path)
+@@ -510,10 +699,11 @@
+     if session["status"] != "ENDED" or not final_files:
+         return
+     path = final_files[0]
+-    probe=subprocess.run(['/opt/homebrew/bin/ffprobe','-v','error','-show_entries','format=duration','-of','json',str(path)],capture_output=True,text=True,timeout=60,check=False)
+-    try:duration=float(json.loads(probe.stdout)['format']['duration'])
+-    except (ValueError,KeyError,TypeError):return
+-    if probe.returncode!=0 or duration<=0:return
++    final_probe = _probe_media_details(path)
++    if not final_probe["ok"]:
++        _record_finalizer_error(conn, session["session_id"], "published media failed final A/V validation; retained evidence not promoted")
++        return
++    duration = final_probe["duration_seconds"]
+     expected=(datetime.fromisoformat(session['ended_at'].replace('Z','+00:00'))-datetime.fromisoformat(session['started_at'].replace('Z','+00:00'))).total_seconds()
+     metadata=json.loads(session['metadata_json'] or '{}')
+     complete=not metadata.get('recording_gap_seen') and int(job.get('restart_count') or 0)==0 and abs(duration-expected)<=max(60,expected*0.02)
+@@ -524,10 +714,31 @@
+     segment_id = conn.execute('SELECT segment_id FROM recording_segments WHERE session_id=? AND path=?',(session['session_id'],str(path))).fetchone()['segment_id']
+     conn.execute("INSERT INTO recording_segments(segment_id,session_id,path,checksum,captured_from,captured_to,status,bytes) VALUES(?,?,?,?,?,?,?,?) ON CONFLICT(session_id,path) DO UPDATE SET checksum=excluded.checksum,status='COMPLETE',bytes=excluded.bytes,captured_to=excluded.captured_to", (segment_id, session["session_id"], str(path), checksum, captured_from, captured_to, "COMPLETE", path.stat().st_size))
+     manifest_path = media_root / "media-manifest.json"
+-    manifest = {"session_id": session["session_id"], "final_path": str(path), "sha256": checksum, "bytes": path.stat().st_size, "captured_from": captured_from, "captured_to": captured_to, "created_at": utc_now(), 'coverage':metadata['media_coverage'],'completeness':'COMPLETE' if complete else 'PARTIAL'}
+-    manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
++    retained_sources = []
++    if source_entries:
++        for entry in source_entries:
++            retained_path = media_root / entry["name"]
++            retained_sidecar = Path(str(retained_path) + ".recording-state.json")
++            retained_sources.append({
++                **{key: value for key, value in entry.items() if key not in {"path", "sidecar"}},
++                "path": str(retained_path),
++                "sidecar": {**entry["sidecar"], "path": str(retained_sidecar)},
++            })
++    source_manifest_path = media_root / FINALIZER_SOURCE_MANIFEST
++    source_manifest_hash = file_digest(source_manifest_path) if source_manifest_path.is_file() else None
++    manifest = {
++        "session_id": session["session_id"], "final_path": str(path), "sha256": checksum,
++        "bytes": path.stat().st_size, "captured_from": captured_from, "captured_to": captured_to,
++        "created_at": utc_now(), "coverage": metadata["media_coverage"],
++        "completeness": "COMPLETE" if complete else "PARTIAL",
++        "final_probe": final_probe,
++        "source_manifest_path": str(source_manifest_path) if source_manifest_hash else None,
++        "source_manifest_sha256": source_manifest_hash,
++        "retained_sources": retained_sources,
++    }
++    _atomic_write_json(manifest_path, manifest)
+     manifest_hash = hashlib.sha256(manifest_path.read_bytes()).hexdigest()
+-    conn.execute("INSERT INTO media_manifests(manifest_id,session_id,status,manifest_path,manifest_hash,segment_count,total_bytes,complete_from,complete_to,verified_at,metadata_json) VALUES(?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT(session_id) DO UPDATE SET status='VERIFIED',manifest_path=excluded.manifest_path,manifest_hash=excluded.manifest_hash,segment_count=excluded.segment_count,total_bytes=excluded.total_bytes,complete_from=excluded.complete_from,complete_to=excluded.complete_to,verified_at=excluded.verified_at,metadata_json=excluded.metadata_json", ("manifest:" + session["session_id"], session["session_id"], "VERIFIED", str(manifest_path), manifest_hash, 1, path.stat().st_size, captured_from, captured_to, utc_now(), json.dumps({"final_file": str(path)}, ensure_ascii=False)))
++    conn.execute("INSERT INTO media_manifests(manifest_id,session_id,status,manifest_path,manifest_hash,segment_count,total_bytes,complete_from,complete_to,verified_at,metadata_json) VALUES(?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT(session_id) DO UPDATE SET status='VERIFIED',manifest_path=excluded.manifest_path,manifest_hash=excluded.manifest_hash,segment_count=excluded.segment_count,total_bytes=excluded.total_bytes,complete_from=excluded.complete_from,complete_to=excluded.complete_to,verified_at=excluded.verified_at,metadata_json=excluded.metadata_json", ("manifest:" + session["session_id"], session["session_id"], "VERIFIED", str(manifest_path), manifest_hash, max(1, len(retained_sources)), path.stat().st_size, captured_from, captured_to, utc_now(), json.dumps({"final_file": str(path), "source_manifest": str(source_manifest_path) if source_manifest_hash else None, "retained_source_count": len(retained_sources)}, ensure_ascii=False)))
+     try:
+         end_time = datetime.fromisoformat(captured_to.replace("Z", "+00:00"))
+         retention = json.loads(V3_CONFIG.read_text(encoding="utf-8")).get("retention") or {}
+@@ -535,7 +746,7 @@
+         video_due = (end_time + timedelta(hours=video_hours)).isoformat(timespec="milliseconds").replace("+00:00", "Z")
+     except ValueError:
+         video_due = utc_now()
+-    conn.execute("INSERT INTO retention_jobs(retention_job_id,object_type,object_id,policy_name,status,not_before,created_at,updated_at,payload_json) VALUES(?,?,?,?,?,?,?,?,?) ON CONFLICT(object_type,object_id,policy_name) DO UPDATE SET not_before=excluded.not_before,payload_json=excluded.payload_json", ("retention:video:" + session["session_id"], "VIDEO", session["session_id"], "VIDEO_72H", "PENDING", video_due, utc_now(), utc_now(), json.dumps({"session_id": session["session_id"], "path": str(path), "manifest_path": str(manifest_path)}, ensure_ascii=False)))
++    conn.execute("INSERT INTO retention_jobs(retention_job_id,object_type,object_id,policy_name,status,not_before,created_at,updated_at,payload_json) VALUES(?,?,?,?,?,?,?,?,?) ON CONFLICT(object_type,object_id,policy_name) DO UPDATE SET not_before=excluded.not_before,payload_json=excluded.payload_json", ("retention:video:" + session["session_id"], "VIDEO", session["session_id"], "VIDEO_72H", "PENDING", video_due, utc_now(), utc_now(), json.dumps({"session_id": session["session_id"], "path": str(path), "manifest_path": str(manifest_path), "source_manifest_path": str(source_manifest_path) if source_manifest_hash else None, "retained_sources": [entry["path"] for entry in retained_sources]}, ensure_ascii=False)))
+     conn.execute("UPDATE live_sessions SET status='MEDIA_COMPLETE',completeness=?,metadata_json=? WHERE session_id=?", ('COMPLETE' if complete else 'PARTIAL',json.dumps(metadata,ensure_ascii=False),session["session_id"]))
+ 
+ 
+--- a/runtime/v3/test_v3_recording_transcription.py
++++ b/runtime/v3/test_v3_recording_transcription.py
+@@ -263,7 +263,7 @@
+             c.execute("UPDATE live_sessions SET status='ENDED',ended_at='2026-08-28T00:10:00Z'")
+             c.execute('UPDATE recording_jobs SET pid=NULL')
+             s,j=self.rows(c)
+-            fake=type('Process',(),{'returncode':0,'stdout':json.dumps({'format':{'duration':'600'}})})()
++            fake=type('Process',(),{'returncode':0,'stdout':json.dumps({'format':{'duration':'600'},'streams':[{'index':0,'codec_type':'video','codec_name':'h264'},{'index':1,'codec_type':'audio','codec_name':'aac'}]}),'stderr':''})()
+             with patch.object(worker.subprocess,'run',return_value=fake):worker.finalize_media_for_session(c,s,j)
+             row=c.execute('SELECT segment_id,path FROM recording_segments').fetchone()
+             self.assertEqual(row['segment_id'],original);self.assertEqual(row['path'],str(self.completed/'整场直播.ts'))
+@@ -388,7 +388,7 @@
+             c.execute("UPDATE live_sessions SET status='ENDED',ended_at='2026-08-28T00:10:00Z'")
+             c.execute('UPDATE recording_jobs SET pid=NULL,restart_count=1')
+             s,j=self.rows(c)
+-            fake=type('Process',(),{'returncode':0,'stdout':json.dumps({'format':{'duration':'600'}})})()
++            fake=type('Process',(),{'returncode':0,'stdout':json.dumps({'format':{'duration':'600'},'streams':[{'index':0,'codec_type':'video','codec_name':'h264'},{'index':1,'codec_type':'audio','codec_name':'aac'}]}),'stderr':''})()
+             with patch.object(worker.subprocess,'run',return_value=fake):worker.finalize_media_for_session(c,s,j)
+             self.assertEqual(self.rows(c)[0]['completeness'],'PARTIAL')
+ 
+--- a/runtime/v3/test_v3_finalizer_evidence.py
++++ b/runtime/v3/test_v3_finalizer_evidence.py
+@@ -0,0 +1,208 @@
++import hashlib
++import importlib.util
++import json
++import os
++from pathlib import Path
++import shutil
++import subprocess
++from types import SimpleNamespace
++import sys
++from unittest.mock import patch
++
++
++RUNTIME_V3 = Path("/Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3")
++sys.path.insert(0, str(RUNTIME_V3))
++from test_v3_workflow import RuntimeCase
++
++
++import v3_worker as worker
++
++
++def probe_payload(duration: float) -> str:
++    return json.dumps({
++        "format": {"duration": str(duration), "size": "100"},
++        "streams": [
++            {"index": 0, "codec_type": "video", "codec_name": "h264", "width": 640, "height": 360},
++            {"index": 1, "codec_type": "audio", "codec_name": "aac", "channels": 2},
++        ],
++    })
++
++
++class FinalizerEvidenceTests(RuntimeCase):
++    def setUp(self):
++        super().setUp()
++        self.partial = self.root / "partial"
++        self.completed = self.root / "completed"
++        self.config = self.root / "v3_config.json"
++        self.config.write_text(json.dumps({"retention": {"video_hours": 72, "delete_enabled": False}}), encoding="utf-8")
++        self.partial.mkdir()
++        with self.connect() as conn:
++            conn.execute("INSERT INTO competitors(competitor_id,platform,platform_account_id,account_name,first_seen_at,last_seen_at) VALUES('c','buyin','c','test','2026-01-01','2026-01-01')")
++            conn.execute("INSERT INTO monitor_targets(monitor_target_id,competitor_id,status,live_url,live_status) VALUES('m','c','ACTIVE','https://live.douyin.com/123','OFFLINE_CONFIRMED')")
++            conn.execute("INSERT INTO live_sessions(session_id,monitor_target_id,platform_session_id,status,started_at,ended_at,source_url,metadata_json) VALUES('s','m','room','ENDED','2026-08-28T00:00:00Z','2026-08-28T00:00:20Z','https://live.douyin.com/123','{}')")
++            conn.execute("INSERT INTO recording_jobs(job_id,session_id,status,pid,account_key,recording_key,partial_dir,completed_dir,started_at,updated_at,restart_count) VALUES('j','s','WAITING_STREAM',NULL,'acct','sess',?,?,'2026-08-28T00:00:00Z','2026-08-28T00:00:20Z',0)", (str(self.partial), str(self.completed)))
++        worker.RECORDER_PROCESSES.clear()
++        self.concat_order = []
++
++    def make_sources(self, *, with_sidecars=True):
++        base = self.partial / "整场直播.ts.partial"
++        refresh = self.partial / "整场直播.refresh0001.ts.partial"
++        base.write_bytes(b"base-source-evidence")
++        refresh.write_bytes(b"refresh-source-evidence")
++        if with_sidecars:
++            Path(str(base) + ".recording-state.json").write_text(json.dumps({
++                "started_at": "2026-08-28T00:00:00Z", "ended_at": "2026-08-28T00:00:10Z",
++                "status": "COMPLETE", "return_code": 0, "exit_kind": "NORMAL",
++            }), encoding="utf-8")
++            Path(str(refresh) + ".recording-state.json").write_text(json.dumps({
++                "started_at": "2026-08-28T00:00:10Z", "ended_at": "2026-08-28T00:00:20Z",
++                "status": "COMPLETE", "return_code": 0, "exit_kind": "NORMAL",
++            }), encoding="utf-8")
++        # Deliberately make mtime contradict the capture chronology.
++        os.utime(base, (2_000, 2_000))
++        os.utime(refresh, (1_000, 1_000))
++        return base, refresh
++
++    def fake_subprocess(self, *, concat_failure=False, empty_output=False, merged_duration=20.0):
++        def run(command, **_kwargs):
++            executable = Path(command[0]).name
++            if executable == "ffprobe":
++                target = Path(command[-1])
++                duration = merged_duration if target.name in {".整场直播.merge.tmp", "整场直播.merge.tmp", "整场直播.ts"} else 10.0
++                return SimpleNamespace(returncode=0, stdout=probe_payload(duration), stderr="")
++            if executable == "ffmpeg":
++                concat_list = Path(command[command.index("-i") + 1])
++                self.concat_order = [Path(line[6:-1]).name for line in concat_list.read_text(encoding="utf-8").splitlines()]
++                if concat_failure:
++                    return SimpleNamespace(returncode=1, stdout="", stderr="injected concat failure")
++                output = Path(command[-1])
++                if empty_output:
++                    output.touch()
++                else:
++                    output.write_bytes(b"validated-merged-output")
++                return SimpleNamespace(returncode=0, stdout="", stderr="")
++            raise AssertionError(f"unexpected subprocess: {command}")
++        return run
++
++    def finalize(self, **faults):
++        with self.connect() as conn:
++            session = dict(conn.execute("SELECT * FROM live_sessions WHERE session_id='s'").fetchone())
++            job = dict(conn.execute("SELECT * FROM recording_jobs WHERE session_id='s'").fetchone())
++            with patch.object(worker, "pid_alive", return_value=False), patch.object(worker, "V3_CONFIG", self.config), patch.object(worker.subprocess, "run", side_effect=self.fake_subprocess(**faults)):
++                worker.finalize_media_for_session(conn, session, job)
++            conn.commit()
++
++    def assert_sources(self, root):
++        for name in ("整场直播.ts.partial", "整场直播.refresh0001.ts.partial"):
++            self.assertTrue((root / name).is_file(), name)
++
++    def test_concat_failure_preserves_sources_and_preconcat_manifest(self):
++        base, refresh = self.make_sources()
++        expected = {base.name: hashlib.sha256(base.read_bytes()).hexdigest(), refresh.name: hashlib.sha256(refresh.read_bytes()).hexdigest()}
++        self.finalize(concat_failure=True)
++        self.assert_sources(self.partial)
++        self.assertFalse((self.partial / "整场直播.ts").exists())
++        manifest_path = self.partial / "source-segments.preconcat.json"
++        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
++        self.assertEqual(manifest["phase"], "PRE_CONCAT")
++        self.assertEqual({entry["name"]: entry["sha256"] for entry in manifest["sources"]}, expected)
++
++    def test_empty_concat_output_is_not_published_and_sources_survive(self):
++        self.make_sources()
++        self.finalize(empty_output=True)
++        self.assert_sources(self.partial)
++        self.assertFalse((self.partial / "整场直播.ts").exists())
++        self.assertTrue((self.partial / "source-segments.preconcat.json").is_file())
++        with self.connect() as conn:
++            self.assertEqual(conn.execute("SELECT status FROM live_sessions WHERE session_id='s'").fetchone()[0], "ENDED")
++            self.assertIn("concat failed", conn.execute("SELECT last_error FROM recording_jobs WHERE session_id='s'").fetchone()[0])
++
++    def test_duration_mismatch_never_publishes_or_deletes_sources(self):
++        self.make_sources()
++        self.finalize(merged_duration=12.0)
++        self.assert_sources(self.partial)
++        self.assertFalse((self.partial / "整场直播.ts").exists())
++        self.assertFalse(self.completed.exists())
++        with self.connect() as conn:
++            self.assertEqual(conn.execute("SELECT status FROM live_sessions WHERE session_id='s'").fetchone()[0], "ENDED")
++            self.assertIn("validation failed", conn.execute("SELECT last_error FROM recording_jobs WHERE session_id='s'").fetchone()[0])
++
++    def test_sidecar_started_at_wins_over_wrong_mtime(self):
++        self.make_sources()
++        self.finalize()
++        self.assertEqual(self.concat_order, ["整场直播.ts.partial", "整场直播.refresh0001.ts.partial"])
++        manifest = json.loads((self.completed / "source-segments.preconcat.json").read_text(encoding="utf-8"))
++        self.assertEqual(manifest["ordering_strategy"], "SIDECAR_STARTED_AT")
++        self.assertEqual(manifest["phase"], "PUBLISHED_SOURCES_RETAINED")
++        self.assertEqual([entry["name"] for entry in manifest["sources"]], self.concat_order)
++        self.assertTrue(all(Path(entry["path"]).is_file() for entry in manifest["sources"]))
++
++    def test_missing_sidecars_use_composite_part_and_refresh_generation(self):
++        names = ["整场直播.ts.partial", "整场直播.refresh0001.ts.partial",
++                 "整场直播.part02.ts.partial", "整场直播.part02.refresh0001.ts.partial"]
++        for index, name in enumerate(reversed(names)):
++            path = self.partial / name
++            path.write_bytes(name.encode())
++            os.utime(path, (1_000 + index, 1_000 + index))
++        self.finalize(merged_duration=40.0)
++        self.assertEqual(self.concat_order, names)
++        manifest = json.loads((self.completed / "source-segments.preconcat.json").read_text(encoding="utf-8"))
++        self.assertEqual(manifest["ordering_strategy"], "EXPLICIT_GENERATION_THEN_FILENAME")
++
++    def test_success_publishes_final_but_retains_sources_and_sidecars(self):
++        self.make_sources()
++        self.finalize()
++        self.assertTrue((self.completed / "整场直播.ts").is_file())
++        self.assert_sources(self.completed)
++        self.assertTrue((self.completed / "整场直播.ts.partial.recording-state.json").is_file())
++        self.assertTrue((self.completed / "整场直播.refresh0001.ts.partial.recording-state.json").is_file())
++        manifest = json.loads((self.completed / "media-manifest.json").read_text(encoding="utf-8"))
++        self.assertEqual(len(manifest["retained_sources"]), 2)
++        self.assertTrue(all(Path(entry["path"]).is_file() for entry in manifest["retained_sources"]))
++        self.assertEqual(manifest["source_manifest_sha256"], hashlib.sha256((self.completed / "source-segments.preconcat.json").read_bytes()).hexdigest())
++        with self.connect() as conn:
++            self.assertEqual(conn.execute("SELECT status FROM live_sessions WHERE session_id='s'").fetchone()[0], "MEDIA_COMPLETE")
++            retention = json.loads(conn.execute("SELECT payload_json FROM retention_jobs WHERE object_id='s'").fetchone()[0])
++        self.assertEqual(len(retention["retained_sources"]), 2)
++
++    def test_real_ffmpeg_concat_retains_sources_and_validates_audio_video(self):
++        ffmpeg = shutil.which("ffmpeg")
++        ffprobe = shutil.which("ffprobe")
++        if not ffmpeg or not ffprobe:
++            self.skipTest("ffmpeg/ffprobe unavailable")
++        sources = []
++        for index in range(2):
++            path = self.partial / ("整场直播.ts.partial" if index == 0 else "整场直播.refresh0001.ts.partial")
++            command = [
++                ffmpeg, "-hide_banner", "-loglevel", "error", "-y",
++                "-f", "lavfi", "-i", "testsrc=size=320x240:rate=15",
++                "-f", "lavfi", "-i", "sine=frequency=440:sample_rate=48000",
++                "-t", "2", "-c:v", "libx264", "-preset", "ultrafast",
++                "-g", "15", "-pix_fmt", "yuv420p", "-c:a", "aac",
++                "-f", "mpegts", str(path),
++            ]
++            subprocess.run(command, check=True, capture_output=True, timeout=60)
++            Path(str(path) + ".recording-state.json").write_text(json.dumps({
++                "started_at": f"2026-08-28T00:00:0{index * 2}Z",
++                "ended_at": f"2026-08-28T00:00:0{index * 2 + 2}Z",
++                "status": "EXITED", "return_code": 0, "exit_kind": "NORMAL",
++                "ffmpeg_tail_class": "BENIGN", "ffmpeg_error_codes": [],
++            }), encoding="utf-8")
++            sources.append(path)
++        with self.connect() as conn:
++            session = dict(conn.execute("SELECT * FROM live_sessions WHERE session_id='s'").fetchone())
++            job = dict(conn.execute("SELECT * FROM recording_jobs WHERE session_id='s'").fetchone())
++            with patch.object(worker, "pid_alive", return_value=False), patch.object(worker, "V3_CONFIG", self.config):
++                worker.finalize_media_for_session(conn, session, job)
++            conn.commit()
++        final = self.completed / "整场直播.ts"
++        self.assertTrue(final.is_file())
++        self.assertTrue(all((self.completed / source.name).is_file() for source in sources))
++        manifest = json.loads((self.completed / "media-manifest.json").read_text())
++        self.assertEqual(manifest["final_probe"]["stream_types"], ["audio", "video"])
++        self.assertEqual(len(manifest["retained_sources"]), 2)
++
++
++if __name__ == "__main__":
++    import unittest
++    unittest.main(verbosity=2)

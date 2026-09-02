@@ -1,0 +1,8 @@
+{
+  "checked_at": "2026-08-30T05:07:49.486318+00:00",
+  "deployment_state": "TESTED_NOT_LOADED_ACTIVE_RECORDINGS",
+  "files": {
+    "/Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/v3_worker.py": "19fb28d9635af81227b178980cefbb111f1133272a2f0e45c9a55476a058181f",
+    "/Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/test_v3_recording_transcription.py": "6186250e4c79a0fc0afcabdac45af8b0711d0b981680a73272462137701e29e1"
+  }
+}

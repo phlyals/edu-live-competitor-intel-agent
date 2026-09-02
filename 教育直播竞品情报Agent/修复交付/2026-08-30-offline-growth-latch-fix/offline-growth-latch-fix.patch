@@ -1,0 +1,82 @@
+--- a/runtime/v3/v3_worker.py
++++ b/runtime/v3/v3_worker.py
+@@ -187,15 +187,38 @@
+             conn.execute("UPDATE live_sessions SET metadata_json=? WHERE session_id=?", (json.dumps(metadata, ensure_ascii=False, sort_keys=True), row["session_id"]))
+             continue
+         job = conn.execute("SELECT * FROM recording_jobs WHERE session_id=?", (row["session_id"],)).fetchone()
+-        health = metadata.get("recording_health") or {}
+-        if job and health.get("bytes") is not None and recording_bytes(Path(job["partial_dir"])) > int(health["bytes"]):
++        health = metadata.setdefault("recording_health", {})
++        try:
++            previous_bytes = int(health["bytes"]) if health.get("bytes") is not None else None
++        except (TypeError, ValueError):
++            previous_bytes = None
++        observed_bytes = recording_bytes(Path(job["partial_dir"])) if job else None
++        grew = previous_bytes is not None and observed_bytes is not None and observed_bytes > previous_bytes
++        recorder_active = bool(job and job["status"] in {"RUNNING", "STARTING"} and pid_alive(job["pid"]))
++        if observed_bytes is not None:
++            # Consume every byte observation exactly once. A recorder may flush
++            # a small final tail after the last RUNNING sample; persisting this
++            # baseline prevents the same fixed tail from vetoing offline forever.
++            health["bytes"] = observed_bytes
++            health["last_observed_at"] = now
++        if grew:
++            health["last_growth_at"] = now
++            health["growth_observations"] = int(health.get("growth_observations") or 0) + 1
++        if grew and recorder_active:
+             for key in ("down_since", "offline_observations", "last_offline_at"):
+                 metadata.pop(key, None)
+             metadata["offline_rejected_media_growth_at"] = now
+             record_event(conn, "OFFLINE_REJECTED_MEDIA_GROWTH", object_type="session", object_id=row["session_id"],
+-                         payload={"observed_at": now}, severity="WARNING")
++                         payload={"observed_at": now, "previous_bytes": previous_bytes,
++                                  "observed_bytes": observed_bytes, "pid": job["pid"],
++                                  "job_status": job["status"]}, severity="WARNING")
+             conn.execute("UPDATE live_sessions SET metadata_json=? WHERE session_id=?", (json.dumps(metadata, ensure_ascii=False, sort_keys=True), row["session_id"]))
+             continue
++        if grew:
++            record_event(conn, "OFFLINE_MEDIA_TAIL_CONSUMED", object_type="session", object_id=row["session_id"],
++                         payload={"observed_at": now, "previous_bytes": previous_bytes,
++                                  "observed_bytes": observed_bytes, "pid": job["pid"] if job else None,
++                                  "job_status": job["status"] if job else None}, severity="INFO")
+         down_since = metadata.get("down_since")
+         last_offline = metadata.get("last_offline_at")
+         try:
+--- a/runtime/v3/test_v3_recording_transcription.py
++++ b/runtime/v3/test_v3_recording_transcription.py
+@@ -272,13 +272,33 @@
+             worker.update_session_liveness(c,{'monitor_target_id':'m'},'OFFLINE_CONFIRMED','2026-08-28T00:00:00Z')
+             worker.update_session_liveness(c,{'monitor_target_id':'m'},'OFFLINE_CONFIRMED','2026-08-28T00:06:00Z')
+             self.assertIsNone(self.rows(c)[0]['ended_at'])
+-    def test_media_growth_vetoes_offline_confirmation(self):
++    def test_active_media_growth_vetoes_once_and_consumes_the_baseline(self):
+         with self.connect() as c:
+             c.execute('UPDATE live_sessions SET metadata_json=?',(json.dumps({'recording_health':{'bytes':0}}),))
+             (self.partial/'capture.ts.partial').write_bytes(b'still receiving')
+-            worker.update_session_liveness(c,{'monitor_target_id':'m'},'OFFLINE_CONFIRMED','2026-08-28T00:06:00Z')
++            with patch.object(worker,'pid_alive',return_value=True):
++                worker.update_session_liveness(c,{'monitor_target_id':'m'},'OFFLINE_CONFIRMED','2026-08-28T00:00:00Z')
+             s,_=self.rows(c);meta=json.loads(s['metadata_json'])
+             self.assertNotIn('down_since',meta);self.assertIn('offline_rejected_media_growth_at',meta)
++            self.assertEqual(meta['recording_health']['bytes'],len(b'still receiving'))
++            with patch.object(worker,'pid_alive',return_value=True):
++                worker.update_session_liveness(c,{'monitor_target_id':'m'},'OFFLINE_CONFIRMED','2026-08-28T00:01:00Z')
++            s,_=self.rows(c);meta=json.loads(s['metadata_json'])
++            self.assertEqual(meta['down_since'],'2026-08-28T00:01:00Z')
++            self.assertEqual(c.execute("SELECT count(*) FROM domain_events WHERE event_type='OFFLINE_REJECTED_MEDIA_GROWTH'").fetchone()[0],1)
++    def test_dead_recorder_final_tail_does_not_block_natural_end(self):
++        with self.connect() as c:
++            c.execute('UPDATE live_sessions SET metadata_json=?',(json.dumps({'recording_health':{'bytes':0}}),))
++            c.execute("UPDATE recording_jobs SET status='WAITING_STREAM',pid=NULL")
++            (self.partial/'capture.ts.partial').write_bytes(b'final flushed bytes')
++            with patch.object(worker,'pid_alive',return_value=False):
++                for minute in range(6):
++                    worker.update_session_liveness(c,{'monitor_target_id':'m'},'OFFLINE_CONFIRMED',f'2026-08-28T00:0{minute}:00Z')
++            s,_=self.rows(c);meta=json.loads(s['metadata_json'])
++            self.assertEqual(s['status'],'ENDED');self.assertEqual(s['ended_at'],'2026-08-28T00:00:00Z')
++            self.assertEqual(meta['recording_health']['bytes'],len(b'final flushed bytes'))
++            self.assertEqual(c.execute("SELECT count(*) FROM domain_events WHERE event_type='OFFLINE_REJECTED_MEDIA_GROWTH'").fetchone()[0],0)
++            self.assertEqual(c.execute("SELECT count(*) FROM domain_events WHERE event_type='OFFLINE_MEDIA_TAIL_CONSUMED'").fetchone()[0],1)
+     def test_dead_recorder_restarts_for_existing_unknown_session(self):
+         with self.connect() as c:c.execute("UPDATE monitor_targets SET live_status='UNKNOWN'")
+         with patch.object(worker,'pid_alive',return_value=False),patch.object(worker,'ensure_recording_job',return_value={'started':True}) as restart:

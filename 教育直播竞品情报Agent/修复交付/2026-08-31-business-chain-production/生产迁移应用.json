@@ -1,0 +1,23 @@
+{
+  "status": "APPLIED",
+  "plan_sha256": "53779e8c3fc76bb02381353f20c2b3092725fb6af6c1d7cbe8535ad122a7c4c4",
+  "backup_path": "/Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-31-business-chain-production/生产迁移行备份/pre-business-chain-20260831-113102-562676.json",
+  "backup_sha256": "3b040b0c9d2bba735c2487c8e2c7fdd89c37075677ac0aabb744ba952fa048df",
+  "postconditions": {
+    "healthy": true,
+    "schema": {
+      "missing_tables": [],
+      "missing_columns": {}
+    },
+    "indexes": [
+      "idx_comparison_evidence_analysis",
+      "idx_comparisons_competitor_newer",
+      "idx_knowledge_publish_receipts_candidate",
+      "idx_strategy_evidence_candidate",
+      "idx_strategy_versions_active",
+      "idx_version_observations_competitor"
+    ],
+    "marker": "1",
+    "errors": []
+  }
+}

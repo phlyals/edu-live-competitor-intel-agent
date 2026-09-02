@@ -1,0 +1,495 @@
+{
+  "observed_at": "2026-08-30T15:18:00.990526+00:00",
+  "transaction_read_only": "on",
+  "transcript_classification": [
+    {
+      "scope": "FULL_SESSION",
+      "qualification_status": "FULL_SESSION_QUALIFIED",
+      "status": "COMPLETE",
+      "count": 1
+    },
+    {
+      "scope": "HISTORICAL_TRANSCRIPT",
+      "qualification_status": "NONQUALIFYING_LEGACY",
+      "status": "COMPLETE",
+      "count": 3
+    },
+    {
+      "scope": "SAMPLE",
+      "qualification_status": "SAMPLE_NONQUALIFYING",
+      "status": "COMPLETE",
+      "count": 2
+    },
+    {
+      "scope": "SOURCE_SEGMENT",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "count": 245
+    }
+  ],
+  "analyses": [
+    {
+      "analysis_id": "analysis_16bdca57a497943fd6eb0c05",
+      "status": "COMPLETE",
+      "lineage_state": "CURRENT",
+      "scope": "FORMAL_SINGLE_SESSION",
+      "qualification_status": "FULL_SESSION_QUALIFIED",
+      "transcript_id": "transcript_875ba0bd045001857d6cd2dc",
+      "transcript_content_digest": "f9cf878d81b2721631046fba9d9f5610b7115c583bc26d77cc41a5ba908cd9a0",
+      "analysis_spec_version": "single-session-evidence-v2",
+      "model_version": "deepseek-chat",
+      "prompt_version": "deepseek-evidence-chunks-v3",
+      "artifact_digest": "45b576f6e35c6db85135f544abf879792180a81c682c91df82f6d7b1e5f5222e",
+      "output_path": "/Volumes/ExternalStorage/同行直播录制/analysis/drafts/runtime-v3/analysis/analysis_16bdca57a497943fd6eb0c05.json",
+      "output_exists": true,
+      "actual_artifact_digest": "45b576f6e35c6db85135f544abf879792180a81c682c91df82f6d7b1e5f5222e",
+      "digest_matches": true
+    },
+    {
+      "analysis_id": "analysis_8801cb766ceca4ab6327511a",
+      "status": "SAMPLE_NONQUALIFYING",
+      "lineage_state": "INVALIDATED",
+      "scope": "SAMPLE_AUXILIARY",
+      "qualification_status": "SAMPLE_NONQUALIFYING",
+      "transcript_id": "transcript_c198e4037bf2e8ead83a1b6e",
+      "transcript_content_digest": "2ff17f5dc3ea4455ee50ec4fcfe21b4f0cb3abd9034dde88982174e3ba829268",
+      "analysis_spec_version": "legacy-sample-analysis-v1",
+      "model_version": "deepseek-chat",
+      "prompt_version": "legacy-unversioned",
+      "artifact_digest": "d64d1ede9ee97628cf74d0b5ed4dcfce82a6f872edf51cbef9749feff1bee817",
+      "output_path": "/Volumes/ExternalStorage/同行直播录制/analysis/drafts/runtime-v3/analysis/analysis_8801cb766ceca4ab6327511a.json",
+      "output_exists": true,
+      "actual_artifact_digest": "d64d1ede9ee97628cf74d0b5ed4dcfce82a6f872edf51cbef9749feff1bee817",
+      "digest_matches": true
+    },
+    {
+      "analysis_id": "analysis_bb3f658b48a46b764b835fab",
+      "status": "SKIPPED_HISTORICAL",
+      "lineage_state": "CURRENT",
+      "scope": "HISTORICAL_SINGLE_SESSION",
+      "qualification_status": "NONQUALIFYING_LEGACY",
+      "transcript_id": null,
+      "transcript_content_digest": null,
+      "analysis_spec_version": null,
+      "model_version": null,
+      "prompt_version": null,
+      "artifact_digest": null,
+      "output_path": null,
+      "output_exists": false,
+      "actual_artifact_digest": null,
+      "digest_matches": null
+    },
+    {
+      "analysis_id": "analysis_f261f8101b4ea725a954c23f",
+      "status": "SAMPLE_NONQUALIFYING",
+      "lineage_state": "INVALIDATED",
+      "scope": "SAMPLE_AUXILIARY",
+      "qualification_status": "SAMPLE_NONQUALIFYING",
+      "transcript_id": "transcript_413c54e763036c6b65b9a56b",
+      "transcript_content_digest": "9afc3910ab398ed1caa4f576520e5ee9f2fe92fa1c2c704161a5ff31eb70760b",
+      "analysis_spec_version": "legacy-sample-analysis-v1",
+      "model_version": "deepseek-chat",
+      "prompt_version": "legacy-unversioned",
+      "artifact_digest": "14147e0d1536df6e157f3c8acd3a2c700926de9f1b45d192e7b106d692fa5c10",
+      "output_path": "/Volumes/ExternalStorage/同行直播录制/analysis/drafts/runtime-v3/analysis/analysis_f261f8101b4ea725a954c23f.json",
+      "output_exists": true,
+      "actual_artifact_digest": "14147e0d1536df6e157f3c8acd3a2c700926de9f1b45d192e7b106d692fa5c10",
+      "digest_matches": true
+    },
+    {
+      "analysis_id": "cmp-4b66f69594dd-vs-4c6ce3010823",
+      "status": "COMPLETE",
+      "lineage_state": "CURRENT",
+      "scope": "HISTORICAL_FORMAL",
+      "qualification_status": "HISTORICAL_IMPORTED",
+      "transcript_id": null,
+      "transcript_content_digest": null,
+      "analysis_spec_version": null,
+      "model_version": null,
+      "prompt_version": null,
+      "artifact_digest": null,
+      "output_path": "https://j10akfek917.feishu.cn/docx/B1NzdxphjocvOtx2Fc5c9k87ntO](https://j10akfek917.feishu.cn/docx/B1NzdxphjocvOtx2Fc5c9k87ntO",
+      "output_exists": false,
+      "actual_artifact_digest": null,
+      "digest_matches": null
+    },
+    {
+      "analysis_id": "cmp-f4be143e30cf-vs-4b66f69594dd",
+      "status": "COMPLETE",
+      "lineage_state": "CURRENT",
+      "scope": "HISTORICAL_FORMAL",
+      "qualification_status": "HISTORICAL_IMPORTED",
+      "transcript_id": null,
+      "transcript_content_digest": null,
+      "analysis_spec_version": null,
+      "model_version": null,
+      "prompt_version": null,
+      "artifact_digest": null,
+      "output_path": "https://j10akfek917.feishu.cn/docx/KPVrd8QvdowyIPxWNb5cbvxSnxe](https://j10akfek917.feishu.cn/docx/KPVrd8QvdowyIPxWNb5cbvxSnxe",
+      "output_exists": false,
+      "actual_artifact_digest": null,
+      "digest_matches": null
+    }
+  ],
+  "analysis_bundles": [
+    {
+      "object_id": "analysis_16bdca57a497943fd6eb0c05",
+      "status": "VERIFIED",
+      "scope": "FORMAL_SINGLE_SESSION",
+      "qualification_status": "FULL_SESSION_QUALIFIED",
+      "manifest_path": "/Volumes/ExternalStorage/同行直播录制/analysis/drafts/runtime-v3/analysis/analysis_16bdca57a497943fd6eb0c05.json",
+      "manifest_hash": "45b576f6e35c6db85135f544abf879792180a81c682c91df82f6d7b1e5f5222e",
+      "verified_at": "2026-08-30T15:12:28.499Z",
+      "manifest_exists": true,
+      "actual_manifest_hash": "45b576f6e35c6db85135f544abf879792180a81c682c91df82f6d7b1e5f5222e",
+      "hash_matches": true
+    },
+    {
+      "object_id": "analysis_8801cb766ceca4ab6327511a",
+      "status": "INVALIDATED_SAMPLE",
+      "scope": "SAMPLE_AUXILIARY",
+      "qualification_status": "SAMPLE_NONQUALIFYING",
+      "manifest_path": "/Volumes/ExternalStorage/同行直播录制/analysis/drafts/runtime-v3/analysis/analysis_8801cb766ceca4ab6327511a.json",
+      "manifest_hash": "d64d1ede9ee97628cf74d0b5ed4dcfce82a6f872edf51cbef9749feff1bee817",
+      "verified_at": "2026-08-25T08:32:26.273Z",
+      "manifest_exists": true,
+      "actual_manifest_hash": "d64d1ede9ee97628cf74d0b5ed4dcfce82a6f872edf51cbef9749feff1bee817",
+      "hash_matches": true
+    },
+    {
+      "object_id": "analysis_f261f8101b4ea725a954c23f",
+      "status": "INVALIDATED_SAMPLE",
+      "scope": "SAMPLE_AUXILIARY",
+      "qualification_status": "SAMPLE_NONQUALIFYING",
+      "manifest_path": "/Volumes/ExternalStorage/同行直播录制/analysis/drafts/runtime-v3/analysis/analysis_f261f8101b4ea725a954c23f.json",
+      "manifest_hash": "14147e0d1536df6e157f3c8acd3a2c700926de9f1b45d192e7b106d692fa5c10",
+      "verified_at": "2026-08-25T08:32:26.276Z",
+      "manifest_exists": true,
+      "actual_manifest_hash": "14147e0d1536df6e157f3c8acd3a2c700926de9f1b45d192e7b106d692fa5c10",
+      "hash_matches": true
+    }
+  ],
+  "corrections": [
+    {
+      "outbox_id": "out_sample_correction_ce51768f07ad3f9bf2aa",
+      "object_id": "analysis_8801cb766ceca4ab6327511a",
+      "outbox_status": "SENT",
+      "attempts": 1,
+      "outbox_scope": "SAMPLE_AUXILIARY",
+      "outbox_qualification": "SAMPLE_NONQUALIFYING",
+      "receipt_id": "receipt:out_sample_correction_ce51768f07ad3f9bf2aa",
+      "receipt_status": "VERIFIED",
+      "receipt_scope": "SAMPLE_AUXILIARY",
+      "receipt_qualification": "SAMPLE_NONQUALIFYING",
+      "verified_at": "2026-08-30T15:13:25.874Z",
+      "delivery_status": "VERIFIED",
+      "delivery_qualification_state": "SAMPLE_NONQUALIFYING",
+      "feishu_record_id": "recvtirUYNc3at",
+      "feishu_fields": {
+        "分析类型": [
+          "部分场辅助"
+        ],
+        "状态": [
+          "证据不足"
+        ],
+        "证据说明": "SAMPLE_NONQUALIFYING：仅300秒样本，不是整场分析，不可用于正式决策或后续交付；lineage_state=INVALIDATED"
+      }
+    },
+    {
+      "outbox_id": "out_sample_correction_39029adb0abb366a71bb",
+      "object_id": "analysis_f261f8101b4ea725a954c23f",
+      "outbox_status": "SENT",
+      "attempts": 1,
+      "outbox_scope": "SAMPLE_AUXILIARY",
+      "outbox_qualification": "SAMPLE_NONQUALIFYING",
+      "receipt_id": "receipt:out_sample_correction_39029adb0abb366a71bb",
+      "receipt_status": "VERIFIED",
+      "receipt_scope": "SAMPLE_AUXILIARY",
+      "receipt_qualification": "SAMPLE_NONQUALIFYING",
+      "verified_at": "2026-08-30T15:13:50.821Z",
+      "delivery_status": "VERIFIED",
+      "delivery_qualification_state": "SAMPLE_NONQUALIFYING",
+      "feishu_record_id": "recvtirVPUVLAM",
+      "feishu_fields": {
+        "分析类型": [
+          "部分场辅助"
+        ],
+        "状态": [
+          "证据不足"
+        ],
+        "证据说明": "SAMPLE_NONQUALIFYING：仅300秒样本，不是整场分析，不可用于正式决策或后续交付；lineage_state=INVALIDATED"
+      }
+    }
+  ],
+  "old_sample_delivery": [
+    {
+      "object_id": "analysis_8801cb766ceca4ab6327511a",
+      "outbox_status": "SENT",
+      "outbox_scope": "SAMPLE_AUXILIARY",
+      "outbox_qualification": "SAMPLE_NONQUALIFYING",
+      "receipt_status": "VERIFIED",
+      "receipt_scope": "SAMPLE_AUXILIARY",
+      "receipt_qualification": "SAMPLE_NONQUALIFYING"
+    },
+    {
+      "object_id": "analysis_f261f8101b4ea725a954c23f",
+      "outbox_status": "SENT",
+      "outbox_scope": "SAMPLE_AUXILIARY",
+      "outbox_qualification": "SAMPLE_NONQUALIFYING",
+      "receipt_status": "VERIFIED",
+      "receipt_scope": "SAMPLE_AUXILIARY",
+      "receipt_qualification": "SAMPLE_NONQUALIFYING"
+    }
+  ],
+  "sample_current_lineage_count": 0,
+  "formal_current_edges": [
+    {
+      "downstream_id": "analysis_16bdca57a497943fd6eb0c05",
+      "upstream_id": "transcript_875ba0bd045001857d6cd2dc",
+      "upstream_version": "f9cf878d81b2721631046fba9d9f5610b7115c583bc26d77cc41a5ba908cd9a0"
+    }
+  ],
+  "heartbeats": [
+    {
+      "service_name": "analysis-v3",
+      "pid": 59710,
+      "status": "READY",
+      "last_heartbeat_at": "2026-08-30T15:16:56.451Z",
+      "last_success_at": "2026-08-30T15:16:56.451Z",
+      "pid_alive": true,
+      "details": {
+        "checked_at": "2026-08-30T15:16:56.451Z",
+        "completed": 0,
+        "source_qualification_blocked": 0,
+        "waiting_model": 0
+      }
+    },
+    {
+      "service_name": "evidence-v3",
+      "pid": 59632,
+      "status": "READY",
+      "last_heartbeat_at": "2026-08-30T15:17:53.521Z",
+      "last_success_at": "2026-08-30T15:17:53.521Z",
+      "pid_alive": true,
+      "details": {
+        "blocked": 0,
+        "checked_at": "2026-08-30T15:17:53.521Z",
+        "verified": 0
+      }
+    },
+    {
+      "service_name": "pipeline-v3",
+      "pid": 59708,
+      "status": "READY",
+      "last_heartbeat_at": "2026-08-30T15:17:53.984Z",
+      "last_success_at": "2026-08-30T15:17:53.984Z",
+      "pid_alive": true,
+      "details": {
+        "analysis_tasks": 0,
+        "checked_at": "2026-08-30T15:17:53.984Z",
+        "eligible_canonical_pending": 0,
+        "eligible_canonical_total": 1,
+        "full_session_meets_target": 1,
+        "full_session_qualified": 1,
+        "health_reasons": [],
+        "quality_blocked": 0,
+        "segments": 108,
+        "stale_backlog": {
+          "missing_output": 0,
+          "missing_source": 0,
+          "unrecoverable": 0
+        },
+        "transcripts": 0
+      }
+    },
+    {
+      "service_name": "recompute-v3",
+      "pid": 708,
+      "status": "READY",
+      "last_heartbeat_at": "2026-08-30T15:17:31.700Z",
+      "last_success_at": "2026-08-30T15:17:31.700Z",
+      "pid_alive": true,
+      "details": {
+        "checked_at": "2026-08-30T15:17:31.699Z",
+        "stale_items": 0
+      }
+    },
+    {
+      "service_name": "retention-v3",
+      "pid": 34907,
+      "status": "READY",
+      "last_heartbeat_at": "2026-08-30T15:17:41.666Z",
+      "last_success_at": "2026-08-30T15:17:41.666Z",
+      "pid_alive": true,
+      "details": {
+        "delete_enabled": false,
+        "idle": true,
+        "mode": "DELETE_DISABLED",
+        "next_scan_in_seconds": 2036
+      }
+    },
+    {
+      "service_name": "runtime-v3",
+      "pid": 59961,
+      "status": "READY",
+      "last_heartbeat_at": "2026-08-30T15:17:38.135Z",
+      "last_success_at": "2026-08-30T15:17:38.135Z",
+      "pid_alive": true,
+      "details": {
+        "audio_retention_hours": 168,
+        "capacity_test_concurrency": 65,
+        "due_target_count": 41,
+        "expected_max_recording_concurrency": 50,
+        "final_ready": false,
+        "full_fleet": true,
+        "live_count": 2,
+        "normal_recording_concurrency": 30,
+        "production_gate": "BLOCKED",
+        "recording_duration_seconds": 0,
+        "recording_health": {
+          "finalized": 117,
+          "restarted": 0,
+          "running": 2
+        },
+        "recording_mode": "LOWEST_VIDEO_WITH_AUDIO",
+        "recording_quality": "LD",
+        "recording_segment_seconds": 0,
+        "result_count": 41,
+        "speech_audio_bitrate_kbps": 48,
+        "speech_audio_format": "opus",
+        "target_count": 41,
+        "unknown_count": 0,
+        "video_retention_hours": 72
+      }
+    }
+  ],
+  "active_recorder_continuity": [
+    {
+      "job_id": "recjob_90409f2eb76bb8754dbf56d7",
+      "pid": 35736,
+      "alive": true,
+      "before_bytes": 821610220,
+      "after_bytes": 822920940,
+      "grew": true
+    },
+    {
+      "job_id": "recjob_6a668c48730ed52bca520bdd",
+      "pid": 43809,
+      "alive": true,
+      "before_bytes": 296135652,
+      "after_bytes": 296922084,
+      "grew": true
+    }
+  ],
+  "retention_delete_enabled": false,
+  "transcript_quality": {
+    "full_session_min_timestamp_coverage_rate": 0.9,
+    "full_session_target_timestamp_coverage_rate": 0.95
+  },
+  "migration_trigger_count": 1,
+  "migration_indexes": [
+    "idx_analyses_qualification",
+    "idx_analyses_transcript_id",
+    "idx_outbox_qualification",
+    "uq_analyses_transcript_spec"
+  ],
+  "repair_event_count": 1,
+  "production_hash_check": [
+    {
+      "path": "v3_analysis_contract.py",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "v3_pipeline_worker.py",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "v3_analysis_worker.py",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "v3_evidence_worker.py",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "v3_project_feishu.py",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "v3_runtime.py",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "v3_schema.sql",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "v3_sample_analysis_migration.py",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "v3_sample_analysis_rollback.py",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "migrations/002_analysis_qualification.sql",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "test_v3_sample_analysis_qualification.py",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "test_v3_segment_lifecycle.py",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "verify_sample_analysis_migration_pg.py",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "v3_config.json",
+      "exists": true,
+      "matches": true
+    }
+  ],
+  "logs": {
+    "runtime-v3": {
+      "exists": false,
+      "mtime": null,
+      "bytes": null,
+      "traceback_count": 0
+    },
+    "pipeline-v3": {
+      "exists": true,
+      "mtime": "2026-08-28T15:35:42.095178+00:00",
+      "bytes": 55751,
+      "traceback_count": 32
+    },
+    "analysis-v3": {
+      "exists": true,
+      "mtime": "2026-08-27T00:38:27.310339+00:00",
+      "bytes": 0,
+      "traceback_count": 0
+    },
+    "evidence-v3": {
+      "exists": true,
+      "mtime": "2026-08-27T00:38:27.318106+00:00",
+      "bytes": 0,
+      "traceback_count": 0
+    }
+  }
+}

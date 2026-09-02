@@ -1,0 +1,13 @@
+{
+  "file_exists": true,
+  "file_path": "/Volumes/ExternalStorage/同行直播录制/media/completed/acct_86bb728a51564fb6/sess_073506ff856ed27304d97df1/整场直播.ts",
+  "duration_seconds": 4229.749333,
+  "file_size_mb": 1146.28,
+  "expected_duration_seconds": 21488.405,
+  "is_complete": false,
+  "session_id": "session_0923b62f50088b6401c06373fc916038",
+  "script": "check_recording",
+  "checked_at": "2026-08-28T15:40:02.726185+00:00",
+  "status": "FAIL",
+  "message": "录制时长误差超过 5%"
+}

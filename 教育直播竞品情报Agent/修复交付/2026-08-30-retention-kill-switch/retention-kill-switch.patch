@@ -1,0 +1,115 @@
+--- a/runtime/v3/v3_retention_worker.py
++++ b/runtime/v3/v3_retention_worker.py
+@@ -28,13 +28,31 @@
+     conn.execute("UPDATE retention_jobs SET status='BLOCKED_DEPENDENCY',next_attempt_at=?,attempts=attempts+1,last_error=?,updated_at=? WHERE retention_job_id=?", (iso_after(1), reason[:1000], utc_now(), row["retention_job_id"]))
+ 
+ 
++def retention_delete_enabled(config: dict) -> bool:
++    """Fail closed: only the literal JSON boolean true permits deletion."""
++    return ((config.get("retention") or {}).get("delete_enabled") is True)
++
++
+ def once(*, heartbeat_service: str = "retention-v3") -> dict:
+     deleted = blocked = failed = 0
+-    init_db()
+     config = load_config()
+     retention = config.get("retention") or {}
+     video_hours = int(retention.get("video_hours") or 72)
+     audio_hours = int(retention.get("audio_hours") or 168)
++    delete_enabled = retention_delete_enabled(config)
++    if not delete_enabled:
++        result = {
++            "deleted": 0,
++            "blocked_dependencies": 0,
++            "failed": 0,
++            "checked_at": utc_now(),
++            "delete_enabled": False,
++            "mode": "DELETE_DISABLED",
++            "policies": {"video_hours": video_hours, "audio_hours": audio_hours},
++        }
++        upsert_heartbeat(heartbeat_service, "READY", result, success=True)
++        return result
++    init_db()
+     now = utc_now()
+     with connect() as conn:
+         rows = conn.execute("SELECT * FROM retention_jobs WHERE status IN ('PENDING','RETRY','BLOCKED_DEPENDENCY') AND (next_attempt_at IS NULL OR next_attempt_at<=?) AND not_before<=? ORDER BY not_before,retention_job_id", (now, now)).fetchall()
+@@ -80,7 +98,7 @@
+                 conn.execute("UPDATE retention_jobs SET status='RETRY',next_attempt_at=?,attempts=attempts+1,last_error=?,updated_at=? WHERE retention_job_id=?", (iso_after(1), str(exc)[:1000], utc_now(), row["retention_job_id"]))
+                 failed += 1
+         conn.commit()
+-    result = {"deleted": deleted, "blocked_dependencies": blocked, "failed": failed, "checked_at": utc_now(), "policies": {"video_hours": video_hours, "audio_hours": audio_hours}}
++    result = {"deleted": deleted, "blocked_dependencies": blocked, "failed": failed, "checked_at": utc_now(), "delete_enabled": True, "mode": "DELETE_ENABLED", "policies": {"video_hours": video_hours, "audio_hours": audio_hours}}
+     upsert_heartbeat(heartbeat_service, "READY" if failed == 0 else "DEGRADED", result, success=failed == 0)
+     return result
+ 
+@@ -105,7 +123,8 @@
+             # Keep the service heartbeat fresh between hourly retention scans;
+             # otherwise observability would incorrectly report a healthy
+             # process as stale for most of the interval.
+-            upsert_heartbeat("retention-v3", "READY", {"idle": True, "next_scan_in_seconds": max(0, int(next_scan - time.monotonic()))}, success=True)
++            delete_enabled = retention_delete_enabled(load_config())
++            upsert_heartbeat("retention-v3", "READY", {"idle": True, "next_scan_in_seconds": max(0, int(next_scan - time.monotonic())), "delete_enabled": delete_enabled, "mode": "DELETE_ENABLED" if delete_enabled else "DELETE_DISABLED"}, success=True)
+         time.sleep(60)
+     return 0
+ 
+--- a/runtime/v3/v3_config.json
++++ b/runtime/v3/v3_config.json
+@@ -85,6 +85,7 @@
+   "expected_max_recording_concurrency": 50,
+   "capacity_test_concurrency": 65,
+   "retention": {
++    "delete_enabled": false,
+     "video_hours": 72,
+     "audio_hours": 168,
+     "scan_interval_seconds": 3600,
+--- a/runtime/config.json
++++ b/runtime/config.json
+@@ -45,7 +45,7 @@
+     }
+   },
+   "retention": {
+-    "automatic_delete": true,
++    "automatic_delete": false,
+     "video_hours": 72,
+     "audio_hours": 168,
+     "scan_interval_seconds": 3600,
+--- a/runtime/v3/test_v3_workflow.py
++++ b/runtime/v3/test_v3_workflow.py
+@@ -7,10 +7,37 @@
+ from concurrent.futures import ThreadPoolExecutor
+ 
+ import v3_runtime as v3
++import v3_retention_worker as retention_worker
+ from v3_task_control import parse_control, ingest_control, select_task
+ from v3_scan_import import import_scan, scan_identity, validate_scan
+ 
+ USER='ou_e2bb6eeeda749177d2b1191664831934'
++
++
++class RetentionKillSwitchTests(unittest.TestCase):
++    def test_delete_requires_literal_true(self):
++        self.assertTrue(retention_worker.retention_delete_enabled({"retention": {"delete_enabled": True}}))
++        for value in (None, False, 1, "true", "TRUE", {}):
++            with self.subTest(value=value):
++                config = {} if value == {} else {"retention": {"delete_enabled": value}}
++                self.assertFalse(retention_worker.retention_delete_enabled(config))
++
++    def test_disabled_returns_before_database_or_filesystem_work(self):
++        for config in ({}, {"retention": {}}, {"retention": {"delete_enabled": False}}):
++            with self.subTest(config=config), \
++                    patch.object(retention_worker, "load_config", return_value=config), \
++                    patch.object(retention_worker, "init_db") as init_db, \
++                    patch.object(retention_worker, "connect") as connect, \
++                    patch.object(Path, "unlink") as unlink, \
++                    patch.object(retention_worker, "upsert_heartbeat") as heartbeat:
++                result = retention_worker.once(heartbeat_service="retention-kill-switch-test")
++                self.assertEqual(result["mode"], "DELETE_DISABLED")
++                self.assertFalse(result["delete_enabled"])
++                self.assertEqual(result["deleted"], 0)
++                init_db.assert_not_called()
++                connect.assert_not_called()
++                unlink.assert_not_called()
++                heartbeat.assert_called_once()
+ 
+ 
+ class RuntimeCase(unittest.TestCase):

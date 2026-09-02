@@ -1,0 +1,33 @@
+--- /Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/v3_long_jobs.py	2026-08-31 01:03:25
++++ staging/runtime/v3/v3_long_jobs.py	2026-08-31 01:28:37
+@@ -21,6 +21,7 @@
+ 
+ TRANSCRIPT = "transcript"
+ ANALYSIS = "analysis"
++RECOMPUTE = "recompute"
+ 
+ 
+ @dataclass(frozen=True)
+@@ -39,8 +40,13 @@
+     ANALYSIS: JobSpec(
+         table="analyses",
+         id_column="analysis_id",
+-        due_statuses=("PENDING", "WAITING_MODEL", "RETRY_WAIT"),
++        due_statuses=("PENDING", "PENDING_RECOMPUTE", "WAITING_MODEL", "RETRY_WAIT"),
+     ),
++    RECOMPUTE: JobSpec(
++        table="recompute_requests",
++        id_column="request_id",
++        due_statuses=("PENDING", "RETRY_WAIT"),
++    ),
+ }
+ 
+ 
+@@ -169,6 +175,7 @@
+         "last_error", "checkpoint_json", "updated_at", "output_path", "metadata_json",
+         "lineage_state", "language", "low_confidence_count", "source_path",
+         "scope", "qualification_status", "artifact_digest",
++        "candidate_analysis_id", "completed_at",
+     }
+     unknown = set(assignments) - allowed
+     if unknown:

@@ -1,0 +1,15 @@
+{
+  "file_exists": true,
+  "file_path": "/private/tmp/edu-acceptance-_c0b64j_/known-complete-10s.wav",
+  "duration_seconds": 10.0,
+  "file_size_mb": 0.15,
+  "expected_duration_seconds": 10.0,
+  "is_complete": true,
+  "session_id": "fixture",
+  "script": "check_recording",
+  "checked_at": "2026-08-28T15:47:46.226581+00:00",
+  "status": "PASS",
+  "message": "录制时长误差在 5% 以内",
+  "test_fixture": true,
+  "test_note": "合成的 10 秒 WAV、转录和七模块报告；不是实播验收；临时源文件测试后删除"
+}

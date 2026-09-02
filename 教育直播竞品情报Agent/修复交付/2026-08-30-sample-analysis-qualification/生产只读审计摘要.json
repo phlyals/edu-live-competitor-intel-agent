@@ -1,0 +1,49 @@
+{
+  "audit_mode": "READ ONLY",
+  "transaction_read_only": "on",
+  "production_mutations": 0,
+  "plan_sha256": "63cd469c7fde308d76cf4b1c8324c3dde236c307c498e9b51d6edf5abbbc9804",
+  "source_schema_signature": "33dbc83a465c00a76fabf80f35cee4c481d26b99f2fdbefe782d918fe904d825",
+  "ddl_sha256": "de9b9a3d441eca8c95324d4ba627d98b358f3c5314345bf938afdfe45c9a82d5",
+  "counts": {
+    "transcripts": 251,
+    "analyses": 6,
+    "sample_actions": 2,
+    "formal_annotations": 1,
+    "evidence_bundles": 3,
+    "outbox": 367,
+    "delivery_receipts": 365,
+    "issues": 0
+  },
+  "sample_actions": [
+    {
+      "analysis_id": "analysis_8801cb766ceca4ab6327511a",
+      "transcript_id": "transcript_c198e4037bf2e8ead83a1b6e",
+      "current_lineage_edges": 2,
+      "transcript_content_digest": "2ff17f5dc3ea4455ee50ec4fcfe21b4f0cb3abd9034dde88982174e3ba829268",
+      "artifact_digest": "d64d1ede9ee97628cf74d0b5ed4dcfce82a6f872edf51cbef9749feff1bee817"
+    },
+    {
+      "analysis_id": "analysis_f261f8101b4ea725a954c23f",
+      "transcript_id": "transcript_413c54e763036c6b65b9a56b",
+      "current_lineage_edges": 2,
+      "transcript_content_digest": "9afc3910ab398ed1caa4f576520e5ee9f2fe92fa1c2c704161a5ff31eb70760b",
+      "artifact_digest": "14147e0d1536df6e157f3c8acd3a2c700926de9f1b45d192e7b106d692fa5c10"
+    }
+  ],
+  "formal_annotations": [
+    {
+      "analysis_id": "analysis_16bdca57a497943fd6eb0c05",
+      "transcript_id": "transcript_875ba0bd045001857d6cd2dc",
+      "lineage_edge": {
+        "edge_id": "lineage_fa6dba3a34d204c0a525bb7b",
+        "upstream_id": "transcript_875ba0bd045001857d6cd2dc",
+        "upstream_version": "24a88b4e724851a20ebf0086c6a10b5b548a67a9fc3da4ea53eb830e03c20673",
+        "state": "CURRENT"
+      },
+      "transcript_content_digest": "f9cf878d81b2721631046fba9d9f5610b7115c583bc26d77cc41a5ba908cd9a0",
+      "artifact_digest": "45b576f6e35c6db85135f544abf879792180a81c682c91df82f6d7b1e5f5222e"
+    }
+  ],
+  "issues": []
+}

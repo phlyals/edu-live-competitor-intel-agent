@@ -1,0 +1,57 @@
+{
+  "database_read_only": "on",
+  "recordings": [
+    {
+      "session_id": "session_b5bad54f795b4f18e9ac9aabcaea94b6",
+      "pid": 58011,
+      "restart_count": 9,
+      "status": "RUNNING",
+      "partial_dir": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_836db3961058b668/sess_4caf2931eb28c1d516f5455e",
+      "bytes": 189331839,
+      "same_pid": true,
+      "same_restart_count": true,
+      "byte_delta": 8912896
+    },
+    {
+      "session_id": "session_b9859257df275605d47840e2d086d191",
+      "pid": 40809,
+      "restart_count": 2,
+      "status": "RUNNING",
+      "partial_dir": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_87b3bb4c9e29eb3b/sess_3f0b3aa868fd45141e1817fc",
+      "bytes": 350691789,
+      "same_pid": true,
+      "same_restart_count": true,
+      "byte_delta": 7340032
+    },
+    {
+      "session_id": "session_cd601ac4090a6982be220bcc6c4cfe23",
+      "pid": 60948,
+      "restart_count": 0,
+      "status": "RUNNING",
+      "partial_dir": "/Volumes/ExternalStorage/同行直播录制/media/partial/acct_986a90186541e9b0/sess_8fca5d3f7513230108b58c1c",
+      "bytes": 114876250,
+      "same_pid": true,
+      "same_restart_count": true,
+      "byte_delta": 7077888
+    }
+  ],
+  "all_recorder_pids_unchanged": true,
+  "all_restart_counts_unchanged": true,
+  "all_running_media_growing": true,
+  "heartbeats": [
+    {
+      "service_name": "feishu-ingress-v3",
+      "pid": 71567,
+      "status": "READY",
+      "last_heartbeat_at": "2026-09-01T10:27:44.231Z"
+    },
+    {
+      "service_name": "runtime-v3",
+      "pid": 70989,
+      "status": "READY",
+      "last_heartbeat_at": "2026-09-01T10:27:26.823Z"
+    }
+  ],
+  "current_task_copy": "⚠️ 需要你操作\n商品：3839136509492068370\n当前进度：已识别商品，尚未完成同行直播间查找\n原因：精选联盟登录状态已失效，暂时无法查找同行直播间。\n请重新登录巨量百应或精选联盟，然后回复“继续处理”。不用重新发送商品链接。\n更新时间：2026-09-01 17:57（北京时间）",
+  "current_task_status": "WAITING_HUMAN"
+}

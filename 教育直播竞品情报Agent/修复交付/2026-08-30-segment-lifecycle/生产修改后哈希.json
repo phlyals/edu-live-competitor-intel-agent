@@ -1,0 +1,14 @@
+{
+  "checked_at": "2026-08-30T13:56:32.656877+00:00",
+  "files": {
+    "/Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/v3_schema.sql": "8d543b0f2c77e767ec7ecd32eca31ddb363e33e8fc77090326152422c4ba39c2",
+    "/Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/v3_runtime.py": "9f717c03e7781711815dc68bbf3ffc47d557babbf6026a77228c33083083aad1",
+    "/Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/v3_pipeline_worker.py": "aedaa9245b85b08e9e73994214eed916957c5eb4c1349b3c7bb584b8f938678c",
+    "/Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/v3_worker.py": "ddc72794e0a1ee9f5ec96d340ca831031c1181d2f7235965c7a99fba7dc2d986",
+    "/Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/test_v3_recording_transcription.py": "869a646665d4bfdd653340043524e8c7ac81ff52be8b03ea950b08ec6fe4f095",
+    "/Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/v3_segment_lifecycle_migration.py": "1b4c869c96b0b76c4c0dca488a1e32bf6917c8c8a8161a2612c562551d90a86a",
+    "/Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/migrations/001_recording_segment_lifecycle.sql": "b76b6de7db208ecdcdbfcd4fa0eeadfa3292a8db7c2fd1a6a31ef37bdffda9e4",
+    "/Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/test_v3_segment_lifecycle.py": "451cae27e6688953e2bd36b55b135ac7df4fc352ad4f24e1e99540a4a78376e1",
+    "/Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/test_v3_segment_lifecycle_migration.py": "398b43ce6b238589bf0cecf4d4fb0d536c0a4ab75d6f9f6b9b9e9dcaf70603bc"
+  }
+}

@@ -1,0 +1,1947 @@
+{
+  "migration_key": "lineage_recompute_revision",
+  "migration_version": "1",
+  "source_schema_signature": "eb3f695161070d654ba0bc01ba79a6d4ca47734ab598f2613171bf9e70ce9c1c",
+  "ddl_sha256": "0d968561c6a6c3c2878e6f75d8a9fbe146867ddd1227dc8ebbdb1999cc940611",
+  "lineage_edges": [
+    {
+      "edge_id": "lineage:history:analysis_8801cb766ceca4ab6327511a",
+      "downstream_type": "analysis",
+      "downstream_id": "analysis_8801cb766ceca4ab6327511a",
+      "upstream_type": "transcript",
+      "upstream_id": "transcript_c198e4037bf2e8ead83a1b6e",
+      "upstream_version": "3ef50d89d409b84c277030d7ce59758154dca4615f9f3e1736123b413505c192",
+      "state": "INVALIDATED"
+    },
+    {
+      "edge_id": "lineage:history:analysis_f261f8101b4ea725a954c23f",
+      "downstream_type": "analysis",
+      "downstream_id": "analysis_f261f8101b4ea725a954c23f",
+      "upstream_type": "transcript",
+      "upstream_id": "transcript_413c54e763036c6b65b9a56b",
+      "upstream_version": "01d19e91fd2b2bfc506d46530cc4abf7a1fcd16ade27d14d5fe2d7e405fa3657",
+      "state": "INVALIDATED"
+    },
+    {
+      "edge_id": "lineage:history:cmp-4b66f69594dd-vs-4c6ce3010823",
+      "downstream_type": "analysis",
+      "downstream_id": "cmp-4b66f69594dd-vs-4c6ce3010823",
+      "upstream_type": "transcript",
+      "upstream_id": "tr-4b66f69594dddbc0992f1340",
+      "upstream_version": "509d0f228d1f7aeb5b88ae01d670f8d82c8f108096fa4907182a8511c8cfc1f2",
+      "state": "CURRENT"
+    },
+    {
+      "edge_id": "lineage:history:cmp-f4be143e30cf-vs-4b66f69594dd",
+      "downstream_type": "analysis",
+      "downstream_id": "cmp-f4be143e30cf-vs-4b66f69594dd",
+      "upstream_type": "transcript",
+      "upstream_id": "tr-f4be143e30cff3ac60e18c81",
+      "upstream_version": "1a48fe683d608ef2e7e0afa6199bd85335376dccb1d5e6dbbf6a72212f20b8c5",
+      "state": "CURRENT"
+    },
+    {
+      "edge_id": "lineage_31834ed12ff0ee379b3ebf06",
+      "downstream_type": "analysis",
+      "downstream_id": "analysis_d52f07f183321d1b75620e21",
+      "upstream_type": "transcript",
+      "upstream_id": "transcript_875ba0bd045001857d6cd2dc",
+      "upstream_version": "f9cf878d81b2721631046fba9d9f5610b7115c583bc26d77cc41a5ba908cd9a0",
+      "state": "SUPERSEDED"
+    },
+    {
+      "edge_id": "lineage_39029adb0abb366a71bbb7e3",
+      "downstream_type": "analysis",
+      "downstream_id": "analysis_f261f8101b4ea725a954c23f",
+      "upstream_type": "transcript",
+      "upstream_id": "transcript_413c54e763036c6b65b9a56b",
+      "upstream_version": "0be1153d373fbc2376bb31be76806712ae4a001bb12ab2e3f0e429e9e2996c6a",
+      "state": "INVALIDATED"
+    },
+    {
+      "edge_id": "lineage_4e3cbba2cf5ada7129c44e22",
+      "downstream_type": "analysis",
+      "downstream_id": "analysis_bb3f658b48a46b764b835fab",
+      "upstream_type": "transcript",
+      "upstream_id": "tr-4c6ce301082381f6e3f210d4",
+      "upstream_version": "6dd1534fc62935deb7c7b50ca5a6603452a7906b7ae0f6273a2aeea46ae7e522",
+      "state": "CURRENT"
+    },
+    {
+      "edge_id": "lineage_ce51768f07ad3f9bf2aaeb78",
+      "downstream_type": "analysis",
+      "downstream_id": "analysis_8801cb766ceca4ab6327511a",
+      "upstream_type": "transcript",
+      "upstream_id": "transcript_c198e4037bf2e8ead83a1b6e",
+      "upstream_version": "65b1be093efe305d2851167a26ba9894aa9f10386f3e6ed5e5a2c8b94dd5b4e9",
+      "state": "INVALIDATED"
+    },
+    {
+      "edge_id": "lineage_f518142aee8f36da788ae28a",
+      "downstream_type": "analysis",
+      "downstream_id": "analysis_c0d5fe33a0180f99e66fbca2",
+      "upstream_type": "transcript",
+      "upstream_id": "transcript_875ba0bd045001857d6cd2dc",
+      "upstream_version": "f9cf878d81b2721631046fba9d9f5610b7115c583bc26d77cc41a5ba908cd9a0",
+      "state": "CURRENT"
+    },
+    {
+      "edge_id": "lineage_fa6dba3a34d204c0a525bb7b",
+      "downstream_type": "analysis",
+      "downstream_id": "analysis_16bdca57a497943fd6eb0c05",
+      "upstream_type": "transcript",
+      "upstream_id": "transcript_875ba0bd045001857d6cd2dc",
+      "upstream_version": "f9cf878d81b2721631046fba9d9f5610b7115c583bc26d77cc41a5ba908cd9a0",
+      "state": "SUPERSEDED"
+    }
+  ],
+  "analyses": [
+    {
+      "analysis_id": "analysis_16bdca57a497943fd6eb0c05",
+      "transcript_id": "transcript_875ba0bd045001857d6cd2dc",
+      "transcript_content_digest": "f9cf878d81b2721631046fba9d9f5610b7115c583bc26d77cc41a5ba908cd9a0",
+      "analysis_spec_version": "single-session-evidence-v2",
+      "model_version": "deepseek-chat",
+      "prompt_version": "deepseek-evidence-chunks-v3",
+      "status": "COMPLETE",
+      "lineage_state": "SUPERSEDED"
+    },
+    {
+      "analysis_id": "analysis_8801cb766ceca4ab6327511a",
+      "transcript_id": "transcript_c198e4037bf2e8ead83a1b6e",
+      "transcript_content_digest": "2ff17f5dc3ea4455ee50ec4fcfe21b4f0cb3abd9034dde88982174e3ba829268",
+      "analysis_spec_version": "legacy-sample-analysis-v1",
+      "model_version": "deepseek-chat",
+      "prompt_version": "legacy-unversioned",
+      "status": "SAMPLE_NONQUALIFYING",
+      "lineage_state": "INVALIDATED"
+    },
+    {
+      "analysis_id": "analysis_bb3f658b48a46b764b835fab",
+      "transcript_id": null,
+      "transcript_content_digest": null,
+      "analysis_spec_version": null,
+      "model_version": null,
+      "prompt_version": null,
+      "status": "SKIPPED_HISTORICAL",
+      "lineage_state": "CURRENT"
+    },
+    {
+      "analysis_id": "analysis_c0d5fe33a0180f99e66fbca2",
+      "transcript_id": "transcript_875ba0bd045001857d6cd2dc",
+      "transcript_content_digest": "f9cf878d81b2721631046fba9d9f5610b7115c583bc26d77cc41a5ba908cd9a0",
+      "analysis_spec_version": "single-session-evidence-v4-source-ids",
+      "model_version": "deepseek-chat",
+      "prompt_version": "deepseek-source-segment-ids-v1",
+      "status": "COMPLETE",
+      "lineage_state": "CURRENT"
+    },
+    {
+      "analysis_id": "analysis_d52f07f183321d1b75620e21",
+      "transcript_id": "transcript_875ba0bd045001857d6cd2dc",
+      "transcript_content_digest": "f9cf878d81b2721631046fba9d9f5610b7115c583bc26d77cc41a5ba908cd9a0",
+      "analysis_spec_version": "single-session-evidence-v3-coverage",
+      "model_version": "deepseek-chat",
+      "prompt_version": "deepseek-evidence-chunks-v3",
+      "status": "COMPLETE",
+      "lineage_state": "SUPERSEDED"
+    },
+    {
+      "analysis_id": "analysis_f261f8101b4ea725a954c23f",
+      "transcript_id": "transcript_413c54e763036c6b65b9a56b",
+      "transcript_content_digest": "9afc3910ab398ed1caa4f576520e5ee9f2fe92fa1c2c704161a5ff31eb70760b",
+      "analysis_spec_version": "legacy-sample-analysis-v1",
+      "model_version": "deepseek-chat",
+      "prompt_version": "legacy-unversioned",
+      "status": "SAMPLE_NONQUALIFYING",
+      "lineage_state": "INVALIDATED"
+    },
+    {
+      "analysis_id": "cmp-4b66f69594dd-vs-4c6ce3010823",
+      "transcript_id": null,
+      "transcript_content_digest": null,
+      "analysis_spec_version": null,
+      "model_version": null,
+      "prompt_version": null,
+      "status": "COMPLETE",
+      "lineage_state": "CURRENT"
+    },
+    {
+      "analysis_id": "cmp-f4be143e30cf-vs-4b66f69594dd",
+      "transcript_id": null,
+      "transcript_content_digest": null,
+      "analysis_spec_version": null,
+      "model_version": null,
+      "prompt_version": null,
+      "status": "COMPLETE",
+      "lineage_state": "CURRENT"
+    }
+  ],
+  "transcripts": [
+    {
+      "transcript_id": "tr-4b66f69594dddbc0992f1340",
+      "engine": "openai-whisper",
+      "model": "base",
+      "status": "COMPLETE",
+      "qualification_status": "NONQUALIFYING_LEGACY"
+    },
+    {
+      "transcript_id": "tr-4c6ce301082381f6e3f210d4",
+      "engine": "openai-whisper",
+      "model": "base",
+      "status": "COMPLETE",
+      "qualification_status": "NONQUALIFYING_LEGACY"
+    },
+    {
+      "transcript_id": "tr-f4be143e30cff3ac60e18c81",
+      "engine": "openai-whisper",
+      "model": "base",
+      "status": "COMPLETE",
+      "qualification_status": "NONQUALIFYING_LEGACY"
+    },
+    {
+      "transcript_id": "transcript_0209aff393ad0a7d1f35a95d",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_0260ff924b3221dc01e26b40",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_058244d848b00dfc5b925e09",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_0615c28581e81ab1959dee3b",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_06f9e38f7b03033cd35059f0",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_07a9abc70453893f9661596f",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_07d4f18eac5a689408c47643",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_09204c9cec20cceda651a7fc",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_095dfea2c9c7cda2128ad144",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_0d711b0e507cc945bb2afb41",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_0e95de511e315055bebc7f80",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_0e9ce3ca70ce9e40b8044c2d",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_100f8992ba00da217c0ce8f7",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_10ec25ed8c09134e234ed171",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_11471c19d56a84ff2083b8a1",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_119b0f85939be959576c4f98",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_11cc9c0d79d41afb6c9f6a6b",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_12c6b4c23c23ccf4578bf1c1",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_13db6b6d5f3d0aa6fff4a85c",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_17c480c36795d5d8c68e3c84",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_1844c6d186a14f4a6a7c046b",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_1874df8b8096570b77c31d2f",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_18e48a6f6fcf981478a671b3",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_18e8741f1c95b76ac0de1e70",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_1bd619ab85aeeee844348203",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_1be786c807ffb1a788092643",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_1bf53e5b5391ed7f83076d42",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_1c5a33ac8928aa220536728c",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_1f6e8988c2daf3f22176871a",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_20fe70615456c8eed725d084",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_21fc5342eb1a327ba3bc6874",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_227460c8674a2cdac9e60311",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_227ec18f5d60683b508abbf2",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_22a476df212c00ecb082ddf2",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_22bfa1cec11c35b2c83087a1",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_24abf2e083f748482d612310",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_25422889125cda60a8b5e720",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_2635021c2ca5cd15e19be371",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_2697375fc45b054543658616",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_26a771a7e84f6f647ac317e8",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_26b5d17e034edf2c4cfbe513",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_282a94dfd7294967b5b6e1dc",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_286110c67d22181782bb5e0c",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_28e665af611d483df911068f",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_293ba51759a602932180fe18",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_2966200b51ab2b93abf6ebbc",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_2c7cdaac1a401b5cc871d866",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_2fdcc8512752bce681b4b595",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_30f8812ec17a7f8f82d9b34f",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_31289194e55e12969e3f81a8",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_31c97783901a0123356f2c0a",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_32502d374a52527578e836cc",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_340084e3d72a6f9973ca3c6a",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_34320e740e10e20139eebb00",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_363d74a84c738cdcb8c23593",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_36b55a3a75bba6eec4777318",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_39a5a4af9964a34e4ec73d79",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_3ae08ac8f3e0fc1d9b7347dd",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_3cbadaa8d4d55099b49ce6b0",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_3cdea111e1d8661fd069f734",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_3cf39e06012baf2ebb82fa98",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_3d1b094266a8b14b059619dc",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_413c54e763036c6b65b9a56b",
+      "engine": "faster-whisper",
+      "model": "tiny",
+      "status": "COMPLETE",
+      "qualification_status": "SAMPLE_NONQUALIFYING"
+    },
+    {
+      "transcript_id": "transcript_433434cf4fe2e34ae1a81ace",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_44d33b2b79ad77f29736a92f",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_44e2b3c7b0ecfecf73cb6b1c",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_451ad0472a846df0d401f6c8",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_459b4a01af3742da6e7b7fa5",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_4695d5178559de428d3ce05f",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_481d2addf576a3a67b127fdd",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_487d1084e469d5b9d7f28f1c",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_48ade6899f0b060b873a7f1a",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_49315d1ab369063053dbc92d",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_493a6c879f4906229631df7d",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_4a3c761192d16defb36ca71c",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_4a73e526e93eb5da1b0f0d4b",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_4c3ed14a329911f437007c80",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_4d24e4cfc0f3d8c823a18b8c",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_4dc0c1f9a2a4ca737c582278",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_4f47e2311622e7c60180de20",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_517a9a28f28087abbb385252",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_525146ea7ac1acdd39d3e89e",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_542958e00b382d9f23167bc6",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_549f0e006b6e46fbf8a2e92d",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_573a1b3127058ffe9a582f92",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_57ab8bed2e964094b7535e65",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_57c424652be162e5dfa21717",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_58be2e6904d49d3d5312e278",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_58e0fdca1313eb8802128d3e",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_5a5646831c4770d6d282fe87",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_5f54f8817943858239130f8a",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_604e2bb9eb8559d585357ce1",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_60643a04aab99c11f0f42d74",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_609286738b21c586e39ef361",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_6179808413dad2a72b56220b",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_61d7376b1adbb6950492692b",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_6214e54c4b41e77f93a8a2b4",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_6390aec6a1d6f9accbf0c318",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_63f7a4fee56219b08e58b83a",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_64c85f6b86e77606b0d40d35",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_65122e22bdc4c2d882697e33",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_671362ca105d7b91faec4ea1",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_684f7bce95bce1babebb1cbc",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_687241e27a10ef8392faabd9",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_6ba6b3f0349b743d41591e47",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_6be1a84601b6978f04eaaee1",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_6e377068db96394dcee9407d",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_6ed5d377b335acea46531418",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_714eeb0a6637dcf6fe2c5a30",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_73a236c49e1be38f4d60f352",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_73f82c8bd655378f003e16d2",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_7644f9c3b6d4b3c525346a7e",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_77cca21476ffd3a228651e2c",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_792b9bd3f0b2fab1906d765b",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_7a03a7f29787f7bb014bfa49",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_7a88c9afcdd2901a8a86bfb8",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_7aef9d3379333f6e42bb39a8",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_7b84eabd753f834572e675bf",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_7ea3648cb4fcfabf961b45fa",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_7ffbd3c97a93cad3cf796168",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_8022d428049014eef0364eb3",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_807979cf394be60255ddecdf",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_8135002b3bc773c7f9928337",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_82d597d0e343279860183a76",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_82fef19661c628e023abcb50",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_84a0bf1fa9e42b90e9e613ea",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_86a8aeebc644df3b68bccfcd",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_875ba0bd045001857d6cd2dc",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "COMPLETE",
+      "qualification_status": "FULL_SESSION_QUALIFIED"
+    },
+    {
+      "transcript_id": "transcript_887dc13b2ba14244c02b33fb",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_88ef4f96d48abec65bc32d49",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_890aafee21df9f2669125b44",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_8914485c19f3b0dbc16f2981",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_8920446edb7511ca444496b8",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_8b212ecdc60803eb30bccd07",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_8b684318b3103c213b9cb849",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_8cd60b5ac2ebdf9d34f069fa",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_8d1279d318ea1655a5bdbad4",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_8ecdbbcd4d84befe3b466c22",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_8f7a1d6f39024c002889c60a",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_8fc02e457ba504aa16d81d40",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_90a6ff6ec9d2d3876733d5c9",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_911a3906fd2463667b6a3e37",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_91ac0b2b9663d314c4444a2c",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_91ad9800143ac606d5ab0faa",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_924b4e5b6cbf9f9a7c17e0d0",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_94934c20a41ed58cb8c78eab",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_94ae0a12f55fc12ef681d81e",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_950e945b6b8cc901bdffbb36",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_95d65a341eb7ae96e30fec03",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_97a0a79b37185354ac4c9da7",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_9aed5ddab69e86b35928d63b",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_9bb994bf22ca7e235b403eef",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_9bc9813a65e82bdbdec477df",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_9deda92189b802f3e0c2e70f",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_9f11ec99ea7c4e9f036ac797",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_a0247e92a560a60a1ca991b0",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_a067a83446ea9fc87068b9aa",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_a08d394feff2cb4a735392bc",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_a15ba3473e90625b89a2cc8a",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_a18b7a0682991025203f5ce1",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_a2ef87e0a0de52d25f672d9e",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_a2f58a0f6f085c60771365d2",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_a303f9f7dd1efb237bf99e31",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_a3f12d59c2d0903b297d5ea5",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_a5b454ca6d9b9682f844542f",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_a63b6781344fab7505dfa901",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_a6e6eb972d4c20f42eaca638",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_a7ae6405e706f94e45eb9f50",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_a98c2ad903b1eff4cab7db32",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_a998f9a1cc9176ff7e61175e",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_aa235805fc2b66ca76cf2508",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_aa3cdc7119b0e6e15e47a157",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_b01b01c61d1fbc727f5ac313",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_b23b9dc88f1d85e6aa40e79a",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_b29b73ff88c1652bf587d0d3",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_b4da3c0aff7cfbd43fe310cc",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_b4f64afb4a17c72ccb2c355f",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_b4ffa8fc1b9b79934b423996",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_b7273124997db17bfde212c9",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_b76eaa9dfce6dc2292f830cd",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_b83cbd24c9933b82f1fe5adb",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_bb1932a61f08242ab4898a17",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_bb43c46f10f60b56aecafeda",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_bd1d6e14f1def743ef96e0fc",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_beb14dfba52dea97e0f2cfc2",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_c1093de417deeccde8640f20",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_c11c9d1a7112204c621b96b1",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_c138fa1afb0fe68a64d4102f",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_c1619e4dd1dc3309a2ec848b",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_c198e4037bf2e8ead83a1b6e",
+      "engine": "faster-whisper",
+      "model": "tiny",
+      "status": "COMPLETE",
+      "qualification_status": "SAMPLE_NONQUALIFYING"
+    },
+    {
+      "transcript_id": "transcript_c1cc7a056e5e40dfe911d080",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_c30ca048a0e90fb977a7cb4d",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_c586954b01f7a5c331a52bac",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_c74846ab9da208ab8dca3383",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_c76564324a87a0186965fc04",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_c8709460f65b367e27a7c13d",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_c8c8f09129b4f9c088134a1e",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_c948c1602a14edd2aca3faa1",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_c9722ba76abd34ac39941d12",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_ca4309c64302d3ef45213ce2",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_cb12c72da06ade87491675bd",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_cd7ec7c795f0ccf543405582",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_ce47461c1e7250357694ad4f",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_cfe546a915fd7a7d43689941",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_d17474f6b825832d31ae4d75",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_d1b977067ad35775ffc91ae6",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_d2b93ce50e24378b69334b4f",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_d2f685a4774b37452c1c3dc7",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_d317627868849fa49b3f70d2",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_d4352b5c7b49f2f80aaa9d53",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_d4c432d4513551add9427c67",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_d4cbb5452b054d0c017dcc76",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_d55710af347602038b90d57a",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_d61d9b1fde88b862f9fd6230",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_d76800d7ec7009ae6ef46fb6",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_d7fd215718c013905e06e137",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_d85733edf805d2272663d283",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_d992779261c5a3f58136d371",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_dabf3a7bf26eeedf3258e887",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_de0188d723cea523c4f2ecea",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_de3b7442b323aabbe990155a",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_deab875cc66524bece95273c",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_df96b8013ac80d21550b9b5f",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_e16b06a8ae51cd89d68cc75f",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_e3f27e48ce7036d42f374f34",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_e48f8b99b9168046c9db665b",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_e7da6af41286537924d2d84c",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_e9a6bc993f27a1e3acb22341",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_e9b517f33cd258a3cea8e9b6",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_ee9f62d9b20e6dbd9f04c593",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_f02d7e3024d0a0bdecb8eb0b",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_f0b36789d5e93a80630da177",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_f35c59401676d8b91d528817",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_f3f847362e960af7ef3b1d4e",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_f4d9e351b33443044d67b1ed",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_f4e9219703988c0406f00120",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_f5503c7068ef577e32ebde70",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_f610e642ffd2fedff1d44984",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_f6f846267b5ad6ed8592b650",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_f77f8932df271b89b234629e",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_f8dc3e60757069e8e3f9f6b8",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_f984c8c99d4cb15e65dc4d0f",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_fbad575c191805659b4dd3c3",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_fc324131c14bd2e31171187d",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_fc53a79b7bd365125e108af1",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_fcb60dd3d57ab2dc600130ab",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_fdedab7bf9655bfdd32ebaa8",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    },
+    {
+      "transcript_id": "transcript_ffe96434f7b20ebdfd886152",
+      "engine": "faster-whisper",
+      "model": "faster-whisper-small",
+      "status": "CANCELLED_SUPERSEDED_SOURCE",
+      "qualification_status": "CANCELLED_SUPERSEDED_SOURCE"
+    }
+  ],
+  "recompute_requests": [],
+  "issues": [],
+  "plan_sha256": "82416a95854d82c8cb43a940963eacc155757bf522946b6b409b8679f86f96b0",
+  "schema_before": {
+    "missing_lineage_columns": [],
+    "recompute_requests_exists": false
+  },
+  "transaction_read_only": "on"
+}

@@ -1,0 +1,416 @@
+--- a/runtime/v3/v3_analysis_worker.py
++++ b/runtime/v3/v3_analysis_worker.py
+@@ -7,6 +7,7 @@
+ import hashlib
+ import json
+ import os
++import re
+ import signal
+ import time
+ from pathlib import Path
+@@ -20,6 +21,12 @@
+ PROFILE_ROOT = ROOT.parent
+ ANALYSIS_ROOT = Path("/Volumes/ExternalStorage/同行直播录制/analysis/drafts/runtime-v3/analysis")
+ RUNNING = True
++ANALYSIS_CHUNK_CHAR_LIMIT = 5000
++ANALYSIS_MAX_RETRIES = 3
++CHUNK_FIELDS = (
++    "instructor", "course_content", "interaction_patterns", "product_handoff",
++    "hook", "pain_points", "claims", "cta", "risks", "evidence_refs",
++)
+ 
+ 
+ def stop(*_args):
+@@ -41,7 +48,7 @@
+     return ""
+ 
+ 
+-def transcript_text(path: Path, limit: int = 16000) -> tuple[str, list[dict]]:
++def transcript_text(path: Path, limit: int | None = None) -> tuple[str, list[dict]]:
+     payload = json.loads(path.read_text(encoding="utf-8"))
+     rows = payload.get("segments") or []
+     parts = []
+@@ -53,31 +60,207 @@
+         text = str(row.get("normalized_text") or row.get("text") or "").strip()
+         if text:
+             parts.append(f"[{float(row.get('start') or 0):.2f}-{float(row.get('end') or 0):.2f}] {text}")
+-    return "\n".join(parts)[:limit], rows
+-
+-
+-def request_analysis(text: str) -> tuple[dict, dict]:
++    text = "\n".join(parts)
++    return (text[:limit] if limit is not None else text), rows
++
++
++def timed_lines(text: str) -> list[dict]:
++    rows = []
++    pattern = re.compile(r"^\[([0-9]+(?:\.[0-9]+)?)-([0-9]+(?:\.[0-9]+)?)\]\s*(.*)$")
++    for line in text.splitlines():
++        match = pattern.match(line.strip())
++        if not match:
++            continue
++        start, end = float(match.group(1)), float(match.group(2))
++        if start < 0 or end < start:
++            continue
++        rows.append({"segment_index": len(rows), "start": start, "end": end,
++                     "text": match.group(3), "line": line.strip()})
++    return rows
++
++
++def analysis_chunks(text: str, char_limit: int = ANALYSIS_CHUNK_CHAR_LIMIT) -> list[dict]:
++    """Split only between timestamped rows; every row belongs to one chunk."""
++    rows = timed_lines(text)
++    if not rows:
++        raise RuntimeError("analysis input has no timestamped transcript rows")
++    chunks = []
++    current: list[dict] = []
++    current_chars = 0
++    for row in rows:
++        line_chars = len(row["line"]) + (1 if current else 0)
++        if current and current_chars + line_chars > char_limit:
++            chunks.append({"index": len(chunks), "start": current[0]["start"], "end": current[-1]["end"],
++                           "text": "\n".join(item["line"] for item in current), "row_count": len(current),
++                           "rows": current})
++            current, current_chars = [], 0
++            line_chars = len(row["line"])
++        current.append(row)
++        current_chars += line_chars
++    if current:
++        chunks.append({"index": len(chunks), "start": current[0]["start"], "end": current[-1]["end"],
++                       "text": "\n".join(item["line"] for item in current), "row_count": len(current),
++                       "rows": current})
++    return chunks
++
++
++def empty_chunk_result() -> dict:
++    return {field: [] for field in CHUNK_FIELDS}
++
++
++def validate_chunk_result(value: object, chunk: dict) -> dict:
++    if not isinstance(value, dict):
++        raise ValueError("analysis chunk response must be a JSON object")
++    result = empty_chunk_result()
++    for field in CHUNK_FIELDS:
++        items = value.get(field, [])
++        if not isinstance(items, list):
++            raise ValueError(f"analysis field {field} must be an array")
++        if len(items) > 3:
++            raise ValueError(f"analysis field {field} exceeded the maximum item count")
++        normalized = []
++        for item in items:
++            if not isinstance(item, dict):
++                raise ValueError(f"analysis field {field} contains a non-object item")
++            try:
++                start, end = float(item["start"]), float(item["end"])
++            except (KeyError, TypeError, ValueError):
++                raise ValueError(f"analysis field {field} item lacks numeric start/end") from None
++            if start < chunk["start"] - 0.01 or end > chunk["end"] + 0.01 or end < start:
++                raise ValueError(f"analysis field {field} timestamp is outside its source chunk")
++            summary = str(item.get("summary") or item.get("name") or "").strip()
++            if not summary or len(summary) > 160:
++                raise ValueError(f"analysis field {field} item has invalid summary length")
++            normalized.append({"summary": summary, "start": start, "end": end})
++        result[field] = normalized
++    return result
++
++
++def request_chunk(chunk: dict) -> tuple[dict, dict]:
+     key = read_env_key("DEEPSEEK_API_KEY")
+     if not key:
+         raise RuntimeError("DEEPSEEK_API_KEY is not configured")
++    example = {field: [] for field in CHUNK_FIELDS}
+     system = (
+-        "你是直播竞品情报分析器。只能从逐字稿中提取证据，不能补写未出现的事实。"
+-        "必须输出严格JSON，不要Markdown。字段必须为："
+-        "hook、pain_points、claims、cta、interaction_patterns、risks、evidence_refs。"
+-        "claims和evidence_refs中的每一项必须带start和end秒数；无法确认就留空。"
++        "你是直播竞品情报分析器。只能从所给时间片逐字稿提取证据，不能补写事实。"
++        "输出严格JSON对象，不要Markdown或解释。必须包含示例中的全部字段，每字段最多2项；"
++        "每项格式只能是{summary,start,end}，summary不超过80个汉字，start/end必须落在本时间片。"
++        "instructor只记录当前说话者明确自称或家长明确称呼当前主播的姓名，summary只能写“X老师”；"
++        "提及课程作者、其他老师或合作老师绝不能算当前讲师；无法唯一确认就返回空数组。JSON示例："
++        + json.dumps(example, ensure_ascii=False, separators=(",", ":"))
+     )
+-    user = "请分析以下带时间戳的直播逐字稿：\n" + text
+-    body = {"model": "deepseek-chat", "temperature": 0, "response_format": {"type": "json_object"}, "messages": [{"role": "system", "content": system}, {"role": "user", "content": user}]}
+-    with httpx.Client(timeout=180) as client:
+-        response = client.post("https://api.deepseek.com/chat/completions", headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json"}, json=body)
+-        response.raise_for_status()
+-        payload = response.json()
+-    content = (((payload.get("choices") or [{}])[0].get("message") or {}).get("content") or "").strip()
+-    result = json.loads(content)
+-    required = {"hook", "pain_points", "claims", "cta", "interaction_patterns", "risks", "evidence_refs"}
+-    if not required.issubset(result):
+-        raise RuntimeError("analysis response schema is incomplete")
+-    return result, {"provider": "deepseek", "model": "deepseek-chat", "response_id": payload.get("id"), "source_content_hash": hashlib.sha256(text.encode()).hexdigest()}
++    body = {"model": "deepseek-chat", "temperature": 0, "max_tokens": 4096,
++            "response_format": {"type": "json_object"},
++            "messages": [{"role": "system", "content": system},
++                         {"role": "user", "content": "请分析这一时间片并输出JSON：\n" + chunk["text"]}]}
++    failures = []
++    for attempt in range(1, ANALYSIS_MAX_RETRIES + 1):
++        with httpx.Client(timeout=180) as client:
++            response = client.post("https://api.deepseek.com/chat/completions",
++                                   headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json"}, json=body)
++            response.raise_for_status()
++            payload = response.json()
++        choice = (payload.get("choices") or [{}])[0]
++        finish_reason = choice.get("finish_reason")
++        content = ((choice.get("message") or {}).get("content") or "").strip()
++        try:
++            if finish_reason != "stop":
++                raise ValueError(f"analysis completion did not stop normally: {finish_reason}")
++            parsed = json.loads(content)
++            result = validate_chunk_result(parsed, chunk)
++            return result, {"response_id": payload.get("id"), "finish_reason": finish_reason,
++                            "usage": payload.get("usage"), "attempt": attempt,
++                            "content_hash": hashlib.sha256(content.encode()).hexdigest()}
++        except (json.JSONDecodeError, ValueError) as exc:
++            failures.append(f"attempt {attempt}: {exc}")
++            body["messages"].append({"role": "assistant", "content": content[-1000:]})
++            body["messages"].append({"role": "user", "content":
++                "上次输出无效或被截断。重新从原时间片生成更短的完整JSON；每字段最多1项，不能省略字段。"})
++    raise RuntimeError("analysis chunk failed after retries: " + " | ".join(failures))
++
++
++def merge_chunk_results(results: list[dict], chunks: list[dict], source_duration: float | None) -> dict:
++    merged = empty_chunk_result()
++    seen = {field: set() for field in CHUNK_FIELDS}
++    for result in results:
++        for field in CHUNK_FIELDS:
++            for item in result[field]:
++                key = (re.sub(r"\s+", "", item["summary"]).lower(), round(item["start"], 2), round(item["end"], 2))
++                if key not in seen[field]:
++                    seen[field].add(key)
++                    merged[field].append(item)
++    for field in CHUNK_FIELDS:
++        merged[field].sort(key=lambda item: (item["start"], item["end"], item["summary"]))
++    instructor_items = merged.pop("instructor")
++    instructor_names = list(dict.fromkeys(item["summary"] for item in instructor_items))
++    instructor_status = "NOT_STATED" if not instructor_names else "STATED" if len(instructor_names) == 1 else "CONFLICT"
++    duration = float(source_duration or chunks[-1]["end"])
++    coverage = max(0.0, chunks[-1]["end"] - chunks[0]["start"])
++    module_sources = (("开场", "hook"), ("干货", "course_content"), ("需求", "pain_points"),
++                      ("信任", "claims"), ("商品承接", "product_handoff"), ("成交", "cta"),
++                      ("答疑", "interaction_patterns"))
++    modules = []
++    source_rows = [row for chunk in chunks for row in chunk["rows"]]
++    for name, field in module_sources:
++        values = merged[field]
++        timestamps = []
++        for item in values:
++            candidates = [row for row in source_rows if row["end"] > item["start"] and row["start"] < item["end"]]
++            if not candidates:
++                candidates = source_rows
++            row = min(candidates, key=lambda candidate: abs(candidate["start"] - item["start"]))
++            timestamps.append({"start": row["start"], "end": row["end"],
++                               "source_segment_index": row["segment_index"], "source_text": row["text"]})
++        modules.append({"name": name, "summary": "；".join(item["summary"] for item in values[:5]),
++                        "timestamps": timestamps})
++    merged.update({
++        "schema_version": "2.0",
++        "instructor": {"status": instructor_status,
++                       "names": instructor_names, "evidence_refs": instructor_items},
++        "interaction": list(merged["interaction_patterns"]),
++        "product_fulfillment": list(merged["product_handoff"]),
++        "modules": modules,
++        "analysis_coverage": {"source_duration_seconds": duration,
++                              "first_timestamp_seconds": chunks[0]["start"],
++                              "last_timestamp_seconds": chunks[-1]["end"],
++                              "timeline_coverage_rate": coverage / duration if duration > 0 else None,
++                              "chunk_count": len(chunks),
++                              "input_row_count": sum(chunk["row_count"] for chunk in chunks),
++                              "analyzed_unique_segment_count": len({row["segment_index"] for row in source_rows}),
++                              "segment_coverage_rate": 1.0,
++                              "all_chunks_complete": True},
++    })
++    return merged
++
++
++def write_json_atomic(path: Path, payload: dict) -> None:
++    serialized = json.dumps(payload, ensure_ascii=False, indent=2, allow_nan=False) + "\n"
++    parsed = json.loads(serialized)
++    if not isinstance(parsed, dict):
++        raise RuntimeError("analysis artifact did not serialize to a JSON object")
++    path.parent.mkdir(parents=True, exist_ok=True)
++    temporary = path.with_name(f".{path.name}.{os.getpid()}.tmp")
++    try:
++        temporary.write_text(serialized, encoding="utf-8")
++        json.loads(temporary.read_text(encoding="utf-8"))
++        temporary.replace(path)
++    finally:
++        if temporary.exists():
++            temporary.unlink()
++
++
++def request_analysis(text: str, source_duration: float | None = None) -> tuple[dict, dict]:
++    chunks = analysis_chunks(text)
++    results, diagnostics = [], []
++    for chunk in chunks:
++        result, diagnostic = request_chunk(chunk)
++        results.append(result)
++        diagnostics.append({"chunk_index": chunk["index"], "start": chunk["start"], "end": chunk["end"],
++                            "row_count": chunk["row_count"], **diagnostic})
++    merged = merge_chunk_results(results, chunks, source_duration)
++    return merged, {"provider": "deepseek", "model": "deepseek-chat", "response_ids": [d["response_id"] for d in diagnostics],
++                    "source_content_hash": hashlib.sha256(text.encode()).hexdigest(), "chunk_count": len(chunks),
++                    "chunk_diagnostics": diagnostics, "merge_engine": "deterministic-python-v2"}
+ 
+ 
+ def once() -> dict:
+@@ -88,11 +271,14 @@
+     for row in rows:
+         try:
+             text, transcript_rows = transcript_text(Path(row["transcript_path"]))
+-            result, engine = request_analysis(text)
++            transcript_payload = json.loads(Path(row["transcript_path"]).read_text(encoding="utf-8"))
++            source_duration = transcript_payload.get("duration") or max(
++                (float(item.get("end") or 0) for item in transcript_rows), default=0
++            )
++            result, engine = request_analysis(text, source_duration=float(source_duration or 0))
+             output_path = ANALYSIS_ROOT / f"{row['analysis_id']}.json"
+-            output_path.parent.mkdir(parents=True, exist_ok=True)
+             artifact = {"analysis_id": row["analysis_id"], "session_id": row["session_id"], "transcript_id": row["transcript_id"], "engine": engine, "created_at": utc_now(), "result": result}
+-            output_path.write_text(json.dumps(artifact, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
++            write_json_atomic(output_path, artifact)
+             with connect() as conn:
+                 conn.execute("UPDATE analyses SET status='COMPLETE',output_path=?,metadata_json=?,lineage_state='CURRENT' WHERE analysis_id=?", (str(output_path), json.dumps({**engine, "semantic_engine": "deepseek-chat", "transcript_segment_count": len(transcript_rows)}, ensure_ascii=False, sort_keys=True), row["analysis_id"]))
+                 conn.execute("INSERT INTO evidence_bundles(bundle_id,object_type,object_id,status,manifest_path,manifest_hash,metadata_json) VALUES(?,?,?,?,?,?,?) ON CONFLICT(object_type,object_id) DO UPDATE SET status=excluded.status,manifest_path=excluded.manifest_path,manifest_hash=excluded.manifest_hash,metadata_json=excluded.metadata_json", ("bundle:" + row["analysis_id"], "analysis", row["analysis_id"], "REQUIRED", str(output_path), hashlib.sha256(output_path.read_bytes()).hexdigest(), json.dumps({"transcript_id": row["transcript_id"]}, ensure_ascii=False)))
+--- /dev/null
++++ b/runtime/v3/test_v3_analysis_worker.py
+@@ -0,0 +1,135 @@
++import json
++import tempfile
++import unittest
++from pathlib import Path
++from unittest.mock import patch
++
++import v3_analysis_worker as analysis
++
++
++def chunk_payload(**values):
++    payload = analysis.empty_chunk_result()
++    payload.update(values)
++    return payload
++
++
++class FakeResponse:
++    def __init__(self, content, finish_reason="stop", response_id="response"):
++        self.payload = {"id": response_id, "choices": [{"finish_reason": finish_reason,
++                        "message": {"content": content}}],
++                        "usage": {"prompt_tokens": 100, "completion_tokens": 100}}
++
++    def raise_for_status(self):
++        return None
++
++    def json(self):
++        return self.payload
++
++
++class FakeClient:
++    responses = []
++
++    def __init__(self, **_kwargs):
++        pass
++
++    def __enter__(self):
++        return self
++
++    def __exit__(self, *_args):
++        return False
++
++    def post(self, *_args, **_kwargs):
++        return self.responses.pop(0)
++
++
++class TranscriptChunkTests(unittest.TestCase):
++    def test_default_transcript_text_is_not_truncated(self):
++        with tempfile.TemporaryDirectory() as directory:
++            path = Path(directory) / "transcript.json"
++            path.write_text(json.dumps({"segments": [{"start": 0, "end": 1, "text": "字" * 17000}]}))
++            text, rows = analysis.transcript_text(path)
++            self.assertGreater(len(text), 16000)
++            self.assertEqual(len(rows), 1)
++            limited, _ = analysis.transcript_text(path, limit=16000)
++            self.assertEqual(len(limited), 16000)
++
++    def test_chunks_cover_every_timestamped_row_once(self):
++        text = "\n".join(f"[{i:.2f}-{i + 1:.2f}] " + "字" * 40 for i in range(100))
++        chunks = analysis.analysis_chunks(text, char_limit=500)
++        self.assertGreater(len(chunks), 1)
++        self.assertEqual(sum(chunk["row_count"] for chunk in chunks), 100)
++        self.assertEqual(chunks[0]["start"], 0)
++        self.assertEqual(chunks[-1]["end"], 100)
++
++    def test_merge_has_new_and_legacy_fields_with_coverage(self):
++        chunks = [{"index": 0, "start": 0, "end": 50, "row_count": 1,
++                   "rows": [{"segment_index": 0, "start": 0, "end": 10, "text": "开场"}]},
++                  {"index": 1, "start": 50, "end": 99, "row_count": 1,
++                   "rows": [{"segment_index": 1, "start": 50, "end": 70, "text": "互动"}]}]
++        first = chunk_payload(instructor=[{"summary": "陈老师", "start": 1, "end": 2}],
++                              course_content=[{"summary": "选科", "start": 3, "end": 4}])
++        second = chunk_payload(interaction_patterns=[{"summary": "评论区答题", "start": 60, "end": 61}],
++                               product_handoff=[{"summary": "小黄车", "start": 80, "end": 81}])
++        result = analysis.merge_chunk_results([first, second], chunks, source_duration=100)
++        self.assertEqual(result["schema_version"], "2.0")
++        self.assertEqual(result["instructor"]["names"], ["陈老师"])
++        self.assertEqual(result["interaction"], result["interaction_patterns"])
++        self.assertEqual(result["product_fulfillment"], result["product_handoff"])
++        self.assertEqual([module["name"] for module in result["modules"]],
++                         ["开场", "干货", "需求", "信任", "商品承接", "成交", "答疑"])
++        self.assertEqual(result["analysis_coverage"]["timeline_coverage_rate"], .99)
++        self.assertEqual(result["analysis_coverage"]["segment_coverage_rate"], 1)
++        self.assertIn("source_segment_index", result["modules"][1]["timestamps"][0])
++        for key in ("course_content", "interaction", "product_handoff", "claims", "evidence_refs"):
++            self.assertIn(key, result)
++
++    def test_out_of_chunk_timestamp_is_rejected(self):
++        value = chunk_payload(claims=[{"summary": "越界", "start": 99, "end": 100}])
++        with self.assertRaises(ValueError):
++            analysis.validate_chunk_result(value, {"start": 0, "end": 10})
++
++    def test_atomic_json_round_trip(self):
++        with tempfile.TemporaryDirectory() as directory:
++            path = Path(directory) / "analysis.json"
++            analysis.write_json_atomic(path, {"中文": [1, 2, 3]})
++            self.assertEqual(json.loads(path.read_text()), {"中文": [1, 2, 3]})
++            self.assertFalse(list(path.parent.glob("*.tmp")))
++
++
++class APIResponseTests(unittest.TestCase):
++    def setUp(self):
++        FakeClient.responses = []
++        self.chunk = {"index": 0, "start": 0, "end": 10, "row_count": 1, "text": "[0.00-10.00] 测试"}
++        self.valid = json.dumps(chunk_payload(course_content=[{"summary": "选科", "start": 0, "end": 10}]), ensure_ascii=False)
++
++    def call(self):
++        with patch.object(analysis, "read_env_key", return_value="configured"), \
++             patch.object(analysis.httpx, "Client", FakeClient):
++            return analysis.request_chunk(self.chunk)
++
++    def test_valid_stop_response_is_accepted(self):
++        FakeClient.responses = [FakeResponse(self.valid)]
++        result, meta = self.call()
++        self.assertEqual(result["course_content"][0]["summary"], "选科")
++        self.assertEqual(meta["finish_reason"], "stop")
++
++    def test_length_response_is_never_parsed_as_success(self):
++        FakeClient.responses = [FakeResponse('{"course_content":[', finish_reason="length"), FakeResponse(self.valid)]
++        result, meta = self.call()
++        self.assertEqual(meta["attempt"], 2)
++        self.assertEqual(result["course_content"][0]["summary"], "选科")
++
++    def test_invalid_json_is_retried(self):
++        FakeClient.responses = [FakeResponse("not-json"), FakeResponse(self.valid)]
++        result, meta = self.call()
++        self.assertEqual(meta["attempt"], 2)
++        self.assertTrue(result["course_content"])
++
++    def test_three_invalid_responses_fail_closed(self):
++        FakeClient.responses = [FakeResponse("bad") for _ in range(3)]
++        with self.assertRaisesRegex(RuntimeError, "failed after retries"):
++            self.call()
++
++
++if __name__ == "__main__":
++    unittest.main(verbosity=2)

@@ -1,0 +1,112 @@
+{
+  "schema_version": 3,
+  "scanner_backend": "tabbit_playwright",
+  "workflow_revision": "3.2",
+  "profile_id": "edu_live_competitor_intel",
+  "bot_name": "直播竞品情报主管",
+  "app_id": "cli_a978a6e73f785cc5",
+  "control_plane_backend": "postgresql",
+  "gateway_runtime_python": "/Users/mac/.local/share/edu-live-runtime-v3-venv/bin/python",
+  "postgresql": {
+    "dsn": "dbname=edu_live_competitor_intel_v3 user=mac host=/tmp",
+    "authoritative": true,
+    "sqlite_mirror": "/Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/runtime_v3.db"
+  },
+  "expected_tenant_key": null,
+  "expected_tenant_name": null,
+  "tenant_verification": "BLOCKED_MISSING_SCOPE",
+  "deployment_state": "BRIDGE_FULL_FLEET_ACTIVE",
+  "production_gate": "BLOCKED",
+  "single_node_mode": true,
+  "single_node_risk_acknowledged": true,
+  "allowed_sender_ids": [
+    "ou_e2bb6eeeda749177d2b1191664831934",
+    "d7geb3ba"
+  ],
+  "lark_cli": "/Users/mac/.hermes/profiles/edu_live_competitor_intel/bin/lark-cli",
+  "lark_cli_profile": "edu_live_competitor_intel",
+  "business_base": "BjilbFZG5atkp0sORszcHP1Anue",
+  "allowed_approver_open_ids": [
+    "ou_e2bb6eeeda749177d2b1191664831934"
+  ],
+  "business_tables": {
+    "00_系统保留": "tblGctpRbR4kzOVO",
+    "01_商品": "tbluIs6HfERsu1O4",
+    "02_同行账号": "tblivS4XFLZy1qfh",
+    "03_商品同行关系": "tbl5SpMvUAY1L1Cc",
+    "04_账号监控": "tblSccyzHr6pwKZX",
+    "05_直播场次": "tbluMlZqwzBXGMgp",
+    "06_转录证据": "tblqwQRfkyWpb0wQ",
+    "07_场次分析": "tblFvjcwMN9VGVWm",
+    "08_打法版本": "tbldEQ2IIVycBkHu",
+    "09_策略候选审批": "tblqC0baPooLdxuJ",
+    "10_Runtime状态": "tblrC9I6AraqxRVH"
+  },
+  "atomic_activation": {
+    "required_identity_coverage": 1.0,
+    "required_active_target_coverage": 1.0,
+    "required_pending_outbox": 0,
+    "max_concurrent_recordings": 65,
+    "normal_recording_concurrency": 30,
+    "expected_max_recording_concurrency": 50,
+    "capacity_test_concurrency": 65,
+    "max_monitor_targets": 100,
+    "monitor_interval_seconds": 30,
+    "full_fleet_activation": true,
+    "activation_state": "ACTIVE"
+  },
+  "routine_automation": {
+    "product_scan": true,
+    "identity_resolution": true,
+    "live_monitor": true,
+    "recording": true,
+    "transcription": true,
+    "analysis": true,
+    "feishu_projection": true
+  },
+  "asr_model": "faster-whisper-small",
+  "asr_model_dir": "/Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/models/models--Systran--faster-whisper-small",
+  "asr_max_local_concurrency": 1,
+  "asr_beam_size": 5,
+  "asr_condition_on_previous_text": false,
+  "asr_vad_min_silence_ms": 500,
+  "asr_speech_pad_ms": 200,
+  "asr_initial_prompt": "这是中文教育直播逐字稿，常见术语包括直播竞品、新高考、选科、文科、理科、物化生、升学规划、家长、学校、专业和排名。",
+  "asr_audio_format": "opus",
+  "asr_audio_bitrate_kbps": 48,
+  "asr_hotwords": "新高考,选科,文科,理科,物化生,物化地,史地政,升学规划,校排名,联考排名,专业覆盖率,强基计划,普通班,重点班,直播竞品",
+  "transcript_quality": {
+    "full_session_min_timestamp_coverage_rate": 0.9,
+    "full_session_target_timestamp_coverage_rate": 0.95
+  },
+  "recording_quality": "LD",
+  "recording_mode": "LOWEST_VIDEO_WITH_AUDIO",
+  "recording_segment_seconds": 0,
+  "recording_stream_refresh_seconds": 900,
+  "recording_single_final_file": true,
+  "recording_duration_seconds": 0,
+  "normal_recording_concurrency": 30,
+  "expected_max_recording_concurrency": 50,
+  "capacity_test_concurrency": 65,
+  "retention": {
+    "delete_enabled": false,
+    "video_hours": 72,
+    "audio_hours": 168,
+    "scan_interval_seconds": 3600,
+    "hold_if_transcript_incomplete": true,
+    "hold_if_review_pending": true
+  },
+  "product_rescan_interval_seconds": 21600,
+  "human_gates": {
+    "strategy_worth_testing": true,
+    "formal_knowledge_diff": true,
+    "review_required": true,
+    "material_retention_override": true,
+    "real_live_use_of_new_script": true,
+    "irreversible_delete": true
+  },
+  "analysis_quality": {
+    "full_session_min_timestamp_coverage_rate": 0.9,
+    "full_session_target_timestamp_coverage_rate": 0.95
+  }
+}

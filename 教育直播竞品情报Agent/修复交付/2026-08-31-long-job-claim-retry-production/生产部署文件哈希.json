@@ -1,0 +1,17 @@
+{
+  "v3_long_jobs.py": "facbcab588d789ab4a04d1729c1bed6a337bcb29644a2a0009a3cdcd5a159362",
+  "v3_pipeline_worker.py": "996d830fa5427f837bdd1381e154d16e5ee4bd2119b7b3519c7c30ae083e6af8",
+  "v3_analysis_worker.py": "f85b01c21b85672e29b9db84cfac316e11ea34f3d6d49c979757851d8d3328a8",
+  "v3_schema.sql": "fba1cbd7439520f2a9f34dd8af5151bec336d035e3e807ea9bb4422ef457de8e",
+  "v3_long_job_migration.py": "babb17a330d3145293bbb8aecc24d25ed3cf142651a99750940590e364dabc20",
+  "v3_long_job_rollback.py": "233a339fbaa179c50ba187aea81134946e7e36a09320af1a62a3f25903ccc46c",
+  "test_v3_long_job_claim_retry.py": "d8453ab7f8f498cfce843f7b660478a9ca998c31a7145ef6f87fd07df845dd8c",
+  "test_v3_long_jobs_postgres.py": "0d569c48ebe02c5c5962c9c5ff67e7920acdf331d1b1869c0b27d98ac3c6d736",
+  "test_v3_analysis_coverage_gate.py": "52019fdd337eecfb09c9b05cdc85315919ece84b2021104ee91fd1a3fc999de5",
+  "test_v3_analysis_worker.py": "685ebb39fc41f914210815b2a8d4c72e503de4c8f0339cbf162e607b758a5536",
+  "test_v3_pipeline_coverage.py": "5cafb0454ffee0941099b51c09574e39c872c60cb2e820416b269ec63f66d5b2",
+  "test_v3_recording_transcription.py": "621e60872f05e850ce322e52b87ae6c705fe413e0ffce09a3fa9e907452469d4",
+  "test_v3_sample_analysis_qualification.py": "90b9149020cdca5b7586df36941fd20d7108cf7ad6c2c229487424a88dea0dfc",
+  "test_v3_segment_lifecycle.py": "d634b6117b9aea1990b74779c5502220318d2026f670520654e694396403a01f",
+  "migrations/003_long_job_claim_retry.sql": "9cdfec57008a6cbc50fd1875337bf7b015012eb670e1863dd221da94ba03d3ac"
+}

@@ -1,0 +1,37 @@
+{
+  "installed_at": "2026-08-30T15:11:45.797126+00:00",
+  "backup_dir": "/Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/backups/sample-analysis-code-20260830-2311",
+  "backed_up": [
+    "v3_pipeline_worker.py",
+    "v3_analysis_worker.py",
+    "v3_evidence_worker.py",
+    "v3_project_feishu.py",
+    "v3_runtime.py",
+    "v3_schema.sql",
+    "test_v3_segment_lifecycle.py"
+  ],
+  "new_files": [
+    "v3_analysis_contract.py",
+    "v3_sample_analysis_migration.py",
+    "v3_sample_analysis_rollback.py",
+    "migrations/002_analysis_qualification.sql",
+    "test_v3_sample_analysis_qualification.py",
+    "verify_sample_analysis_migration_pg.py"
+  ],
+  "installed_hashes": {
+    "v3_analysis_contract.py": "1e4a3b27d9aedb278e696c60c4648e8301bdbfccbec69f3e47f7d418b083eaf4",
+    "v3_pipeline_worker.py": "58a076a834fad01c8d4739a682e8024da4fff178eaa01c1e2e290a9e76876e83",
+    "v3_analysis_worker.py": "ed7f47ca98eaf3b3a07eb2b3fa4622e99aa1119fe73bc8f071816874e502f1e3",
+    "v3_evidence_worker.py": "f67d5623c9f9af566de2c3895297f10594d9ef89c52282371581383e9dbd4c95",
+    "v3_project_feishu.py": "5cf248cfd58149371f8d7584be7e3a217dc205f066581342b8be4e9fb214a96a",
+    "v3_runtime.py": "9517abf237ab8ffc8102876bc36b7bae0b098d82d63b24374d25887dc00c4da4",
+    "v3_schema.sql": "b3cafcccbbdbc4e3c89a7598f62950f01925a01db7fcd224766118f5d60f7357",
+    "v3_sample_analysis_migration.py": "b5a615cf361d450df230ddd84099b6ccf5886aaf4e5a58eae610e49891e99123",
+    "v3_sample_analysis_rollback.py": "3583ce14a81f861dc110f1fd92b75402d42db59f30199ec192bdeeb9b55aafe7",
+    "migrations/002_analysis_qualification.sql": "de9b9a3d441eca8c95324d4ba627d98b358f3c5314345bf938afdfe45c9a82d5",
+    "test_v3_sample_analysis_qualification.py": "8876c59e57c3fd80570dabd2e8828899b1d9c7f28f0bacd9a6920695d53af8bf",
+    "test_v3_segment_lifecycle.py": "4e8b9f4a02c430f31eecd932a65cfac32e4bef7bc5fb85fabb23d4b80404253b",
+    "verify_sample_analysis_migration_pg.py": "99dcfae6d076ebeeeaa14c7df32444a979da3c12753b86ba574fb8bfd9fd2811"
+  },
+  "config_not_overwritten": true
+}

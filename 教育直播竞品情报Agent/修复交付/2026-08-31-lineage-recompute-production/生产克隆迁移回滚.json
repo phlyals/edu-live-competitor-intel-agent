@@ -1,0 +1,6 @@
+{
+  "status": "ROLLED_BACK_ROWS",
+  "backup_sha256": "120d640a9d34ff39c04def1fb9f7f4d0dd40f37b2db44bbe2e7867673b97d2ea",
+  "lineage_columns_retained": true,
+  "recompute_table_removed": true
+}

@@ -1,0 +1,24 @@
+{
+  "migration_key": "long_job_claim_retry_revision",
+  "migration_version": "1",
+  "source_schema_signature": "2ff7b3ca5d97a22e92c63b07d6474b5b377eb77421cdaecdad6fc23fbfe4c450",
+  "ddl_sha256": "9cdfec57008a6cbc50fd1875337bf7b015012eb670e1863dd221da94ba03d3ac",
+  "row_statuses": {
+    "transcripts": [
+      {
+        "transcript_id": "t",
+        "status": "PENDING"
+      }
+    ],
+    "analyses": [
+      {
+        "analysis_id": "a",
+        "status": "WAITING_MODEL"
+      }
+    ]
+  },
+  "issues": [],
+  "plan_sha256": "d4f76f4e7043dcf6ac7f0e6c24984c0c2242f4cf645b6c2c0baf5346239eb7bb",
+  "schema_missing_before_migration": {},
+  "transaction_read_only": "on"
+}

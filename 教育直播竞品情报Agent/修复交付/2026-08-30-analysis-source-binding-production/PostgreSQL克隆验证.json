@@ -1,0 +1,169 @@
+{
+  "temporary_database": "edu_source_binding_test_2236889122",
+  "production_writes": 0,
+  "pipeline_created": 1,
+  "pipeline_replay_created": 0,
+  "analysis_result": {
+    "completed": 1,
+    "revalidated": 0,
+    "quality_blocked": 0,
+    "source_qualification_blocked": 0,
+    "waiting_model": 0,
+    "minimum_coverage_rate": 0.9,
+    "target_coverage_rate": 0.95,
+    "analysis_spec_version": "single-session-evidence-v4-source-ids",
+    "current_spec_total": 1,
+    "current_spec_qualified": 1,
+    "current_spec_meets_target": 1,
+    "current_spec_blocked": 0,
+    "current_spec_waiting": 0,
+    "current_spec_evidence_pending": 1,
+    "health_reasons": [
+      "ANALYSIS_EVIDENCE_PENDING"
+    ],
+    "checked_at": "2026-08-30T16:02:50.940Z"
+  },
+  "evidence_result": {
+    "verified": 1,
+    "blocked": 0,
+    "released_projections": 2,
+    "checked_at": "2026-08-30T16:02:51.019Z"
+  },
+  "current_analysis": {
+    "analysis_id": "analysis_c0d5fe33a0180f99e66fbca2",
+    "status": "COMPLETE",
+    "lineage_state": "CURRENT",
+    "scope": "FORMAL_SINGLE_SESSION",
+    "qualification_status": "FULL_SESSION_QUALIFIED",
+    "analysis_spec_version": "single-session-evidence-v4-source-ids",
+    "output_path": "/Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-30-analysis-source-binding-production/pg-integration-artifacts/analysis_c0d5fe33a0180f99e66fbca2.json",
+    "artifact_digest": "b8f1b0dab32e0ddda2b8922d68337eb437caee80b15b225372e891b4535c77eb"
+  },
+  "old_analysis": {
+    "analysis_id": "analysis_d52f07f183321d1b75620e21",
+    "status": "COMPLETE",
+    "lineage_state": "SUPERSEDED",
+    "analysis_spec_version": "single-session-evidence-v3-coverage",
+    "output_path": "/Volumes/ExternalStorage/同行直播录制/analysis/drafts/runtime-v3/analysis/analysis_d52f07f183321d1b75620e21.json",
+    "artifact_digest": "d37b7363bb5a01ccc9c7c69665887f26bea534bd16aeba49ce4e88a08a48343d"
+  },
+  "coverage": {
+    "schema_version": 2,
+    "coverage_scope": "FULL_SESSION",
+    "source_duration_seconds": 4387.491625,
+    "source_timestamp_covered_seconds": 4335.199999999997,
+    "source_transcript_coverage_rate": 0.9880816581615691,
+    "analyzed_timestamp_covered_seconds": 4335.199999999997,
+    "analysis_coverage_rate": 0.9880816581615691,
+    "timeline_coverage_rate": 0.9880816581615691,
+    "source_segment_count": 1454,
+    "analyzed_unique_segment_count": 1454,
+    "segment_coverage_rate": 1.0,
+    "source_segment_ids_sha256": "bde4ab08f8f2a8634c0a78e8ddfdeeda227900166388c82f466ff0af62c7ebb5",
+    "successful_source_segment_ids_sha256": "bde4ab08f8f2a8634c0a78e8ddfdeeda227900166388c82f466ff0af62c7ebb5",
+    "minimum_coverage_rate": 0.9,
+    "target_coverage_rate": 0.95,
+    "timestamps_valid": true,
+    "source_segment_ids_valid": true,
+    "all_chunks_complete": true,
+    "is_qualified": true,
+    "meets_target": true,
+    "validation_errors": [],
+    "first_timestamp_seconds": 0.0,
+    "last_timestamp_seconds": 4385.42,
+    "chunk_count": 16,
+    "input_row_count": 1454
+  },
+  "gap_count": 123,
+  "model_chunk_calls": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15
+  ],
+  "artifact_binding_status": "BOUND_V1",
+  "reference_count": 16,
+  "nearest_segment_fallback": false,
+  "model_generated_timestamps": false,
+  "old_artifact_unchanged": true,
+  "new_artifact_sha256_matches_db": true,
+  "bundles": [
+    {
+      "object_id": "analysis_16bdca57a497943fd6eb0c05",
+      "status": "VERIFIED",
+      "scope": "FORMAL_SINGLE_SESSION",
+      "qualification_status": "FULL_SESSION_QUALIFIED",
+      "manifest_hash": "45b576f6e35c6db85135f544abf879792180a81c682c91df82f6d7b1e5f5222e"
+    },
+    {
+      "object_id": "analysis_8801cb766ceca4ab6327511a",
+      "status": "INVALIDATED_SAMPLE",
+      "scope": "SAMPLE_AUXILIARY",
+      "qualification_status": "SAMPLE_NONQUALIFYING",
+      "manifest_hash": "d64d1ede9ee97628cf74d0b5ed4dcfce82a6f872edf51cbef9749feff1bee817"
+    },
+    {
+      "object_id": "analysis_c0d5fe33a0180f99e66fbca2",
+      "status": "VERIFIED",
+      "scope": "FORMAL_SINGLE_SESSION",
+      "qualification_status": "FULL_SESSION_QUALIFIED",
+      "manifest_hash": "b8f1b0dab32e0ddda2b8922d68337eb437caee80b15b225372e891b4535c77eb"
+    },
+    {
+      "object_id": "analysis_d52f07f183321d1b75620e21",
+      "status": "VERIFIED",
+      "scope": "FORMAL_SINGLE_SESSION",
+      "qualification_status": "FULL_SESSION_QUALIFIED",
+      "manifest_hash": "d37b7363bb5a01ccc9c7c69665887f26bea534bd16aeba49ce4e88a08a48343d"
+    },
+    {
+      "object_id": "analysis_f261f8101b4ea725a954c23f",
+      "status": "INVALIDATED_SAMPLE",
+      "scope": "SAMPLE_AUXILIARY",
+      "qualification_status": "SAMPLE_NONQUALIFYING",
+      "manifest_hash": "14147e0d1536df6e157f3c8acd3a2c700926de9f1b45d192e7b106d692fa5c10"
+    }
+  ],
+  "pending_projection_count": 2,
+  "pending_projection_objects": [
+    "analysis_c0d5fe33a0180f99e66fbca2",
+    "analysis_d52f07f183321d1b75620e21"
+  ],
+  "migration_health": {
+    "healthy": true,
+    "schema_missing": {},
+    "indexes": [
+      "idx_analyses_qualification",
+      "idx_analyses_transcript_id",
+      "idx_outbox_qualification",
+      "uq_analyses_transcript_spec"
+    ],
+    "trigger": true,
+    "unclassified": {
+      "transcripts": 0,
+      "analyses": 0,
+      "evidence_bundles": 0,
+      "outbox": 0,
+      "delivery_receipts": 0
+    },
+    "lineage_errors": [],
+    "sample_lineage_errors": [],
+    "correction_errors": [],
+    "bad_formal": 0,
+    "bad_sample": 0,
+    "bad_formal_evidence": 0,
+    "bad_sample_evidence": 0
+  }
+}

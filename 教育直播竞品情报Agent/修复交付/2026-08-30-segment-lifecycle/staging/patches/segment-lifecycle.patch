@@ -1,0 +1,135 @@
+--- a/runtime/v3/v3_schema.sql
++++ b/runtime/v3/v3_schema.sql
+@@ -223,6 +223,9 @@
+     captured_to TEXT,
+     status TEXT NOT NULL DEFAULT 'PARTIAL',
+     bytes INTEGER NOT NULL DEFAULT 0,
++    lifecycle_status TEXT NOT NULL DEFAULT 'UNCLASSIFIED',
++    superseded_by_segment_id TEXT REFERENCES recording_segments(segment_id),
++    lifecycle_updated_at TEXT,
+     UNIQUE(session_id, path)
+ );
+ 
+--- a/runtime/v3/v3_runtime.py
++++ b/runtime/v3/v3_runtime.py
+@@ -155,6 +155,12 @@
+             _ensure_column(conn, "tasks", "next_attempt_at", "TEXT")
+             _ensure_column(conn, "outbox", "max_attempts", f"INTEGER NOT NULL DEFAULT {OUTBOX_MAX_ATTEMPTS}")
+             _ensure_column(conn, "transcripts", "language", "TEXT")
++            # Fail closed on upgraded databases.  The explicit lifecycle
++            # migration classifies legacy rows before the pipeline is resumed.
++            _ensure_column(conn, "recording_segments", "lifecycle_status", "TEXT NOT NULL DEFAULT 'UNCLASSIFIED'")
++            _ensure_column(conn, "recording_segments", "superseded_by_segment_id", "TEXT REFERENCES recording_segments(segment_id)")
++            _ensure_column(conn, "recording_segments", "lifecycle_updated_at", "TEXT")
++            conn.execute("CREATE INDEX IF NOT EXISTS idx_recording_segments_lifecycle ON recording_segments(lifecycle_status,session_id)")
+             conn.execute("UPDATE tasks SET next_attempt_at=COALESCE(next_attempt_at,updated_at) WHERE status IN ('RECEIVED','RETRY_WAIT')")
+             conn.execute("CREATE INDEX IF NOT EXISTS idx_tasks_due ON tasks(status,next_attempt_at,lease_until)")
+             conn.execute("INSERT INTO schema_meta(key,value) VALUES('control_plane_revision','3.1') ON CONFLICT(key) DO UPDATE SET value=excluded.value,updated_at=strftime('%Y-%m-%dT%H:%M:%fZ','now')")
+--- a/runtime/v3/v3_worker.py
++++ b/runtime/v3/v3_worker.py
+@@ -579,6 +579,57 @@
+ 
+ def _record_finalizer_error(conn, session_id: str, reason: str) -> None:
+     conn.execute("UPDATE recording_jobs SET last_error=? WHERE session_id=?", (reason[:2000], session_id))
++
++
++def _classify_published_source_segments(conn, session_id: str, canonical_segment_id: str,
++                                         source_entries: list[dict]) -> None:
++    """Classify only rows for which finalization produced direct evidence.
++
++    A source moved from partial to completed storage keeps its segment identity:
++    update the path and mark it retained.  If that destination is already owned
++    by an equivalent row, keep the owner and supersede the stale duplicate.  A
++    hash conflict fails closed instead of violating UNIQUE(session_id, path).
++    """
++    known_sources: dict[str, dict] = {}
++    for entry in source_entries:
++        current_path = str(entry.get("path") or "")
++        original_path = str(entry.get("original_path") or "")
++        info = {"checksum": str(entry.get("sha256") or "") or None, "current_path": current_path}
++        if current_path:
++            known_sources[current_path] = info
++        if original_path:
++            known_sources[original_path] = info
++    now = utc_now()
++    rows = conn.execute(
++        "SELECT segment_id,path,checksum FROM recording_segments WHERE session_id=? AND segment_id<>?",
++        (session_id, canonical_segment_id),
++    ).fetchall()
++    for row in rows:
++        recorded_path = str(row["path"])
++        info = known_sources.get(recorded_path)
++        replacement_path = str((info or {}).get("current_path") or "")
++        if Path(recorded_path).is_file():
++            lifecycle, replacement, new_path = "SOURCE_RETAINED", None, recorded_path
++        elif info and replacement_path and Path(replacement_path).is_file():
++            owner = conn.execute(
++                "SELECT segment_id,checksum FROM recording_segments WHERE session_id=? AND path=?",
++                (session_id, replacement_path),
++            ).fetchone()
++            compatible = (not row["checksum"] or not info.get("checksum") or str(row["checksum"]) == info["checksum"])
++            if not owner or owner["segment_id"] == row["segment_id"]:
++                lifecycle, replacement, new_path = ("SOURCE_RETAINED", None, replacement_path) if compatible else ("LOST_REVIEW", None, recorded_path)
++            elif compatible and (not owner["checksum"] or not info.get("checksum") or str(owner["checksum"]) == info["checksum"]):
++                lifecycle, replacement, new_path = "SOURCE_SUPERSEDED", canonical_segment_id, recorded_path
++            else:
++                lifecycle, replacement, new_path = "LOST_REVIEW", None, recorded_path
++        elif info and (not row["checksum"] or not info.get("checksum") or str(row["checksum"]) == info["checksum"]):
++            lifecycle, replacement, new_path = "SOURCE_SUPERSEDED", canonical_segment_id, recorded_path
++        else:
++            lifecycle, replacement, new_path = "SOURCE_SUPERSEDED", canonical_segment_id, recorded_path
++        conn.execute(
++            "UPDATE recording_segments SET path=?,lifecycle_status=?,superseded_by_segment_id=?,lifecycle_updated_at=? WHERE segment_id=?",
++            (new_path, lifecycle, replacement, now, row["segment_id"]),
++        )
+ 
+ 
+ def finalize_media_for_session(conn, session: dict, job: dict) -> None:
+@@ -694,7 +745,7 @@
+             return
+         captured_from = session["started_at"] or utc_now()
+         captured_to = session["ended_at"] if session["status"] == "ENDED" else None
+-        conn.execute("INSERT INTO recording_segments(segment_id,session_id,path,checksum,captured_from,captured_to,status,bytes) VALUES(?,?,?,?,?,?,?,?) ON CONFLICT(segment_id) DO UPDATE SET path=excluded.path,checksum=excluded.checksum,status=excluded.status,bytes=excluded.bytes,captured_to=excluded.captured_to", (segment_id, session["session_id"], str(path), checksum, captured_from, captured_to, "COMPLETE" if session["status"] == "ENDED" else "PARTIAL", path.stat().st_size))
++        conn.execute("INSERT INTO recording_segments(segment_id,session_id,path,checksum,captured_from,captured_to,status,bytes,lifecycle_status,lifecycle_updated_at) VALUES(?,?,?,?,?,?,?,?,?,?) ON CONFLICT(segment_id) DO UPDATE SET path=excluded.path,checksum=excluded.checksum,status=excluded.status,bytes=excluded.bytes,captured_to=excluded.captured_to", (segment_id, session["session_id"], str(path), checksum, captured_from, captured_to, "COMPLETE" if session["status"] == "ENDED" else "PARTIAL", path.stat().st_size, "UNCLASSIFIED", utc_now()))
+     final_files = sorted(media_root.glob("整场直播.ts")) if media_root.exists() else []
+     if session["status"] != "ENDED" or not final_files:
+         return
+@@ -712,7 +763,7 @@
+     captured_from = session["started_at"] or utc_now()
+     captured_to = session["ended_at"] or utc_now()
+     segment_id = conn.execute('SELECT segment_id FROM recording_segments WHERE session_id=? AND path=?',(session['session_id'],str(path))).fetchone()['segment_id']
+-    conn.execute("INSERT INTO recording_segments(segment_id,session_id,path,checksum,captured_from,captured_to,status,bytes) VALUES(?,?,?,?,?,?,?,?) ON CONFLICT(session_id,path) DO UPDATE SET checksum=excluded.checksum,status='COMPLETE',bytes=excluded.bytes,captured_to=excluded.captured_to", (segment_id, session["session_id"], str(path), checksum, captured_from, captured_to, "COMPLETE", path.stat().st_size))
++    conn.execute("INSERT INTO recording_segments(segment_id,session_id,path,checksum,captured_from,captured_to,status,bytes,lifecycle_status,superseded_by_segment_id,lifecycle_updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT(session_id,path) DO UPDATE SET checksum=excluded.checksum,status='COMPLETE',bytes=excluded.bytes,captured_to=excluded.captured_to,lifecycle_status='CANONICAL_ACTIVE',superseded_by_segment_id=NULL,lifecycle_updated_at=excluded.lifecycle_updated_at", (segment_id, session["session_id"], str(path), checksum, captured_from, captured_to, "COMPLETE", path.stat().st_size, "CANONICAL_ACTIVE", None, utc_now()))
+     manifest_path = media_root / "media-manifest.json"
+     retained_sources = []
+     if source_entries:
+@@ -739,6 +790,7 @@
+     _atomic_write_json(manifest_path, manifest)
+     manifest_hash = hashlib.sha256(manifest_path.read_bytes()).hexdigest()
+     conn.execute("INSERT INTO media_manifests(manifest_id,session_id,status,manifest_path,manifest_hash,segment_count,total_bytes,complete_from,complete_to,verified_at,metadata_json) VALUES(?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT(session_id) DO UPDATE SET status='VERIFIED',manifest_path=excluded.manifest_path,manifest_hash=excluded.manifest_hash,segment_count=excluded.segment_count,total_bytes=excluded.total_bytes,complete_from=excluded.complete_from,complete_to=excluded.complete_to,verified_at=excluded.verified_at,metadata_json=excluded.metadata_json", ("manifest:" + session["session_id"], session["session_id"], "VERIFIED", str(manifest_path), manifest_hash, max(1, len(retained_sources)), path.stat().st_size, captured_from, captured_to, utc_now(), json.dumps({"final_file": str(path), "source_manifest": str(source_manifest_path) if source_manifest_hash else None, "retained_source_count": len(retained_sources)}, ensure_ascii=False)))
++    _classify_published_source_segments(conn, session["session_id"], segment_id, retained_sources)
+     try:
+         end_time = datetime.fromisoformat(captured_to.replace("Z", "+00:00"))
+         retention = json.loads(V3_CONFIG.read_text(encoding="utf-8")).get("retention") or {}
+--- a/runtime/v3/v3_pipeline_worker.py
++++ b/runtime/v3/v3_pipeline_worker.py
+@@ -62,7 +62,9 @@
+                 if old and (old['session_id']!=job['session_id'] or (old['path']!=str(path) and Path(old['path']).is_file() and old['checksum']!=checksum)):
+                     conn.execute("UPDATE recording_jobs SET last_error='media relocation conflict; original files retained' WHERE session_id=?",(job['session_id'],))
+                     continue
+-                conn.execute("INSERT INTO recording_segments(segment_id,session_id,path,checksum,captured_from,captured_to,status,bytes) VALUES(?,?,?,?,?,?,?,?) ON CONFLICT(segment_id) DO UPDATE SET path=excluded.path,checksum=excluded.checksum,bytes=excluded.bytes,status=excluded.status,captured_to=excluded.captured_to", (seg_id, job["session_id"], str(path), checksum, job["started_at"] or utc_now(), job["ended_at"], "COMPLETE" if media_complete else "PARTIAL", size))
++                # Discovery never promotes a segment to canonical.  Only the
++                # finalizer may do that after manifest and media validation.
++                conn.execute("INSERT INTO recording_segments(segment_id,session_id,path,checksum,captured_from,captured_to,status,bytes,lifecycle_status,lifecycle_updated_at) VALUES(?,?,?,?,?,?,?,?,?,?) ON CONFLICT(segment_id) DO UPDATE SET path=excluded.path,checksum=excluded.checksum,bytes=excluded.bytes,status=excluded.status,captured_to=excluded.captured_to,lifecycle_updated_at=CASE WHEN recording_segments.lifecycle_status='UNCLASSIFIED' THEN recording_segments.lifecycle_updated_at ELSE excluded.lifecycle_updated_at END", (seg_id, job["session_id"], str(path), checksum, job["started_at"] or utc_now(), job["ended_at"], "COMPLETE" if media_complete else "PARTIAL", size, "SOURCE_RETAINED", utc_now()))
+                 changed += 1
+         conn.commit()
+     return changed
+@@ -115,7 +117,7 @@
+ def transcribe_pending() -> int:
+     created = 0
+     with connect() as conn:
+-        sessions = [dict(r) for r in conn.execute("SELECT DISTINCT s.session_id,s.status,s.ended_at,s.completeness,s.metadata_json AS session_metadata,r.path,r.segment_id,r.checksum FROM live_sessions s JOIN recording_segments r ON r.session_id=s.session_id WHERE r.status='COMPLETE' AND s.status='MEDIA_COMPLETE' ORDER BY s.ended_at DESC,r.path")]
++        sessions = [dict(r) for r in conn.execute("SELECT DISTINCT s.session_id,s.status,s.ended_at,s.completeness,s.metadata_json AS session_metadata,r.path,r.segment_id,r.checksum FROM live_sessions s JOIN recording_segments r ON r.session_id=s.session_id WHERE r.status='COMPLETE' AND r.lifecycle_status='CANONICAL_ACTIVE' AND s.status='MEDIA_COMPLETE' ORDER BY s.ended_at DESC,r.path")]
+     for session in sessions:
+         media = Path(session["path"])
+         full_session = media.name == "整场直播.ts"

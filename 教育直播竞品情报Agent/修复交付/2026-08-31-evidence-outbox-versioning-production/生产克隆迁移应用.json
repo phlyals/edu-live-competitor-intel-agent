@@ -1,0 +1,22 @@
+{
+  "status": "APPLIED",
+  "plan_sha256": "91fe490a9afc921c4e71f660c5d820e3bf815c6886fd4016d180faa91c243b24",
+  "backup_path": "/Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-31-evidence-outbox-versioning-production/生产克隆迁移备份/pre-evidence-outbox-20260831-021104-807729.json",
+  "backup_sha256": "e8bc15a0b7e25e39540c2712c1394ffefef6b710643f3dd334ac1a5e8ab3b991",
+  "legacy_rows_backfilled": 5,
+  "postconditions": {
+    "healthy": true,
+    "missing_columns": {
+      "outbox": [],
+      "delivery_receipts": []
+    },
+    "indexes": [
+      "idx_delivery_receipts_projection_version",
+      "idx_outbox_projection_binding",
+      "uq_outbox_projection_version"
+    ],
+    "marker": "1",
+    "errors": [],
+    "held_evidence_outbox": []
+  }
+}

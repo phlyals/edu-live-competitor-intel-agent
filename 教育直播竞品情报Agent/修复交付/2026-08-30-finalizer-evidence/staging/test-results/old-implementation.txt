@@ -1,0 +1,106 @@
+test_concat_failure_preserves_sources_and_preconcat_manifest (__main__.FinalizerEvidenceTests.test_concat_failure_preserves_sources_and_preconcat_manifest) ... ERROR
+test_duration_mismatch_never_publishes_or_deletes_sources (__main__.FinalizerEvidenceTests.test_duration_mismatch_never_publishes_or_deletes_sources) ... FAIL
+test_empty_concat_output_is_not_published_and_sources_survive (__main__.FinalizerEvidenceTests.test_empty_concat_output_is_not_published_and_sources_survive) ... FAIL
+test_missing_sidecars_use_composite_part_and_refresh_generation (__main__.FinalizerEvidenceTests.test_missing_sidecars_use_composite_part_and_refresh_generation) ... FAIL
+test_real_ffmpeg_concat_retains_sources_and_validates_audio_video (__main__.FinalizerEvidenceTests.test_real_ffmpeg_concat_retains_sources_and_validates_audio_video) ... FAIL
+test_sidecar_started_at_wins_over_wrong_mtime (__main__.FinalizerEvidenceTests.test_sidecar_started_at_wins_over_wrong_mtime) ... FAIL
+test_success_publishes_final_but_retains_sources_and_sidecars (__main__.FinalizerEvidenceTests.test_success_publishes_final_but_retains_sources_and_sidecars) ... FAIL
+
+======================================================================
+ERROR: test_concat_failure_preserves_sources_and_preconcat_manifest (__main__.FinalizerEvidenceTests.test_concat_failure_preserves_sources_and_preconcat_manifest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/ExternalStorage/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-30-finalizer-evidence/staging/test_finalizer_evidence.py", line 113, in test_concat_failure_preserves_sources_and_preconcat_manifest
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/pathlib.py", line 1027, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/pathlib.py", line 1013, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/var/folders/5y/4c_btmd536z_4x9r2719bgbw0000gp/T/v3-workflow-test-_s3zn5w_/partial/source-segments.preconcat.json'
+
+======================================================================
+FAIL: test_duration_mismatch_never_publishes_or_deletes_sources (__main__.FinalizerEvidenceTests.test_duration_mismatch_never_publishes_or_deletes_sources)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/ExternalStorage/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-30-finalizer-evidence/staging/test_finalizer_evidence.py", line 130, in test_duration_mismatch_never_publishes_or_deletes_sources
+    self.assert_sources(self.partial)
+  File "/Volumes/ExternalStorage/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-30-finalizer-evidence/staging/test_finalizer_evidence.py", line 104, in assert_sources
+    self.assertTrue((root / name).is_file(), name)
+AssertionError: False is not true : 整场直播.ts.partial
+
+======================================================================
+FAIL: test_empty_concat_output_is_not_published_and_sources_survive (__main__.FinalizerEvidenceTests.test_empty_concat_output_is_not_published_and_sources_survive)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/ExternalStorage/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-30-finalizer-evidence/staging/test_finalizer_evidence.py", line 122, in test_empty_concat_output_is_not_published_and_sources_survive
+    self.assertTrue((self.partial / "source-segments.preconcat.json").is_file())
+AssertionError: False is not true
+
+======================================================================
+FAIL: test_missing_sidecars_use_composite_part_and_refresh_generation (__main__.FinalizerEvidenceTests.test_missing_sidecars_use_composite_part_and_refresh_generation)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/ExternalStorage/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-30-finalizer-evidence/staging/test_finalizer_evidence.py", line 155, in test_missing_sidecars_use_composite_part_and_refresh_generation
+    self.assertEqual(self.concat_order, names)
+AssertionError: Lists differ: ['整场直播.part02.refresh0001.ts.partial', '整场直播.par[61 chars]ial'] != ['整场直播.ts.partial', '整场直播.refresh0001.ts.partial[61 chars]ial']
+
+First differing element 0:
+'整场直播.part02.refresh0001.ts.partial'
+'整场直播.ts.partial'
+
++ ['整场直播.ts.partial',
+- ['整场直播.part02.refresh0001.ts.partial',
+? ^     -------
+
++  '整场直播.refresh0001.ts.partial',
+? ^
+
+   '整场直播.part02.ts.partial',
+-  '整场直播.refresh0001.ts.partial',
+?                               ^
+
++  '整场直播.part02.refresh0001.ts.partial']
+?       +++++++                        ^
+
+-  '整场直播.ts.partial']
+
+======================================================================
+FAIL: test_real_ffmpeg_concat_retains_sources_and_validates_audio_video (__main__.FinalizerEvidenceTests.test_real_ffmpeg_concat_retains_sources_and_validates_audio_video)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/ExternalStorage/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-30-finalizer-evidence/staging/test_finalizer_evidence.py", line 207, in test_real_ffmpeg_concat_retains_sources_and_validates_audio_video
+    self.assertTrue(all((self.completed / source.name).is_file() for source in sources))
+AssertionError: False is not true
+
+======================================================================
+FAIL: test_sidecar_started_at_wins_over_wrong_mtime (__main__.FinalizerEvidenceTests.test_sidecar_started_at_wins_over_wrong_mtime)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/ExternalStorage/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-30-finalizer-evidence/staging/test_finalizer_evidence.py", line 140, in test_sidecar_started_at_wins_over_wrong_mtime
+    self.assertEqual(self.concat_order, ["整场直播.ts.partial", "整场直播.refresh0001.ts.partial"])
+AssertionError: Lists differ: ['整场直播.refresh0001.ts.partial', '整场直播.ts.partial'] != ['整场直播.ts.partial', '整场直播.refresh0001.ts.partial']
+
+First differing element 0:
+'整场直播.refresh0001.ts.partial'
+'整场直播.ts.partial'
+
+- ['整场直播.refresh0001.ts.partial', '整场直播.ts.partial']
++ ['整场直播.ts.partial', '整场直播.refresh0001.ts.partial']
+
+======================================================================
+FAIL: test_success_publishes_final_but_retains_sources_and_sidecars (__main__.FinalizerEvidenceTests.test_success_publishes_final_but_retains_sources_and_sidecars)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/ExternalStorage/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-30-finalizer-evidence/staging/test_finalizer_evidence.py", line 163, in test_success_publishes_final_but_retains_sources_and_sidecars
+    self.assert_sources(self.completed)
+  File "/Volumes/ExternalStorage/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-30-finalizer-evidence/staging/test_finalizer_evidence.py", line 104, in assert_sources
+    self.assertTrue((root / name).is_file(), name)
+AssertionError: False is not true : 整场直播.ts.partial
+
+----------------------------------------------------------------------
+Ran 7 tests in 2.145s
+
+FAILED (failures=6, errors=1)

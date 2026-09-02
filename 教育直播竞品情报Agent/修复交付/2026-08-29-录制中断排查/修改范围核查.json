@@ -1,0 +1,11 @@
+{
+  "changed_files": [
+    "/Volumes/ExternalStorage/AgentInfrastructure/isolated/profiles/edu_live_competitor_intel/runtime/bin/recorder.py",
+    "/Volumes/ExternalStorage/AgentInfrastructure/isolated/profiles/edu_live_competitor_intel/runtime/v3/v3_worker.py",
+    "/Volumes/ExternalStorage/AgentInfrastructure/isolated/shared/avtranscribe/record_douyin_live.py",
+    "/Volumes/ExternalStorage/AgentInfrastructure/isolated/profiles/edu_live_competitor_intel/runtime/v3/test_v3_recording_transcription.py"
+  ],
+  "protected_files_changed": [],
+  "acceptance_transcription_analysis_unchanged": true,
+  "backup_directory": "/Volumes/ExternalStorage/AgentInfrastructure/backups/edu-recording-interruption-20260829"
+}

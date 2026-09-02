@@ -1,0 +1,24 @@
+{
+  "files": {
+    "v3_schema.sql": {
+      "source": "/Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/v3_schema.sql",
+      "backup": "/Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-31-long-job-claim-retry-production/生产切换前备份/v3_schema.sql",
+      "sha256": "b3cafcccbbdbc4e3c89a7598f62950f01925a01db7fcd224766118f5d60f7357"
+    },
+    "v3_pipeline_worker.py": {
+      "source": "/Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/v3_pipeline_worker.py",
+      "backup": "/Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-31-long-job-claim-retry-production/生产切换前备份/v3_pipeline_worker.py",
+      "sha256": "58a076a834fad01c8d4739a682e8024da4fff178eaa01c1e2e290a9e76876e83"
+    },
+    "v3_analysis_worker.py": {
+      "source": "/Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/v3_analysis_worker.py",
+      "backup": "/Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-31-long-job-claim-retry-production/生产切换前备份/v3_analysis_worker.py",
+      "sha256": "295d57afec67c992fc76438fc6d6c2137fc389ac29f3a5b09186f18095f29aa0"
+    }
+  },
+  "database_dump": {
+    "path": "/Users/mac/Documents/agent架构师/教育直播竞品情报Agent/修复交付/2026-08-31-long-job-claim-retry-production/生产切换前备份/postgres-pre-003.dump",
+    "bytes": 1038967,
+    "sha256": "510c5ef532ce1c61c0304f50b4d80ae47a58b9535897cbc24d4f7a96cb6e8144"
+  }
+}

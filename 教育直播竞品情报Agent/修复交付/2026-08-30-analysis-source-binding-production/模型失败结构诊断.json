@@ -1,0 +1,235 @@
+{
+  "finish_reason": "stop",
+  "attempt": 1,
+  "row_count": 93,
+  "shape": {
+    "instructor": {
+      "container_type": "list",
+      "item_count": 0,
+      "items": []
+    },
+    "course_content": {
+      "container_type": "list",
+      "item_count": 0,
+      "items": []
+    },
+    "interaction_patterns": {
+      "container_type": "list",
+      "item_count": 2,
+      "items": [
+        {
+          "item_type": "dict",
+          "keys": [
+            "source_segment_ids",
+            "summary"
+          ],
+          "source_ids_type": "list",
+          "source_ids_count": 2,
+          "source_ids_value_preview": [
+            "srcseg_000010_7313598fcd441b76fd8e",
+            "srcseg_000015_fda2c299ee3307be7d2d"
+          ]
+        },
+        {
+          "item_type": "dict",
+          "keys": [
+            "source_segment_ids",
+            "summary"
+          ],
+          "source_ids_type": "list",
+          "source_ids_count": 2,
+          "source_ids_value_preview": [
+            "srcseg_000064_ac76e1a929bb46e66e94",
+            "srcseg_000066_0b88738e8df3cb68deff"
+          ]
+        }
+      ]
+    },
+    "product_handoff": {
+      "container_type": "list",
+      "item_count": 0,
+      "items": []
+    },
+    "hook": {
+      "container_type": "list",
+      "item_count": 2,
+      "items": [
+        {
+          "item_type": "dict",
+          "keys": [
+            "source_segment_ids",
+            "summary"
+          ],
+          "source_ids_type": "list",
+          "source_ids_count": 2,
+          "source_ids_value_preview": [
+            "srcseg_000027_d708a674490615f304a0",
+            "srcseg_000029_0e988c71aeb24b4eaea8"
+          ]
+        },
+        {
+          "item_type": "dict",
+          "keys": [
+            "source_segment_ids",
+            "summary"
+          ],
+          "source_ids_type": "list",
+          "source_ids_count": 2,
+          "source_ids_value_preview": [
+            "srcseg_000020_c3e02c2e2c8385e2dfe2",
+            "srcseg_000022_c8df9e7ee809ade4bc4d"
+          ]
+        }
+      ]
+    },
+    "pain_points": {
+      "container_type": "list",
+      "item_count": 2,
+      "items": [
+        {
+          "item_type": "dict",
+          "keys": [
+            "source_segment_ids",
+            "summary"
+          ],
+          "source_ids_type": "list",
+          "source_ids_count": 2,
+          "source_ids_value_preview": [
+            "srcseg_000001_bec1cd74734b5fd224ae",
+            "srcseg_000002_b944ad73920de2d44f10"
+          ]
+        },
+        {
+          "item_type": "dict",
+          "keys": [
+            "source_segment_ids",
+            "summary"
+          ],
+          "source_ids_type": "list",
+          "source_ids_count": 3,
+          "source_ids_value_preview": [
+            "srcseg_000045_0e0acc59630311f4e5cf",
+            "srcseg_000049_a84b42f0287e4510a5af",
+            "srcseg_000071_d926346dc6cc40539fc5"
+          ]
+        }
+      ]
+    },
+    "claims": {
+      "container_type": "list",
+      "item_count": 2,
+      "items": [
+        {
+          "item_type": "dict",
+          "keys": [
+            "source_segment_ids",
+            "summary"
+          ],
+          "source_ids_type": "list",
+          "source_ids_count": 2,
+          "source_ids_value_preview": [
+            "srcseg_000049_a84b42f0287e4510a5af",
+            "srcseg_000051_39478d6f34be8547007b"
+          ]
+        },
+        {
+          "item_type": "dict",
+          "keys": [
+            "source_segment_ids",
+            "summary"
+          ],
+          "source_ids_type": "list",
+          "source_ids_count": 3,
+          "source_ids_value_preview": [
+            "srcseg_000063_f72953e0ced08767733c",
+            "srcseg_000065_50b0b97f07f5d98dc7cd",
+            "srcseg_000069_78e51256bb80303d02c1"
+          ]
+        }
+      ]
+    },
+    "cta": {
+      "container_type": "list",
+      "item_count": 2,
+      "items": [
+        {
+          "item_type": "dict",
+          "keys": [
+            "source_segment_ids",
+            "summary"
+          ],
+          "source_ids_type": "list",
+          "source_ids_count": 2,
+          "source_ids_value_preview": [
+            "srcseg_000017_08f47c836cc1452dd527",
+            "srcseg_000019_f7adf92bde27bf4c1e0e"
+          ]
+        },
+        {
+          "item_type": "dict",
+          "keys": [
+            "source_segment_ids",
+            "summary"
+          ],
+          "source_ids_type": "list",
+          "source_ids_count": 2,
+          "source_ids_value_preview": [
+            "srcseg_000040_81f0553b526c9e952df3",
+            "srcseg_000041_145461cd7bca0da8acdf"
+          ]
+        }
+      ]
+    },
+    "risks": {
+      "container_type": "list",
+      "item_count": 1,
+      "items": [
+        {
+          "item_type": "dict",
+          "keys": [
+            "source_segment_ids",
+            "summary"
+          ],
+          "source_ids_type": "list",
+          "source_ids_count": 2,
+          "source_ids_value_preview": [
+            "srcseg_000036_fd60d6094cdcfd57b400",
+            "srcseg_000029_0e988c71aeb24b4eaea8"
+          ]
+        }
+      ]
+    },
+    "evidence_refs": {
+      "container_type": "list",
+      "item_count": 2,
+      "items": [
+        {
+          "item_type": "dict",
+          "keys": [
+            "source_segment_ids",
+            "summary"
+          ],
+          "source_ids_type": "list",
+          "source_ids_count": 2,
+          "source_ids_value_preview": [
+            "srcseg_000004_93ac627a7d4e13ea8e0b",
+            "srcseg_000005_6ff9a25631735e90564c"
+          ]
+        },
+        {
+          "item_type": "dict",
+          "keys": [
+            "source_segment_ids",
+            "summary"
+          ],
+          "source_ids_type": "list",
+          "source_ids_count": 2,
+          "source_ids_value_preview": [
+            "srcseg_000043_3539d1f8031171179b15",
+            "srcseg_000044_2c5ccc6d81632af278d9"
+          ]
+        }
+      ]
+    }
+  }
+}

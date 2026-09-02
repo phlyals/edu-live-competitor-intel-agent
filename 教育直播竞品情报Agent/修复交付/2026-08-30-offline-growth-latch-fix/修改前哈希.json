@@ -1,0 +1,8 @@
+{
+  "checked_at": "2026-08-30T05:01:27.779179+00:00",
+  "backup_directory": "/Volumes/ExternalStorage/AgentInfrastructure/backups/edu-offline-growth-latch-fix-20260830",
+  "files": {
+    "/Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/v3_worker.py": "68d4b0f3accad3bf2c2ed78fd688ad593c0e01cd1072d5baa23b6ff25dfa4460",
+    "/Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/test_v3_recording_transcription.py": "74570b0c120cc75ba8e15d3482800e24d439f43532fc53c2790eb103566d2be3"
+  }
+}

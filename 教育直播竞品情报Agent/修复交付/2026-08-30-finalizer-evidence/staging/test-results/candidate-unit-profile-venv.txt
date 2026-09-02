@@ -1,0 +1,12 @@
+test_concat_failure_preserves_sources_and_preconcat_manifest (__main__.FinalizerEvidenceTests.test_concat_failure_preserves_sources_and_preconcat_manifest) ... ok
+test_duration_mismatch_never_publishes_or_deletes_sources (__main__.FinalizerEvidenceTests.test_duration_mismatch_never_publishes_or_deletes_sources) ... ok
+test_empty_concat_output_is_not_published_and_sources_survive (__main__.FinalizerEvidenceTests.test_empty_concat_output_is_not_published_and_sources_survive) ... ok
+test_missing_sidecars_use_composite_part_and_refresh_generation (__main__.FinalizerEvidenceTests.test_missing_sidecars_use_composite_part_and_refresh_generation) ... ok
+test_real_ffmpeg_concat_retains_sources_and_validates_audio_video (__main__.FinalizerEvidenceTests.test_real_ffmpeg_concat_retains_sources_and_validates_audio_video) ... ok
+test_sidecar_started_at_wins_over_wrong_mtime (__main__.FinalizerEvidenceTests.test_sidecar_started_at_wins_over_wrong_mtime) ... ok
+test_success_publishes_final_but_retains_sources_and_sidecars (__main__.FinalizerEvidenceTests.test_success_publishes_final_but_retains_sources_and_sidecars) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 2.721s
+
+OK

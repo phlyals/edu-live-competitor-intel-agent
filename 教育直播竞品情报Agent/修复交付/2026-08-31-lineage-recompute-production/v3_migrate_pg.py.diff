@@ -1,0 +1,11 @@
+--- /Users/mac/.hermes/profiles/edu_live_competitor_intel/runtime/v3/v3_migrate_pg.py	2026-08-25 16:11:25
++++ staging/runtime/v3/v3_migrate_pg.py	2026-08-31 01:30:34
+@@ -24,7 +24,7 @@
+     "domain_events", "products", "competitors", "scan_runs", "scan_observations",
+     "identities", "product_competitors", "monitor_targets", "live_sessions",
+     "recording_jobs", "recording_segments", "transcripts", "analyses", "approvals",
+-    "outbox", "delivery_receipts", "dead_letters", "lineage_edges", "evidence_bundles",
++    "outbox", "delivery_receipts", "dead_letters", "lineage_edges", "recompute_requests", "evidence_bundles",
+     "strategy_candidates", "knowledge_versions", "knowledge_diffs", "review_items",
+     "retention_jobs", "heartbeats", "reconciliation_runs",
+ ]

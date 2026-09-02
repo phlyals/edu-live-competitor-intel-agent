@@ -1,0 +1,30 @@
+{
+  "modules_present": [],
+  "expected_modules": [
+    "开场",
+    "干货",
+    "需求",
+    "信任",
+    "商品承接",
+    "成交",
+    "答疑"
+  ],
+  "missing_modules": [
+    "开场",
+    "干货",
+    "需求",
+    "信任",
+    "商品承接",
+    "成交",
+    "答疑"
+  ],
+  "modules_with_timestamps": [],
+  "timestamps_in_coverage": [],
+  "is_complete": false,
+  "session_id": "session_0923b62f50088b6401c06373fc916038",
+  "script": "check_analysis",
+  "checked_at": "2026-08-28T15:46:04.785670+00:00",
+  "status": "FAIL",
+  "error_code": "REPORT_NOT_FOUND",
+  "message": "未找到分析报告"
+}

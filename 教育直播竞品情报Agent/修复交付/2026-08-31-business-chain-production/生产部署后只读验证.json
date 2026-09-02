@@ -1,0 +1,91 @@
+{
+  "read_only": "on",
+  "health": {
+    "healthy": true,
+    "schema": {
+      "missing_tables": [],
+      "missing_columns": {}
+    },
+    "indexes": [
+      "idx_comparison_evidence_analysis",
+      "idx_comparisons_competitor_newer",
+      "idx_knowledge_publish_receipts_candidate",
+      "idx_strategy_evidence_candidate",
+      "idx_strategy_versions_active",
+      "idx_version_observations_competitor"
+    ],
+    "marker": "1",
+    "errors": []
+  },
+  "counts": {
+    "comparisons": 0,
+    "comparison_evidence": 0,
+    "strategy_versions": 0,
+    "version_observations": 3,
+    "strategy_evidence": 0,
+    "strategy_candidates": 3,
+    "knowledge_versions": 1,
+    "knowledge_diffs": 0,
+    "knowledge_publish_receipts": 0,
+    "approvals": 0
+  },
+  "observation_states": [
+    {
+      "observation_state": "EXPERIMENT",
+      "count": 3
+    }
+  ],
+  "new_candidates": 0,
+  "legacy_candidates": 3,
+  "active_recorders": [
+    {
+      "session_id": "session_15f7b0f71878fd566407b2a242797771",
+      "pid": 14427,
+      "restart_count": 0,
+      "status": "RUNNING"
+    },
+    {
+      "session_id": "session_467e48f1f055dc30902ca65bf655d3d3",
+      "pid": 49490,
+      "restart_count": 0,
+      "status": "RUNNING"
+    },
+    {
+      "session_id": "session_5987394586e12113772e04383377a329",
+      "pid": 53592,
+      "restart_count": 0,
+      "status": "RUNNING"
+    },
+    {
+      "session_id": "session_be82650f4a1c3645cdc394e257a2b651",
+      "pid": 48471,
+      "restart_count": 0,
+      "status": "RUNNING"
+    },
+    {
+      "session_id": "session_f378877b97099e078924840d351cd687",
+      "pid": 13904,
+      "restart_count": 1,
+      "status": "RUNNING"
+    }
+  ],
+  "evidence_heartbeat": [
+    {
+      "service_name": "evidence-v3",
+      "pid": 59835,
+      "status": "READY",
+      "last_heartbeat_at": "2026-08-31T03:38:21.095Z",
+      "details_json": "{\"blocked\":0,\"business_chain\":{\"checked_at\":\"2026-08-31T03:38:21.095Z\",\"comparison\":{\"checked_at\":\"2026-08-31T03:38:20.810Z\",\"created\":0,\"eligible_competitors\":3,\"skipped_insufficient\":3},\"errors\":[],\"knowledge\":{\"approved_pending\":0,\"blocked\":0,\"checked_at\":\"2026-08-31T03:38:21.095Z\",\"published\":0},\"status\":\"READY\",\"strategy\":{\"activation_observations\":0,\"checked_at\":\"2026-08-31T03:38:21.003Z\",\"created\":0,\"skipped_evidence\":0},\"version\":{\"activated\":0,\"checked_at\":\"2026-08-31T03:38:20.923Z\",\"eligible_competitors\":3,\"experiments\":0,\"observations\":0,\"restored\":0,\"stable\":0}},\"checked_at\":\"2026-08-31T03:38:21.095Z\",\"reconciliation\":{\"blocked_outbox\":0,\"checked_at\":\"2026-08-31T03:38:20.701Z\",\"legacy_held_cancelled\":0,\"missing_receipts\":0,\"receipt_mismatches\":0,\"recreated_outbox\":0,\"tasks_completed\":0},\"verified\":0,\"versioned_projections\":0}"
+    }
+  ],
+  "held_outbox": 0,
+  "business_chain_config": {
+    "comparison_spec_version": "structural-comparison-v1",
+    "version_spec_version": "three-session-confirmation-v1",
+    "minimum_consecutive_sessions": 3,
+    "strategy_candidates_require_review": true,
+    "knowledge_publish_requires_approved_nonce": true,
+    "auto_publish": false
+  },
+  "retention_delete_enabled": false
+}
