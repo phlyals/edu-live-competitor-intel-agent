@@ -1,0 +1,260 @@
+{
+  "ok": true,
+  "identity": "user",
+  "data": {
+    "fields": [
+      {
+        "default_value": null,
+        "id": "fldgo5Bu0Y",
+        "name": "正式知识Diff",
+        "style": {
+          "type": "url"
+        },
+        "type": "text"
+      },
+      {
+        "default_value": null,
+        "id": "fldc9sWomV",
+        "multiple": false,
+        "name": "类别",
+        "options": [
+          {
+            "hue": "Orange",
+            "lightness": "Lighter",
+            "name": "开场钩子"
+          },
+          {
+            "hue": "Blue",
+            "lightness": "Lighter",
+            "name": "家长痛点"
+          },
+          {
+            "hue": "Turquoise",
+            "lightness": "Lighter",
+            "name": "需求建立"
+          },
+          {
+            "hue": "Lime",
+            "lightness": "Lighter",
+            "name": "信任建立"
+          },
+          {
+            "hue": "Wathet",
+            "lightness": "Lighter",
+            "name": "干货结构"
+          },
+          {
+            "hue": "Green",
+            "lightness": "Lighter",
+            "name": "商品承接"
+          },
+          {
+            "hue": "Green",
+            "lightness": "Lighter",
+            "name": "成交推动"
+          },
+          {
+            "hue": "Gray",
+            "lightness": "Lighter",
+            "name": "答疑"
+          },
+          {
+            "hue": "Gray",
+            "lightness": "Lighter",
+            "name": "其他"
+          }
+        ],
+        "type": "select"
+      },
+      {
+        "bidirectional": true,
+        "bidirectional_link_field_id": "fldoBmfQT4",
+        "id": "fldmtvzUBU",
+        "link_table": "tbluMlZqwzBXGMgp",
+        "name": "来源场次",
+        "type": "link"
+      },
+      {
+        "default_value": null,
+        "id": "flddMi0new",
+        "name": "证据时间戳",
+        "style": {
+          "type": "plain"
+        },
+        "type": "text"
+      },
+      {
+        "default_value": null,
+        "id": "fldbRnKyJf",
+        "name": "审核时间",
+        "style": {
+          "format": "yyyy-MM-dd HH:mm"
+        },
+        "type": "datetime"
+      },
+      {
+        "default_value": null,
+        "id": "fld6JMnxjP",
+        "name": "策略候选",
+        "style": {
+          "type": "plain"
+        },
+        "type": "text"
+      },
+      {
+        "bidirectional": true,
+        "bidirectional_link_field_id": "fldxrlST7Z",
+        "id": "fldgiWGSHm",
+        "link_table": "tblivS4XFLZy1qfh",
+        "name": "来源同行",
+        "type": "link"
+      },
+      {
+        "default_value": null,
+        "id": "fldw0aQe8R",
+        "multiple": false,
+        "name": "验证状态",
+        "options": [
+          {
+            "hue": "Carmine",
+            "lightness": "Lighter",
+            "name": "单场观察"
+          },
+          {
+            "hue": "Purple",
+            "lightness": "Lighter",
+            "name": "多场验证中"
+          },
+          {
+            "hue": "Orange",
+            "lightness": "Lighter",
+            "name": "稳定候选"
+          }
+        ],
+        "type": "select"
+      },
+      {
+        "id": "fldvATIi8G",
+        "name": "创建时间",
+        "style": {
+          "format": "yyyy-MM-dd HH:mm"
+        },
+        "type": "created_at"
+      },
+      {
+        "default_value": null,
+        "id": "fldrYkfREs",
+        "name": "候选ID",
+        "style": {
+          "type": "plain"
+        },
+        "type": "text"
+      },
+      {
+        "default_value": null,
+        "id": "fldJOYyqqa",
+        "name": "来源场次ID",
+        "style": {
+          "type": "plain"
+        },
+        "type": "text"
+      },
+      {
+        "default_value": null,
+        "id": "fldU1myfUX",
+        "multiple": false,
+        "name": "人工结论",
+        "options": [
+          {
+            "hue": "Blue",
+            "lightness": "Lighter",
+            "name": "待审核"
+          },
+          {
+            "hue": "Red",
+            "lightness": "Lighter",
+            "name": "值得测试"
+          },
+          {
+            "hue": "Red",
+            "lightness": "Lighter",
+            "name": "继续观察"
+          },
+          {
+            "hue": "Turquoise",
+            "lightness": "Lighter",
+            "name": "不采用"
+          }
+        ],
+        "type": "select"
+      },
+      {
+        "id": "fldL44xBDx",
+        "name": "更新时间",
+        "style": {
+          "format": "yyyy-MM-dd HH:mm"
+        },
+        "type": "updated_at"
+      },
+      {
+        "default_value": null,
+        "id": "fldPZxcpz7",
+        "name": "来源同行ID",
+        "style": {
+          "type": "plain"
+        },
+        "type": "text"
+      },
+      {
+        "default_value": null,
+        "id": "fldlI56MxD",
+        "multiple": false,
+        "name": "审核人",
+        "type": "user"
+      },
+      {
+        "default_value": null,
+        "id": "fldVeDgKkv",
+        "multiple": false,
+        "name": "正式写入状态",
+        "options": [
+          {
+            "hue": "Carmine",
+            "lightness": "Lighter",
+            "name": "未申请"
+          },
+          {
+            "hue": "Yellow",
+            "lightness": "Lighter",
+            "name": "待审批"
+          },
+          {
+            "hue": "Carmine",
+            "lightness": "Lighter",
+            "name": "已批准"
+          },
+          {
+            "hue": "Green",
+            "lightness": "Lighter",
+            "name": "已写入"
+          },
+          {
+            "hue": "Green",
+            "lightness": "Lighter",
+            "name": "拒绝"
+          }
+        ],
+        "type": "select"
+      }
+    ],
+    "total": 16
+  },
+  "_notice": {
+    "update": {
+      "command": "lark-cli update",
+      "current": "1.0.58",
+      "latest": "1.0.93",
+      "message": "lark-cli 1.0.93 available, current 1.0.58, run: lark-cli update"
+    }
+  }
+}

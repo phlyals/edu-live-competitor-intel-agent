@@ -1,0 +1,34 @@
+BEGIN
+          checked_at           
+-------------------------------
+ 2026-09-02 11:28:26.254678+08
+(1 row)
+
+   service_name    |  status  |    last_heartbeat_at     |     last_success_at      
+-------------------+----------+--------------------------+--------------------------
+ analysis-v3       | READY    | 2026-09-02T03:27:46.765Z | 2026-09-02T03:27:46.765Z
+ evidence-v3       | READY    | 2026-09-02T03:27:52.861Z | 2026-09-02T03:27:52.861Z
+ feishu-ingress-v3 | READY    | 2026-09-02T03:27:55.889Z | 2026-09-02T03:27:55.889Z
+ pipeline-v3       | DEGRADED | 2026-09-02T03:28:06.503Z | 2026-09-02T03:28:06.503Z
+ recompute-v3      | READY    | 2026-09-02T03:28:22.883Z | 2026-09-02T03:28:22.883Z
+ retention-v3      | READY    | 2026-09-02T03:28:12.304Z | 2026-09-02T03:28:12.304Z
+ runtime-v3        | READY    | 2026-09-02T03:27:34.226Z | 2026-09-02T03:27:34.226Z
+(7 rows)
+
+        status        | completeness | count 
+----------------------+--------------+-------
+ DUPLICATE_SUPERSEDED | UNKNOWN      |     2
+ ENDED                | UNKNOWN      |    42
+ MEDIA_COMPLETE       | COMPLETE     |    15
+ MEDIA_COMPLETE       | PARTIAL      |   182
+ RECORDING            | UNKNOWN      |     3
+ WAITING_STREAM       | UNKNOWN      |     6
+(6 rows)
+
+   status    | count 
+-------------+-------
+ DEAD_LETTER |     1
+ SENT        |   688
+(2 rows)
+
+COMMIT

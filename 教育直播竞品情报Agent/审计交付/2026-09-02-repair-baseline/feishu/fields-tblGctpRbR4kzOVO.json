@@ -1,0 +1,54 @@
+{
+  "ok": true,
+  "identity": "user",
+  "data": {
+    "fields": [
+      {
+        "default_value": null,
+        "id": "fldFB5bCUg",
+        "name": "文本",
+        "style": {
+          "type": "plain"
+        },
+        "type": "text"
+      },
+      {
+        "default_value": null,
+        "id": "fldV5PFXoE",
+        "multiple": false,
+        "name": "单选",
+        "options": [
+          {
+            "hue": "Turquoise",
+            "lightness": "Lighter",
+            "name": "Runtime V3"
+          }
+        ],
+        "type": "select"
+      },
+      {
+        "default_value": null,
+        "id": "fldxDLuVJn",
+        "name": "日期",
+        "style": {
+          "format": "yyyy/MM/dd"
+        },
+        "type": "datetime"
+      },
+      {
+        "id": "fldhw5puPQ",
+        "name": "附件",
+        "type": "attachment"
+      }
+    ],
+    "total": 4
+  },
+  "_notice": {
+    "update": {
+      "command": "lark-cli update",
+      "current": "1.0.58",
+      "latest": "1.0.93",
+      "message": "lark-cli 1.0.93 available, current 1.0.58, run: lark-cli update"
+    }
+  }
+}

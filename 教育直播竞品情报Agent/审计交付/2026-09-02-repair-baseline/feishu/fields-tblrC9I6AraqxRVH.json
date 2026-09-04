@@ -1,0 +1,159 @@
+{
+  "ok": true,
+  "identity": "user",
+  "data": {
+    "fields": [
+      {
+        "id": "fldMVbGAC6",
+        "name": "更新时间",
+        "style": {
+          "format": "yyyy-MM-dd HH:mm"
+        },
+        "type": "updated_at"
+      },
+      {
+        "default_value": null,
+        "id": "fldwQeJu47",
+        "name": "Gateway Profile",
+        "style": {
+          "type": "plain"
+        },
+        "type": "text"
+      },
+      {
+        "default_value": null,
+        "id": "fldOfemq5n",
+        "name": "当前阶段",
+        "style": {
+          "type": "plain"
+        },
+        "type": "text"
+      },
+      {
+        "default_value": null,
+        "id": "fld6yvSkQB",
+        "name": "任务ID",
+        "style": {
+          "type": "plain"
+        },
+        "type": "text"
+      },
+      {
+        "default_value": null,
+        "id": "fld1QYjb7w",
+        "multiple": false,
+        "name": "状态",
+        "options": [
+          {
+            "hue": "Wathet",
+            "lightness": "Lighter",
+            "name": "WAITING_TOOL"
+          },
+          {
+            "hue": "Green",
+            "lightness": "Lighter",
+            "name": "WAITING_HUMAN"
+          },
+          {
+            "hue": "Red",
+            "lightness": "Lighter",
+            "name": "PAUSED"
+          },
+          {
+            "hue": "Wathet",
+            "lightness": "Lighter",
+            "name": "RUNNING"
+          },
+          {
+            "hue": "Wathet",
+            "lightness": "Lighter",
+            "name": "PARTIAL_SUCCESS"
+          },
+          {
+            "hue": "Green",
+            "lightness": "Lighter",
+            "name": "SUCCEEDED"
+          },
+          {
+            "hue": "Purple",
+            "lightness": "Lighter",
+            "name": "FAILED"
+          },
+          {
+            "hue": "Lime",
+            "lightness": "Lighter",
+            "name": "WAITING_CONFIGURATION"
+          },
+          {
+            "hue": "Lime",
+            "lightness": "Lighter",
+            "name": "DEGRADED"
+          }
+        ],
+        "type": "select"
+      },
+      {
+        "id": "fldmOIKm2S",
+        "name": "创建时间",
+        "style": {
+          "format": "yyyy-MM-dd HH:mm"
+        },
+        "type": "created_at"
+      },
+      {
+        "default_value": null,
+        "id": "fldQ9YACqN",
+        "name": "最后心跳",
+        "style": {
+          "format": "yyyy-MM-dd HH:mm"
+        },
+        "type": "datetime"
+      },
+      {
+        "default_value": null,
+        "id": "fld7CyZuSd",
+        "name": "任务类型",
+        "style": {
+          "type": "plain"
+        },
+        "type": "text"
+      },
+      {
+        "default_value": null,
+        "id": "fldITXm81o",
+        "name": "最近错误",
+        "style": {
+          "type": "plain"
+        },
+        "type": "text"
+      },
+      {
+        "default_value": null,
+        "id": "fldSw6F90h",
+        "name": "下一步",
+        "style": {
+          "type": "plain"
+        },
+        "type": "text"
+      },
+      {
+        "default_value": null,
+        "id": "fldU3ok2C8",
+        "name": "最后Checkpoint",
+        "style": {
+          "type": "plain"
+        },
+        "type": "text"
+      }
+    ],
+    "total": 11
+  },
+  "_notice": {
+    "update": {
+      "command": "lark-cli update",
+      "current": "1.0.58",
+      "latest": "1.0.93",
+      "message": "lark-cli 1.0.93 available, current 1.0.58, run: lark-cli update"
+    }
+  }
+}

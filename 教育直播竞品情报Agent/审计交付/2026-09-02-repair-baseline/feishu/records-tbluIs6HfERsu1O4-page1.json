@@ -1,0 +1,124 @@
+{
+  "ok": true,
+  "identity": "user",
+  "data": {
+    "data": [
+      [
+        "douyin:3836325491917324425",
+        "2026-08-29T04:02:44.000+08:00",
+        "2026-08-25T12:30:34.000+08:00",
+        "[https://buyin.jinritemai.com/dashboard/merch-picking-library/merch-promoting?id=3836325491917324425](https://buyin.jinritemai.com/dashboard/merch-picking-library/merch-promoting?id=3836325491917324425)",
+        [
+          "完整"
+        ],
+        "2026-08-29T04:02:37.000+08:00",
+        "2026-08-25T11:26:02.000+08:00",
+        "[有道领世]源哥知识兴趣读书卡",
+        null,
+        "3836325491917324425",
+        [
+          "监控中"
+        ],
+        null
+      ],
+      [
+        "douyin:3838016038189006849",
+        "2026-08-28T22:05:30.000+08:00",
+        "2026-08-28T13:57:24.000+08:00",
+        "[https://buyin.jinritemai.com/dashboard/merch-picking-library/merch-promoting?id=3838016038189006849](https://buyin.jinritemai.com/dashboard/merch-picking-library/merch-promoting?id=3838016038189006849)",
+        [
+          "完整"
+        ],
+        "2026-08-28T22:05:22.000+08:00",
+        "2026-08-28T13:57:17.000+08:00",
+        "初阶好家长诊断训练【爷爷奶奶勿拍】KCH 读书卡",
+        null,
+        "3838016038189006849",
+        [
+          "监控中"
+        ],
+        null
+      ],
+      [
+        "douyin:3838742594351923581",
+        "2026-09-02T08:33:07.000+08:00",
+        "2026-09-01T20:26:53.000+08:00",
+        "[https://buyin.jinritemai.com/dashboard/merch-picking-library/merch-promoting?id=3838742594351923581](https://buyin.jinritemai.com/dashboard/merch-picking-library/merch-promoting?id=3838742594351923581)",
+        [
+          "完整"
+        ],
+        "2026-09-02T08:32:58.000+08:00",
+        "2026-09-01T20:26:29.000+08:00",
+        "随身读：公式与定律-教辅",
+        null,
+        "3838742594351923581",
+        [
+          "监控中"
+        ],
+        null
+      ]
+    ],
+    "field_id_list": [
+      "fldMh0voL8",
+      "fld8Hb3xOk",
+      "fldDtyQyHL",
+      "fldmlpSg7r",
+      "fldOAJIowt",
+      "fldtAupDZf",
+      "fldtHG0xws",
+      "flduBnAvBZ",
+      "fldxYpNqsT",
+      "fldYDiQVAr",
+      "fldzPALayK",
+      "fldztY9cvi"
+    ],
+    "field_type_list": [
+      "text",
+      "updated_at",
+      "created_at",
+      "text",
+      "select",
+      "datetime",
+      "datetime",
+      "text",
+      "text",
+      "text",
+      "select",
+      "link"
+    ],
+    "fields": [
+      "商品ID",
+      "更新时间",
+      "创建时间",
+      "原始链接",
+      "扫描完整性",
+      "最近扫描时间",
+      "首次发现时间",
+      "商品名称",
+      "备注",
+      "平台商品ID",
+      "状态",
+      "同行关系"
+    ],
+    "has_more": false,
+    "query_context": {
+      "field_scope": "all_fields",
+      "record_scope": "all_records"
+    },
+    "record_id_list": [
+      "recvthoFPHVEvY",
+      "recvtzi6ZGkPlw",
+      "recvtYggBZfI4o"
+    ],
+    "rev": 29,
+    "timezone": "Asia/Shanghai"
+  },
+  "_notice": {
+    "update": {
+      "command": "lark-cli update",
+      "current": "1.0.58",
+      "latest": "1.0.93",
+      "message": "lark-cli 1.0.93 available, current 1.0.58, run: lark-cli update"
+    }
+  }
+}

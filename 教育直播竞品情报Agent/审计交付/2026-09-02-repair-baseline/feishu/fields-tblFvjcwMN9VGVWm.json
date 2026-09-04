@@ -1,0 +1,218 @@
+{
+  "ok": true,
+  "identity": "user",
+  "data": {
+    "fields": [
+      {
+        "default_value": null,
+        "id": "flduJIKGLg",
+        "name": "商品首次出现时间点",
+        "style": {
+          "type": "plain"
+        },
+        "type": "text"
+      },
+      {
+        "default_value": null,
+        "id": "fldJHD3u8s",
+        "name": "分析ID",
+        "style": {
+          "type": "plain"
+        },
+        "type": "text"
+      },
+      {
+        "id": "fldHUv0wN4",
+        "name": "更新时间",
+        "style": {
+          "format": "yyyy-MM-dd HH:mm"
+        },
+        "type": "updated_at"
+      },
+      {
+        "default_value": null,
+        "id": "fldbpijfNW",
+        "name": "商品承接相似度",
+        "style": {
+          "percentage": true,
+          "precision": 2,
+          "thousands_separator": false,
+          "type": "plain"
+        },
+        "type": "number"
+      },
+      {
+        "default_value": null,
+        "id": "fldmBGauvu",
+        "name": "干货相似度",
+        "style": {
+          "percentage": true,
+          "precision": 2,
+          "thousands_separator": false,
+          "type": "plain"
+        },
+        "type": "number"
+      },
+      {
+        "default_value": null,
+        "id": "fldgSP09Ce",
+        "name": "对比场次ID",
+        "style": {
+          "type": "plain"
+        },
+        "type": "text"
+      },
+      {
+        "default_value": null,
+        "id": "fldesKMtmk",
+        "multiple": false,
+        "name": "状态",
+        "options": [
+          {
+            "hue": "Yellow",
+            "lightness": "Lighter",
+            "name": "待分析"
+          },
+          {
+            "hue": "Orange",
+            "lightness": "Lighter",
+            "name": "分析中"
+          },
+          {
+            "hue": "Green",
+            "lightness": "Lighter",
+            "name": "完成"
+          },
+          {
+            "hue": "Yellow",
+            "lightness": "Lighter",
+            "name": "证据不足"
+          },
+          {
+            "hue": "Yellow",
+            "lightness": "Lighter",
+            "name": "失败暂停"
+          }
+        ],
+        "type": "select"
+      },
+      {
+        "default_value": null,
+        "id": "fldTkDKe5z",
+        "name": "证据说明",
+        "style": {
+          "type": "plain"
+        },
+        "type": "text"
+      },
+      {
+        "bidirectional": true,
+        "bidirectional_link_field_id": "fldF7fHXSQ",
+        "id": "fldd3KbqZh",
+        "link_table": "tbluMlZqwzBXGMgp",
+        "name": "对比场次",
+        "type": "link"
+      },
+      {
+        "bidirectional": true,
+        "bidirectional_link_field_id": "fldHiL5ZC3",
+        "id": "fldjwOie74",
+        "link_table": "tbluMlZqwzBXGMgp",
+        "name": "当前场次",
+        "type": "link"
+      },
+      {
+        "id": "fldcnusUEF",
+        "name": "创建时间",
+        "style": {
+          "format": "yyyy-MM-dd HH:mm"
+        },
+        "type": "created_at"
+      },
+      {
+        "default_value": null,
+        "id": "fldPpmmoEP",
+        "name": "整体相似度",
+        "style": {
+          "percentage": true,
+          "precision": 2,
+          "thousands_separator": false,
+          "type": "plain"
+        },
+        "type": "number"
+      },
+      {
+        "default_value": null,
+        "id": "fldqvUFzdp",
+        "multiple": false,
+        "name": "分析类型",
+        "options": [
+          {
+            "hue": "Gray",
+            "lightness": "Lighter",
+            "name": "单场分析"
+          },
+          {
+            "hue": "Blue",
+            "lightness": "Lighter",
+            "name": "完整场N对N-1"
+          },
+          {
+            "hue": "Turquoise",
+            "lightness": "Lighter",
+            "name": "部分场辅助"
+          }
+        ],
+        "type": "select"
+      },
+      {
+        "default_value": null,
+        "id": "fldvABGABa",
+        "name": "当前场次ID",
+        "style": {
+          "type": "plain"
+        },
+        "type": "text"
+      },
+      {
+        "default_value": null,
+        "id": "fldyZiL4Jv",
+        "name": "分析文档",
+        "style": {
+          "type": "url"
+        },
+        "type": "text"
+      },
+      {
+        "default_value": null,
+        "id": "fldRkDI4Ia",
+        "name": "固定讲解相似度",
+        "style": {
+          "percentage": true,
+          "precision": 2,
+          "thousands_separator": false,
+          "type": "plain"
+        },
+        "type": "number"
+      },
+      {
+        "default_value": null,
+        "id": "fldgtXQQRd",
+        "name": "变化摘要",
+        "style": {
+          "type": "plain"
+        },
+        "type": "text"
+      }
+    ],
+    "total": 17
+  },
+  "_notice": {
+    "update": {
+      "command": "lark-cli update",
+      "current": "1.0.58",
+      "latest": "1.0.93",
+      "message": "lark-cli 1.0.93 available, current 1.0.58, run: lark-cli update"
+    }
+  }
+}

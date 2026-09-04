@@ -1,0 +1,178 @@
+{
+  "ok": true,
+  "identity": "user",
+  "data": {
+    "fields": [
+      {
+        "bidirectional": true,
+        "bidirectional_link_field_id": "fldZjQkDP7",
+        "id": "fldUN1ADpB",
+        "link_table": "tbluMlZqwzBXGMgp",
+        "name": "关联场次",
+        "type": "link"
+      },
+      {
+        "default_value": null,
+        "id": "fldYeUjGyr",
+        "name": "证据说明",
+        "style": {
+          "type": "plain"
+        },
+        "type": "text"
+      },
+      {
+        "default_value": null,
+        "id": "fldvfA9ZCB",
+        "name": "场次ID",
+        "style": {
+          "type": "plain"
+        },
+        "type": "text"
+      },
+      {
+        "default_value": null,
+        "id": "fldFfO67Dk",
+        "name": "模型",
+        "style": {
+          "type": "plain"
+        },
+        "type": "text"
+      },
+      {
+        "default_value": null,
+        "id": "fldrGtmKhI",
+        "multiple": false,
+        "name": "状态",
+        "options": [
+          {
+            "hue": "Purple",
+            "lightness": "Lighter",
+            "name": "待处理"
+          },
+          {
+            "hue": "Lime",
+            "lightness": "Lighter",
+            "name": "处理中"
+          },
+          {
+            "hue": "Green",
+            "lightness": "Lighter",
+            "name": "成功"
+          },
+          {
+            "hue": "Orange",
+            "lightness": "Lighter",
+            "name": "低置信度"
+          },
+          {
+            "hue": "Yellow",
+            "lightness": "Lighter",
+            "name": "失败暂停"
+          },
+          {
+            "hue": "Green",
+            "lightness": "Lighter",
+            "name": "完成"
+          },
+          {
+            "hue": "Green",
+            "lightness": "Lighter",
+            "name": "完成"
+          }
+        ],
+        "type": "select"
+      },
+      {
+        "default_value": null,
+        "id": "fldfgljpFe",
+        "name": "原始媒体路径",
+        "style": {
+          "type": "plain"
+        },
+        "type": "text"
+      },
+      {
+        "default_value": null,
+        "id": "fldKaH7jeK",
+        "name": "低置信度片段数",
+        "style": {
+          "percentage": false,
+          "precision": 0,
+          "thousands_separator": false,
+          "type": "plain"
+        },
+        "type": "number"
+      },
+      {
+        "default_value": null,
+        "id": "fldzrrmIlY",
+        "name": "语言",
+        "style": {
+          "type": "plain"
+        },
+        "type": "text"
+      },
+      {
+        "default_value": null,
+        "id": "fldi1s7Vw7",
+        "name": "带时间戳逐字稿路径",
+        "style": {
+          "type": "plain"
+        },
+        "type": "text"
+      },
+      {
+        "id": "fldgN9ldhk",
+        "name": "更新时间",
+        "style": {
+          "format": "yyyy-MM-dd HH:mm"
+        },
+        "type": "updated_at"
+      },
+      {
+        "default_value": null,
+        "id": "fldBzt6qyn",
+        "name": "引擎",
+        "style": {
+          "type": "plain"
+        },
+        "type": "text"
+      },
+      {
+        "id": "fldHR68IaR",
+        "name": "创建时间",
+        "style": {
+          "format": "yyyy-MM-dd HH:mm"
+        },
+        "type": "created_at"
+      },
+      {
+        "default_value": null,
+        "id": "flddh5VzAW",
+        "name": "清洗稿路径",
+        "style": {
+          "type": "plain"
+        },
+        "type": "text"
+      },
+      {
+        "default_value": null,
+        "id": "fldnfiUYRK",
+        "name": "转录ID",
+        "style": {
+          "type": "plain"
+        },
+        "type": "text"
+      }
+    ],
+    "total": 14
+  },
+  "_notice": {
+    "update": {
+      "command": "lark-cli update",
+      "current": "1.0.58",
+      "latest": "1.0.93",
+      "message": "lark-cli 1.0.93 available, current 1.0.58, run: lark-cli update"
+    }
+  }
+}

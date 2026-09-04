@@ -30,6 +30,15 @@ venv/
 **/venv/
 **/models/models--*/
 **/.cache/
+.cache-quarantine/
+
+# Re-creatable JavaScript dependencies and build output
+node_modules/
+**/node_modules/
+dist/
+**/dist/
+.next/
+**/.next/
 
 # Generated full-tree clones and migration sandboxes
 **/full-tree-*/

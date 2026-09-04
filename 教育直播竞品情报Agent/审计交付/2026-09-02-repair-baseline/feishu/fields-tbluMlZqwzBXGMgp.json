@@ -1,0 +1,269 @@
+{
+  "ok": true,
+  "identity": "user",
+  "data": {
+    "fields": [
+      {
+        "id": "fldc8hPAwk",
+        "name": "更新时间",
+        "style": {
+          "format": "yyyy-MM-dd HH:mm"
+        },
+        "type": "updated_at"
+      },
+      {
+        "default_value": null,
+        "id": "fldsTnWJWO",
+        "name": "最近错误",
+        "style": {
+          "type": "plain"
+        },
+        "type": "text"
+      },
+      {
+        "default_value": null,
+        "id": "fldU6LEBej",
+        "multiple": false,
+        "name": "场次状态",
+        "options": [
+          {
+            "hue": "Red",
+            "lightness": "Lighter",
+            "name": "UNKNOWN"
+          },
+          {
+            "hue": "Yellow",
+            "lightness": "Lighter",
+            "name": "检测到开播"
+          },
+          {
+            "hue": "Carmine",
+            "lightness": "Lighter",
+            "name": "录制中"
+          },
+          {
+            "hue": "Orange",
+            "lightness": "Lighter",
+            "name": "已下播"
+          },
+          {
+            "hue": "Lime",
+            "lightness": "Lighter",
+            "name": "处理中"
+          },
+          {
+            "hue": "Lime",
+            "lightness": "Lighter",
+            "name": "处理完成"
+          },
+          {
+            "hue": "Yellow",
+            "lightness": "Lighter",
+            "name": "失败暂停"
+          }
+        ],
+        "type": "select"
+      },
+      {
+        "default_value": null,
+        "id": "fld8r9rNv7",
+        "name": "媒体证据路径",
+        "style": {
+          "type": "plain"
+        },
+        "type": "text"
+      },
+      {
+        "bidirectional": true,
+        "bidirectional_link_field_id": "fldYoIB5qj",
+        "id": "fldgIaGDpV",
+        "link_table": "tblivS4XFLZy1qfh",
+        "name": "关联同行",
+        "type": "link"
+      },
+      {
+        "bidirectional": true,
+        "bidirectional_link_field_id": "fldjwOie74",
+        "id": "fldHiL5ZC3",
+        "link_table": "tblFvjcwMN9VGVWm",
+        "name": "当前场分析",
+        "type": "link"
+      },
+      {
+        "bidirectional": true,
+        "bidirectional_link_field_id": "fldmtvzUBU",
+        "id": "fldoBmfQT4",
+        "link_table": "tblqC0baPooLdxuJ",
+        "name": "策略来源",
+        "type": "link"
+      },
+      {
+        "default_value": null,
+        "id": "fldP9sNSAs",
+        "name": "直播入口",
+        "style": {
+          "type": "url"
+        },
+        "type": "text"
+      },
+      {
+        "bidirectional": true,
+        "bidirectional_link_field_id": "fldd3KbqZh",
+        "id": "fldF7fHXSQ",
+        "link_table": "tblFvjcwMN9VGVWm",
+        "name": "对比场分析",
+        "type": "link"
+      },
+      {
+        "default_value": null,
+        "id": "fldsNQcSul",
+        "name": "结束时间",
+        "style": {
+          "format": "yyyy-MM-dd HH:mm"
+        },
+        "type": "datetime"
+      },
+      {
+        "default_value": null,
+        "id": "fldklCIZoG",
+        "name": "同行ID",
+        "style": {
+          "type": "plain"
+        },
+        "type": "text"
+      },
+      {
+        "default_value": null,
+        "id": "fldKNuy1rD",
+        "name": "平台场次ID",
+        "style": {
+          "type": "plain"
+        },
+        "type": "text"
+      },
+      {
+        "default_value": null,
+        "id": "fldbwfxLI0",
+        "multiple": false,
+        "name": "录制状态",
+        "options": [
+          {
+            "hue": "Lime",
+            "lightness": "Lighter",
+            "name": "待开始"
+          },
+          {
+            "hue": "Carmine",
+            "lightness": "Lighter",
+            "name": "录制中"
+          },
+          {
+            "hue": "Green",
+            "lightness": "Lighter",
+            "name": "成功"
+          },
+          {
+            "hue": "Purple",
+            "lightness": "Lighter",
+            "name": "部分"
+          },
+          {
+            "hue": "Orange",
+            "lightness": "Lighter",
+            "name": "失败"
+          }
+        ],
+        "type": "select"
+      },
+      {
+        "id": "fldms4SKnm",
+        "name": "创建时间",
+        "style": {
+          "format": "yyyy-MM-dd HH:mm"
+        },
+        "type": "created_at"
+      },
+      {
+        "default_value": null,
+        "id": "fld0BuL2pd",
+        "name": "直播标题",
+        "style": {
+          "type": "plain"
+        },
+        "type": "text"
+      },
+      {
+        "bidirectional": true,
+        "bidirectional_link_field_id": "fldWJIqaQ5",
+        "id": "fld6MAGqh3",
+        "link_table": "tbldEQ2IIVycBkHu",
+        "name": "起始打法版本",
+        "type": "link"
+      },
+      {
+        "default_value": null,
+        "id": "fldovDfpoQ",
+        "multiple": false,
+        "name": "完整性",
+        "options": [
+          {
+            "hue": "Red",
+            "lightness": "Lighter",
+            "name": "UNKNOWN"
+          },
+          {
+            "hue": "Purple",
+            "lightness": "Lighter",
+            "name": "完整"
+          },
+          {
+            "hue": "Purple",
+            "lightness": "Lighter",
+            "name": "部分"
+          },
+          {
+            "hue": "Wathet",
+            "lightness": "Lighter",
+            "name": "COMPLETE"
+          }
+        ],
+        "type": "select"
+      },
+      {
+        "bidirectional": true,
+        "bidirectional_link_field_id": "fldUN1ADpB",
+        "id": "fldZjQkDP7",
+        "link_table": "tblqwQRfkyWpb0wQ",
+        "name": "转录证据",
+        "type": "link"
+      },
+      {
+        "default_value": null,
+        "id": "fldravRk9T",
+        "name": "场次ID",
+        "style": {
+          "type": "plain"
+        },
+        "type": "text"
+      },
+      {
+        "default_value": null,
+        "id": "fldJ6ZHX5w",
+        "name": "开始时间",
+        "style": {
+          "format": "yyyy-MM-dd HH:mm"
+        },
+        "type": "datetime"
+      }
+    ],
+    "total": 20
+  },
+  "_notice": {
+    "update": {
+      "command": "lark-cli update",
+      "current": "1.0.58",
+      "latest": "1.0.93",
+      "message": "lark-cli 1.0.93 available, current 1.0.58, run: lark-cli update"
+    }
+  }
+}

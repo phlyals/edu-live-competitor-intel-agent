@@ -1,0 +1,176 @@
+{
+  "ok": true,
+  "identity": "user",
+  "data": {
+    "fields": [
+      {
+        "default_value": null,
+        "id": "fldfOo2vJE",
+        "name": "起始场次ID",
+        "style": {
+          "type": "plain"
+        },
+        "type": "text"
+      },
+      {
+        "default_value": null,
+        "id": "fldCVrzjb8",
+        "name": "最后可见时间",
+        "style": {
+          "format": "yyyy-MM-dd HH:mm"
+        },
+        "type": "datetime"
+      },
+      {
+        "default_value": null,
+        "id": "fld5o63MtL",
+        "multiple": false,
+        "name": "当前状态",
+        "options": [
+          {
+            "hue": "Blue",
+            "lightness": "Lighter",
+            "name": "候选"
+          },
+          {
+            "hue": "Turquoise",
+            "lightness": "Lighter",
+            "name": "生效"
+          },
+          {
+            "hue": "Wathet",
+            "lightness": "Lighter",
+            "name": "结束"
+          }
+        ],
+        "type": "select"
+      },
+      {
+        "default_value": null,
+        "id": "fldhbyQtvv",
+        "name": "首次发现时间",
+        "style": {
+          "format": "yyyy-MM-dd HH:mm"
+        },
+        "type": "datetime"
+      },
+      {
+        "default_value": null,
+        "id": "fldKJnSCN5",
+        "name": "版本号",
+        "style": {
+          "type": "plain"
+        },
+        "type": "text"
+      },
+      {
+        "id": "fldTdHbF2Q",
+        "name": "创建时间",
+        "style": {
+          "format": "yyyy-MM-dd HH:mm"
+        },
+        "type": "created_at"
+      },
+      {
+        "default_value": null,
+        "id": "fldjbkPjIP",
+        "name": "支持场次数",
+        "style": {
+          "percentage": false,
+          "precision": 0,
+          "thousands_separator": false,
+          "type": "plain"
+        },
+        "type": "number"
+      },
+      {
+        "default_value": null,
+        "id": "fldlJ7mynY",
+        "name": "核心结构",
+        "style": {
+          "type": "plain"
+        },
+        "type": "text"
+      },
+      {
+        "default_value": null,
+        "id": "fldcwfAJ2d",
+        "name": "证据文档",
+        "style": {
+          "type": "url"
+        },
+        "type": "text"
+      },
+      {
+        "bidirectional": true,
+        "bidirectional_link_field_id": "fld6MAGqh3",
+        "id": "fldWJIqaQ5",
+        "link_table": "tbluMlZqwzBXGMgp",
+        "name": "起始场次",
+        "type": "link"
+      },
+      {
+        "default_value": null,
+        "id": "fldZKQ3ncW",
+        "name": "同行ID",
+        "style": {
+          "type": "plain"
+        },
+        "type": "text"
+      },
+      {
+        "default_value": null,
+        "id": "fldIoK0XUA",
+        "name": "稳定打法",
+        "style": {
+          "type": "plain"
+        },
+        "type": "text"
+      },
+      {
+        "default_value": null,
+        "id": "fld77epZT2",
+        "name": "版本ID",
+        "style": {
+          "type": "plain"
+        },
+        "type": "text"
+      },
+      {
+        "default_value": null,
+        "description": "推断内容必须与事实证据分开标注",
+        "id": "fldjbfcPdU",
+        "name": "变更原因（推断）",
+        "style": {
+          "type": "plain"
+        },
+        "type": "text"
+      },
+      {
+        "bidirectional": true,
+        "bidirectional_link_field_id": "fldrXW9Ddw",
+        "id": "fld4OPolvr",
+        "link_table": "tblivS4XFLZy1qfh",
+        "name": "关联同行",
+        "type": "link"
+      },
+      {
+        "id": "fldMVr7qtT",
+        "name": "更新时间",
+        "style": {
+          "format": "yyyy-MM-dd HH:mm"
+        },
+        "type": "updated_at"
+      }
+    ],
+    "total": 16
+  },
+  "_notice": {
+    "update": {
+      "command": "lark-cli update",
+      "current": "1.0.58",
+      "latest": "1.0.93",
+      "message": "lark-cli 1.0.93 available, current 1.0.58, run: lark-cli update"
+    }
+  }
+}

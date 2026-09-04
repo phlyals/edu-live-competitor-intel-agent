@@ -1,0 +1,80 @@
+{
+  "ok": true,
+  "identity": "user",
+  "data": {
+    "data": [
+      [
+        "runtime-v3",
+        [
+          "DEGRADED"
+        ],
+        "full-fleet-control-plane",
+        null,
+        "2026-08-25T12:35:05.000+08:00",
+        "2026-09-02T08:36:24.000+08:00",
+        "全量同行监控与录制调度",
+        "2026-09-02T08:32:43.000+08:00",
+        "按next_check_at错峰检测全部监控目标",
+        "ATOMIC_FULL_FLEET_ACTIVATED",
+        "edu_live_competitor_intel"
+      ]
+    ],
+    "field_id_list": [
+      "fld6yvSkQB",
+      "fld1QYjb7w",
+      "fld7CyZuSd",
+      "fldITXm81o",
+      "fldmOIKm2S",
+      "fldMVbGAC6",
+      "fldOfemq5n",
+      "fldQ9YACqN",
+      "fldSw6F90h",
+      "fldU3ok2C8",
+      "fldwQeJu47"
+    ],
+    "field_type_list": [
+      "text",
+      "select",
+      "text",
+      "text",
+      "created_at",
+      "updated_at",
+      "text",
+      "datetime",
+      "text",
+      "text",
+      "text"
+    ],
+    "fields": [
+      "任务ID",
+      "状态",
+      "任务类型",
+      "最近错误",
+      "创建时间",
+      "更新时间",
+      "当前阶段",
+      "最后心跳",
+      "下一步",
+      "最后Checkpoint",
+      "Gateway Profile"
+    ],
+    "has_more": false,
+    "query_context": {
+      "field_scope": "all_fields",
+      "record_scope": "all_records"
+    },
+    "record_id_list": [
+      "recvthpOk0N4pZ"
+    ],
+    "rev": 15,
+    "timezone": "Asia/Shanghai"
+  },
+  "_notice": {
+    "update": {
+      "command": "lark-cli update",
+      "current": "1.0.58",
+      "latest": "1.0.93",
+      "message": "lark-cli 1.0.93 available, current 1.0.58, run: lark-cli update"
+    }
+  }
+}

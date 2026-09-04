@@ -1,0 +1,163 @@
+{
+  "ok": true,
+  "identity": "user",
+  "data": {
+    "fields": [
+      {
+        "default_value": null,
+        "id": "fldxYpNqsT",
+        "name": "备注",
+        "style": {
+          "type": "plain"
+        },
+        "type": "text"
+      },
+      {
+        "default_value": null,
+        "id": "fldtAupDZf",
+        "name": "最近扫描时间",
+        "style": {
+          "format": "yyyy-MM-dd HH:mm"
+        },
+        "type": "datetime"
+      },
+      {
+        "default_value": null,
+        "id": "fldzPALayK",
+        "multiple": false,
+        "name": "状态",
+        "options": [
+          {
+            "hue": "Turquoise",
+            "lightness": "Lighter",
+            "name": "待预检"
+          },
+          {
+            "hue": "Turquoise",
+            "lightness": "Lighter",
+            "name": "监控中"
+          },
+          {
+            "hue": "Purple",
+            "lightness": "Lighter",
+            "name": "暂停"
+          },
+          {
+            "hue": "Wathet",
+            "lightness": "Lighter",
+            "name": "结束"
+          }
+        ],
+        "type": "select"
+      },
+      {
+        "default_value": null,
+        "id": "fldmlpSg7r",
+        "name": "原始链接",
+        "style": {
+          "type": "url"
+        },
+        "type": "text"
+      },
+      {
+        "default_value": null,
+        "id": "fldOAJIowt",
+        "multiple": false,
+        "name": "扫描完整性",
+        "options": [
+          {
+            "hue": "Yellow",
+            "lightness": "Lighter",
+            "name": "未扫描"
+          },
+          {
+            "hue": "Purple",
+            "lightness": "Lighter",
+            "name": "完整"
+          },
+          {
+            "hue": "Blue",
+            "lightness": "Lighter",
+            "name": "不完整"
+          },
+          {
+            "hue": "Green",
+            "lightness": "Lighter",
+            "name": "异常"
+          }
+        ],
+        "type": "select"
+      },
+      {
+        "default_value": null,
+        "id": "fldtHG0xws",
+        "name": "首次发现时间",
+        "style": {
+          "format": "yyyy-MM-dd HH:mm"
+        },
+        "type": "datetime"
+      },
+      {
+        "id": "fldDtyQyHL",
+        "name": "创建时间",
+        "style": {
+          "format": "yyyy-MM-dd HH:mm"
+        },
+        "type": "created_at"
+      },
+      {
+        "id": "fld8Hb3xOk",
+        "name": "更新时间",
+        "style": {
+          "format": "yyyy-MM-dd HH:mm"
+        },
+        "type": "updated_at"
+      },
+      {
+        "bidirectional": true,
+        "bidirectional_link_field_id": "fldf2L9cBy",
+        "id": "fldztY9cvi",
+        "link_table": "tbl5SpMvUAY1L1Cc",
+        "name": "同行关系",
+        "type": "link"
+      },
+      {
+        "default_value": null,
+        "id": "fldYDiQVAr",
+        "name": "平台商品ID",
+        "style": {
+          "type": "plain"
+        },
+        "type": "text"
+      },
+      {
+        "default_value": null,
+        "description": "Runtime生成的稳定业务ID",
+        "id": "fldMh0voL8",
+        "name": "商品ID",
+        "style": {
+          "type": "plain"
+        },
+        "type": "text"
+      },
+      {
+        "default_value": null,
+        "id": "flduBnAvBZ",
+        "name": "商品名称",
+        "style": {
+          "type": "plain"
+        },
+        "type": "text"
+      }
+    ],
+    "total": 12
+  },
+  "_notice": {
+    "update": {
+      "command": "lark-cli update",
+      "current": "1.0.58",
+      "latest": "1.0.93",
+      "message": "lark-cli 1.0.93 available, current 1.0.58, run: lark-cli update"
+    }
+  }
+}

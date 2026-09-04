@@ -1,0 +1,190 @@
+{
+  "ok": true,
+  "identity": "user",
+  "data": {
+    "fields": [
+      {
+        "default_value": null,
+        "description": "稳定内部ID，平台账号ID优先去重",
+        "id": "fldfIa0wkF",
+        "name": "同行ID",
+        "style": {
+          "type": "plain"
+        },
+        "type": "text"
+      },
+      {
+        "default_value": null,
+        "id": "fldllk6E7z",
+        "multiple": false,
+        "name": "监控状态",
+        "options": [
+          {
+            "hue": "Turquoise",
+            "lightness": "Lighter",
+            "name": "待加入"
+          },
+          {
+            "hue": "Turquoise",
+            "lightness": "Lighter",
+            "name": "监控中"
+          },
+          {
+            "hue": "Purple",
+            "lightness": "Lighter",
+            "name": "暂停"
+          },
+          {
+            "hue": "Green",
+            "lightness": "Lighter",
+            "name": "异常"
+          }
+        ],
+        "type": "select"
+      },
+      {
+        "bidirectional": true,
+        "bidirectional_link_field_id": "fldg8qMmYA",
+        "id": "fldpDVf1Ni",
+        "link_table": "tblSccyzHr6pwKZX",
+        "name": "账号监控",
+        "type": "link"
+      },
+      {
+        "id": "fldzcrtUTU",
+        "name": "创建时间",
+        "style": {
+          "format": "yyyy-MM-dd HH:mm"
+        },
+        "type": "created_at"
+      },
+      {
+        "default_value": null,
+        "id": "fldtGXTKmM",
+        "name": "最后可见时间",
+        "style": {
+          "format": "yyyy-MM-dd HH:mm"
+        },
+        "type": "datetime"
+      },
+      {
+        "default_value": null,
+        "id": "fld99ALlV6",
+        "multiple": false,
+        "name": "账号状态",
+        "options": [
+          {
+            "hue": "Red",
+            "lightness": "Lighter",
+            "name": "UNKNOWN"
+          },
+          {
+            "hue": "Purple",
+            "lightness": "Lighter",
+            "name": "正常"
+          },
+          {
+            "hue": "Turquoise",
+            "lightness": "Lighter",
+            "name": "失效"
+          }
+        ],
+        "type": "select"
+      },
+      {
+        "default_value": null,
+        "id": "fldGoEVBpA",
+        "name": "账号名称",
+        "style": {
+          "type": "plain"
+        },
+        "type": "text"
+      },
+      {
+        "default_value": null,
+        "id": "fldoccLzp4",
+        "name": "备注",
+        "style": {
+          "type": "plain"
+        },
+        "type": "text"
+      },
+      {
+        "bidirectional": true,
+        "bidirectional_link_field_id": "fld8l2H100",
+        "id": "fldhUfPjMF",
+        "link_table": "tbl5SpMvUAY1L1Cc",
+        "name": "商品关系",
+        "type": "link"
+      },
+      {
+        "default_value": null,
+        "id": "fldPuuCX5D",
+        "name": "直播间地址",
+        "style": {
+          "type": "url"
+        },
+        "type": "text"
+      },
+      {
+        "bidirectional": true,
+        "bidirectional_link_field_id": "fldgIaGDpV",
+        "id": "fldYoIB5qj",
+        "link_table": "tbluMlZqwzBXGMgp",
+        "name": "直播场次",
+        "type": "link"
+      },
+      {
+        "bidirectional": true,
+        "bidirectional_link_field_id": "fldgiWGSHm",
+        "id": "fldxrlST7Z",
+        "link_table": "tblqC0baPooLdxuJ",
+        "name": "策略候选",
+        "type": "link"
+      },
+      {
+        "id": "fldIoJ490l",
+        "name": "更新时间",
+        "style": {
+          "format": "yyyy-MM-dd HH:mm"
+        },
+        "type": "updated_at"
+      },
+      {
+        "default_value": null,
+        "id": "fldrXCvV7E",
+        "name": "首次发现时间",
+        "style": {
+          "format": "yyyy-MM-dd HH:mm"
+        },
+        "type": "datetime"
+      },
+      {
+        "bidirectional": true,
+        "bidirectional_link_field_id": "fld4OPolvr",
+        "id": "fldrXW9Ddw",
+        "link_table": "tbldEQ2IIVycBkHu",
+        "name": "打法版本",
+        "type": "link"
+      },
+      {
+        "default_value": null,
+        "id": "fld2IQN9Ah",
+        "name": "平台账号ID",
+        "style": {
+          "type": "plain"
+        },
+        "type": "text"
+      }
+    ],
+    "total": 16
+  },
+  "_notice": {
+    "update": {
+      "command": "lark-cli update",
+      "current": "1.0.58",
+      "latest": "1.0.93",
+      "message": "lark-cli 1.0.93 available, current 1.0.58, run: lark-cli update"
+    }
+  }
+}

@@ -1,0 +1,151 @@
+{
+  "ok": true,
+  "identity": "user",
+  "data": {
+    "fields": [
+      {
+        "default_value": null,
+        "id": "fldJt5A7jC",
+        "name": "下次检查时间",
+        "style": {
+          "format": "yyyy-MM-dd HH:mm"
+        },
+        "type": "datetime"
+      },
+      {
+        "default_value": null,
+        "id": "fldiaUxKSj",
+        "name": "监控ID",
+        "style": {
+          "type": "plain"
+        },
+        "type": "text"
+      },
+      {
+        "default_value": null,
+        "id": "fld6mpLqQB",
+        "name": "同行ID",
+        "style": {
+          "type": "plain"
+        },
+        "type": "text"
+      },
+      {
+        "id": "fldTM4PLlX",
+        "name": "创建时间",
+        "style": {
+          "format": "yyyy-MM-dd HH:mm"
+        },
+        "type": "created_at"
+      },
+      {
+        "default_value": null,
+        "id": "fldNe9QonG",
+        "multiple": false,
+        "name": "监控状态",
+        "options": [
+          {
+            "hue": "Red",
+            "lightness": "Lighter",
+            "name": "待启动"
+          },
+          {
+            "hue": "Turquoise",
+            "lightness": "Lighter",
+            "name": "监控中"
+          },
+          {
+            "hue": "Purple",
+            "lightness": "Lighter",
+            "name": "暂停"
+          },
+          {
+            "hue": "Green",
+            "lightness": "Lighter",
+            "name": "异常"
+          }
+        ],
+        "type": "select"
+      },
+      {
+        "default_value": null,
+        "id": "flddC7RYgg",
+        "multiple": false,
+        "name": "直播状态",
+        "options": [
+          {
+            "hue": "Red",
+            "lightness": "Lighter",
+            "name": "UNKNOWN"
+          },
+          {
+            "hue": "Carmine",
+            "lightness": "Lighter",
+            "name": "直播中"
+          },
+          {
+            "hue": "Purple",
+            "lightness": "Lighter",
+            "name": "未直播"
+          }
+        ],
+        "type": "select"
+      },
+      {
+        "default_value": null,
+        "id": "fldPWmDdRJ",
+        "name": "最近错误",
+        "style": {
+          "type": "plain"
+        },
+        "type": "text"
+      },
+      {
+        "bidirectional": true,
+        "bidirectional_link_field_id": "fldpDVf1Ni",
+        "id": "fldg8qMmYA",
+        "link_table": "tblivS4XFLZy1qfh",
+        "name": "关联同行",
+        "type": "link"
+      },
+      {
+        "id": "fldnILSkrd",
+        "name": "更新时间",
+        "style": {
+          "format": "yyyy-MM-dd HH:mm"
+        },
+        "type": "updated_at"
+      },
+      {
+        "default_value": null,
+        "id": "fldu9HTptE",
+        "name": "最近检查时间",
+        "style": {
+          "format": "yyyy-MM-dd HH:mm"
+        },
+        "type": "datetime"
+      },
+      {
+        "default_value": null,
+        "id": "fldOns9FXg",
+        "name": "连续失败次数",
+        "style": {
+          "percentage": false,
+          "precision": 0,
+          "thousands_separator": false,
+          "type": "plain"
+        },
+        "type": "number"
+      }
+    ],
+    "total": 11
+  },
+  "_notice": {
+    "update": {
+      "command": "lark-cli update",
+      "current": "1.0.58",
+      "latest": "1.0.93",
+      "message": "lark-cli 1.0.93 available, current 1.0.58, run: lark-cli update"
+    }
+  }
+}

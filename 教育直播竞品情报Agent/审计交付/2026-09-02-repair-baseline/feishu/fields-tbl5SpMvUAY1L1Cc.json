@@ -1,0 +1,189 @@
+{
+  "ok": true,
+  "identity": "user",
+  "data": {
+    "fields": [
+      {
+        "default_value": null,
+        "id": "fldpQWn8cA",
+        "name": "首次发现时间",
+        "style": {
+          "format": "yyyy-MM-dd HH:mm"
+        },
+        "type": "datetime"
+      },
+      {
+        "default_value": null,
+        "id": "fldQWqOf33",
+        "multiple": false,
+        "name": "当前状态",
+        "options": [
+          {
+            "hue": "Red",
+            "lightness": "Lighter",
+            "name": "UNKNOWN"
+          },
+          {
+            "hue": "Lime",
+            "lightness": "Lighter",
+            "name": "新增"
+          },
+          {
+            "hue": "Lime",
+            "lightness": "Lighter",
+            "name": "持续"
+          },
+          {
+            "hue": "Turquoise",
+            "lightness": "Lighter",
+            "name": "变化"
+          },
+          {
+            "hue": "Red",
+            "lightness": "Lighter",
+            "name": "未出现"
+          },
+          {
+            "hue": "Blue",
+            "lightness": "Lighter",
+            "name": "重新出现"
+          }
+        ],
+        "type": "select"
+      },
+      {
+        "default_value": null,
+        "id": "fldnfe3JkH",
+        "name": "商品ID",
+        "style": {
+          "type": "plain"
+        },
+        "type": "text"
+      },
+      {
+        "default_value": null,
+        "id": "fldthHELp5",
+        "name": "平台可见数据摘要",
+        "style": {
+          "type": "plain"
+        },
+        "type": "text"
+      },
+      {
+        "default_value": null,
+        "id": "fldeUjm1EN",
+        "name": "最后可见时间",
+        "style": {
+          "format": "yyyy-MM-dd HH:mm"
+        },
+        "type": "datetime"
+      },
+      {
+        "bidirectional": true,
+        "bidirectional_link_field_id": "fldztY9cvi",
+        "id": "fldf2L9cBy",
+        "link_table": "tbluIs6HfERsu1O4",
+        "name": "关联商品",
+        "type": "link"
+      },
+      {
+        "default_value": null,
+        "id": "fld1koELyC",
+        "name": "关系ID",
+        "style": {
+          "type": "plain"
+        },
+        "type": "text"
+      },
+      {
+        "id": "fldfBrafBI",
+        "name": "更新时间",
+        "style": {
+          "format": "yyyy-MM-dd HH:mm"
+        },
+        "type": "updated_at"
+      },
+      {
+        "default_value": null,
+        "id": "fld9YOg2KC",
+        "name": "本轮扫描ID",
+        "style": {
+          "type": "plain"
+        },
+        "type": "text"
+      },
+      {
+        "default_value": null,
+        "id": "fldR6CI2bj",
+        "name": "备注",
+        "style": {
+          "type": "plain"
+        },
+        "type": "text"
+      },
+      {
+        "id": "fld5rG0vE9",
+        "name": "创建时间",
+        "style": {
+          "format": "yyyy-MM-dd HH:mm"
+        },
+        "type": "created_at"
+      },
+      {
+        "bidirectional": true,
+        "bidirectional_link_field_id": "fldhUfPjMF",
+        "id": "fld8l2H100",
+        "link_table": "tblivS4XFLZy1qfh",
+        "name": "关联同行",
+        "type": "link"
+      },
+      {
+        "default_value": null,
+        "id": "fld7h2DlEN",
+        "multiple": false,
+        "name": "扫描完整性",
+        "options": [
+          {
+            "hue": "Blue",
+            "lightness": "Lighter",
+            "name": "未确认"
+          },
+          {
+            "hue": "Purple",
+            "lightness": "Lighter",
+            "name": "完整"
+          },
+          {
+            "hue": "Blue",
+            "lightness": "Lighter",
+            "name": "不完整"
+          },
+          {
+            "hue": "Green",
+            "lightness": "Lighter",
+            "name": "异常"
+          }
+        ],
+        "type": "select"
+      },
+      {
+        "default_value": null,
+        "id": "fld9HQ54x5",
+        "name": "同行ID",
+        "style": {
+          "type": "plain"
+        },
+        "type": "text"
+      }
+    ],
+    "total": 14
+  },
+  "_notice": {
+    "update": {
+      "command": "lark-cli update",
+      "current": "1.0.58",
+      "latest": "1.0.93",
+      "message": "lark-cli 1.0.93 available, current 1.0.58, run: lark-cli update"
+    }
+  }
+}

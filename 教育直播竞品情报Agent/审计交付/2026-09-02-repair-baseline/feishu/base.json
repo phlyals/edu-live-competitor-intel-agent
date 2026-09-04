@@ -1,0 +1,23 @@
+{
+  "ok": true,
+  "identity": "user",
+  "data": {
+    "base": {
+      "base_token": "BjilbFZG5atkp0sORszcHP1Anue",
+      "is_advanced": false,
+      "name": "直播竞品情报主管｜业务工作台",
+      "revision": 12,
+      "time_zone": "Asia/Shanghai",
+      "url": "https://j10akfek917.feishu.cn/base/BjilbFZG5atkp0sORszcHP1Anue",
+      "workspace_token": ""
+    }
+  },
+  "_notice": {
+    "update": {
+      "command": "lark-cli update",
+      "current": "1.0.58",
+      "latest": "1.0.93",
+      "message": "lark-cli 1.0.93 available, current 1.0.58, run: lark-cli update"
+    }
+  }
+}

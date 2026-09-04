@@ -1,0 +1,89 @@
+{
+  "ok": true,
+  "identity": "user",
+  "data": {
+    "tables": [
+      {
+        "id": "tblGctpRbR4kzOVO",
+        "name": "00_系统保留",
+        "records_count": 1,
+        "rev": 1
+      },
+      {
+        "id": "tbluIs6HfERsu1O4",
+        "name": "01_商品",
+        "records_count": 3,
+        "rev": 29
+      },
+      {
+        "id": "tblivS4XFLZy1qfh",
+        "name": "02_同行账号",
+        "records_count": 90,
+        "rev": 705
+      },
+      {
+        "id": "tbl5SpMvUAY1L1Cc",
+        "name": "03_商品同行关系",
+        "records_count": 94,
+        "rev": 523
+      },
+      {
+        "id": "tblSccyzHr6pwKZX",
+        "name": "04_账号监控",
+        "records_count": 70,
+        "rev": 535
+      },
+      {
+        "id": "tbluMlZqwzBXGMgp",
+        "name": "05_直播场次",
+        "records_count": 248,
+        "rev": 519
+      },
+      {
+        "id": "tblqwQRfkyWpb0wQ",
+        "name": "06_转录证据",
+        "records_count": 5,
+        "rev": 18
+      },
+      {
+        "id": "tblFvjcwMN9VGVWm",
+        "name": "07_场次分析",
+        "records_count": 15,
+        "rev": 31
+      },
+      {
+        "id": "tbldEQ2IIVycBkHu",
+        "name": "08_打法版本",
+        "records_count": 1,
+        "rev": 8
+      },
+      {
+        "id": "tblqC0baPooLdxuJ",
+        "name": "09_策略候选审批",
+        "records_count": 3,
+        "rev": 14
+      },
+      {
+        "id": "tblrC9I6AraqxRVH",
+        "name": "10_Runtime状态",
+        "records_count": 1,
+        "rev": 15
+      },
+      {
+        "id": "tbl666D2RpISmHRa",
+        "name": "MVP_同行扫描结果",
+        "records_count": 55,
+        "rev": 165
+      }
+    ],
+    "total": 12
+  },
+  "_notice": {
+    "update": {
+      "command": "lark-cli update",
+      "current": "1.0.58",
+      "latest": "1.0.93",
+      "message": "lark-cli 1.0.93 available, current 1.0.58, run: lark-cli update"
+    }
+  }
+}
